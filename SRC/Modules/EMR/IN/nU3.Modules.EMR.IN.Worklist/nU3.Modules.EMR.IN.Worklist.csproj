@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>nU3.Modules.EMR.IN.Worklist</RootNamespace>
+    <UseWindowsForms>true</UseWindowsForms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\nU3.Core.UI\nU3.Core.UI.csproj" />
+    <ProjectReference Include="..\..\..\..\nU3.Core\nU3.Core.csproj" />
+  </ItemGroup>
+
+</Project>

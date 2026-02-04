@@ -1,0 +1,119 @@
+@nU3.Server.Host_HostAddress = http://localhost:5299
+
+###
+# nU3 Server Host - HTTP 샘플 컬렉션
+# 이 파일은 서버의 주요 엔드포인트 예제를 포함합니다.
+# 변수: {{nU3.Server.Host_HostAddress}}를 실제 호스트/포트로 변경하세요.
+
+### 헬스 체크 - 전체 상태
+GET {{nU3.Server.Host_HostAddress}}/health
+Accept: application/json
+
+### 헬스 체크 - 준비(ready)
+GET {{nU3.Server.Host_HostAddress}}/health/ready
+Accept: application/json
+
+### 헬스 체크 - 라이브(live)
+GET {{nU3.Server.Host_HostAddress}}/health/live
+Accept: application/json
+
+### 파일 전송 - 서버 홈 디렉토리 조회
+GET {{nU3.Server.Host_HostAddress}}/api/v1/files/directory
+Accept: application/json
+
+### 파일 전송 - 서버 홈 디렉토리 설정 (JSON)
+POST {{nU3.Server.Host_HostAddress}}/api/v1/files/directory/config
+Content-Type: application/json
+
+{
+  "IsUseHomePath": true,
+  "ServerHomePath": "C:\\nU3_Server_Storage"
+}
+
+### 파일 전송 - 디렉토리 목록 조회
+GET {{nU3.Server.Host_HostAddress}}/api/v1/files/list?path=Optional/Sub/Path
+Accept: application/json
+
+### 파일 전송 - 파일 업로드 (폼, multipart)
+# REST 클라이언트에 따라 파일 업로드 문법이 다릅니다. 아래는 curl 예시입니다.
+# curl -X POST "{{nU3.Server.Host_HostAddress}}/api/v1/files/upload" -F "File=@./sample.bin" -F "ServerPath=some/remote/path/sample.bin"
+
+### 파일 전송 - 파일 다운로드
+GET {{nU3.Server.Host_HostAddress}}/api/v1/files/download?serverPath=some/remote/path/sample.bin
+
+### 파일 전송 - 파일 존재 여부 확인
+GET {{nU3.Server.Host_HostAddress}}/api/v1/files/exists?path=some/remote/path/sample.bin
+Accept: application/json
+
+### 로그 업로드 - 일반 로그 (multipart form)
+# curl 예시:
+# curl -X POST "{{nU3.Server.Host_HostAddress}}/api/log/upload" -F "File=@./client.log"
+
+POST {{nU3.Server.Host_HostAddress}}/api/log/upload
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary
+
+------WebKitFormBoundary
+Content-Disposition: form-data; name="File"; filename="client.log"
+Content-Type: text/plain
+
+< ./client.log
+------WebKitFormBoundary--
+
+### 로그 업로드 - 감사지 로그
+# curl -X POST "{{nU3.Server.Host_HostAddress}}/api/log/upload-audit" -F "File=@./audit.log.gz"
+
+### 로그 정보 조회
+GET {{nU3.Server.Host_HostAddress}}/api/log/info
+Accept: application/json
+
+### DB 액세스 - 연결 (비동기)
+POST {{nU3.Server.Host_HostAddress}}/api/v1/db/connect
+Accept: application/json
+
+### DB 액세스 - 쿼리 (테이블 결과)
+POST {{nU3.Server.Host_HostAddress}}/api/v1/db/query/table
+Content-Type: application/json
+
+{
+  "CommandText": "SELECT * FROM SOME_TABLE WHERE ROWNUM < 10",
+  "Parameters": null
+}
+
+### DB 액세스 - 비쿼리 실행
+POST {{nU3.Server.Host_HostAddress}}/api/v1/db/query/nonquery
+Content-Type: application/json
+
+{
+  "CommandText": "UPDATE SOME_TABLE SET COL = 'X' WHERE ID = :id",
+  "Parameters": { 
+    ":id": 123
+  }
+}
+
+### DB 액세스 - 스칼라 값
+POST {{nU3.Server.Host_HostAddress}}/api/v1/db/query/scalar
+Content-Type: application/json
+
+{
+  "CommandText": "SELECT COUNT(*) FROM SOME_TABLE",
+  "Parameters": null
+}
+
+### DB 액세스 - 저장 프로시저 호출 (예시)
+POST {{nU3.Server.Host_HostAddress}}/api/v1/db/procedure
+Content-Type: application/json
+
+{
+  "SpName": "SOME_PACKAGE.SOME_PROC",
+  "InputParams": { "P_IN": "value" },
+  "OutputParams": { "P_OUT": null }
+}
+
+### Swagger UI
+# 브라우저에서 다음 경로로 Swagger UI 확인
+# {{nU3.Server.Host_HostAddress}}/swagger
+
+### 유의사항
+# - 파일 업로드는 멀티파트 폼을 사용해야 하며 서버 설정에 따라 최대 업로드 크기가 제한될 수 있습니다.
+# - DB 연동이 필요한 엔드포인트는 서버에 적절한 DB 커넥션 팩토리가 구성되어 있어야 합니다.
+# - 필요 시 변수 {{nU3.Server.Host_HostAddress}} 값을 실제 호스트/포트로 변경하세요.

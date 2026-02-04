@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "nU3.Shell": {
+      "commandName": "Executable",
+      "executablePath": "C:\\nU3Framework\\nU3.Shell.exe",
+      "workingDirectory": "C:\\nU3Framework\\"
+    }
+  }
+}

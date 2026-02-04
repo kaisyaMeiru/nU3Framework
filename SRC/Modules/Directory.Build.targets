@@ -1,0 +1,35 @@
+<Project>
+  <!-- Centralized deploy target: auto-compute module subpath from project name and copy the project's main assembly to the framework drop -->
+  <PropertyGroup>
+    <!-- Default deploy folder; can be overridden per-project or via Directory.Build.props -->
+    <DeployOutputDir Condition="'$(DeployOutputDir)' == ''">C:\nU3Framework\</DeployOutputDir>
+
+    <!-- Try to extract module and submodule parts from the project name, e.g. nU3.Modules.EMR.IN.Worklist -> EMR and IN -->
+    <_Module1>$([System.Text.RegularExpressions.Regex]::Match($(MSBuildProjectName),'Modules\.([^\.]+)\.([^\.]+)').Groups[1].Value)</_Module1>
+    <_Module2>$([System.Text.RegularExpressions.Regex]::Match($(MSBuildProjectName),'Modules\.([^\.]+)\.([^\.]+)').Groups[2].Value)</_Module2>
+
+    <!-- If extraction succeeded, build the deploy subpath like Modules\EMR\IN\ -->
+    <ModuleDeploySubPath Condition="'$(_Module1)' != '' and '$(_Module2)' != ''">Modules\$(_Module1)\$(_Module2)\</ModuleDeploySubPath>
+  </PropertyGroup>
+
+  <Target Name="CopyProjectAssemblyToFrameworkDrop" AfterTargets="Build" Condition=" '$(ModuleDeploySubPath)' != '' and '$(DeployOutputDir)' != '' ">
+    <PropertyGroup>
+      <AssemblyToCopy>$(TargetDir)$(TargetFileName)</AssemblyToCopy>
+    </PropertyGroup>
+
+    <Message Text="[Deploy] Copying '$(AssemblyToCopy)' -> '$(DeployOutputDir)$(ModuleDeploySubPath)'" Importance="High" Condition="Exists('$(AssemblyToCopy)')" />
+
+    <ItemGroup>
+      <AssemblyFile Include="$(AssemblyToCopy)" Condition="Exists('$(AssemblyToCopy)')" />
+      <!-- Also include PDB and XML documentation if present -->
+      <AssemblyFile Include="$(TargetDir)$(TargetName).pdb" Condition="Exists('$(TargetDir)$(TargetName).pdb')" />
+      <AssemblyFile Include="$(TargetDir)$(TargetName).xml" Condition="Exists('$(TargetDir)$(TargetName).xml')" />
+    </ItemGroup>
+
+    <MakeDir Directories="$(DeployOutputDir)$(ModuleDeploySubPath)" Condition="Exists('$(AssemblyToCopy)')" />
+
+    <Copy SourceFiles="@(AssemblyFile)"
+          DestinationFiles="@(AssemblyFile->'$(DeployOutputDir)$(ModuleDeploySubPath)%(Filename)%(Extension)')"
+          SkipUnchangedFiles="false" />
+  </Target>
+</Project>

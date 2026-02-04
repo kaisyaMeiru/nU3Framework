@@ -1,0 +1,13 @@
+<Project>
+  <PropertyGroup>
+    <!-- Use SDK defaults (bin/obj per project) for reliable VS F5 debugging -->
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+
+    <!-- Do not force a common output directory for builds; use publish for bundling artifacts -->
+    <UseCommonOutputDirectory>false</UseCommonOutputDirectory>
+
+    <!-- Keep runtime config generation; publish output will include dependencies -->
+    <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+  </PropertyGroup>
+
+</Project>

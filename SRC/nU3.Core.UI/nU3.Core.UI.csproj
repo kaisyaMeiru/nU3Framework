@@ -1,0 +1,259 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <Nullable>enable</Nullable>
+    <RootNamespace>nU3.Core.UI</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Compiled\**" />
+    <EmbeddedResource Remove="Compiled\**" />
+    <None Remove="Compiled\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Controls\nU3FactoryAdvancedControls.cs" />
+    <Compile Remove="Controls\nU3FactoryBasicEditors.cs" />
+    <Compile Remove="Controls\nU3FactoryComplexControls.cs" />
+    <Compile Remove="Controls\nU3FactoryComplexGrids.cs" />
+    <Compile Remove="Controls\nU3FactoryControls.cs" />
+    <Compile Remove="Controls\nU3FactoryFinalWrap.cs" />
+    <Compile Remove="Controls\nU3FactoryGridControls.cs" />
+    <Compile Remove="Controls\nU3FactoryMiscControls.cs" />
+    <Compile Remove="Controls\nU3FactoryNavLayoutControls.cs" />
+  </ItemGroup>
+
+   <ItemGroup>
+    <PackageReference Include="DevExpress.Win" Version="23.2.9" />
+    <PackageReference Include="DevExpress.Win.Design" Version="23.2.9" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\nU3.Core\nU3.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="DevExpress.Dashboard.v23.2.Design.Tool">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\Design\DevExpress.Dashboard.v23.2.Design.Tool.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Dashboard.v23.2.Design.VSCore">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\Design\DevExpress.Dashboard.v23.2.Design.VSCore.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Dashboard.v23.2.Win.Design">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\Design\DevExpress.Dashboard.v23.2.Win.Design.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.DataAccess.v23.2.Design">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\Design\DevExpress.DataAccess.v23.2.Design.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Design.Protocol.v23.2">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\Design\DevExpress.Design.Protocol.v23.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Design.Surface.Core.v23.2">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\Design\DevExpress.Design.Surface.Core.v23.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Design.v23.2">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\Design\DevExpress.Design.v23.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.ExpressApp.Win.Design.v23.2">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\Design\DevExpress.ExpressApp.Win.Design.v23.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Spreadsheet.v23.2.Core">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\DevExpress.Spreadsheet.v23.2.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpo.v23.2.Design">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\Design\DevExpress.Xpo.v23.2.Design.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraBars.v23.2">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\DevExpress.XtraBars.v23.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraBars.v23.2.Design">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\Design\DevExpress.XtraBars.v23.2.Design.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraCharts.v23.2">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\DevExpress.XtraCharts.v23.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraCharts.v23.2.Design">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\Design\DevExpress.XtraCharts.v23.2.Design.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraCharts.v23.2.Extensions">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\DevExpress.XtraCharts.v23.2.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraCharts.v23.2.UI">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\DevExpress.XtraCharts.v23.2.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraCharts.v23.2.Wizard">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\DevExpress.XtraCharts.v23.2.Wizard.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraDiagram.v23.2">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\DevExpress.XtraDiagram.v23.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraDiagram.v23.2.Design">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\Design\DevExpress.XtraDiagram.v23.2.Design.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraDialogs.v23.2">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\DevExpress.XtraDialogs.v23.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraDialogs.v23.2.Design">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\Design\DevExpress.XtraDialogs.v23.2.Design.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraEditors.v23.2">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\DevExpress.XtraEditors.v23.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraEditors.v23.2.Design">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\Design\DevExpress.XtraEditors.v23.2.Design.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraGantt.v23.2">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\DevExpress.XtraGantt.v23.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraGantt.v23.2.Design">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\Design\DevExpress.XtraGantt.v23.2.Design.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraGauges.v23.2.Core">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\DevExpress.XtraGauges.v23.2.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraGauges.v23.2.Design.Win">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\Design\DevExpress.XtraGauges.v23.2.Design.Win.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraGauges.v23.2.Presets">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\DevExpress.XtraGauges.v23.2.Presets.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraGauges.v23.2.Win">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\DevExpress.XtraGauges.v23.2.Win.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraGrid.v23.2">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\DevExpress.XtraGrid.v23.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraGrid.v23.2.Design">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\Design\DevExpress.XtraGrid.v23.2.Design.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraLayout.v23.2">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\DevExpress.XtraLayout.v23.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraLayout.v23.2.Design">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\Design\DevExpress.XtraLayout.v23.2.Design.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraMap.v23.2">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\DevExpress.XtraMap.v23.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraMap.v23.2.Design">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\Design\DevExpress.XtraMap.v23.2.Design.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraNavBar.v23.2">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\DevExpress.XtraNavBar.v23.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraNavBar.v23.2.Design">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\Design\DevExpress.XtraNavBar.v23.2.Design.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraPdfViewer.v23.2">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\DevExpress.XtraPdfViewer.v23.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraPdfViewer.v23.2.Design">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\Design\DevExpress.XtraPdfViewer.v23.2.Design.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraPivotGrid.v23.2">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\DevExpress.XtraPivotGrid.v23.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraPivotGrid.v23.2.Design">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\Design\DevExpress.XtraPivotGrid.v23.2.Design.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraPrinting.v23.2">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\DevExpress.XtraPrinting.v23.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraPrinting.v23.2.Design">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\Design\DevExpress.XtraPrinting.v23.2.Design.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraReports.v23.2">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\DevExpress.XtraReports.v23.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraReports.v23.2.CodeCompletion">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\DevExpress.XtraReports.v23.2.CodeCompletion.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraReports.v23.2.Design.VSCore">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\Design\DevExpress.XtraReports.v23.2.Design.VSCore.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraReports.v23.2.Extensions">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\DevExpress.XtraReports.v23.2.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraReports.v23.2.Service">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\DevExpress.XtraReports.v23.2.Service.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraReports.v23.2.Web">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\DevExpress.XtraReports.v23.2.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraRichEdit.v23.2">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\DevExpress.XtraRichEdit.v23.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraRichEdit.v23.2.Design">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\Design\DevExpress.XtraRichEdit.v23.2.Design.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraScheduler.v23.2">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\DevExpress.XtraScheduler.v23.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraScheduler.v23.2.Core">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\DevExpress.XtraScheduler.v23.2.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraScheduler.v23.2.Core.Desktop">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\DevExpress.XtraScheduler.v23.2.Core.Desktop.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraScheduler.v23.2.Design">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\Design\DevExpress.XtraScheduler.v23.2.Design.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraScheduler.v23.2.Extensions">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\DevExpress.XtraScheduler.v23.2.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraScheduler.v23.2.GoogleCalendar">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\DevExpress.XtraScheduler.v23.2.GoogleCalendar.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraScheduler.v23.2.Microsoft365Calendar">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\DevExpress.XtraScheduler.v23.2.Microsoft365Calendar.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraScheduler.v23.2.Reporting">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\DevExpress.XtraScheduler.v23.2.Reporting.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraScheduler.v23.2.Reporting.Extensions">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\DevExpress.XtraScheduler.v23.2.Reporting.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraSpellChecker.v23.2">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\DevExpress.XtraSpellChecker.v23.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraSpellChecker.v23.2.Design">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\Design\DevExpress.XtraSpellChecker.v23.2.Design.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraSpreadsheet.v23.2">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\DevExpress.XtraSpreadsheet.v23.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraSpreadsheet.v23.2.Design">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\Design\DevExpress.XtraSpreadsheet.v23.2.Design.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraTreeList.v23.2">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\DevExpress.XtraTreeList.v23.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraTreeList.v23.2.Design">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\Design\DevExpress.XtraTreeList.v23.2.Design.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraTreeMap.v23.2">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\DevExpress.XtraTreeMap.v23.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraTreeMap.v23.2.Design">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\Design\DevExpress.XtraTreeMap.v23.2.Design.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraTreeMap.v23.2.UI">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\DevExpress.XtraTreeMap.v23.2.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraVerticalGrid.v23.2">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\DevExpress.XtraVerticalGrid.v23.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraVerticalGrid.v23.2.Design">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\Design\DevExpress.XtraVerticalGrid.v23.2.Design.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraWizard.v23.2">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\DevExpress.XtraWizard.v23.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraWizard.v23.2.Design">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 23.2\Components\Bin\NetCore\Design\DevExpress.XtraWizard.v23.2.Design.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
