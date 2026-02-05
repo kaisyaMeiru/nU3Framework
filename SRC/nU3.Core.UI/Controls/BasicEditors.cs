@@ -24,8 +24,8 @@ namespace nU3.Core.UI.Controls
                 typeof(TextEditViewInfo), new TextEditPainter(), true));
         }
 
-        [Category("nU3 Framework")]
-        public bool IsRequired { get; set; } = false;
+        //[Category("nU3 Framework")]
+        //public bool IsRequired { get; set; } = false;
     }
 
     [ToolboxItem(true)]
@@ -431,9 +431,9 @@ namespace nU3.Core.UI.Controls
     {
         public nU3LabelControl() : base() { }
 
-        [Category("nU3 Framework")]
-        [Description("필수 입력 표시 여부")]
-        public bool IsRequiredMarker { get; set; } = false;
+        //[Category("nU3 Framework")]
+        //[Description("필수 입력 표시 여부")]
+        //public bool IsRequiredMarker { get; set; } = false;
 
         public object? GetValue() => this.Text;
         public void SetValue(object? value) => this.Text = value?.ToString();
