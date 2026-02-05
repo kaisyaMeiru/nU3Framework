@@ -2,7 +2,6 @@
 
 > **Framework**: nU3.Framework (Medical IS Framework)  
 > **Tech Stack**: .NET 8.0, WinForms, DevExpress 23.2.9, ASP.NET Core  
-> **Last Updated**: 2026-02-03  
 > **Purpose**: Guide for AI coding agents operating in this repository.
 
 ---
@@ -11,54 +10,39 @@
 
 ### Build Commands
 ```bash
-# Build entire solution (Release)
+# Build entire solution
 dotnet build nU3.Framework.sln --configuration Release
-
-# Build entire solution (Debug)
 dotnet build nU3.Framework.sln --configuration Debug
 
 # Build specific project
 dotnet build nU3.Core/nU3.Core.csproj
 
-# Restore packages
+# Restore packages / Clean
 dotnet restore nU3.Framework.sln
-
-# Clean build
 dotnet clean nU3.Framework.sln
 ```
 
 ### Test Commands
 ```bash
-# NOTE: No xUnit/NUnit test projects currently exists (TODO: Add xUnit to Modules/Tests/)
-# Only DbTest project exists
+# NOTE: Only DbTest project exists (no xUnit/NUnit yet)
 
-# Run all tests (when available)
-dotnet test --filter "Category=Unit" --verbosity normal
+# Run DbTest project
+dotnet build Tools/DbTest/DbTest.csproj
 
-# Run specific test file (when test projects exist)
-# Example: dotnet test Tests/Modules.EMR.IN.Tests/EMR.IN.Worklist.Tests.cs --logger "xUnit"
-```
-
-### Run Single Test (When Test Projects Added)
-```bash
-# Run specific test method (when test framework added)
+# Run specific test (when test framework added)
 dotnet test --filter "FullyQualified.TestMethodName"
-
-# Run tests with coverage (when test framework added)
-dotnet test /p:Coverlet.Coverlet.DotCover /p:Coverlet.Coverlet.Collector.VSwhere /p:Coverlet.Coverlet.OpenCover
+dotnet test --filter "Category=Unit" --verbosity normal
 ```
 
 ### Lint/Analysis Commands
 ```bash
-# Analyze dependencies (Visual Studio)
-# Use Visual Studio → Build → Analyze Solution for Code Clones
-# Or: Rider → Code → Inspect Code
-
 # Check for compiler warnings
 dotnet build --verbosity quiet 2>&1 | findstr /C /warning
 
-# Check for obsolete APIs (when tooling exists)
+# Check for obsolete packages
 dotnet list package --deprecated
+
+# Use Visual Studio → Build → Analyze Solution for Code Clones
 ```
 
 ---
@@ -67,124 +51,63 @@ dotnet list package --deprecated
 
 ### Imports & Namespaces
 ```csharp
-// 1. System namespace imports first (sorted alphabetically)
+// 1. System imports (alphabetical)
 using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Threading;
 using System.Threading.Tasks;
 
-// 2. Third-party (DevExpress, etc.)
+// 2. Third-party (DevExpress)
 using DevExpress.XtraEditors;
 
-// 3. nU3 internal namespaces
+// 3. nU3 internal
 using nU3.Core;
-using nU3.Connectivity;
 using nU3.Models;
 ```
 
-### Formatting & Indentation
-```csharp
-// 1. Use 4-space indentation (no tabs)
-// 2. XML comments use triple slashes /// or block XML
-/// <summary>
-/// Service description.
-/// </summary>
-
-// 3. Region directives for code organization
-#region Public Methods
-#endregion
-```
-
 ### Naming Conventions
-
 | Element | Convention | Example |
 |---------|-----------|--------|
-| **Classes** | PascalCase | `PatientListControl`, `ConnectivityManager` |
-| **Interfaces** | I-prefixed (Framework) | `IShellForm`, `IWorkForm` |
-| **DTOs** | **Dto** suffix | `PatientInfoDto`, `ComponentVerDto` |
-| **Enums** | PascalCase | `ComponentType`, `BloodType` |
-| **Methods** | PascalCase | `LoadData()`, `InitializeContext()` |
-| **Private fields** | _camelCase prefix | `_instance`, `_httpClient` |
-| **Events** | **Event** suffix (PubSub) | `PatientSelectedEvent` |
-| **Event Payloads** | **EventPayload** suffix | `PatientSelectedEventPayload` |
-| **Exceptions** | **Exception** suffix | `InvalidOperationException`, `AuthenticationException` |
+| Classes | PascalCase | `PatientListControl` |
+| Interfaces | I-prefixed | `IShellForm`, `IWorkForm` |
+| DTOs | **Dto** suffix | `PatientInfoDto` |
+| Enums | PascalCase | `ComponentType` |
+| Methods | PascalCase | `LoadData()` |
+| Private fields | _camelCase | `_instance` |
+| Events | **Event** suffix | `PatientSelectedEvent` |
+| Event Payloads | **EventPayload** suffix | `PatientSelectedEventPayload` |
+| Exceptions | **Exception** suffix | `AuthenticationException` |
 
-### Types & Generics
+### Formatting & Types
 ```csharp
-// 1. Always use nullable reference types for optional values
+// 4-space indentation, no tabs
+// XML comments: /// <summary>
+// Use regions: #region Public Methods
+
+// Nullable reference types
 public string? ServerUrl { get; }
 public Task<T> GetAsync<T>(string id);
 
-// 2. Use 'var' for local variables when type is obvious
-var fileInfo = new FileInfo(filePath);
-var results = new List<DataTable>();
+// Use 'var' when type obvious, List<T> over arrays
+var results = new List<PatientInfoDto>();
 
-// 3. Use generics for reusable collections
-public interface IRepository<T> where T : class;
-
-// 4. Prefer 'List<T>' over arrays unless performance critical
-public List<PatientInfoDto> GetPatients();
-
-// 5. Use 'ReadOnlySpan' for string parameters
-public void ProcessData(ReadOnlySpan<char> xmlData);
-```
-
-### Async/Await Patterns
-```csharp
-// 1. Use async/await for I/O operations
-public async Task LoadDataAsync()
-{
-    var data = await _dbClient.ExecuteDataTableAsync(sql, parameters);
-}
-
-// 2. Always pass CancellationToken
-public async Task CancelableOperationAsync(CancellationToken token)
+// Async/await patterns
+public async Task LoadDataAsync(CancellationToken token = default)
 {
     token.ThrowIfCancellationRequested();
-    await _fileTransferService.UploadFileAsync(file, path, token);
+    var data = await _dbClient.ExecuteDataTableAsync(sql, token).ConfigureAwait(false);
 }
-
-// 3. ConfigureAwait(false) for non-UI async calls
-var response = await _httpClient.GetAsyncAsync(url).ConfigureAwait(false);
 ```
 
-### Error Handling
+### Error Handling & Logging
 ```csharp
-// 1. Never throw on non-fatal paths
-public void LogInfo(string message, string category)
-{
-    try
-    {
-        LogManager.Info(message, category);
-    }
-    catch { }  // Silent fail
-}
+// Never throw on non-fatal paths
+try { LogManager.Info(message, category); } catch { }
 
-// 2. Always log exceptions with context
+// Always log exceptions with context
 catch (Exception ex)
-{777777
-    LogManager.Error($"Operation failed: {ex.Message}", category, ex);
-    throw; // Re-throw for critical errors
-}
-
-// 3. Use custom exceptions for business logic
-public class AuthenticationException : Exception
 {
-    public AuthenticationException(string message) : base(message) { }
+    LogManager.Error($"Operation failed: {ex.Message}", category, ex);
+    throw; // Re-throw critical errors
 }
-```
-
-### Logging Guidelines
-```csharp
-// 1. Use context-aware logging
-LogManager.Info($"Patient selected: {patient.PatientName}", "EMR_IN");
-
-// 2. Use audit logging for sensitive operations
-LogAudit(AuditAction.Read, "Patient", patientId, "Viewed patient details");
-
-// 3. Log progress for long operations
-LogInfo($"Deploying {files.Length} files...", "Deployer");
 ```
 
 ---
@@ -193,36 +116,28 @@ LogInfo($"Deploying {files.Length} files...", "Deployer");
 
 ### Plugin Development
 ```csharp
-// 1. Always include [nU3ProgramInfo] attribute
-[nU3ProgramInfo(
-    typeof(MyModuleScreen),
-    "Module Display Name",       // Program Name (used in UI)
-    "MODULE_ID"             // Unique ID
-    "CHILD"               // Form Type: CHILD/POPUP/SDI
-)]
+[nU3ProgramInfo(typeof(MyModuleScreen), "Display Name", "MODULE_ID", "CHILD")]
 
 public class MyModuleScreen : BaseWorkControl
 {
     public override string ScreenId => "MY_SCREEN_001";
-    public override string ProgramTitle => "Module Display Name";
+    protected override void OnScreenActivated() { }
+    protected bool CanUpdate => HasPermission(p => p.CanUpdate);
 }
 ```
 
 ### Event-Driven Communication
 ```csharp
-// Module-to-Module (Decoupled)
-// Publish events for state changes
+// Publish events
 EventBus?.GetEvent<PatientSelectedEvent>()
     .Publish(new PatientSelectedEventPayload { Patient = patient, Source = ScreenId });
 
-// Subscribe to relevant events
+// Subscribe (avoid circular dependencies)
 protected override void OnScreenActivated()
 {
-    EventBus?.GetEvent<PatientSelectedEvent>()
-        .Subscribe(OnPatientSelected);
+    EventBus?.GetEvent<PatientSelectedEvent>().Subscribe(OnPatientSelected);
 }
 
-// Avoid circular event dependencies (check Source)
 private void OnPatientSelected(object payload)
 {
     if (payload is PatientSelectedEventPayload evt && evt.Source == ScreenId)
@@ -232,206 +147,110 @@ private void OnPatientSelected(object payload)
 
 ### Dependency Injection
 ```csharp
-// Use DI for services (Microsoft.Extensions.DependencyInjection)
-// Avoid direct instantiation in business logic
-
 // Constructor injection for services
-public class MyBusinessService
+public class MyService
 {
     private readonly IComponentRepository _repo;
-    private readonly ILogger _logger;
-    
-    public MyBusinessService(
-        IComponentRepository repo,
-        ILogger logger)
-    {
-        _repo = repo;
-        _logger = logger;
-    }
+    public MyService(IComponentRepository repo) => _repo = repo;
 }
 
-// Use [ActivatorUtilitiesConstructor] for view constructors
+// Use [ActivatorUtilitiesConstructor] for views
 public MyView(IService service) : BaseWorkControl
 {
     [ActivatorUtilitiesConstructor]
-    public MyView(IService service) : this()
-    {
-        _service = service; // Injected
-    }
+    public MyView(IService service) : this() { _service = service; }
 }
 ```
 
-### Database Access
+### Database & UI Development
 ```csharp
-// Always use repository pattern
-// Use async/await for DB operations
-
-// Example: Repository
-public interface IPatientRepository
-{
-    Task<PatientInfoDto> GetPatientAsync(string patientId);
-    Task SavePatientAsync(PatientInfoDto patient);
-}
-
-// Avoid raw SQL in UI components - use services
+// Always use repository pattern with async/await
 // Use parameterized queries to prevent SQL injection
-```
 
-### UI Development (WinForms + DevExpress)
-```csharp
-// Inherit from BaseWorkControl, not Control directly
-public partial class PatientListControl : BaseWorkControl
-{
-    // Override lifecycle methods
-    protected override void OnScreenActivated() { }
-    protected override void OnScreenDeactivated() { }
-    
-    // Use permission checks
-    protected bool CanUpdate => HasPermission(p => p.CanUpdate);
-}
-}
-
-// Use DevExpress controls via wrappers
-// nU3GridControl, nU3TextEdit, etc.
-
-// Resource management is automatic in BaseWorkControl
-// Register disposable resources
+// Use nU3 controls (wrapped DevExpress, namespace: nU3.Core.UI.Controls)
+// Inherit from BaseWorkControl, use RegisterDisposable() for resources
 RegisterDisposable(_httpClient);
 ```
 
-### Component Deployment
-```csharp
-// 1. ComponentId must be unique (include extension if needed)
-// 2. Always verify file hash before overwriting
-// 3. Use StoragePath that preserves folder structure
-
-// Component naming convention
-// Core: "nU3.Core", "DevExpress.XtraEditors" → Root folder
-// Modules: "Modules\EMR\IN\nU3.Modules.EMR.IN.Worklist.dll"
-// Plugins: "plugins\PluginName\PluginName.dll"
-// Resources: "resources\images\logo.png"
-```
-
 ---
 
-## Important Notes for Agents
+## Important Notes
 
-### 1. Medical Domain Specifics
+### Medical Domain
+- Validate patient IDs (HIPAA), use DateTimeOffset for timestamps
+- Never log sensitive patient data, use secure storage for keys
+- Gender: 0=Unknown, 1=Male, 2=Female, 3=Other
+- BloodType: 0=Unknown, 1=A+, 2=A-, 3=B+, 4=B-, 5=O+, 6=O-
+
+### DevExpress Specifics
+- Reference Demo: `c:\Project2_OPERATION\05.Framework\Reference\Example_CS\`
+- Reference Docs: `c:\Project2_OPERATION\05.Framework\Reference\DevExpress.WindowsForms.v23.2\`
+- Use nU3 controls (same API as DevExpress, just namespace/prefix change)
+- Separate designer code for WinForms designer compatibility, no lambdas in designer code
+
+### Common Pitfalls
 ```csharp
-// Medical Data Handling
-// - Always validate patient IDs (HIPAA)
-// - Use DateTimeOffset for timestamps
-// - Never log sensitive patient data to console/file
-// - Use secure storage for encryption keys
-
-// Medical Constants
-// Gender: 0=Unknown, 1=Male, 2=Female, 3=Other
-// BloodType: 0=Unknown, 1=A+, 2=A-, 3=B+, 4=B-, 5=O+, 6=O-
+// ❌ Magic numbers, hardcoded paths, Thread.Sleep(), silent catches, static singletons
+// ✅ Constants, Path.Combine(), await Task.Delay(), log+rethrow, DI container
 ```
 
-### 2. Thread Safety
+### Thread Safety & Disposables
 ```csharp
-// Use ConcurrentDictionary for thread-safe caches
 private readonly ConcurrentDictionary<int, HttpClient> _httpClientPool;
-
-// Use lock for non-thread-safe operations
 private readonly object _lock = new object();
-lock (_lock) { ... }
-```
 
-### 3. Disposable Pattern
-```csharp
-// Always call RegisterDisposable() for disposable resources
-public class MyControl : BaseWorkControl
+public MyControl()
 {
-    private Timer _timer;
-    
-    public MyControl()
-    {
-        _timer = new Timer();
-        RegisterDisposable(_timer);  // Auto-cleanup
-    }
+    _timer = new Timer();
+    RegisterDisposable(_timer);  // Auto-cleanup in BaseWorkControl
 }
 ```
 
-### 4. DevExpress Specifics
-```csharp
-// Use XtraTabbedMdiManager for MDI forms
-// Use XtraGridControl with GridView for tables
-// Use LayoutControl for responsive layouts
-
-// Avoid direct form show from business logic
-// Use navigation pattern instead
-```
-
-### 5. Common Pitfalls to Avoid
-```csharp
-// ❌ DO: Use string magic numbers
-// ✅ DO: Use constants with meaningful names
-const int DEFAULT_TIMEOUT_SECONDS = 30;
-
-// ❌ DO: Hardcode paths
-// ✅ DO: Use Path.Combine() and Environment variables
-string configPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "config");
-
-// ❌ DO: Use Thread.Sleep()
-// ✅ DO: await Task.Delay() or CancellationToken
-
-// ❌ DO: Catch and ignore exceptions silently
-// ✅ DO: Log and rethrow with context
-
-// ❌ DO: Implement Singleton as static property
-// ✅ DO: Use DI Container for lifecycle management
-```
-
-### 6. Testing Considerations
-```csharp
-// When writing tests for this project:
-// - Mock repositories (IComponentRepository, ILogger, etc.)
-// - Mock HTTP clients (HttpClient, IDBAccessService)
-// - Test async methods (with ConfigureAwait(false))
-// - Use in-memory database for unit tests (SQLite in-memory mode)
-// - Verify all exceptions are logged appropriately
-```
-
 ---
 
-## Quick Reference
+## Project Structure & Dependencies
 
-### Project Structure
 ```
 SRC/
 ├── nU3.Core/         # Business logic, interfaces, services
 ├── nU3.Core.UI/       # Base UI classes, controls
+├── nU3.Core.UI.Components/  # nU3 wrapped controls
 ├── nU3.Data/          # Data access layer
 ├── nU3.Models/        # DTOs, entities, enums
-├── nU3.Connectivity/     # External APIs, HTTP clients
-├── nU3.Tools.Deployer/# Deployment tool
-└── Modules/              # Business modules (EMR, ADM, OT, etc.)
+├── nU3.Connectivity/  # External APIs, HTTP clients
+├── nU3.Bootstrapper/  # DI setup
+├── nU3.Shell/         # Shell interface
+├── nU3.MainShell/     # Main shell implementation
+├── nU3.Tools.Deployer/ # Deployment tool
+├── Servers/           # Server projects (Host, Connectivity)
+├── Modules/           # Business modules (EMR, ADM, OT, etc.)
+└── Tools/             # Utilities (DbTest)
 ```
 
-### Key Dependencies
-- DevExpress WinForms v23.2.9
-- Microsoft.Extensions.DependencyInjection v8.0.0
-- System.Data.SqlClient (for local SQLite)
-- System.Net.Http.Json (for REST APIs)
-
-
-## Inportant ##
-- 주석은 한글로 작성하며 최대한 자세하게 작성한다. 
-- 주석은 내용이 틀린 경우 삭제해도 무방하나 기존에 있던 주석을 임의로 삭제하지 않는다.
-- 코드주석 처리는 임의로 삭제하지 않는다. 
-- Framework 전반에 관련된 문서는 DOC 폴더밑에 DOC_{Category}_{Title}.md 형식으로 작성한다.
-- 프로젝트 내에 문서 파일은 프로젝트 파일(.csproj)과 동일한 곳에 생성하며, DOC_{Category}_{Function}_{Detail}.md 로 형식으로 작성한다.
-- 코드가 수정이 되면 DOC_ 내용에 맞게 갱신한다.
-- 모든 코드 및 문서는 UTF8로 인코딩하여 저장할것.
-- DevExpress Winform Demo : c:\Project2_OPERATION\05.Framework\Reference\Example_CS\
-- DevExpress Winform Document : c:\Project2_OPERATION\05.Framework\Reference\DevExpress.WindowsForms.v23.2\
--
-
+**Key Dependencies**: DevExpress WinForms v23.2.9, Microsoft.Extensions.DependencyInjection v8.0.0, System.Data.SqlClient, System.Net.Http.Json
 
 ---
 
-**Generated**: 2026-02-03  
-**Version**: 1.0  
-**Framework**: nU3.Framework v1.0
+## Critical Guidelines (Korean)
+
+### 코딩 규칙
+- **주석**: 한글로 작성하며 최대한 자세하게 작성한다. 내용이 틀린 경우에만 삭제하며, 기존 주석은 임의로 삭제하지 않는다
+- **코드주석 처리**: 임의로 삭제하지 않는다
+- **문서 작성**:
+  - Framework 전반 문서: `DOC 폴더/DOC_{Category}_{Title}.md`
+  - 프로젝트 내 문서: `.csproj와 동일 위치/DOC_{Category}_{Function}_{Detail}.md`
+  - 코드 수정 시 DOC 내용을 갱신한다
+- **인코딩**: 모든 코드 및 문서는 UTF8로 저장한다
+
+### DevExpress 컨트롤 사용
+- 이 프로젝트에서 사용되는 컨트롤은 nU3 컨트롤을 사용해야 한다 (네임스페이스: `nU3.Core.UI.Controls`)
+- DevExpress 컨트롤을 상속받아 랩핑했으므로 동일한 API로 작동한다
+- DevExpress 컨트롤로 작성 후 네임스페이스와 접두어를 일괄 변경하여 변환 가능하다
+
+### 화면 개발
+- 윈폼 디자이너에서 디자인 가능하도록 디자인 코드를 분리해야 한다
+- 디자인 코드에는 람다식이 들어가면 안된다
+
+---
+
+**Last Updated**: 2026-02-05

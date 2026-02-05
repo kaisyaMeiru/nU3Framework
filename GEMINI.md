@@ -1,111 +1,258 @@
-# GEMINI.md - Project Context & Guide
+﻿# GEMINI.md - Project Context & Guide
 
-## 1. Project Overview
+# nU3.Framework - Agentic Coding Agent Instructions
 
-**Project Name:** Hospital Information System (GMIS / EMR) Framework Migration
-**Type:** Enterprise Desktop Application (WinForms)
-**Status:** **Foundation Implemented (Phase 1 Completed)**
-**Domain:** Healthcare / Hospital Information System (HIS)
+> **Framework**: nU3.Framework (Medical IS Framework)  
+> **Tech Stack**: .NET 8.0, WinForms, DevExpress 23.2.9, ASP.NET Core  
+> **Purpose**: Guide for AI coding agents operating in this repository.
 
-This project represents a large-scale Hospital Information System (GMIS) and Electronic Medical Record (EMR) system. The current working directory contains both the legacy source code (`AS-IS`) and the active implementation of the next-generation framework (`nU3.Framework`).
+---
 
-The primary goal is to transition from a legacy custom WinForms framework to a modern **.NET 8 + DevExpress WinForms** architecture, focusing on modularity, performance, and stability.
+## Build, Lint, Test Commands
 
-## 2. Directory Structure & Projects
+### Build Commands
+```bash
+# Build entire solution
+dotnet build nU3.Framework.sln --configuration Release
+dotnet build nU3.Framework.sln --configuration Debug
 
-### 📂 Root Directory
-*   `AS-IS/`: Legacy source code.
-*   `nU3.Framework/SRC/`: **New Framework Source Code**
+# Build specific project
+dotnet build nU3.Core/nU3.Core.csproj
 
-### 📂 Active Projects (nU3.Framework)
-*   **`nU3.Core`**:
-    *   Shared Interfaces (`IModule`, `IWorkForm`).
-    *   Attributes (`[ScreenInfo]`) for metadata-driven discovery.
-    *   Events (`IEventAggregator`, `PubSubEvent`) for decoupled communication.
-    *   Security (`UserSession`).
-*   **`nU3.Core.UI`**:
-    *   Base UI Classes (`BaseWorkControl`, `BaseXtraForm`).
-    *   *Designed to inherit from DevExpress controls.*
-*   **`nU3.Data`**:
-    *   `LocalDatabaseManager`: SQLite implementation for client-side configuration.
-    *   Schema: `SYS_MODULE_MST`, `SYS_MODULE_VER`, `SYS_PROG_MST`, `SYS_MENU`.
-*   **`nU3.Connectivity`**:
-    *   **Connectivity Layer**: Database access (Oracle/SQL) and File Transfer interfaces.
-    *   `IDBAccessService`: Standardized async/sync database operations.
-*   **`nU3.Bootstrapper`**:
-    *   **Launcher Application**.
-    *   Checks for module updates (Syncs `ServerStorage` -> `Staging Cache` -> `Runtime Modules`).
-    *   **Zero-Lock Updates**: Ensures DLLs are updated before the main Shell locks them.
-    *   Launches `nU3.Shell.exe`.
-*   **`nU3.Shell`**:
-    *   **Main MDI Container**.
-    *   Dynamically loads modules from the `Modules/` directory (Recursive).
-    *   Builds menus dynamically from `SYS_MENU`.
-    *   Uses Dependency Injection (DI) for services.
-*   **`nU3.Tools.Deployer`**:
-    *   **Admin Tool** for developers.
-    *   Register Modules & Categories.
-    *   Upload Versions (with Hash calculation).
-    *   **Menu Editor**: Visual Drag & Drop menu configuration.
-*   **`nU3.Modules.{Category}.{Name}`**:
-    *   Example: `nU3.Modules.EMR.Clinic` (Outpatient Registration).
-    *   Business logic implementation.
+# Restore packages / Clean
+dotnet restore nU3.Framework.sln
+dotnet clean nU3.Framework.sln
+```
 
-## 3. Technical Stack & Key Technologies
+### Test Commands
+```bash
+# NOTE: Only DbTest project exists (no xUnit/NUnit yet)
 
-### TO-BE (New Framework)
-*   **Framework:** .NET 8 (Windows)
-*   **UI:** WinForms (DevExpress)
-*   **Data (Client):** System.Data.SQLite
-*   **Data (Server):** Oracle (via `nU3.Connectivity`)
-*   **Communication:**
-    *   **Internal:** `EventAggregator` (Pub/Sub).
-    *   **External:** Service Agent Pattern (`nU3.Connectivity`).
-*   **Architecture:**
-    *   **Category-Based Plugin Architecture:** Modules are organized by folder (`Modules/EMR/`, `Modules/ADM/`).
-    *   **Staged Deployment:** Bootstrapper syncs DLLs to a local cache to prevent file locking.
-    *   **DI Container:** `Microsoft.Extensions.DependencyInjection`.
+# Run DbTest project
+dotnet build Tools/DbTest/DbTest.csproj
 
-## 4. Deployment System (Implemented)
+# Run specific test (when test framework added)
+dotnet test --filter "FullyQualified.TestMethodName"
+dotnet test --filter "Category=Unit" --verbosity normal
+```
 
-The framework uses a rigorous deployment strategy:
+### Lint/Analysis Commands
+```bash
+# Check for compiler warnings
+dotnet build --verbosity quiet 2>&1 | findstr /C /warning
 
-1.  **Registration**: Developer uses `Deployer` tool to register a module (e.g., `MOD_CLINIC`) and assign a Category (`EMR`).
-2.  **Upload**: Developer uploads a compiled DLL. The tool:
-    *   Calculates SHA-256 Hash.
-    *   Scans for `[ScreenInfo]` attributes to register Programs (`PROG_ID`).
-    *   Copies file to Server Storage (`ServerStorage/EMR/File.dll`).
-3.  **Bootstrapping (Client)**:
-    *   `Bootstrapper` runs on client startup.
-    *   Checks `SYS_MODULE_VER` for active versions.
-    *   **Staging:** Copies updated DLLs to `%AppData%/nU3.Framework/Cache`.
-    *   **Installation:** Syncs Cache to `[AppDir]/Modules` before Shell starts.
-4.  **Execution**: Shell loads assemblies from the local `Modules` folder.
+# Check for obsolete packages
+dotnet list package --deprecated
 
-## 5. Development Conventions
+# Use Visual Studio → Build → Analyze Solution for Code Clones
+```
 
-*   **Naming:** `nU3.Modules.{Category}.{Name}`
-*   **Attributes:** All Screens must have `[ScreenInfo("Name", "ID", "Category")]`.
-*   **Base Classes:** All Screens must inherit `BaseWorkControl`. All Popups must inherit `BaseXtraForm`.
+---
 
-## 6. Critical Considerations
+## Code Style Guidelines
 
-1.  **Dependency Decoupling:** The legacy system likely has tight coupling. The new system enforces isolation via `IEventAggregator` and Interface-based design.
-2.  **Hardware Integration:** (Pending - Phase 2) Needs Serial/USB integration layer.
-3.  **Performance:** (Pending - Phase 2) GridControl Server Mode implementation.
+### Imports & Namespaces
+```csharp
+// 1. System imports (alphabetical)
+using System;
+using System.Threading.Tasks;
 
+// 2. Third-party (DevExpress)
+using DevExpress.XtraEditors;
 
+// 3. nU3 internal
+using nU3.Core;
+using nU3.Models;
+```
 
-## Inportant ##
-- 주석은 한글로 작성하며 최대한 자세하게 작성한다. 
-- 주석은 내용이 틀린 경우 삭제해도 무방하나 기존에 있던 주석을 임의로 삭제하지 않는다.
-- 코드주석 처리는 임의로 삭제하지 않는다. 
-- Framework 전반에 관련된 문서는 DOC 폴더밑에 DOC_{Category}_{Title}.md 형식으로 작성한다.
-- 프로젝트 내에 문서 파일은 프로젝트 파일(.csproj)과 동일한 곳에 생성하며, DOC_{Category}_{Function}_{Detail}.md 로 형식으로 작성한다.
-- 코드가 수정이 되면 DOC_ 내용에 맞게 갱신한다.
-- 모든 코드 및 문서는 UTF8로 인코딩하여 저장할것.
-- DevExpress API, Help문서는 Reference 폴더 밑에 있으므로 참조할 것.
-- DevExpress Winform Demo 프로젝트 및 파일 : c:\Project2_OPERATION\05.Framework\nU3.Framework\Reference\Example_CS\
-- DevExpress Winform Document : c:\Project2_OPERATION\05.Framework\nU3.Framework\Reference\DevExpress.WindowsForms.v23.2\
+### Naming Conventions
+| Element | Convention | Example |
+|---------|-----------|--------|
+| Classes | PascalCase | `PatientListControl` |
+| Interfaces | I-prefixed | `IShellForm`, `IWorkForm` |
+| DTOs | **Dto** suffix | `PatientInfoDto` |
+| Enums | PascalCase | `ComponentType` |
+| Methods | PascalCase | `LoadData()` |
+| Private fields | _camelCase | `_instance` |
+| Events | **Event** suffix | `PatientSelectedEvent` |
+| Event Payloads | **EventPayload** suffix | `PatientSelectedEventPayload` |
+| Exceptions | **Exception** suffix | `AuthenticationException` |
+
+### Formatting & Types
+```csharp
+// 4-space indentation, no tabs
+// XML comments: /// <summary>
+// Use regions: #region Public Methods
+
+// Nullable reference types
+public string? ServerUrl { get; }
+public Task<T> GetAsync<T>(string id);
+
+// Use 'var' when type obvious, List<T> over arrays
+var results = new List<PatientInfoDto>();
+
+// Async/await patterns
+public async Task LoadDataAsync(CancellationToken token = default)
+{
+    token.ThrowIfCancellationRequested();
+    var data = await _dbClient.ExecuteDataTableAsync(sql, token).ConfigureAwait(false);
+}
+```
+
+### Error Handling & Logging
+```csharp
+// Never throw on non-fatal paths
+try { LogManager.Info(message, category); } catch { }
+
+// Always log exceptions with context
+catch (Exception ex)
+{
+    LogManager.Error($"Operation failed: {ex.Message}", category, ex);
+    throw; // Re-throw critical errors
+}
+```
+
+---
+
+## Module & Architecture Guidelines
+
+### Plugin Development
+```csharp
+[nU3ProgramInfo(typeof(MyModuleScreen), "Display Name", "MODULE_ID", "CHILD")]
+
+public class MyModuleScreen : BaseWorkControl
+{
+    public override string ScreenId => "MY_SCREEN_001";
+    protected override void OnScreenActivated() { }
+    protected bool CanUpdate => HasPermission(p => p.CanUpdate);
+}
+```
+
+### Event-Driven Communication
+```csharp
+// Publish events
+EventBus?.GetEvent<PatientSelectedEvent>()
+    .Publish(new PatientSelectedEventPayload { Patient = patient, Source = ScreenId });
+
+// Subscribe (avoid circular dependencies)
+protected override void OnScreenActivated()
+{
+    EventBus?.GetEvent<PatientSelectedEvent>().Subscribe(OnPatientSelected);
+}
+
+private void OnPatientSelected(object payload)
+{
+    if (payload is PatientSelectedEventPayload evt && evt.Source == ScreenId)
+        return; // Ignore own events
+}
+```
+
+### Dependency Injection
+```csharp
+// Constructor injection for services
+public class MyService
+{
+    private readonly IComponentRepository _repo;
+    public MyService(IComponentRepository repo) => _repo = repo;
+}
+
+// Use [ActivatorUtilitiesConstructor] for views
+public MyView(IService service) : BaseWorkControl
+{
+    [ActivatorUtilitiesConstructor]
+    public MyView(IService service) : this() { _service = service; }
+}
+```
+
+### Database & UI Development
+```csharp
+// Always use repository pattern with async/await
+// Use parameterized queries to prevent SQL injection
+
+// Use nU3 controls (wrapped DevExpress, namespace: nU3.Core.UI.Controls)
+// Inherit from BaseWorkControl, use RegisterDisposable() for resources
+RegisterDisposable(_httpClient);
+```
+
+---
+
+## Important Notes
+
+### Medical Domain
+- Validate patient IDs (HIPAA), use DateTimeOffset for timestamps
+- Never log sensitive patient data, use secure storage for keys
+- Gender: 0=Unknown, 1=Male, 2=Female, 3=Other
+- BloodType: 0=Unknown, 1=A+, 2=A-, 3=B+, 4=B-, 5=O+, 6=O-
+
+### DevExpress Specifics
+- Reference Demo: `c:\Project2_OPERATION\05.Framework\Reference\Example_CS\`
+- Reference Docs: `c:\Project2_OPERATION\05.Framework\Reference\DevExpress.WindowsForms.v23.2\`
+- Use nU3 controls (same API as DevExpress, just namespace/prefix change)
+- Separate designer code for WinForms designer compatibility, no lambdas in designer code
+
+### Common Pitfalls
+```csharp
+// ❌ Magic numbers, hardcoded paths, Thread.Sleep(), silent catches, static singletons
+// ✅ Constants, Path.Combine(), await Task.Delay(), log+rethrow, DI container
+```
+
+### Thread Safety & Disposables
+```csharp
+private readonly ConcurrentDictionary<int, HttpClient> _httpClientPool;
+private readonly object _lock = new object();
+
+public MyControl()
+{
+    _timer = new Timer();
+    RegisterDisposable(_timer);  // Auto-cleanup in BaseWorkControl
+}
+```
+
+---
+
+## Project Structure & Dependencies
+
+```
+SRC/
+├── nU3.Core/         # Business logic, interfaces, services
+├── nU3.Core.UI/       # Base UI classes, controls
+├── nU3.Core.UI.Components/  # nU3 wrapped controls
+├── nU3.Data/          # Data access layer
+├── nU3.Models/        # DTOs, entities, enums
+├── nU3.Connectivity/  # External APIs, HTTP clients
+├── nU3.Bootstrapper/  # DI setup
+├── nU3.Shell/         # Shell interface
+├── nU3.MainShell/     # Main shell implementation
+├── nU3.Tools.Deployer/ # Deployment tool
+├── Servers/           # Server projects (Host, Connectivity)
+├── Modules/           # Business modules (EMR, ADM, OT, etc.)
+└── Tools/             # Utilities (DbTest)
+```
+
+**Key Dependencies**: DevExpress WinForms v23.2.9, Microsoft.Extensions.DependencyInjection v8.0.0, System.Data.SqlClient, System.Net.Http.Json
+
+---
+
+## Critical Guidelines (Korean)
+
+### 코딩 규칙
+- **주석**: 한글로 작성하며 최대한 자세하게 작성한다. 내용이 틀린 경우에만 삭제하며, 기존 주석은 임의로 삭제하지 않는다
+- **코드주석 처리**: 임의로 삭제하지 않는다
+- **문서 작성**:
+  - Framework 전반 문서: `DOC 폴더/DOC_{Category}_{Title}.md`
+  - 프로젝트 내 문서: `.csproj와 동일 위치/DOC_{Category}_{Function}_{Detail}.md`
+  - 코드 수정 시 DOC 내용을 갱신한다
+- **인코딩**: 모든 코드 및 문서는 UTF8로 저장한다
+
+### DevExpress 컨트롤 사용
+- 이 프로젝트에서 사용되는 컨트롤은 nU3 컨트롤을 사용해야 한다 (네임스페이스: `nU3.Core.UI.Controls`)
+- DevExpress 컨트롤을 상속받아 랩핑했으므로 동일한 API로 작동한다
+- DevExpress 컨트롤로 작성 후 네임스페이스와 접두어를 일괄 변경하여 변환 가능하다
+
+### 화면 개발
+- 윈폼 디자이너에서 디자인 가능하도록 디자인 코드를 분리해야 한다
+- 디자인 코드에는 람다식이 들어가면 안된다
+
+---
 
 
