@@ -1,8 +1,10 @@
 using System;
 using System.ComponentModel;
 using DevExpress.XtraEditors;
+using DevExpress.XtraEditors.Drawing;
 using DevExpress.XtraEditors.Registrator;
 using DevExpress.XtraEditors.Repository;
+using DevExpress.XtraEditors.ViewInfo;
 
 namespace nU3.Core.UI.Controls
 {
@@ -19,7 +21,7 @@ namespace nU3.Core.UI.Controls
         {
             EditorRegistrationInfo.Default.Editors.Add(new EditorClassInfo(
                 CustomEditName, typeof(nU3TextEdit), typeof(nU3RepositoryItemTextEdit),
-                null, null, true));
+                typeof(TextEditViewInfo), new TextEditPainter(), true));
         }
 
         [Category("nU3 Framework")]
@@ -54,7 +56,7 @@ namespace nU3.Core.UI.Controls
         {
             EditorRegistrationInfo.Default.Editors.Add(new EditorClassInfo(
                 CustomEditName, typeof(nU3ButtonEdit), typeof(nU3RepositoryItemButtonEdit),
-                null, null, true));
+                typeof(ButtonEditViewInfo), new ButtonEditPainter(), true));
         }
     }
 
@@ -86,7 +88,7 @@ namespace nU3.Core.UI.Controls
         {
             EditorRegistrationInfo.Default.Editors.Add(new EditorClassInfo(
                 CustomEditName, typeof(nU3CheckEdit), typeof(nU3RepositoryItemCheckEdit),
-                null, null, true));
+                typeof(CheckEditViewInfo), new CheckEditPainter(), true));
         }
     }
 
@@ -98,7 +100,7 @@ namespace nU3.Core.UI.Controls
         public override string EditorTypeName => nU3RepositoryItemCheckEdit.CustomEditName;
 
         public object? GetValue() => this.Checked;
-        public void SetValue(object? value) 
+        public void SetValue(object? value)
         {
             if (value is bool b) this.Checked = b;
             else if (value != null) this.Checked = Convert.ToBoolean(value);
@@ -123,7 +125,7 @@ namespace nU3.Core.UI.Controls
         {
             EditorRegistrationInfo.Default.Editors.Add(new EditorClassInfo(
                 CustomEditName, typeof(nU3MemoEdit), typeof(nU3RepositoryItemMemoEdit),
-                null, null, true));
+                typeof(MemoEditViewInfo), new MemoEditPainter(), true));
         }
     }
 
@@ -151,12 +153,12 @@ namespace nU3.Core.UI.Controls
         public const string CustomEditName = "nU3ComboBoxEdit";
         public override string EditorTypeName => CustomEditName;
 
-        public static void RegisternU3ComboBoxEdit()
-        {
-            EditorRegistrationInfo.Default.Editors.Add(new EditorClassInfo(
-                CustomEditName, typeof(nU3ComboBoxEdit), typeof(nU3RepositoryItemComboBoxEdit),
-                null, null, true));
-        }
+    public static void RegisternU3ComboBoxEdit()
+    {
+        EditorRegistrationInfo.Default.Editors.Add(new EditorClassInfo(
+            CustomEditName, typeof(nU3ComboBoxEdit), typeof(nU3RepositoryItemComboBoxEdit),
+            typeof(ComboBoxViewInfo), new ButtonEditPainter(), true));
+    }
     }
 
     [ToolboxItem(true)]
@@ -187,7 +189,7 @@ namespace nU3.Core.UI.Controls
         {
             EditorRegistrationInfo.Default.Editors.Add(new EditorClassInfo(
                 CustomEditName, typeof(nU3LookUpEdit), typeof(nU3RepositoryItemLookUpEdit),
-                null, null, true));
+                typeof(LookUpEditViewInfo), new LookUpEditPainter(), true));
         }
     }
 
@@ -219,7 +221,7 @@ namespace nU3.Core.UI.Controls
         {
             EditorRegistrationInfo.Default.Editors.Add(new EditorClassInfo(
                 CustomEditName, typeof(nU3DateEdit), typeof(nU3RepositoryItemDateEdit),
-                null, null, true));
+                typeof(DateEditViewInfo), new ButtonEditPainter(), true));
         }
     }
 
@@ -251,7 +253,7 @@ namespace nU3.Core.UI.Controls
         {
             EditorRegistrationInfo.Default.Editors.Add(new EditorClassInfo(
                 CustomEditName, typeof(nU3SpinEdit), typeof(nU3RepositoryItemSpinEdit),
-                null, null, true));
+                typeof(BaseSpinEditViewInfo), new ButtonEditPainter(), true));
         }
     }
 
@@ -283,7 +285,7 @@ namespace nU3.Core.UI.Controls
         {
             EditorRegistrationInfo.Default.Editors.Add(new EditorClassInfo(
                 CustomEditName, typeof(nU3RadioGroup), typeof(nU3RepositoryItemRadioGroup),
-                null, null, true));
+                typeof(RadioGroupViewInfo), new RadioGroupPainter(), true));
         }
     }
 
@@ -315,7 +317,7 @@ namespace nU3.Core.UI.Controls
         {
             EditorRegistrationInfo.Default.Editors.Add(new EditorClassInfo(
                 CustomEditName, typeof(nU3ToggleSwitch), typeof(nU3RepositoryItemToggleSwitch),
-                null, null, true));
+                typeof(ToggleSwitchViewInfo), new ToggleSwitchPainter(), true));
         }
     }
 
@@ -327,11 +329,11 @@ namespace nU3.Core.UI.Controls
         public override string EditorTypeName => nU3RepositoryItemToggleSwitch.CustomEditName;
 
         public object? GetValue() => this.IsOn;
-        public void SetValue(object? value) 
+        public void SetValue(object? value)
         {
-             if (value is bool b) this.IsOn = b;
-             else if (value != null) this.IsOn = Convert.ToBoolean(value);
-             else this.IsOn = false;
+            if (value is bool b) this.IsOn = b;
+            else if (value != null) this.IsOn = Convert.ToBoolean(value);
+            else this.IsOn = false;
         }
         public void Clear() => this.IsOn = false;
         public string GetControlId() => this.Name;
@@ -352,7 +354,7 @@ namespace nU3.Core.UI.Controls
         {
             EditorRegistrationInfo.Default.Editors.Add(new EditorClassInfo(
                 CustomEditName, typeof(nU3ImageComboBoxEdit), typeof(nU3RepositoryItemImageComboBox),
-                null, null, true));
+                typeof(ImageComboBoxEditViewInfo), new ButtonEditPainter(), true));
         }
     }
 
@@ -384,7 +386,7 @@ namespace nU3.Core.UI.Controls
         {
             EditorRegistrationInfo.Default.Editors.Add(new EditorClassInfo(
                 CustomEditName, typeof(nU3ProgressBarControl), typeof(nU3RepositoryItemProgressBar),
-                null, null, true));
+                typeof(ProgressBarViewInfo), new ProgressBarPainter(), true));
         }
     }
 
