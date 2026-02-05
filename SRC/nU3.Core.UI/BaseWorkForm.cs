@@ -5,8 +5,8 @@ using nU3.Core.UI.Controls.Forms;
 namespace nU3.Core.UI
 {
     /// <summary>
-    /// ¸ğµç ÆË¾÷ ´ëÈ­»óÀÚÀÇ ±âº» Å¬·¡½ºÀÔ´Ï´Ù.
-    /// TODO: Form¿¡¼­ DevExpress.XtraEditors.XtraFormÀ¸·Î »ó¼Ó º¯°æ °ËÅä
+    /// ë³‘ì› íŒì—… ëŒ€í™”ìƒìì˜ ê¸°ë³¸ í´ë˜ìŠ¤ì…ë‹ˆë‹¤.
+    /// DevExpress.XtraEditors.XtraFormì„ ìƒì†ë°›ëŠ” nU3Formì„ ê¸°ë°˜ìœ¼ë¡œ í•©ë‹ˆë‹¤.
     /// </summary>
     public class BaseWorkForm : nU3Form
     {

@@ -1,65 +1,65 @@
-# HTTP Client ±¸ÇöÃ¼ - »ç¿ë °¡ÀÌµå
+# HTTP Client êµ¬í˜„ì²´ - ì‚¬ìš© ê°€ì´ë“œ
 
-## ?? °³¿ä
+## ?? ê°œìš”
 
-`nU3.Connectivity`ÀÇ Ãß»ó Å¬·¡½º¸¦ **HTTP/REST·Î ±¸Çö**ÇÑ ±¸Ã¼ Å¬·¡½ºµéÀÔ´Ï´Ù.
+`nU3.Connectivity`ì˜ ì¶”ìƒ í´ë˜ìŠ¤ë¥¼ **HTTP/RESTë¡œ êµ¬í˜„**í•œ êµ¬ì²´ í´ë˜ìŠ¤ë“¤ì…ë‹ˆë‹¤.
 
 ---
 
-## ?? »ı¼ºµÈ ÆÄÀÏ
+## ?? ìƒì„±ëœ íŒŒì¼
 
 ```
 nU3.Connectivity/
-¦§¦¡¦¡ Implementations/
-¦¢   ¦§¦¡¦¡ DBAccessClientBase.cs           # Ãß»ó ±â¹İ Å¬·¡½º
-¦¢   ¦§¦¡¦¡ FileTransferClientBase.cs       # Ãß»ó ±â¹İ Å¬·¡½º
-¦¢   ¦§¦¡¦¡ HttpDBAccessClient.cs          # ? HTTP ±¸Çö (NEW)
-¦¢   ¦§¦¡¦¡ HttpFileTransferClient.cs      # ? HTTP ±¸Çö (NEW)
-¦¢   ¦¦¦¡¦¡ HttpLogUploadClient.cs         # ? HTTP ±¸Çö (NEW)
-¦§¦¡¦¡ IDBAccessService.cs
-¦§¦¡¦¡ IFileTransferService.cs
-¦¦¦¡¦¡ ILogUploadService.cs               # ? ÀÎÅÍÆäÀÌ½º (NEW)
+â”œâ”€â”€ Implementations/
+â”‚   â”œâ”€â”€ DBAccessClientBase.cs           # ì¶”ìƒ ê¸°ë°˜ í´ë˜ìŠ¤
+â”‚   â”œâ”€â”€ FileTransferClientBase.cs       # ì¶”ìƒ ê¸°ë°˜ í´ë˜ìŠ¤
+â”‚   â”œâ”€â”€ HttpDBAccessClient.cs          # ? HTTP êµ¬í˜„ (NEW)
+â”‚   â”œâ”€â”€ HttpFileTransferClient.cs      # ? HTTP êµ¬í˜„ (NEW)
+â”‚   â””â”€â”€ HttpLogUploadClient.cs         # ? HTTP êµ¬í˜„ (NEW)
+â”œâ”€â”€ IDBAccessService.cs
+â”œâ”€â”€ IFileTransferService.cs
+â””â”€â”€ ILogUploadService.cs               # ? ì¸í„°í˜ì´ìŠ¤ (NEW)
 ```
 
 ---
 
-## ?? ¾ÆÅ°ÅØÃ³ Èå¸§
+## ?? ì•„í‚¤í…ì²˜ íë¦„
 
-### Before (Ãß»ó Å¬·¡½º¸¸ Á¸Àç)
-
-```
-¦£¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¤
-¦¢  nU3.Connectivity                  ¦¢
-¦§¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦©
-¦¢  DBAccessClientBase (abstract)     ¦¢
-¦¢    - RemoteExecuteAsync<T>(...)   ¦¢ ¡ç ±¸Çö ¾øÀ½!
-¦¢                                    ¦¢
-¦¢  ¾î¶»°Ô ¼­¹ö¿Í Åë½ÅÇÏÁö? ?          ¦¢
-¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¥
-```
-
-### After (HTTP ±¸Çö Ãß°¡)
+### Before (ì¶”ìƒ í´ë˜ìŠ¤ë§Œ ì¡´ì¬)
 
 ```
-¦£¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¤
-¦¢  nU3.Shell (WinForms)              ¦¢
-¦¢         ¡é                          ¦¢
-¦¢  HttpDBAccessClient                ¦¢ ¡ç ±¸Ã¼ Å¬·¡½º!
-¦¢  HttpFileTransferClient            ¦¢ ¡ç ±¸Ã¼ Å¬·¡½º!
-¦¢  HttpLogUploadClient               ¦¢ ¡ç ±¸Ã¼ Å¬·¡½º!
-¦¢         ¡é                          ¦¢
-¦¢  RemoteExecuteAsync<T>(...)        ¦¢
-¦¢         ¡é HttpClient.PostAsync     ¦¢
-¦¢         ¡é                          ¦¢
-¦¢  https://localhost:64229/api/...   ¦¢
-¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¥
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚  nU3.Connectivity                  â”‚
+â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¤
+â”‚  DBAccessClientBase (abstract)     â”‚
+â”‚    - RemoteExecuteAsync<T>(...)   â”‚ â† êµ¬í˜„ ì—†ìŒ!
+â”‚                                    â”‚
+â”‚  ì–´ë–»ê²Œ ì„œë²„ì™€ í†µì‹ í•˜ì§€? ?          â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+```
+
+### After (HTTP êµ¬í˜„ ì¶”ê°€)
+
+```
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚  nU3.Shell (WinForms)              â”‚
+â”‚         â†“                          â”‚
+â”‚  HttpDBAccessClient                â”‚ â† êµ¬ì²´ í´ë˜ìŠ¤!
+â”‚  HttpFileTransferClient            â”‚ â† êµ¬ì²´ í´ë˜ìŠ¤!
+â”‚  HttpLogUploadClient               â”‚ â† êµ¬ì²´ í´ë˜ìŠ¤!
+â”‚         â†“                          â”‚
+â”‚  RemoteExecuteAsync<T>(...)        â”‚
+â”‚         â†“ HttpClient.PostAsync     â”‚
+â”‚         â†“                          â”‚
+â”‚  https://localhost:64229/api/...   â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
 ```
 
 ---
 
-## ?? »ç¿ë ¹æ¹ı
+## ?? ì‚¬ìš© ë°©ë²•
 
-### 1?? **HttpDBAccessClient »ç¿ë**
+### 1?? **HttpDBAccessClient ì‚¬ìš©**
 
 ```csharp
 using nU3.Connectivity.Implementations;
@@ -71,7 +71,7 @@ public class MyForm : Form
 
     public MyForm()
     {
-        // ¼­¹ö URL ÁöÁ¤
+        // ì„œë²„ URL ì§€ì •
         _dbClient = new HttpDBAccessClient("https://localhost:64229");
     }
 
@@ -79,14 +79,14 @@ public class MyForm : Form
     {
         try
         {
-            // DB ¿¬°á
+            // DB ì—°ê²°
             var connected = await _dbClient.ConnectAsync();
             
             if (connected)
             {
-                MessageBox.Show("DB ¿¬°á ¼º°ø!");
+                MessageBox.Show("DB ì—°ê²° ì„±ê³µ!");
                 
-                // Äõ¸® ½ÇÇà
+                // ì¿¼ë¦¬ ì‹¤í–‰
                 var dt = await _dbClient.ExecuteDataTableAsync(
                     "SELECT * FROM Users WHERE Age > @age",
                     new Dictionary<string, object> { { "@age", 18 } }
@@ -97,7 +97,7 @@ public class MyForm : Form
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"¿¡·¯: {ex.Message}");
+            MessageBox.Show($"ì—ëŸ¬: {ex.Message}");
         }
     }
 
@@ -112,7 +112,7 @@ public class MyForm : Form
 }
 ```
 
-### 2?? **HttpFileTransferClient »ç¿ë**
+### 2?? **HttpFileTransferClient ì‚¬ìš©**
 
 ```csharp
 using nU3.Connectivity.Implementations;
@@ -123,7 +123,7 @@ public class FileOperations
 
     public FileOperations()
     {
-        // ¼­¹ö URL ÁöÁ¤
+        // ì„œë²„ URL ì§€ì •
         _fileClient = new HttpFileTransferClient("https://localhost:64229");
     }
 
@@ -131,20 +131,20 @@ public class FileOperations
     {
         try
         {
-            // ·ÎÄÃ ÆÄÀÏ ÀĞ±â
+            // ë¡œì»¬ íŒŒì¼ ì½ê¸°
             var data = await File.ReadAllBytesAsync(localFilePath);
             
-            // ¼­¹ö¿¡ ¾÷·Îµå
+            // ì„œë²„ì— ì—…ë¡œë“œ
             var success = await _fileClient.UploadFileAsync(serverPath, data);
             
             if (success)
             {
-                Console.WriteLine("ÆÄÀÏ ¾÷·Îµå ¼º°ø!");
+                Console.WriteLine("íŒŒì¼ ì—…ë¡œë“œ ì„±ê³µ!");
             }
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"¾÷·Îµå ½ÇÆĞ: {ex.Message}");
+            Console.WriteLine($"ì—…ë¡œë“œ ì‹¤íŒ¨: {ex.Message}");
         }
     }
 
@@ -152,17 +152,17 @@ public class FileOperations
     {
         try
         {
-            // ¼­¹ö¿¡¼­ ´Ù¿î·Îµå
+            // ì„œë²„ì—ì„œ ë‹¤ìš´ë¡œë“œ
             var data = await _fileClient.DownloadFileAsync(serverPath);
             
-            // ·ÎÄÃ¿¡ ÀúÀå
+            // ë¡œì»¬ì— ì €ì¥
             await File.WriteAllBytesAsync(localFilePath, data);
             
-            Console.WriteLine("ÆÄÀÏ ´Ù¿î·Îµå ¼º°ø!");
+            Console.WriteLine("íŒŒì¼ ë‹¤ìš´ë¡œë“œ ì„±ê³µ!");
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"´Ù¿î·Îµå ½ÇÆĞ: {ex.Message}");
+            Console.WriteLine($"ë‹¤ìš´ë¡œë“œ ì‹¤íŒ¨: {ex.Message}");
         }
     }
 
@@ -173,7 +173,7 @@ public class FileOperations
 }
 ```
 
-### 3?? **HttpLogUploadClient »ç¿ë** ? NEW!
+### 3?? **HttpLogUploadClient ì‚¬ìš©** ? NEW!
 
 ```csharp
 using nU3.Connectivity.Implementations;
@@ -188,13 +188,13 @@ public class LogManager
     {
         _logger = new FileLogger();
         
-        // ·Î±× ¾÷·Îµå Å¬¶óÀÌ¾ğÆ® »ı¼º
+        // ë¡œê·¸ ì—…ë¡œë“œ í´ë¼ì´ì–¸íŠ¸ ìƒì„±
         _logClient = new HttpLogUploadClient(
             baseUrl: "https://localhost:64229",
             logCallback: (level, message) => LogCallback(level, message)
         );
         
-        // ÀÚµ¿ ¾÷·Îµå È°¼ºÈ­ (¸ÅÀÏ ¿ÀÀü 2½Ã)
+        // ìë™ ì—…ë¡œë“œ í™œì„±í™” (ë§¤ì¼ ì˜¤ì „ 2ì‹œ)
         _logClient.EnableAutoUpload(true);
     }
 
@@ -214,17 +214,17 @@ public class LogManager
         }
     }
 
-    // ¿À·ù ¹ß»ı ½Ã Áï½Ã ·Î±× ¾÷·Îµå
+    // ì˜¤ë¥˜ ë°œìƒ ì‹œ ì¦‰ì‹œ ë¡œê·¸ ì—…ë¡œë“œ
     public async Task OnErrorAsync(Exception ex)
     {
         _logger.Error($"Error occurred: {ex.Message}", "App", ex);
         await _logger.FlushAsync();
         
-        // ÇöÀç ·Î±× Áï½Ã ¾÷·Îµå
+        // í˜„ì¬ ë¡œê·¸ ì¦‰ì‹œ ì—…ë¡œë“œ
         await _logClient.UploadCurrentLogImmediatelyAsync();
     }
 
-    // ¾Û Á¾·á ½Ã ´ë±â ÁßÀÎ ·Î±× ¸ğµÎ ¾÷·Îµå
+    // ì•± ì¢…ë£Œ ì‹œ ëŒ€ê¸° ì¤‘ì¸ ë¡œê·¸ ëª¨ë‘ ì—…ë¡œë“œ
     public async Task OnShutdownAsync()
     {
         await _logger.FlushAsync();
@@ -235,17 +235,17 @@ public class LogManager
 
 ---
 
-## ?? HttpClient Ä¿½ºÅÍ¸¶ÀÌÂ¡
+## ?? HttpClient ì»¤ìŠ¤í„°ë§ˆì´ì§•
 
-### DI (Dependency Injection) »ç¿ë
+### DI (Dependency Injection) ì‚¬ìš©
 
 ```csharp
-// Startup.cs ¶Ç´Â Program.cs
+// Startup.cs ë˜ëŠ” Program.cs
 public void ConfigureServices(IServiceCollection services)
 {
     var serverUrl = "https://localhost:64229";
 
-    // HttpClient µî·Ï (IHttpClientFactory)
+    // HttpClient ë“±ë¡ (IHttpClientFactory)
     services.AddHttpClient<HttpDBAccessClient>(client =>
     {
         client.BaseAddress = new Uri(serverUrl);
@@ -266,7 +266,7 @@ public void ConfigureServices(IServiceCollection services)
     });
 }
 
-// »ç¿ë
+// ì‚¬ìš©
 public class MyService
 {
     private readonly HttpDBAccessClient _dbClient;
@@ -288,7 +288,7 @@ public class MyService
 }
 ```
 
-### ÀÎÁõ Ãß°¡
+### ì¸ì¦ ì¶”ê°€
 
 ```csharp
 public class AuthenticatedHttpClient
@@ -305,7 +305,7 @@ public class AuthenticatedHttpClient
     }
 }
 
-// »ç¿ë
+// ì‚¬ìš©
 var httpClient = AuthenticatedHttpClient.CreateAuthenticatedClient(
     "https://localhost:64229", 
     "your-jwt-token");
@@ -316,20 +316,20 @@ var logClient = new HttpLogUploadClient(httpClient, "https://localhost:64229");
 
 ---
 
-## ?? ¸Ş¼­µå ¸ÅÇÎ
+## ?? ë©”ì„œë“œ ë§¤í•‘
 
-### HttpLogUploadClient ¸ÅÇÎ ? NEW!
+### HttpLogUploadClient ë§¤í•‘ ? NEW!
 
-| Å¬¶óÀÌ¾ğÆ® ¸Ş¼­µå | HTTP ¸Ş¼­µå | API ¿£µåÆ÷ÀÎÆ® |
+| í´ë¼ì´ì–¸íŠ¸ ë©”ì„œë“œ | HTTP ë©”ì„œë“œ | API ì—”ë“œí¬ì¸íŠ¸ |
 |------------------|-------------|----------------|
 | `UploadLogFileAsync(...)` | POST | `/api/log/upload` |
 | `UploadAuditLogAsync(...)` | POST | `/api/log/upload-audit` |
 | `UploadAllPendingLogsAsync()` | POST (multiple) | `/api/log/upload` |
 | `UploadCurrentLogImmediatelyAsync()` | POST | `/api/log/upload` |
 
-### HttpDBAccessClient ¸ÅÇÎ
+### HttpDBAccessClient ë§¤í•‘
 
-| Å¬¶óÀÌ¾ğÆ® ¸Ş¼­µå | HTTP ¸Ş¼­µå | API ¿£µåÆ÷ÀÎÆ® |
+| í´ë¼ì´ì–¸íŠ¸ ë©”ì„œë“œ | HTTP ë©”ì„œë“œ | API ì—”ë“œí¬ì¸íŠ¸ |
 |------------------|-------------|----------------|
 | `ConnectAsync()` | POST | `/api/v1/db/connect` |
 | `BeginTransaction()` | POST | `/api/v1/db/transaction/begin` |
@@ -340,9 +340,9 @@ var logClient = new HttpLogUploadClient(httpClient, "https://localhost:64229");
 | `ExecuteScalarValueAsync(...)` | POST | `/api/v1/db/query/scalar` |
 | `ExecuteProcedureAsync(...)` | POST | `/api/v1/db/procedure` |
 
-### HttpFileTransferClient ¸ÅÇÎ
+### HttpFileTransferClient ë§¤í•‘
 
-| Å¬¶óÀÌ¾ğÆ® ¸Ş¼­µå | HTTP ¸Ş¼­µå | API ¿£µåÆ÷ÀÎÆ® |
+| í´ë¼ì´ì–¸íŠ¸ ë©”ì„œë“œ | HTTP ë©”ì„œë“œ | API ì—”ë“œí¬ì¸íŠ¸ |
 |------------------|-------------|----------------|
 | `GetHomeDirectoryAsync()` | GET | `/api/v1/files/directory` |
 | `SetHomeDirectoryAsync(...)` | POST | `/api/v1/files/directory/config` |
@@ -358,7 +358,7 @@ var logClient = new HttpLogUploadClient(httpClient, "https://localhost:64229");
 
 ---
 
-## ?? Å×½ºÆ® ¿¹½Ã
+## ?? í…ŒìŠ¤íŠ¸ ì˜ˆì‹œ
 
 ```csharp
 [Fact]
@@ -424,23 +424,23 @@ public async Task Should_Upload_File_Successfully()
 
 ---
 
-## ?? º¸¾È °í·Á»çÇ×
+## ?? ë³´ì•ˆ ê³ ë ¤ì‚¬í•­
 
-### 1. HTTPS »ç¿ë
+### 1. HTTPS ì‚¬ìš©
 
 ```csharp
-// ? ¿Ã¹Ù¸¥ ¹æ¹ı
+// ? ì˜¬ë°”ë¥¸ ë°©ë²•
 var client = new HttpDBAccessClient("https://localhost:64229");
 var logClient = new HttpLogUploadClient("https://localhost:64229");
 
-// ? ÇÁ·Î´ö¼Ç¿¡¼­ HTTP »ç¿ë ±İÁö
+// ? í”„ë¡œë•ì…˜ì—ì„œ HTTP ì‚¬ìš© ê¸ˆì§€
 var client = new HttpDBAccessClient("http://localhost:64228");
 ```
 
-### 2. ÀÎÁõ¼­ °ËÁõ
+### 2. ì¸ì¦ì„œ ê²€ì¦
 
 ```csharp
-// °³¹ß È¯°æ¿¡¼­¸¸ ÀÎÁõ¼­ °ËÁõ ¹«½Ã
+// ê°œë°œ í™˜ê²½ì—ì„œë§Œ ì¸ì¦ì„œ ê²€ì¦ ë¬´ì‹œ
 #if DEBUG
 var handler = new HttpClientHandler
 {
@@ -452,19 +452,19 @@ var client = new HttpDBAccessClient(httpClient, "https://localhost:64229");
 #endif
 ```
 
-### 3. Å¸ÀÓ¾Æ¿ô ¼³Á¤
+### 3. íƒ€ì„ì•„ì›ƒ ì„¤ì •
 
 ```csharp
 var httpClient = new HttpClient
 {
-    Timeout = TimeSpan.FromSeconds(30) // ÀûÀıÇÑ Å¸ÀÓ¾Æ¿ô ¼³Á¤
+    Timeout = TimeSpan.FromSeconds(30) // ì ì ˆí•œ íƒ€ì„ì•„ì›ƒ ì„¤ì •
 };
 var client = new HttpDBAccessClient(httpClient, "https://server");
 ```
 
 ---
 
-## ?? ¿¡·¯ Ã³¸®
+## ?? ì—ëŸ¬ ì²˜ë¦¬
 
 ```csharp
 public async Task<DataTable> GetUsersWithErrorHandling()
@@ -476,22 +476,22 @@ public async Task<DataTable> GetUsersWithErrorHandling()
     }
     catch (HttpRequestException ex)
     {
-        // HTTP Åë½Å ¿¡·¯
+        // HTTP í†µì‹  ì—ëŸ¬
         LogError($"HTTP Error: {ex.Message}");
         
-        // ·Î±× ¾÷·Îµå
+        // ë¡œê·¸ ì—…ë¡œë“œ
         await _logClient.UploadCurrentLogImmediatelyAsync();
         throw;
     }
     catch (InvalidOperationException ex)
     {
-        // ¿ø°İ ½ÇÇà ¿¡·¯
+        // ì›ê²© ì‹¤í–‰ ì—ëŸ¬
         LogError($"Remote Execution Error: {ex.Message}");
         throw;
     }
     catch (Exception ex)
     {
-        // ±âÅ¸ ¿¡·¯
+        // ê¸°íƒ€ ì—ëŸ¬
         LogError($"Unexpected Error: {ex.Message}");
         throw;
     }
@@ -500,19 +500,19 @@ public async Task<DataTable> GetUsersWithErrorHandling()
 
 ---
 
-## ?? °á·Ğ
+## ?? ê²°ë¡ 
 
-### ? ¹®Á¦ ÇØ°á
+### ? ë¬¸ì œ í•´ê²°
 
 **Before:**
 ```csharp
-// Ãß»ó ¸Ş¼­µå¸¸ ÀÖ°í ±¸Çö ¾øÀ½
+// ì¶”ìƒ ë©”ì„œë“œë§Œ ìˆê³  êµ¬í˜„ ì—†ìŒ
 protected abstract Task<T> RemoteExecuteAsync<T>(...); // ?
 ```
 
 **After:**
 ```csharp
-// HTTP ±¸Çö ¿Ï·á!
+// HTTP êµ¬í˜„ ì™„ë£Œ!
 protected override async Task<T> RemoteExecuteAsync<T>(...)
 {
     var response = await _httpClient.PostAsJsonAsync(endpoint, data);
@@ -520,43 +520,43 @@ protected override async Task<T> RemoteExecuteAsync<T>(...)
 }
 ```
 
-### ?? Ã¼Å©¸®½ºÆ®
+### ?? ì²´í¬ë¦¬ìŠ¤íŠ¸
 
-- [x] `HttpDBAccessClient` »ı¼º
-- [x] `HttpFileTransferClient` »ı¼º
-- [x] `HttpLogUploadClient` »ı¼º ? NEW!
-- [x] `ILogUploadService` ÀÎÅÍÆäÀÌ½º »ı¼º ? NEW!
-- [x] ¼­¹ö URL ±¸¼º °¡´É
-- [x] ¸ğµç API ¿£µåÆ÷ÀÎÆ® ¸ÅÇÎ
-- [x] DataTable/DataSet º¯È¯
-- [x] ÆÄÀÏ ¾÷·Îµå/´Ù¿î·Îµå (multipart/form-data)
-- [x] ·Î±× ¾÷·Îµå (ÀÚµ¿/¼öµ¿) ? NEW!
-- [x] ¿¡·¯ Ã³¸®
-- [x] IDisposable ±¸Çö
+- [x] `HttpDBAccessClient` ìƒì„±
+- [x] `HttpFileTransferClient` ìƒì„±
+- [x] `HttpLogUploadClient` ìƒì„± ? NEW!
+- [x] `ILogUploadService` ì¸í„°í˜ì´ìŠ¤ ìƒì„± ? NEW!
+- [x] ì„œë²„ URL êµ¬ì„± ê°€ëŠ¥
+- [x] ëª¨ë“  API ì—”ë“œí¬ì¸íŠ¸ ë§¤í•‘
+- [x] DataTable/DataSet ë³€í™˜
+- [x] íŒŒì¼ ì—…ë¡œë“œ/ë‹¤ìš´ë¡œë“œ (multipart/form-data)
+- [x] ë¡œê·¸ ì—…ë¡œë“œ (ìë™/ìˆ˜ë™) ? NEW!
+- [x] ì—ëŸ¬ ì²˜ë¦¬
+- [x] IDisposable êµ¬í˜„
 
-### ?? ÀÌÁ¦ ÇÒ ¼ö ÀÖ´Â °Í
+### ?? ì´ì œ í•  ìˆ˜ ìˆëŠ” ê²ƒ
 
 ```csharp
-// 1. DB Á¢±Ù
+// 1. DB ì ‘ê·¼
 var dbClient = new HttpDBAccessClient("https://localhost:64229");
 var dt = await dbClient.ExecuteDataTableAsync("SELECT * FROM Users");
 
-// 2. ÆÄÀÏ Àü¼Û
+// 2. íŒŒì¼ ì „ì†¡
 var fileClient = new HttpFileTransferClient("https://localhost:64229");
 await fileClient.UploadFileAsync("file.txt", data);
 
-// 3. ·Î±× ¾÷·Îµå ? NEW!
+// 3. ë¡œê·¸ ì—…ë¡œë“œ ? NEW!
 var logClient = new HttpLogUploadClient("https://localhost:64229");
 await logClient.UploadAllPendingLogsAsync();
-logClient.EnableAutoUpload(true); // ¸ÅÀÏ ¿ÀÀü 2½Ã ÀÚµ¿ ¾÷·Îµå
+logClient.EnableAutoUpload(true); // ë§¤ì¼ ì˜¤ì „ 2ì‹œ ìë™ ì—…ë¡œë“œ
 
-// 4. WinForms¿¡¼­ »ç¿ë
+// 4. WinFormsì—ì„œ ì‚¬ìš©
 var client = new HttpDBAccessClient(_serverUrl);
 dataGridView1.DataSource = await client.ExecuteDataTableAsync(query);
 ```
 
-**¿Ïº®ÇÏ°Ô µ¿ÀÛÇÕ´Ï´Ù!** ?
+**ì™„ë²½í•˜ê²Œ ë™ì‘í•©ë‹ˆë‹¤!** ?
 
 ---
 
-**´ÙÀ½ ´Ü°è:** nU3.Shell¿¡¼­ `HttpDBAccessClient`, `HttpFileTransferClient`, `HttpLogUploadClient`¸¦ »ç¿ëÇÏ¿© ¼­¹ö¿Í Åë½ÅÇÏ¼¼¿ä!
+**ë‹¤ìŒ ë‹¨ê³„:** nU3.Shellì—ì„œ `HttpDBAccessClient`, `HttpFileTransferClient`, `HttpLogUploadClient`ë¥¼ ì‚¬ìš©í•˜ì—¬ ì„œë²„ì™€ í†µì‹ í•˜ì„¸ìš”!

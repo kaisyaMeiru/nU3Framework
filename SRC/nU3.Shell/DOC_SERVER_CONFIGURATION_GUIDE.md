@@ -1,28 +1,28 @@
-# nU3.Shell - Server Host ¼³Á¤ °¡ÀÌµå
+# nU3.Shell - Server Host ì„¤ì • ê°€ì´ë“œ
 
-## ?? °³¿ä
+## ?? ê°œìš”
 
-nU3.Shell¿¡¼­ nU3.Server.Host API ¼­¹ö¿¡ ¿¬°áÇÏ±â À§ÇÑ ¼³Á¤ ¹æ¹ıÀ» ¾È³»ÇÕ´Ï´Ù.
+nU3.Shellì—ì„œ nU3.Server.Host API ì„œë²„ì— ì—°ê²°í•˜ê¸° ìœ„í•œ ì„¤ì • ë°©ë²•ì„ ì•ˆë‚´í•©ë‹ˆë‹¤.
 
 ---
 
-## ?? ¼³Á¤ ÆÄÀÏ
+## ?? ì„¤ì • íŒŒì¼
 
-### appsettings.json À§Ä¡
+### appsettings.json ìœ„ì¹˜
 
 ```
 nU3.Shell/
-¦§¦¡¦¡ bin/
-¦¢   ¦¦¦¡¦¡ Debug/
-¦¢       ¦¦¦¡¦¡ appsettings.json  ¡ç ÀÌ ÆÄÀÏ ¼öÁ¤!
-¦¦¦¡¦¡ appsettings.json          ¡ç ¿øº» (º¹»çµÊ)
+â”œâ”€â”€ bin/
+â”‚   â””â”€â”€ Debug/
+â”‚       â””â”€â”€ appsettings.json  â† ì´ íŒŒì¼ ìˆ˜ì •!
+â””â”€â”€ appsettings.json          â† ì›ë³¸ (ë³µì‚¬ë¨)
 ```
 
 ---
 
-## ?? ServerConnection ¼³Á¤
+## ?? ServerConnection ì„¤ì •
 
-### appsettings.json ¿¹½Ã
+### appsettings.json ì˜ˆì‹œ
 
 ```json
 {
@@ -43,46 +43,46 @@ nU3.Shell/
 }
 ```
 
-### ¼³Á¤ Ç×¸ñ ¼³¸í
+### ì„¤ì • í•­ëª© ì„¤ëª…
 
-| Ç×¸ñ | Å¸ÀÔ | ±âº»°ª | ¼³¸í |
+| í•­ëª© | íƒ€ì… | ê¸°ë³¸ê°’ | ì„¤ëª… |
 |------|------|--------|------|
-| **Enabled** | bool | true | ¼­¹ö ¿¬°á È°¼ºÈ­ ¿©ºÎ |
-| **BaseUrl** | string | "https://localhost:64229" | API ¼­¹ö ÁÖ¼Ò |
-| **Timeout** | int | 300 | ¿äÃ» Å¸ÀÓ¾Æ¿ô (ÃÊ) |
-| **RetryCount** | int | 3 | ½ÇÆĞ ½Ã Àç½Ãµµ È½¼ö |
+| **Enabled** | bool | true | ì„œë²„ ì—°ê²° í™œì„±í™” ì—¬ë¶€ |
+| **BaseUrl** | string | "https://localhost:64229" | API ì„œë²„ ì£¼ì†Œ |
+| **Timeout** | int | 300 | ìš”ì²­ íƒ€ì„ì•„ì›ƒ (ì´ˆ) |
+| **RetryCount** | int | 3 | ì‹¤íŒ¨ ì‹œ ì¬ì‹œë„ íšŸìˆ˜ |
 
 ---
 
-## ?? »ç¿ë ¿¹½Ã
+## ?? ì‚¬ìš© ì˜ˆì‹œ
 
-### 1. ¼³Á¤ ·Îµå
+### 1. ì„¤ì • ë¡œë“œ
 
 ```csharp
 using nU3.Shell.Configuration;
 using nU3.Connectivity.Implementations;
 
-// ¼³Á¤ ·Îµå
+// ì„¤ì • ë¡œë“œ
 var serverConfig = ServerConnectionConfig.Load();
 
 if (serverConfig.Enabled)
 {
-    // DB Å¬¶óÀÌ¾ğÆ® »ı¼º
+    // DB í´ë¼ì´ì–¸íŠ¸ ìƒì„±
     var dbClient = new HttpDBAccessClient(serverConfig.BaseUrl);
     
-    // ÆÄÀÏ Å¬¶óÀÌ¾ğÆ® »ı¼º
+    // íŒŒì¼ í´ë¼ì´ì–¸íŠ¸ ìƒì„±
     var fileClient = new HttpFileTransferClient(serverConfig.BaseUrl);
     
-    // »ç¿ë
+    // ì‚¬ìš©
     var connected = await dbClient.ConnectAsync();
     if (connected)
     {
-        Console.WriteLine("¼­¹ö ¿¬°á ¼º°ø!");
+        Console.WriteLine("ì„œë²„ ì—°ê²° ì„±ê³µ!");
     }
 }
 ```
 
-### 2. MainShellForm¿¡¼­ ÃÊ±âÈ­
+### 2. MainShellFormì—ì„œ ì´ˆê¸°í™”
 
 ```csharp
 public partial class MainShellForm : BaseWorkForm
@@ -108,13 +108,13 @@ public partial class MainShellForm : BaseWorkForm
                 return;
             }
             
-            // HTTP Å¬¶óÀÌ¾ğÆ® »ı¼º
+            // HTTP í´ë¼ì´ì–¸íŠ¸ ìƒì„±
             _dbClient = new HttpDBAccessClient(config.BaseUrl);
             _fileClient = new HttpFileTransferClient(config.BaseUrl);
             
             LogManager.Info($"Server connection initialized: {config.BaseUrl}", "Shell");
             
-            // »óÅÂ¹Ù¿¡ ¼­¹ö ÁÖ¼Ò Ç¥½Ã
+            // ìƒíƒœë°”ì— ì„œë²„ ì£¼ì†Œ í‘œì‹œ
             barStaticItemServer.Caption = $"?? {config.BaseUrl}";
         }
         catch (Exception ex)
@@ -125,29 +125,29 @@ public partial class MainShellForm : BaseWorkForm
 }
 ```
 
-### 3. DB Äõ¸® ½ÇÇà
+### 3. DB ì¿¼ë¦¬ ì‹¤í–‰
 
 ```csharp
 private async void btnLoadData_Click(object sender, EventArgs e)
 {
     if (_dbClient == null)
     {
-        XtraMessageBox.Show("¼­¹ö ¿¬°áÀÌ ÃÊ±âÈ­µÇÁö ¾Ê¾Ò½À´Ï´Ù.", "¿À·ù");
+        XtraMessageBox.Show("ì„œë²„ ì—°ê²°ì´ ì´ˆê¸°í™”ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.", "ì˜¤ë¥˜");
         return;
     }
     
     try
     {
-        // DB ¿¬°á
+        // DB ì—°ê²°
         await _dbClient.ConnectAsync();
         
-        // Äõ¸® ½ÇÇà
+        // ì¿¼ë¦¬ ì‹¤í–‰
         var dt = await _dbClient.ExecuteDataTableAsync(
             "SELECT * FROM Users WHERE Age > @age",
             new Dictionary<string, object> { { "@age", 18 } }
         );
         
-        // °á°ú Ç¥½Ã
+        // ê²°ê³¼ í‘œì‹œ
         dataGridView1.DataSource = dt;
         
         LogManager.Info($"Data loaded: {dt.Rows.Count} rows", "Shell");
@@ -155,19 +155,19 @@ private async void btnLoadData_Click(object sender, EventArgs e)
     catch (Exception ex)
     {
         LogManager.Error("Failed to load data", "Shell", ex);
-        XtraMessageBox.Show($"µ¥ÀÌÅÍ ·Îµå ½ÇÆĞ: {ex.Message}", "¿À·ù");
+        XtraMessageBox.Show($"ë°ì´í„° ë¡œë“œ ì‹¤íŒ¨: {ex.Message}", "ì˜¤ë¥˜");
     }
 }
 ```
 
-### 4. ÆÄÀÏ ¾÷·Îµå
+### 4. íŒŒì¼ ì—…ë¡œë“œ
 
 ```csharp
 private async void btnUploadFile_Click(object sender, EventArgs e)
 {
     if (_fileClient == null)
     {
-        XtraMessageBox.Show("¼­¹ö ¿¬°áÀÌ ÃÊ±âÈ­µÇÁö ¾Ê¾Ò½À´Ï´Ù.", "¿À·ù");
+        XtraMessageBox.Show("ì„œë²„ ì—°ê²°ì´ ì´ˆê¸°í™”ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.", "ì˜¤ë¥˜");
         return;
     }
     
@@ -177,36 +177,36 @@ private async void btnUploadFile_Click(object sender, EventArgs e)
     
     try
     {
-        // ÆÄÀÏ ÀĞ±â
+        // íŒŒì¼ ì½ê¸°
         var data = await File.ReadAllBytesAsync(openFileDialog.FileName);
         
-        // ¼­¹ö¿¡ ¾÷·Îµå
+        // ì„œë²„ì— ì—…ë¡œë“œ
         var serverPath = $"uploads/{Path.GetFileName(openFileDialog.FileName)}";
         var success = await _fileClient.UploadFileAsync(serverPath, data);
         
         if (success)
         {
-            XtraMessageBox.Show("ÆÄÀÏ ¾÷·Îµå ¼º°ø!", "¼º°ø");
+            XtraMessageBox.Show("íŒŒì¼ ì—…ë¡œë“œ ì„±ê³µ!", "ì„±ê³µ");
             LogManager.Info($"File uploaded: {serverPath}", "Shell");
         }
         else
         {
-            XtraMessageBox.Show("ÆÄÀÏ ¾÷·Îµå ½ÇÆĞ", "½ÇÆĞ");
+            XtraMessageBox.Show("íŒŒì¼ ì—…ë¡œë“œ ì‹¤íŒ¨", "ì‹¤íŒ¨");
         }
     }
     catch (Exception ex)
     {
         LogManager.Error("File upload failed", "Shell", ex);
-        XtraMessageBox.Show($"¾÷·Îµå ½ÇÆĞ: {ex.Message}", "¿À·ù");
+        XtraMessageBox.Show($"ì—…ë¡œë“œ ì‹¤íŒ¨: {ex.Message}", "ì˜¤ë¥˜");
     }
 }
 ```
 
 ---
 
-## ?? È¯°æº° ¼³Á¤
+## ?? í™˜ê²½ë³„ ì„¤ì •
 
-### Development (°³¹ß)
+### Development (ê°œë°œ)
 
 ```json
 {
@@ -219,7 +219,7 @@ private async void btnUploadFile_Click(object sender, EventArgs e)
 }
 ```
 
-### Staging (Å×½ºÆ®)
+### Staging (í…ŒìŠ¤íŠ¸)
 
 ```json
 {
@@ -232,7 +232,7 @@ private async void btnUploadFile_Click(object sender, EventArgs e)
 }
 ```
 
-### Production (¿î¿µ)
+### Production (ìš´ì˜)
 
 ```json
 {
@@ -247,27 +247,27 @@ private async void btnUploadFile_Click(object sender, EventArgs e)
 
 ---
 
-## ?? º¸¾È °í·Á»çÇ×
+## ?? ë³´ì•ˆ ê³ ë ¤ì‚¬í•­
 
-### 1. HTTPS »ç¿ë
+### 1. HTTPS ì‚¬ìš©
 
 ```json
 {
   "ServerConnection": {
-    "BaseUrl": "https://api.company.com"  // ? HTTPS »ç¿ë
+    "BaseUrl": "https://api.company.com"  // ? HTTPS ì‚¬ìš©
   }
 }
 ```
 
-**ÁÖÀÇ:** ¿î¿µ È¯°æ¿¡¼­´Â ¹İµå½Ã HTTPS¸¦ »ç¿ëÇÏ¼¼¿ä!
+**ì£¼ì˜:** ìš´ì˜ í™˜ê²½ì—ì„œëŠ” ë°˜ë“œì‹œ HTTPSë¥¼ ì‚¬ìš©í•˜ì„¸ìš”!
 
-### 2. ÀÎÁõ¼­ °ËÁõ
+### 2. ì¸ì¦ì„œ ê²€ì¦
 
-°³¹ß È¯°æ¿¡¼­ ÀÚÃ¼ ¼­¸í ÀÎÁõ¼­ »ç¿ë ½Ã:
+ê°œë°œ í™˜ê²½ì—ì„œ ìì²´ ì„œëª… ì¸ì¦ì„œ ì‚¬ìš© ì‹œ:
 
 ```csharp
 #if DEBUG
-// °³¹ß È¯°æ¿¡¼­¸¸ ÀÎÁõ¼­ °ËÁõ ¹«½Ã
+// ê°œë°œ í™˜ê²½ì—ì„œë§Œ ì¸ì¦ì„œ ê²€ì¦ ë¬´ì‹œ
 var handler = new HttpClientHandler
 {
     ServerCertificateCustomValidationCallback = 
@@ -278,21 +278,21 @@ var dbClient = new HttpDBAccessClient(httpClient, serverConfig.BaseUrl);
 #endif
 ```
 
-### 3. Å¸ÀÓ¾Æ¿ô ¼³Á¤
+### 3. íƒ€ì„ì•„ì›ƒ ì„¤ì •
 
 ```json
 {
   "ServerConnection": {
-    "Timeout": 300  // 5ºĞ (´ë¿ë·® Äõ¸®/ÆÄÀÏ Àü¼Û¿ë)
+    "Timeout": 300  // 5ë¶„ (ëŒ€ìš©ëŸ‰ ì¿¼ë¦¬/íŒŒì¼ ì „ì†¡ìš©)
   }
 }
 ```
 
 ---
 
-## ?? ¿¬°á Å×½ºÆ®
+## ?? ì—°ê²° í…ŒìŠ¤íŠ¸
 
-### ¿¬°á Å×½ºÆ® ÄÚµå
+### ì—°ê²° í…ŒìŠ¤íŠ¸ ì½”ë“œ
 
 ```csharp
 private async Task<bool> TestServerConnectionAsync()
@@ -313,7 +313,7 @@ private async Task<bool> TestServerConnectionAsync()
             Timeout = TimeSpan.FromSeconds(30)
         };
         
-        // Health Check È£Ãâ
+        // Health Check í˜¸ì¶œ
         var response = await client.GetAsync("/health");
         
         if (response.IsSuccessStatusCode)
@@ -336,21 +336,21 @@ private async Task<bool> TestServerConnectionAsync()
 }
 ```
 
-### UI¿¡¼­ Å×½ºÆ®
+### UIì—ì„œ í…ŒìŠ¤íŠ¸
 
 ```csharp
 private async void btnTestConnection_Click(object sender, EventArgs e)
 {
     var config = ServerConnectionConfig.Load();
     
-    var message = $"¼­¹ö ¿¬°á ¼³Á¤\n\n" +
-                 $"È°¼ºÈ­: {(config.Enabled ? "¿¹" : "¾Æ´Ï¿À")}\n" +
-                 $"ÁÖ¼Ò: {config.BaseUrl}\n" +
-                 $"Å¸ÀÓ¾Æ¿ô: {config.Timeout}ÃÊ\n" +
-                 $"Àç½Ãµµ: {config.RetryCount}È¸\n\n" +
-                 $"¿¬°á Å×½ºÆ®¸¦ ÁøÇàÇÏ½Ã°Ú½À´Ï±î?";
+    var message = $"ì„œë²„ ì—°ê²° ì„¤ì •\n\n" +
+                 $"í™œì„±í™”: {(config.Enabled ? "ì˜ˆ" : "ì•„ë‹ˆì˜¤")}\n" +
+                 $"ì£¼ì†Œ: {config.BaseUrl}\n" +
+                 $"íƒ€ì„ì•„ì›ƒ: {config.Timeout}ì´ˆ\n" +
+                 $"ì¬ì‹œë„: {config.RetryCount}íšŒ\n\n" +
+                 $"ì—°ê²° í…ŒìŠ¤íŠ¸ë¥¼ ì§„í–‰í•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
     
-    if (XtraMessageBox.Show(message, "¼­¹ö ¿¬°á Å×½ºÆ®", 
+    if (XtraMessageBox.Show(message, "ì„œë²„ ì—°ê²° í…ŒìŠ¤íŠ¸", 
         MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
         return;
     
@@ -358,12 +358,12 @@ private async void btnTestConnection_Click(object sender, EventArgs e)
     
     if (result)
     {
-        XtraMessageBox.Show("¼­¹ö ¿¬°á ¼º°ø!", "¼º°ø", 
+        XtraMessageBox.Show("ì„œë²„ ì—°ê²° ì„±ê³µ!", "ì„±ê³µ", 
             MessageBoxButtons.OK, MessageBoxIcon.Information);
     }
     else
     {
-        XtraMessageBox.Show("¼­¹ö ¿¬°á ½ÇÆĞ!\n\n¼³Á¤À» È®ÀÎÇÏ¼¼¿ä.", "½ÇÆĞ", 
+        XtraMessageBox.Show("ì„œë²„ ì—°ê²° ì‹¤íŒ¨!\n\nì„¤ì •ì„ í™•ì¸í•˜ì„¸ìš”.", "ì‹¤íŒ¨", 
             MessageBoxButtons.OK, MessageBoxIcon.Error);
     }
 }
@@ -371,32 +371,32 @@ private async void btnTestConnection_Click(object sender, EventArgs e)
 
 ---
 
-## ?? Æ®·¯ºí½´ÆÃ
+## ?? íŠ¸ëŸ¬ë¸”ìŠˆíŒ…
 
-### ¹®Á¦ 1: ¿¬°á Å¸ÀÓ¾Æ¿ô
+### ë¬¸ì œ 1: ì—°ê²° íƒ€ì„ì•„ì›ƒ
 
-**Áõ»ó:**
+**ì¦ìƒ:**
 ```
 System.Threading.Tasks.TaskCanceledException: The request was canceled due to the configured HttpClient.Timeout
 ```
 
-**ÇØ°á:**
+**í•´ê²°:**
 ```json
 {
   "ServerConnection": {
-    "Timeout": 600  // Å¸ÀÓ¾Æ¿ô Áõ°¡ (10ºĞ)
+    "Timeout": 600  // íƒ€ì„ì•„ì›ƒ ì¦ê°€ (10ë¶„)
   }
 }
 ```
 
-### ¹®Á¦ 2: SSL ÀÎÁõ¼­ ¿À·ù
+### ë¬¸ì œ 2: SSL ì¸ì¦ì„œ ì˜¤ë¥˜
 
-**Áõ»ó:**
+**ì¦ìƒ:**
 ```
 System.Net.Http.HttpRequestException: The SSL connection could not be established
 ```
 
-**ÇØ°á (°³¹ß È¯°æ):**
+**í•´ê²° (ê°œë°œ í™˜ê²½):**
 ```csharp
 #if DEBUG
 var handler = new HttpClientHandler
@@ -407,38 +407,38 @@ var httpClient = new HttpClient(handler);
 #endif
 ```
 
-### ¹®Á¦ 3: ¼­¹ö¸¦ Ã£À» ¼ö ¾øÀ½
+### ë¬¸ì œ 3: ì„œë²„ë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŒ
 
-**Áõ»ó:**
+**ì¦ìƒ:**
 ```
 System.Net.Http.HttpRequestException: No such host is known
 ```
 
-**ÇØ°á:**
-1. BaseUrl È®ÀÎ
-2. ¼­¹ö°¡ ½ÇÇà ÁßÀÎÁö È®ÀÎ
-3. ¹æÈ­º® ¼³Á¤ È®ÀÎ
+**í•´ê²°:**
+1. BaseUrl í™•ì¸
+2. ì„œë²„ê°€ ì‹¤í–‰ ì¤‘ì¸ì§€ í™•ì¸
+3. ë°©í™”ë²½ ì„¤ì • í™•ì¸
 
 ```bash
-# ¼­¹ö »óÅÂ È®ÀÎ
+# ì„œë²„ ìƒíƒœ í™•ì¸
 curl https://localhost:64229/health
 
-# ¶Ç´Â
+# ë˜ëŠ”
 Test-NetConnection -ComputerName localhost -Port 64229
 ```
 
 ---
 
-## ?? »óÅÂ ¸ğ´ÏÅÍ¸µ
+## ?? ìƒíƒœ ëª¨ë‹ˆí„°ë§
 
-### »óÅÂ¹Ù¿¡ ¼­¹ö »óÅÂ Ç¥½Ã
+### ìƒíƒœë°”ì— ì„œë²„ ìƒíƒœ í‘œì‹œ
 
 ```csharp
 private async void TimerServerStatus_Tick(object sender, EventArgs e)
 {
     if (_dbClient == null)
     {
-        barStaticItemServer.Caption = "?? ¼­¹ö ¿¬°á ¾øÀ½";
+        barStaticItemServer.Caption = "?? ì„œë²„ ì—°ê²° ì—†ìŒ";
         return;
     }
     
@@ -449,46 +449,46 @@ private async void TimerServerStatus_Tick(object sender, EventArgs e)
         
         if (connected)
         {
-            barStaticItemServer.Caption = "?? ¼­¹ö ¿¬°áµÊ";
+            barStaticItemServer.Caption = "?? ì„œë²„ ì—°ê²°ë¨";
         }
         else
         {
-            barStaticItemServer.Caption = "?? ¼­¹ö ¿¬°á ½ÇÆĞ";
+            barStaticItemServer.Caption = "?? ì„œë²„ ì—°ê²° ì‹¤íŒ¨";
         }
     }
     catch
     {
-        barStaticItemServer.Caption = "?? ¼­¹ö ¿À·ù";
+        barStaticItemServer.Caption = "?? ì„œë²„ ì˜¤ë¥˜";
     }
 }
 ```
 
 ---
 
-## ? Ã¼Å©¸®½ºÆ®
+## ? ì²´í¬ë¦¬ìŠ¤íŠ¸
 
-- [ ] appsettings.json¿¡ ServerConnection ¼½¼Ç Ãß°¡
-- [ ] BaseUrlÀ» ¿Ã¹Ù¸¥ ¼­¹ö ÁÖ¼Ò·Î ¼³Á¤
-- [ ] Enabled¸¦ true·Î ¼³Á¤
-- [ ] MainShellForm¿¡¼­ ServerConnectionConfig.Load() È£Ãâ
-- [ ] HttpDBAccessClient ¹× HttpFileTransferClient »ı¼º
-- [ ] ¿¬°á Å×½ºÆ® ½ÇÇà
-- [ ] »óÅÂ¹Ù¿¡ ¼­¹ö »óÅÂ Ç¥½Ã
+- [ ] appsettings.jsonì— ServerConnection ì„¹ì…˜ ì¶”ê°€
+- [ ] BaseUrlì„ ì˜¬ë°”ë¥¸ ì„œë²„ ì£¼ì†Œë¡œ ì„¤ì •
+- [ ] Enabledë¥¼ trueë¡œ ì„¤ì •
+- [ ] MainShellFormì—ì„œ ServerConnectionConfig.Load() í˜¸ì¶œ
+- [ ] HttpDBAccessClient ë° HttpFileTransferClient ìƒì„±
+- [ ] ì—°ê²° í…ŒìŠ¤íŠ¸ ì‹¤í–‰
+- [ ] ìƒíƒœë°”ì— ì„œë²„ ìƒíƒœ í‘œì‹œ
 
 ---
 
-## ?? ¿Ï·á!
+## ?? ì™„ë£Œ!
 
-ÀÌÁ¦ nU3.Shell¿¡¼­ nU3.Server.Host API ¼­¹ö¿¡ ¿¬°áÇÒ ¼ö ÀÖ½À´Ï´Ù!
+ì´ì œ nU3.Shellì—ì„œ nU3.Server.Host API ì„œë²„ì— ì—°ê²°í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤!
 
-**´ÙÀ½ ´Ü°è:**
-1. ? appsettings.json ¼³Á¤ ¿Ï·á
-2. ? ServerConnectionConfig Å¬·¡½º »ı¼º
-3. ? MainShellForm¿¡¼­ ÃÊ±âÈ­
-4. ?? ½ÇÁ¦ API È£Ãâ ±¸Çö
-5. ?? ¿À·ù Ã³¸® ¹× ·Î±ë Ãß°¡
+**ë‹¤ìŒ ë‹¨ê³„:**
+1. ? appsettings.json ì„¤ì • ì™„ë£Œ
+2. ? ServerConnectionConfig í´ë˜ìŠ¤ ìƒì„±
+3. ? MainShellFormì—ì„œ ì´ˆê¸°í™”
+4. ?? ì‹¤ì œ API í˜¸ì¶œ êµ¬í˜„
+5. ?? ì˜¤ë¥˜ ì²˜ë¦¬ ë° ë¡œê¹… ì¶”ê°€
 
-**Âü°í ¹®¼­:**
-- `HTTP_CLIENT_GUIDE.md` - HTTP Å¬¶óÀÌ¾ğÆ® »ç¿ë °¡ÀÌµå
-- `ARCHITECTURE_SEPARATION.md` - ¾ÆÅ°ÅØÃ³ ¼³¸í
-- `README.md` (Server.Host) - ¼­¹ö API ¹®¼­
+**ì°¸ê³  ë¬¸ì„œ:**
+- `HTTP_CLIENT_GUIDE.md` - HTTP í´ë¼ì´ì–¸íŠ¸ ì‚¬ìš© ê°€ì´ë“œ
+- `ARCHITECTURE_SEPARATION.md` - ì•„í‚¤í…ì²˜ ì„¤ëª…
+- `README.md` (Server.Host) - ì„œë²„ API ë¬¸ì„œ

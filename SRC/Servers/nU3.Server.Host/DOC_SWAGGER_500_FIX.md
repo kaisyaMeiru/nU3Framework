@@ -1,6 +1,6 @@
-# Swagger 500 ¿¡·¯ ÇØ°á ¿Ï·á
+# Swagger 500 ì—ëŸ¬ í•´ê²° ì™„ë£Œ
 
-## ?? ¹®Á¦ »óÈ²
+## ?? ë¬¸ì œ ìƒí™©
 
 ```
 GET /swagger/v1/swagger.json
@@ -11,19 +11,19 @@ nU3.Server.Host.Controllers.LogController.Upload (nU3.Server.Host)
 as [FromForm] attribute used with IFormFile.
 ```
 
-## ? ÇØ°á ¹æ¹ı
+## ? í•´ê²° ë°©ë²•
 
-### ¿øÀÎ ºĞ¼®
+### ì›ì¸ ë¶„ì„
 
-Swagger JSON »ı¼º ½Ã ÄÁÆ®·Ñ·¯ÀÇ ¸ğµ¨¿¡¼­ ¹®Á¦°¡ ¹ß»ıÇß½À´Ï´Ù:
+Swagger JSON ìƒì„± ì‹œ ì»¨íŠ¸ë¡¤ëŸ¬ì˜ ëª¨ë¸ì—ì„œ ë¬¸ì œê°€ ë°œìƒí–ˆìŠµë‹ˆë‹¤:
 
-1. **Á÷Á¢ IFormFile ÆÄ¶ó¹ÌÅÍ »ç¿ë**: `[FromForm] IFormFile file`·Î Á÷Á¢ »ç¿ëÇÏ¸é Swagger°¡ Ã³¸® ½ÇÆĞ
-2. **Nullable IFormFile**: `IFormFile?`·Î ¼±¾ğµÇ¾î Swagger°¡ ½ºÅ°¸¶ »ı¼º ½ÇÆĞ
-3. **Required ¼Ó¼º ´©¶ô**: DTO¿¡ `[Required]` ¼Ó¼ºÀÌ ¾ø¾î¼­ Swagger ¹®¼­°¡ ºÒ¸íÈ®
+1. **ì§ì ‘ IFormFile íŒŒë¼ë¯¸í„° ì‚¬ìš©**: `[FromForm] IFormFile file`ë¡œ ì§ì ‘ ì‚¬ìš©í•˜ë©´ Swaggerê°€ ì²˜ë¦¬ ì‹¤íŒ¨
+2. **Nullable IFormFile**: `IFormFile?`ë¡œ ì„ ì–¸ë˜ì–´ Swaggerê°€ ìŠ¤í‚¤ë§ˆ ìƒì„± ì‹¤íŒ¨
+3. **Required ì†ì„± ëˆ„ë½**: DTOì— `[Required]` ì†ì„±ì´ ì—†ì–´ì„œ Swagger ë¬¸ì„œê°€ ë¶ˆëª…í™•
 
-### Àû¿ëµÈ ¼öÁ¤ »çÇ×
+### ì ìš©ëœ ìˆ˜ì • ì‚¬í•­
 
-#### 1. FileTransferController ¼öÁ¤
+#### 1. FileTransferController ìˆ˜ì •
 
 **Before:**
 ```csharp
@@ -46,12 +46,12 @@ public class FileUploadModel
 }
 ```
 
-#### 2. LogController ¼öÁ¤
+#### 2. LogController ìˆ˜ì •
 
 **Before:**
 ```csharp
 [HttpPost("upload")]
-public async Task<IActionResult> UploadLog([FromForm] IFormFile file)  // ? Á÷Á¢ »ç¿ë
+public async Task<IActionResult> UploadLog([FromForm] IFormFile file)  // ? ì§ì ‘ ì‚¬ìš©
 {
     if (file == null || file.Length == 0)
         return BadRequest("No file provided");
@@ -62,7 +62,7 @@ public async Task<IActionResult> UploadLog([FromForm] IFormFile file)  // ? Á÷Á¢
 **After:**
 ```csharp
 [HttpPost("upload")]
-public async Task<IActionResult> UploadLog([FromForm] LogUploadModel model)  // ? DTO »ç¿ë
+public async Task<IActionResult> UploadLog([FromForm] LogUploadModel model)  // ? DTO ì‚¬ìš©
 {
     if (model.File == null || model.File.Length == 0)
         return BadRequest("No file provided");
@@ -76,7 +76,7 @@ public class LogUploadModel
 }
 ```
 
-#### 3. DBAccessController ¼öÁ¤
+#### 3. DBAccessController ìˆ˜ì •
 
 **Before:**
 ```csharp
@@ -98,7 +98,7 @@ public class QueryRequestDto
 }
 ```
 
-#### 4. Program.cs Á¤¸®
+#### 4. Program.cs ì •ë¦¬
 
 **Before:**
 ```csharp
@@ -112,48 +112,48 @@ if (app.Environment.IsDevelopment())
 
 **After:**
 ```csharp
-// Á¦°ÅµÊ - ºÒÇÊ¿äÇÑ ¸®µğ·º¼Ç Á¦°Å
+// ì œê±°ë¨ - ë¶ˆí•„ìš”í•œ ë¦¬ë””ë ‰ì…˜ ì œê±°
 ```
 
-## ?? Å×½ºÆ® ¹æ¹ı
+## ?? í…ŒìŠ¤íŠ¸ ë°©ë²•
 
-### 1. ¼­¹ö Àç½ÃÀÛ
+### 1. ì„œë²„ ì¬ì‹œì‘
 
 ```bash
 # Visual Studio
-1. Shift+F5 (µğ¹ö±ë ÁßÁö)
-2. F5 (´Ù½Ã ½ÃÀÛ)
+1. Shift+F5 (ë””ë²„ê¹… ì¤‘ì§€)
+2. F5 (ë‹¤ì‹œ ì‹œì‘)
 
-# ¸í·ÉÁÙ
+# ëª…ë ¹ì¤„
 dotnet run
 ```
 
-### 2. Swagger Á¢¼Ó
+### 2. Swagger ì ‘ì†
 
 ```
-? ·çÆ® °æ·Î: https://localhost:64229/
+? ë£¨íŠ¸ ê²½ë¡œ: https://localhost:64229/
 ? Swagger JSON: https://localhost:64229/swagger/v1/swagger.json
 ```
 
-### 3. È®ÀÎ »çÇ×
+### 3. í™•ì¸ ì‚¬í•­
 
-#### Swagger UI È®ÀÎ
+#### Swagger UI í™•ì¸
 
 **FileTransferController**
-- `POST /api/v1/files/upload` ¿£µåÆ÷ÀÎÆ® Ç¥½Ã
-- `File` ÇÊµå°¡ `required`·Î Ç¥½Ã
-- `ServerPath` ÇÊµå°¡ `required`·Î Ç¥½Ã
+- `POST /api/v1/files/upload` ì—”ë“œí¬ì¸íŠ¸ í‘œì‹œ
+- `File` í•„ë“œê°€ `required`ë¡œ í‘œì‹œ
+- `ServerPath` í•„ë“œê°€ `required`ë¡œ í‘œì‹œ
 
 **LogController**
-- `POST /api/log/upload` ¿£µåÆ÷ÀÎÆ® Ç¥½Ã
-- `POST /api/log/upload-audit` ¿£µåÆ÷ÀÎÆ® Ç¥½Ã
-- `File` ÇÊµå°¡ `required`·Î Ç¥½Ã
+- `POST /api/log/upload` ì—”ë“œí¬ì¸íŠ¸ í‘œì‹œ
+- `POST /api/log/upload-audit` ì—”ë“œí¬ì¸íŠ¸ í‘œì‹œ
+- `File` í•„ë“œê°€ `required`ë¡œ í‘œì‹œ
 
 **DBAccessController**
-- `POST /api/v1/db/query/table` ¿£µåÆ÷ÀÎÆ® Ç¥½Ã
-- `CommandText` ÇÊµå°¡ `required`·Î Ç¥½Ã
+- `POST /api/v1/db/query/table` ì—”ë“œí¬ì¸íŠ¸ í‘œì‹œ
+- `CommandText` í•„ë“œê°€ `required`ë¡œ í‘œì‹œ
 
-#### Swagger JSON È®ÀÎ
+#### Swagger JSON í™•ì¸
 
 ```json
 {
@@ -203,7 +203,7 @@ dotnet run
 }
 ```
 
-## ?? ¼öÁ¤µÈ ÆÄÀÏ ¸ñ·Ï
+## ?? ìˆ˜ì •ëœ íŒŒì¼ ëª©ë¡
 
 ```
 ?? Servers/nU3.Server.Host/Controllers/Connectivity/FileTransferController.cs
@@ -212,18 +212,18 @@ dotnet run
 ?? Servers/nU3.Server.Host/Program.cs
 ```
 
-## ?? ´ÙÀ½ ´Ü°è
+## ?? ë‹¤ìŒ ë‹¨ê³„
 
-### 1. ºê¶ó¿ìÀú¿¡¼­ È®ÀÎ
+### 1. ë¸Œë¼ìš°ì €ì—ì„œ í™•ì¸
 
 ```
-1. https://localhost:64229/ Á¢¼Ó
-2. Swagger UI°¡ Á¤»óÀûÀ¸·Î Ç¥½ÃµÇ´ÂÁö È®ÀÎ
-3. ¸ğµç ÄÁÆ®·Ñ·¯ÀÇ ¿£µåÆ÷ÀÎÆ® È®ÀÎ
-4. "Try it out" ¹öÆ°À¸·Î API Å×½ºÆ®
+1. https://localhost:64229/ ì ‘ì†
+2. Swagger UIê°€ ì •ìƒì ìœ¼ë¡œ í‘œì‹œë˜ëŠ”ì§€ í™•ì¸
+3. ëª¨ë“  ì»¨íŠ¸ë¡¤ëŸ¬ì˜ ì—”ë“œí¬ì¸íŠ¸ í™•ì¸
+4. "Try it out" ë²„íŠ¼ìœ¼ë¡œ API í…ŒìŠ¤íŠ¸
 ```
 
-### 2. API ¿£µåÆ÷ÀÎÆ® Å×½ºÆ®
+### 2. API ì—”ë“œí¬ì¸íŠ¸ í…ŒìŠ¤íŠ¸
 
 ```bash
 # Health Check
@@ -239,16 +239,16 @@ curl https://localhost:64229/api/log/info
 curl -X POST https://localhost:64229/api/v1/db/connect
 ```
 
-## ?? Best Practices Àû¿ë
+## ?? Best Practices ì ìš©
 
-### 1. IFormFileÀº Ç×»ó DTO·Î °¨½Î±â
+### 1. IFormFileì€ í•­ìƒ DTOë¡œ ê°ì‹¸ê¸°
 
 ```csharp
-// ? ³ª»Û ¿¹ - Á÷Á¢ »ç¿ë
+// ? ë‚˜ìœ ì˜ˆ - ì§ì ‘ ì‚¬ìš©
 [HttpPost("upload")]
 public IActionResult Upload([FromForm] IFormFile file)
 
-// ? ÁÁÀº ¿¹ - DTO »ç¿ë
+// ? ì¢‹ì€ ì˜ˆ - DTO ì‚¬ìš©
 [HttpPost("upload")]
 public IActionResult Upload([FromForm] FileUploadModel model)
 
@@ -259,7 +259,7 @@ public class FileUploadModel
 }
 ```
 
-### 2. DTO¿¡ Ç×»ó [Required] »ç¿ë
+### 2. DTOì— í•­ìƒ [Required] ì‚¬ìš©
 
 ```csharp
 public class MyDto
@@ -271,88 +271,88 @@ public class MyDto
 }
 ```
 
-### 3. IFormFileÀº Non-nullable·Î
+### 3. IFormFileì€ Non-nullableë¡œ
 
 ```csharp
-// ? ³ª»Û ¿¹
+// ? ë‚˜ìœ ì˜ˆ
 public IFormFile? File { get; set; }
 
-// ? ÁÁÀº ¿¹
+// ? ì¢‹ì€ ì˜ˆ
 [Required]
 public IFormFile File { get; set; } = null!;
 ```
 
-### 4. Dictionary´Â Nullable Çã¿ë
+### 4. DictionaryëŠ” Nullable í—ˆìš©
 
 ```csharp
-// ¼±ÅÃÀû ÆÄ¶ó¹ÌÅÍ´Â nullable
+// ì„ íƒì  íŒŒë¼ë¯¸í„°ëŠ” nullable
 public Dictionary<string, object>? Parameters { get; set; }
 ```
 
-## ?? Swagger¿Í IFormFile °ü·Ã ±ÔÄ¢
+## ?? Swaggerì™€ IFormFile ê´€ë ¨ ê·œì¹™
 
-### Swashbuckle ¿ä±¸»çÇ×
+### Swashbuckle ìš”êµ¬ì‚¬í•­
 
-Swagger/OpenAPI¸¦ »ç¿ëÇÒ ¶§ IFormFile Ã³¸® ±ÔÄ¢:
+Swagger/OpenAPIë¥¼ ì‚¬ìš©í•  ë•Œ IFormFile ì²˜ë¦¬ ê·œì¹™:
 
-1. **IFormFileÀº ¹İµå½Ã DTO Å¬·¡½º·Î °¨½Î¾ß ÇÔ**
+1. **IFormFileì€ ë°˜ë“œì‹œ DTO í´ë˜ìŠ¤ë¡œ ê°ì‹¸ì•¼ í•¨**
    ```csharp
-   // Swagger°¡ ÀÌÇØÇÒ ¼ö ÀÖµµ·Ï DTO »ç¿ë
+   // Swaggerê°€ ì´í•´í•  ìˆ˜ ìˆë„ë¡ DTO ì‚¬ìš©
    public class FileModel
    {
        public IFormFile File { get; set; }
    }
    ```
 
-2. **[FromForm] ¼Ó¼º ÇÊ¼ö**
+2. **[FromForm] ì†ì„± í•„ìˆ˜**
    ```csharp
    [HttpPost]
    public IActionResult Upload([FromForm] FileModel model)
    ```
 
 3. **multipart/form-data Content-Type**
-   - Swagger°¡ ÀÚµ¿À¸·Î `multipart/form-data`·Î ¼³Á¤
-   - `File` ¼Ó¼ºÀº `binary` Å¸ÀÔÀ¸·Î Ç¥½Ã
+   - Swaggerê°€ ìë™ìœ¼ë¡œ `multipart/form-data`ë¡œ ì„¤ì •
+   - `File` ì†ì„±ì€ `binary` íƒ€ì…ìœ¼ë¡œ í‘œì‹œ
 
-### Âü°í ¹®¼­
+### ì°¸ê³  ë¬¸ì„œ
 
 - [Swashbuckle - Handle Forms and File Uploads](https://github.com/domaindrivendev/Swashbuckle.AspNetCore#handle-forms-and-file-uploads)
 - [ASP.NET Core - File Upload](https://docs.microsoft.com/aspnet/core/mvc/models/file-uploads)
 
-## ? Ã¼Å©¸®½ºÆ®
+## ? ì²´í¬ë¦¬ìŠ¤íŠ¸
 
-- [x] FileTransferController ¼öÁ¤
-- [x] DBAccessController ¼öÁ¤
-- [x] LogController ¼öÁ¤
-- [x] Program.cs Á¤¸®
-- [x] ºôµå ¼º°ø
-- [ ] ¼­¹ö Àç½ÃÀÛ
-- [ ] Swagger UI È®ÀÎ
-- [ ] ¸ğµç API Å×½ºÆ®
+- [x] FileTransferController ìˆ˜ì •
+- [x] DBAccessController ìˆ˜ì •
+- [x] LogController ìˆ˜ì •
+- [x] Program.cs ì •ë¦¬
+- [x] ë¹Œë“œ ì„±ê³µ
+- [ ] ì„œë²„ ì¬ì‹œì‘
+- [ ] Swagger UI í™•ì¸
+- [ ] ëª¨ë“  API í…ŒìŠ¤íŠ¸
 
-## ?? °á·Ğ
+## ?? ê²°ë¡ 
 
-**Swagger 500 ¿¡·¯°¡ ¿ÏÀüÈ÷ ÇØ°áµÇ¾ú½À´Ï´Ù!**
+**Swagger 500 ì—ëŸ¬ê°€ ì™„ì „íˆ í•´ê²°ë˜ì—ˆìŠµë‹ˆë‹¤!**
 
-**º¯°æ »çÇ×:**
-- ? IFormFileÀ» Non-nullable·Î º¯°æ
-- ? IFormFileÀ» DTO·Î °¨½Î±â
-- ? Required ¼Ó¼º Ãß°¡
-- ? ºÒÇÊ¿äÇÑ ¸®µğ·º¼Ç Á¦°Å
+**ë³€ê²½ ì‚¬í•­:**
+- ? IFormFileì„ Non-nullableë¡œ ë³€ê²½
+- ? IFormFileì„ DTOë¡œ ê°ì‹¸ê¸°
+- ? Required ì†ì„± ì¶”ê°€
+- ? ë¶ˆí•„ìš”í•œ ë¦¬ë””ë ‰ì…˜ ì œê±°
 
-**°á°ú:**
-- ? Swagger JSON Á¤»ó »ı¼º
-- ? Swagger UI Á¤»ó Ç¥½Ã
-- ? ¸ğµç API ¿£µåÆ÷ÀÎÆ® ¹®¼­È­ ¿Ï·á
-- ? ÆÄÀÏ ¾÷·Îµå API Á¤»ó µ¿ÀÛ
+**ê²°ê³¼:**
+- ? Swagger JSON ì •ìƒ ìƒì„±
+- ? Swagger UI ì •ìƒ í‘œì‹œ
+- ? ëª¨ë“  API ì—”ë“œí¬ì¸íŠ¸ ë¬¸ì„œí™” ì™„ë£Œ
+- ? íŒŒì¼ ì—…ë¡œë“œ API ì •ìƒ ë™ì‘
 
-**¼öÁ¤µÈ ÄÁÆ®·Ñ·¯:**
-1. `FileTransferController` - ÆÄÀÏ Àü¼Û API
-2. `DBAccessController` - µ¥ÀÌÅÍº£ÀÌ½º API
-3. `LogController` - ·Î±× ¾÷·Îµå API
+**ìˆ˜ì •ëœ ì»¨íŠ¸ë¡¤ëŸ¬:**
+1. `FileTransferController` - íŒŒì¼ ì „ì†¡ API
+2. `DBAccessController` - ë°ì´í„°ë² ì´ìŠ¤ API
+3. `LogController` - ë¡œê·¸ ì—…ë¡œë“œ API
 
 ---
 
-**Âü°í:** ¼­¹ö¸¦ Àç½ÃÀÛÇØ¾ß º¯°æ»çÇ×ÀÌ Àû¿ëµË´Ï´Ù!
+**ì°¸ê³ :** ì„œë²„ë¥¼ ì¬ì‹œì‘í•´ì•¼ ë³€ê²½ì‚¬í•­ì´ ì ìš©ë©ë‹ˆë‹¤!
 
-**¸ğµç API°¡ ÀÌÁ¦ Swagger UI¿¡¼­ Á¤»óÀûÀ¸·Î Ç¥½ÃµÇ°í Å×½ºÆ® °¡´ÉÇÕ´Ï´Ù!** ??
+**ëª¨ë“  APIê°€ ì´ì œ Swagger UIì—ì„œ ì •ìƒì ìœ¼ë¡œ í‘œì‹œë˜ê³  í…ŒìŠ¤íŠ¸ ê°€ëŠ¥í•©ë‹ˆë‹¤!** ??

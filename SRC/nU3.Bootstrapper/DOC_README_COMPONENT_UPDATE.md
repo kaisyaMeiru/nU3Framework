@@ -1,88 +1,88 @@
-# nU3 Bootstrapper - ¾÷µ¥ÀÌÆ® ÆÐÄ¡ ¸ðµâ
+# nU3 Bootstrapper - ì—…ë°ì´íŠ¸ íŒ¨ì¹˜ ëª¨ë“ˆ
 
-## °³¿ä
+## ê°œìš”
 
-`nU3.Bootstrapper`´Â Framework ÄÄÆ÷³ÍÆ®¿Í È­¸é ¸ðµâÀ» ÀÚµ¿À¸·Î ¾÷µ¥ÀÌÆ®ÇÏ°í MainShellÀ» ½ÇÇàÇÏ´Â ·±Ã³ÀÔ´Ï´Ù.
+`nU3.Bootstrapper`ëŠ” Framework ì»´í¬ë„ŒíŠ¸ì™€ í™”ë©´ ëª¨ë“ˆì„ ìžë™ìœ¼ë¡œ ì—…ë°ì´íŠ¸í•˜ê³  MainShellì„ ì‹¤í–‰í•˜ëŠ” ëŸ°ì²˜ìž…ë‹ˆë‹¤.
 
-## ÁÖ¿ä ±â´É
+## ì£¼ìš” ê¸°ëŠ¥
 
-### 1. Framework ÄÄÆ÷³ÍÆ® ¾÷µ¥ÀÌÆ® (½Å±Ô)
-
-```
-¦£¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¤
-¦¢                    Bootstrapper ½ÃÀÛ                         ¦¢
-¦¢                          ¦¢                                   ¦¢
-¦¢                    DB ÃÊ±âÈ­                                 ¦¢
-¦¢                          ¦¢                                   ¦¢
-¦¢              Framework ÄÄÆ÷³ÍÆ® È®ÀÎ                         ¦¢
-¦¢         (nU3.Core.dll, DevExpress.*.dll µî)                 ¦¢
-¦¢                          ¦¢                                   ¦¢
-¦¢           ¦£¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦ª¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¤                   ¦¢
-¦¢           ¦¢                              ¦¢                   ¦¢
-¦¢     ¾÷µ¥ÀÌÆ® ÀÖÀ½                   ÃÖ½Å ¹öÀü                ¦¢
-¦¢           ¦¢                              ¦¢                   ¦¢
-¦¢     UI Ç¥½Ã + ´Ù¿î·Îµå                   ¦¢                   ¦¢
-¦¢           ¦¢                              ¦¢                   ¦¢
-¦¢           ¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¨¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¥                   ¦¢
-¦¢                          ¦¢                                   ¦¢
-¦¢              È­¸é ¸ðµâ ¾÷µ¥ÀÌÆ® (±âÁ¸)                       ¦¢
-¦¢                          ¦¢                                   ¦¢
-¦¢                  MainShell ½ÇÇà                              ¦¢
-¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¥
-```
-
-### 2. ¾÷µ¥ÀÌÆ® UI
+### 1. Framework ì»´í¬ë„ŒíŠ¸ ì—…ë°ì´íŠ¸ (ì‹ ê·œ)
 
 ```
-¦£¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¤
-¦¢ ?? Framework ÄÄÆ÷³ÍÆ® ¾÷µ¥ÀÌÆ®                              ¦¢
-¦§¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦©
-¦¢ ´Ù¿î·Îµå Áß... (3/10)                                       ¦¢
-¦¢ [??????????????????????????????] 30%                        ¦¢
-¦¢ DevExpress.XtraEditors                                      ¦¢
-¦§¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦©
-¦¢ »óÅÂ ¦¢ ÄÄÆ÷³ÍÆ®            ¦¢ ¹öÀü     ¦¢ Å©±â   ¦¢ À¯Çü      ¦¢
-¦¢¦¡¦¡¦¡¦¡¦¡¦¡¦«¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦«¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦«¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦«¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¢
-¦¢ ?   ¦¢ nU3.Core           ¦¢ 1.0.0.0  ¦¢ 245 KB ¦¢ Core      ¦¢
-¦¢ ?   ¦¢ nU3.Core.UI        ¦¢ 1.0.0.0  ¦¢ 189 KB ¦¢ Core      ¦¢
-¦¢ ??   ¦¢ DevExpress.XtraEdi ¦¢ 23.2.9   ¦¢ 2.1 MB ¦¢ Library   ¦¢
-¦¢ ?   ¦¢ Oracle.Managed...  ¦¢ 21.12.0  ¦¢ 8.5 MB ¦¢ Library   ¦¢
-¦§¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦©
-¦¢                        [ Ãë¼Ò ]                              ¦¢
-¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¥
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚                    Bootstrapper ì‹œìž‘                         â”‚
+â”‚                          â”‚                                   â”‚
+â”‚                    DB ì´ˆê¸°í™”                                 â”‚
+â”‚                          â”‚                                   â”‚
+â”‚              Framework ì»´í¬ë„ŒíŠ¸ í™•ì¸                         â”‚
+â”‚         (nU3.Core.dll, DevExpress.*.dll ë“±)                 â”‚
+â”‚                          â”‚                                   â”‚
+â”‚           â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”´â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”                   â”‚
+â”‚           â”‚                              â”‚                   â”‚
+â”‚     ì—…ë°ì´íŠ¸ ìžˆìŒ                   ìµœì‹  ë²„ì „                â”‚
+â”‚           â”‚                              â”‚                   â”‚
+â”‚     UI í‘œì‹œ + ë‹¤ìš´ë¡œë“œ                   â”‚                   â”‚
+â”‚           â”‚                              â”‚                   â”‚
+â”‚           â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜                   â”‚
+â”‚                          â”‚                                   â”‚
+â”‚              í™”ë©´ ëª¨ë“ˆ ì—…ë°ì´íŠ¸ (ê¸°ì¡´)                       â”‚
+â”‚                          â”‚                                   â”‚
+â”‚                  MainShell ì‹¤í–‰                              â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
 ```
 
-## ÆÄÀÏ ±¸Á¶
+### 2. ì—…ë°ì´íŠ¸ UI
+
+```
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚ ?? Framework ì»´í¬ë„ŒíŠ¸ ì—…ë°ì´íŠ¸                              â”‚
+â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¤
+â”‚ ë‹¤ìš´ë¡œë“œ ì¤‘... (3/10)                                       â”‚
+â”‚ [??????????????????????????????] 30%                        â”‚
+â”‚ DevExpress.XtraEditors                                      â”‚
+â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¤
+â”‚ ìƒíƒœ â”‚ ì»´í¬ë„ŒíŠ¸            â”‚ ë²„ì „     â”‚ í¬ê¸°   â”‚ ìœ í˜•      â”‚
+â”‚â”€â”€â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”‚
+â”‚ ?   â”‚ nU3.Core           â”‚ 1.0.0.0  â”‚ 245 KB â”‚ Core      â”‚
+â”‚ ?   â”‚ nU3.Core.UI        â”‚ 1.0.0.0  â”‚ 189 KB â”‚ Core      â”‚
+â”‚ ??   â”‚ DevExpress.XtraEdi â”‚ 23.2.9   â”‚ 2.1 MB â”‚ Library   â”‚
+â”‚ ?   â”‚ Oracle.Managed...  â”‚ 21.12.0  â”‚ 8.5 MB â”‚ Library   â”‚
+â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¤
+â”‚                        [ ì·¨ì†Œ ]                              â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+```
+
+## íŒŒì¼ êµ¬ì¡°
 
 ```
 nU3.Bootstrapper/
-¦§¦¡¦¡ Program.cs              # ¸ÞÀÎ ÁøÀÔÁ¡
-¦§¦¡¦¡ ComponentLoader.cs      # Framework ÄÄÆ÷³ÍÆ® ·Î´õ (½Å±Ô)
-¦§¦¡¦¡ ModuleLoader.cs         # È­¸é ¸ðµâ ·Î´õ (±âÁ¸)
-¦§¦¡¦¡ UpdateProgressForm.cs   # ¾÷µ¥ÀÌÆ® UI (½Å±Ô)
-¦§¦¡¦¡ Seeder.cs               # °³¹ß¿ë Å×½ºÆ® µ¥ÀÌÅÍ
-¦¦¦¡¦¡ nU3.Bootstrapper.csproj
+â”œâ”€â”€ Program.cs              # ë©”ì¸ ì§„ìž…ì 
+â”œâ”€â”€ ComponentLoader.cs      # Framework ì»´í¬ë„ŒíŠ¸ ë¡œë” (ì‹ ê·œ)
+â”œâ”€â”€ ModuleLoader.cs         # í™”ë©´ ëª¨ë“ˆ ë¡œë” (ê¸°ì¡´)
+â”œâ”€â”€ UpdateProgressForm.cs   # ì—…ë°ì´íŠ¸ UI (ì‹ ê·œ)
+â”œâ”€â”€ Seeder.cs               # ê°œë°œìš© í…ŒìŠ¤íŠ¸ ë°ì´í„°
+â””â”€â”€ nU3.Bootstrapper.csproj
 ```
 
-## Å¬·¡½º ¼³¸í
+## í´ëž˜ìŠ¤ ì„¤ëª…
 
 ### ComponentLoader
 
-Framework ÄÄÆ÷³ÍÆ® (DLL, EXE) ¾÷µ¥ÀÌÆ® ´ã´ç:
+Framework ì»´í¬ë„ŒíŠ¸ (DLL, EXE) ì—…ë°ì´íŠ¸ ë‹´ë‹¹:
 
 ```csharp
 var loader = new ComponentLoader(dbManager, installPath);
 
-// 1. ¾÷µ¥ÀÌÆ® È®ÀÎ
+// 1. ì—…ë°ì´íŠ¸ í™•ì¸
 var updates = loader.CheckForUpdates();
 
-// 2. ÇÊ¼ö ÄÄÆ÷³ÍÆ® ´©¶ô È®ÀÎ
+// 2. í•„ìˆ˜ ì»´í¬ë„ŒíŠ¸ ëˆ„ë½ í™•ì¸
 var missing = loader.GetMissingRequiredComponents();
 
-// 3. ÀüÃ¼ ¾÷µ¥ÀÌÆ®
+// 3. ì „ì²´ ì—…ë°ì´íŠ¸
 var result = loader.UpdateAll();
 
-// 4. ÁøÇà ÀÌº¥Æ®
+// 4. ì§„í–‰ ì´ë²¤íŠ¸
 loader.UpdateProgress += (s, e) => 
 {
     Console.WriteLine($"{e.Phase}: {e.ComponentName} ({e.PercentComplete}%)");
@@ -91,26 +91,26 @@ loader.UpdateProgress += (s, e) =>
 
 ### UpdateProgressForm
 
-¾÷µ¥ÀÌÆ® ÁøÇà UI:
+ì—…ë°ì´íŠ¸ ì§„í–‰ UI:
 
 ```csharp
 using var form = new UpdateProgressForm();
 
-// ¾÷µ¥ÀÌÆ® ¸ñ·Ï ÃÊ±âÈ­
+// ì—…ë°ì´íŠ¸ ëª©ë¡ ì´ˆê¸°í™”
 form.InitializeUpdateList(updates);
 
-// ÁøÇà »óÅÂ ¾÷µ¥ÀÌÆ®
+// ì§„í–‰ ìƒíƒœ ì—…ë°ì´íŠ¸
 loader.UpdateProgress += (s, e) => form.UpdateProgress(e);
 
-// °á°ú Ç¥½Ã
+// ê²°ê³¼ í‘œì‹œ
 form.ShowResult(result);
 
 form.ShowDialog();
 ```
 
-### ModuleLoader (±âÁ¸)
+### ModuleLoader (ê¸°ì¡´)
 
-È­¸é ¸ðµâ (DLL with screens) ¾÷µ¥ÀÌÆ®:
+í™”ë©´ ëª¨ë“ˆ (DLL with screens) ì—…ë°ì´íŠ¸:
 
 ```csharp
 var moduleLoader = new ModuleLoader();
@@ -118,82 +118,82 @@ moduleLoader.EnsureDatabaseInitialized();
 moduleLoader.CheckAndLoadModules(shellPath);
 ```
 
-## ½ÇÇà Èå¸§
+## ì‹¤í–‰ íë¦„
 
-### 1. Á¤»ó ½Ã³ª¸®¿À
+### 1. ì •ìƒ ì‹œë‚˜ë¦¬ì˜¤
 
 ```
-1. nU3.Bootstrapper.exe ½ÇÇà
-   ¡é
-2. DB ÃÊ±âÈ­ (SYS_COMPONENT_MST, SYS_MODULE_MST µî)
-   ¡é
-3. Shell °æ·Î Ã£±â (nU3.MainShell.exe)
-   ¡é
-4. Framework ÄÄÆ÷³ÍÆ® ¾÷µ¥ÀÌÆ® È®ÀÎ
-   - ¼­¹ö ¹öÀü vs ·ÎÄÃ ¹öÀü ºñ±³
-   - ÇØ½Ã ºñ±³·Î º¯°æ °¨Áö
-   ¡é
-5. ¾÷µ¥ÀÌÆ® ÀÖÀ¸¸é UI Ç¥½Ã + ´Ù¿î·Îµå
-   - ¼­¹ö ÀúÀå¼Ò ¡æ Ä³½Ã ¡æ ¼³Ä¡ °æ·Î
-   ¡é
-6. È­¸é ¸ðµâ ¾÷µ¥ÀÌÆ®
-   ¡é
-7. MainShell ½ÇÇà
+1. nU3.Bootstrapper.exe ì‹¤í–‰
+   â†“
+2. DB ì´ˆê¸°í™” (SYS_COMPONENT_MST, SYS_MODULE_MST ë“±)
+   â†“
+3. Shell ê²½ë¡œ ì°¾ê¸° (nU3.MainShell.exe)
+   â†“
+4. Framework ì»´í¬ë„ŒíŠ¸ ì—…ë°ì´íŠ¸ í™•ì¸
+   - ì„œë²„ ë²„ì „ vs ë¡œì»¬ ë²„ì „ ë¹„êµ
+   - í•´ì‹œ ë¹„êµë¡œ ë³€ê²½ ê°ì§€
+   â†“
+5. ì—…ë°ì´íŠ¸ ìžˆìœ¼ë©´ UI í‘œì‹œ + ë‹¤ìš´ë¡œë“œ
+   - ì„œë²„ ì €ìž¥ì†Œ â†’ ìºì‹œ â†’ ì„¤ì¹˜ ê²½ë¡œ
+   â†“
+6. í™”ë©´ ëª¨ë“ˆ ì—…ë°ì´íŠ¸
+   â†“
+7. MainShell ì‹¤í–‰
 ```
 
-### 2. ¾÷µ¥ÀÌÆ® Ãë¼Ò ½Ã
+### 2. ì—…ë°ì´íŠ¸ ì·¨ì†Œ ì‹œ
 
-- ÇÊ¼ö ÄÄÆ÷³ÍÆ® ´©¶ô ¿©ºÎ È®ÀÎ
-- ´©¶ô ½Ã: °æ°í ¸Þ½ÃÁö Ç¥½Ã ÈÄ Á¾·á
-- ´©¶ô ¾øÀ½: Shell ½ÇÇà °è¼Ó
+- í•„ìˆ˜ ì»´í¬ë„ŒíŠ¸ ëˆ„ë½ ì—¬ë¶€ í™•ì¸
+- ëˆ„ë½ ì‹œ: ê²½ê³  ë©”ì‹œì§€ í‘œì‹œ í›„ ì¢…ë£Œ
+- ëˆ„ë½ ì—†ìŒ: Shell ì‹¤í–‰ ê³„ì†
 
-### 3. ¿À·ù ¹ß»ý ½Ã
+### 3. ì˜¤ë¥˜ ë°œìƒ ì‹œ
 
-- ÆÄÀÏ Àá±Ý: 3È¸ Àç½Ãµµ ÈÄ ½ÇÆÐ Ã³¸®
-- ³×Æ®¿öÅ© ¿À·ù: ½ÇÆÐ ¸ñ·Ï¿¡ Ãß°¡, °è¼Ó ÁøÇà
-- ÇÊ¼ö ÄÄÆ÷³ÍÆ® ½ÇÆÐ: °æ°í ÈÄ Á¾·á
+- íŒŒì¼ ìž ê¸ˆ: 3íšŒ ìž¬ì‹œë„ í›„ ì‹¤íŒ¨ ì²˜ë¦¬
+- ë„¤íŠ¸ì›Œí¬ ì˜¤ë¥˜: ì‹¤íŒ¨ ëª©ë¡ì— ì¶”ê°€, ê³„ì† ì§„í–‰
+- í•„ìˆ˜ ì»´í¬ë„ŒíŠ¸ ì‹¤íŒ¨: ê²½ê³  í›„ ì¢…ë£Œ
 
-## °æ·Î ¼³Á¤
+## ê²½ë¡œ ì„¤ì •
 
-### ¼­¹ö ÀúÀå¼Ò (¹èÆ÷ ¿øº»)
+### ì„œë²„ ì €ìž¥ì†Œ (ë°°í¬ ì›ë³¸)
 
 ```
 %AppData%\nU3.Framework\ServerStorage\Components\
-¦§¦¡¦¡ Framework\
-¦¢   ¦§¦¡¦¡ nU3.Core.dll
-¦¢   ¦¦¦¡¦¡ nU3.Core.UI.dll
-¦§¦¡¦¡ DevExpress\
-¦¢   ¦¦¦¡¦¡ DevExpress.XtraEditors.dll
-¦¦¦¡¦¡ Oracle\
-    ¦¦¦¡¦¡ Oracle.ManagedDataAccess.dll
+â”œâ”€â”€ Framework\
+â”‚   â”œâ”€â”€ nU3.Core.dll
+â”‚   â””â”€â”€ nU3.Core.UI.dll
+â”œâ”€â”€ DevExpress\
+â”‚   â””â”€â”€ DevExpress.XtraEditors.dll
+â””â”€â”€ Oracle\
+    â””â”€â”€ Oracle.ManagedDataAccess.dll
 ```
 
-### Ä³½Ã (´Ù¿î·Îµå ¿µ¿ª)
+### ìºì‹œ (ë‹¤ìš´ë¡œë“œ ì˜ì—­)
 
 ```
 %AppData%\nU3.Framework\Cache\Components\
-¦§¦¡¦¡ Framework\
-¦§¦¡¦¡ DevExpress\
-¦¦¦¡¦¡ Oracle\
+â”œâ”€â”€ Framework\
+â”œâ”€â”€ DevExpress\
+â””â”€â”€ Oracle\
 ```
 
-### ¼³Ä¡ °æ·Î (·±Å¸ÀÓ)
+### ì„¤ì¹˜ ê²½ë¡œ (ëŸ°íƒ€ìž„)
 
 ```
-C:\Program Files\nU3\              ¡ç Shell À§Ä¡ ±âÁØ
-¦§¦¡¦¡ nU3.MainShell.exe
-¦§¦¡¦¡ nU3.Core.dll                   ¡ç InstallPath: ""
-¦§¦¡¦¡ nU3.Core.UI.dll
-¦§¦¡¦¡ plugins\                       ¡ç InstallPath: "plugins"
-¦¢   ¦¦¦¡¦¡ MyPlugin.dll
-¦¦¦¡¦¡ Modules\                       ¡ç È­¸é ¸ðµâ (ModuleLoader)
-    ¦¦¦¡¦¡ EMR\IN\
-        ¦¦¦¡¦¡ nU3.Modules.EMR.IN.Worklist.dll
+C:\Program Files\nU3\              â† Shell ìœ„ì¹˜ ê¸°ì¤€
+â”œâ”€â”€ nU3.MainShell.exe
+â”œâ”€â”€ nU3.Core.dll                   â† InstallPath: ""
+â”œâ”€â”€ nU3.Core.UI.dll
+â”œâ”€â”€ plugins\                       â† InstallPath: "plugins"
+â”‚   â””â”€â”€ MyPlugin.dll
+â””â”€â”€ Modules\                       â† í™”ë©´ ëª¨ë“ˆ (ModuleLoader)
+    â””â”€â”€ EMR\IN\
+        â””â”€â”€ nU3.Modules.EMR.IN.Worklist.dll
 ```
 
-## ÀÌº¥Æ® ¸ðµ¨
+## ì´ë²¤íŠ¸ ëª¨ë¸
 
-### UpdateProgress ÀÌº¥Æ®
+### UpdateProgress ì´ë²¤íŠ¸
 
 ```csharp
 public class ComponentUpdateEventArgs : EventArgs
@@ -208,85 +208,85 @@ public class ComponentUpdateEventArgs : EventArgs
 }
 ```
 
-### UpdatePhase ¿­°ÅÇü
+### UpdatePhase ì—´ê±°í˜•
 
-| Phase | ¼³¸í |
+| Phase | ì„¤ëª… |
 |-------|------|
-| `Checking` | ¾÷µ¥ÀÌÆ® È®ÀÎ Áß |
-| `Downloading` | ¼­¹ö¿¡¼­ Ä³½Ã·Î ´Ù¿î·Îµå |
-| `Installing` | Ä³½Ã¿¡¼­ ¼³Ä¡ °æ·Î·Î º¹»ç |
-| `Completed` | ¾÷µ¥ÀÌÆ® ¿Ï·á |
-| `Failed` | ¾÷µ¥ÀÌÆ® ½ÇÆÐ |
+| `Checking` | ì—…ë°ì´íŠ¸ í™•ì¸ ì¤‘ |
+| `Downloading` | ì„œë²„ì—ì„œ ìºì‹œë¡œ ë‹¤ìš´ë¡œë“œ |
+| `Installing` | ìºì‹œì—ì„œ ì„¤ì¹˜ ê²½ë¡œë¡œ ë³µì‚¬ |
+| `Completed` | ì—…ë°ì´íŠ¸ ì™„ë£Œ |
+| `Failed` | ì—…ë°ì´íŠ¸ ì‹¤íŒ¨ |
 
-## ¹èÆ÷ ½Ã³ª¸®¿À
+## ë°°í¬ ì‹œë‚˜ë¦¬ì˜¤
 
-### °³¹ß È¯°æ
+### ê°œë°œ í™˜ê²½
 
 ```bash
-# Bootstrapper ºôµå ÈÄ ½ÇÇà
+# Bootstrapper ë¹Œë“œ í›„ ì‹¤í–‰
 dotnet run --project nU3.Bootstrapper
 
-# ÀÚµ¿À¸·Î:
-# 1. DB ÃÊ±âÈ­
-# 2. Å×½ºÆ® µ¥ÀÌÅÍ ½Ãµå (DEBUG ¸ðµå)
-# 3. ÄÄÆ÷³ÍÆ® ¾÷µ¥ÀÌÆ® È®ÀÎ (¼­¹ö ÀúÀå¼Ò ºñ¾îÀÖÀ¸¸é ½ºÅµ)
-# 4. MainShell ½ÇÇà
+# ìžë™ìœ¼ë¡œ:
+# 1. DB ì´ˆê¸°í™”
+# 2. í…ŒìŠ¤íŠ¸ ë°ì´í„° ì‹œë“œ (DEBUG ëª¨ë“œ)
+# 3. ì»´í¬ë„ŒíŠ¸ ì—…ë°ì´íŠ¸ í™•ì¸ (ì„œë²„ ì €ìž¥ì†Œ ë¹„ì–´ìžˆìœ¼ë©´ ìŠ¤í‚µ)
+# 4. MainShell ì‹¤í–‰
 ```
 
-### ¿î¿µ È¯°æ
+### ìš´ì˜ í™˜ê²½
 
 ```
-¹èÆ÷ ÆÐÅ°Áö:
-¦§¦¡¦¡ nU3.Bootstrapper.exe      ¡ç »ç¿ëÀÚ ½ÇÇà
-¦§¦¡¦¡ nU3.MainShell.exe
-¦§¦¡¦¡ nU3.Core.dll
-¦§¦¡¦¡ nU3.Core.UI.dll
-¦§¦¡¦¡ nU3.Data.dll
-¦§¦¡¦¡ nU3.Models.dll
-¦¦¦¡¦¡ ... (±âÅ¸ ÇÊ¼ö DLL)
+ë°°í¬ íŒ¨í‚¤ì§€:
+â”œâ”€â”€ nU3.Bootstrapper.exe      â† ì‚¬ìš©ìž ì‹¤í–‰
+â”œâ”€â”€ nU3.MainShell.exe
+â”œâ”€â”€ nU3.Core.dll
+â”œâ”€â”€ nU3.Core.UI.dll
+â”œâ”€â”€ nU3.Data.dll
+â”œâ”€â”€ nU3.Models.dll
+â””â”€â”€ ... (ê¸°íƒ€ í•„ìˆ˜ DLL)
 
-¼­¹ö ÀúÀå¼Ò (Áß¾Ó °ü¸®):
+ì„œë²„ ì €ìž¥ì†Œ (ì¤‘ì•™ ê´€ë¦¬):
 \\server\nU3.Framework\ServerStorage\Components\
-¦§¦¡¦¡ Framework\...
-¦§¦¡¦¡ DevExpress\...
-¦¦¦¡¦¡ ...
+â”œâ”€â”€ Framework\...
+â”œâ”€â”€ DevExpress\...
+â””â”€â”€ ...
 ```
 
-## Âü°í
+## ì°¸ê³ 
 
-- ÄÄÆ÷³ÍÆ® ¹èÆ÷: `nU3.Tools.Deployer` ¡æ "Framework ÄÄÆ÷³ÍÆ®" ÅÇ
-- DB ½ºÅ°¸¶: `SYS_COMPONENT_MST`, `SYS_COMPONENT_VER`
-- °ü·Ã °¡ÀÌµå: `INSTALL_PATH_GUIDE.md`, `COMPONENT_DEPLOY_GUIDE.md`
+- ì»´í¬ë„ŒíŠ¸ ë°°í¬: `nU3.Tools.Deployer` â†’ "Framework ì»´í¬ë„ŒíŠ¸" íƒ­
+- DB ìŠ¤í‚¤ë§ˆ: `SYS_COMPONENT_MST`, `SYS_COMPONENT_VER`
+- ê´€ë ¨ ê°€ì´ë“œ: `INSTALL_PATH_GUIDE.md`, `COMPONENT_DEPLOY_GUIDE.md`
 
 ---
 
-## ë‹¨ì¼ ì‹¤í–‰ íŒŒì¼ ë¹Œë“œ
+## ?â‘¥ì”ª ?ã…½ë»¾ ?ëš¯ì”ª é®ëš®ë±¶
 
-### ë¹ ë¥¸ ì‹œìž‘
+### é®ì¢Šâ…¨ ?ì’–ì˜‰
 
 ```batch
-# Release ë¹Œë“œ (í”„ë¡œë•ì…˜)
+# Release é®ëš®ë±¶ (?ê¾¨ì¤ˆ?ëº¤ë€¡)
 build_single.bat
 
-# Debug ë¹Œë“œ (ê°œë°œ)
+# Debug é®ëš®ë±¶ (åª›ì’•ì»»)
 build_single_debug.bat
 ```
 
-### ì¶œë ¥
+### ç•°ì’•ì °
 
 ```
 publish/
-â”œâ”€â”€ nU3.Bootstrapper.exe    # ë‹¨ì¼ ì‹¤í–‰ íŒŒì¼ (ì•½ 70-100MB)
-â””â”€â”€ (ê¸°íƒ€ íŒŒì¼ ì—†ìŒ)
+?ì’‹??Â€ nU3.Bootstrapper.exe    # ?â‘¥ì”ª ?ã…½ë»¾ ?ëš¯ì”ª (??70-100MB)
+?ë¶´??Â€ (æ¹²ê³ ? ?ëš¯ì”ª ?ë†ì“¬)
 ```
 
-### ê¸°ëŠ¥
+### æ¹²ê³•ë’«
 
-- ë‹¨ì¼ EXE íŒŒì¼ë¡œ ëª¨ë“  ì¢…ì†ì„± í¬í•¨
-- ëŸ°íƒ€ìž„ í¬í•¨ (ë³„ë„ .NET ì„¤ì¹˜ ë¶ˆí•„ìš”)
-- `appsettings.json` ë¦¬ì†ŒìŠ¤ í¬í•¨
-- LOG í´ë”ì— ìžë™ ë¡œê¹…
+- ?â‘¥ì”ª EXE ?ëš¯ì”ªæ¿¡?ï§â‘¤ë±º é†«ë‚†ëƒ½???Ñ‹ë¸¿
+- ?ê³ ????Ñ‹ë¸¿ (è¹‚ê¾¨ë£„ .NET ?ã…¼íŠ‚ éºëŠë¸˜??
+- `appsettings.json` ç”±ÑŠëƒ¼???Ñ‹ë¸¿
+- LOG ?ëŒ€ëœ‘???ë¨®ë£ž æ¿¡ì’“í‰­
 
-### ìžì„¸í•œ ì •ë³´
+### ?ë¨¯ê½­???ëº£ë‚«
 
-ìžì„¸í•œ ë‚´ìš©ì€ `BUILD_SINGLE_GUIDE.md` ì°¸ì¡°
+?ë¨¯ê½­???ëŒìŠœ?Â€ `BUILD_SINGLE_GUIDE.md` ï§¡ëª„â€œ

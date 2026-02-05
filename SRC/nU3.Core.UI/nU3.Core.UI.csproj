@@ -13,18 +13,6 @@
     <None Remove="Compiled\**" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Compile Remove="Controls\nU3FactoryAdvancedControls.cs" />
-    <Compile Remove="Controls\nU3FactoryBasicEditors.cs" />
-    <Compile Remove="Controls\nU3FactoryComplexControls.cs" />
-    <Compile Remove="Controls\nU3FactoryComplexGrids.cs" />
-    <Compile Remove="Controls\nU3FactoryControls.cs" />
-    <Compile Remove="Controls\nU3FactoryFinalWrap.cs" />
-    <Compile Remove="Controls\nU3FactoryGridControls.cs" />
-    <Compile Remove="Controls\nU3FactoryMiscControls.cs" />
-    <Compile Remove="Controls\nU3FactoryNavLayoutControls.cs" />
-  </ItemGroup>
-
    <ItemGroup>
     <PackageReference Include="DevExpress.Win" Version="23.2.9" />
     <PackageReference Include="DevExpress.Win.Design" Version="23.2.9" />

@@ -1,39 +1,39 @@
-# nU3.Connectivity vs nU3.Server.Connectivity ºĞ¸® ÀÌÀ¯
+# nU3.Connectivity vs nU3.Server.Connectivity ë¶„ë¦¬ ì´ìœ 
 
-## ?? ¾ÆÅ°ÅØÃ³ ºĞ¸® ¸ñÀû
+## ?? ì•„í‚¤í…ì²˜ ë¶„ë¦¬ ëª©ì 
 
-µÎ ÇÁ·ÎÁ§Æ®´Â **Client-Server ¾ÆÅ°ÅØÃ³**¸¦ À§ÇØ ¸íÈ®ÇÏ°Ô ºĞ¸®µÇ¾î ÀÖ½À´Ï´Ù.
+ë‘ í”„ë¡œì íŠ¸ëŠ” **Client-Server ì•„í‚¤í…ì²˜**ë¥¼ ìœ„í•´ ëª…í™•í•˜ê²Œ ë¶„ë¦¬ë˜ì–´ ìˆìŠµë‹ˆë‹¤.
 
 ---
 
-## ?? ÇÁ·ÎÁ§Æ® ¿ªÇÒ ºñ±³
+## ?? í”„ë¡œì íŠ¸ ì—­í•  ë¹„êµ
 
-| Ç×¸ñ | nU3.Connectivity | nU3.Server.Connectivity |
+| í•­ëª© | nU3.Connectivity | nU3.Server.Connectivity |
 |------|------------------|------------------------|
-| **À§Ä¡** | Å¬¶óÀÌ¾ğÆ® Ãø | ¼­¹ö Ãø |
-| **¿ªÇÒ** | ÀÎÅÍÆäÀÌ½º Á¤ÀÇ + Å¬¶óÀÌ¾ğÆ® ±¸Çö | ¼­¹ö ±¸Çö |
-| **ÀÇÁ¸¼º** | nU3.Core, nU3.Models | nU3.Core, **nU3.Connectivity** |
-| **½ÇÇà È¯°æ** | WinForms (nU3.Shell) | ASP.NET Core (nU3.Server.Host) |
-| **Åë½Å ¹æ½Ä** | HTTP ¿äÃ» Àü¼Û | HTTP ¿äÃ» ¼ö½Å ¹× Ã³¸® |
+| **ìœ„ì¹˜** | í´ë¼ì´ì–¸íŠ¸ ì¸¡ | ì„œë²„ ì¸¡ |
+| **ì—­í• ** | ì¸í„°í˜ì´ìŠ¤ ì •ì˜ + í´ë¼ì´ì–¸íŠ¸ êµ¬í˜„ | ì„œë²„ êµ¬í˜„ |
+| **ì˜ì¡´ì„±** | nU3.Core, nU3.Models | nU3.Core, **nU3.Connectivity** |
+| **ì‹¤í–‰ í™˜ê²½** | WinForms (nU3.Shell) | ASP.NET Core (nU3.Server.Host) |
+| **í†µì‹  ë°©ì‹** | HTTP ìš”ì²­ ì „ì†¡ | HTTP ìš”ì²­ ìˆ˜ì‹  ë° ì²˜ë¦¬ |
 
 ---
 
-## ?? »ó¼¼ ºĞ¼®
+## ?? ìƒì„¸ ë¶„ì„
 
-### 1?? **nU3.Connectivity** (°øÀ¯ °è¾à + Å¬¶óÀÌ¾ğÆ®)
+### 1?? **nU3.Connectivity** (ê³µìœ  ê³„ì•½ + í´ë¼ì´ì–¸íŠ¸)
 
-#### ?? ÆÄÀÏ ±¸Á¶
+#### ?? íŒŒì¼ êµ¬ì¡°
 ```
 nU3.Connectivity/
-¦§¦¡¦¡ IDBAccessService.cs              # ÀÎÅÍÆäÀÌ½º (°è¾à)
-¦§¦¡¦¡ IFileTransferService.cs          # ÀÎÅÍÆäÀÌ½º (°è¾à)
-¦§¦¡¦¡ Implementations/
-¦¢   ¦§¦¡¦¡ DBAccessClientBase.cs        # Å¬¶óÀÌ¾ğÆ® ±¸Çö (Ãß»ó ±â¹İ)
-¦¢   ¦¦¦¡¦¡ FileTransferClientBase.cs    # Å¬¶óÀÌ¾ğÆ® ±¸Çö (Ãß»ó ±â¹İ)
+â”œâ”€â”€ IDBAccessService.cs              # ì¸í„°í˜ì´ìŠ¤ (ê³„ì•½)
+â”œâ”€â”€ IFileTransferService.cs          # ì¸í„°í˜ì´ìŠ¤ (ê³„ì•½)
+â”œâ”€â”€ Implementations/
+â”‚   â”œâ”€â”€ DBAccessClientBase.cs        # í´ë¼ì´ì–¸íŠ¸ êµ¬í˜„ (ì¶”ìƒ ê¸°ë°˜)
+â”‚   â””â”€â”€ FileTransferClientBase.cs    # í´ë¼ì´ì–¸íŠ¸ êµ¬í˜„ (ì¶”ìƒ ê¸°ë°˜)
 ```
 
-#### ?? ¸ñÀû
-1. **ÀÎÅÍÆäÀÌ½º Á¤ÀÇ** (°è¾à)
+#### ?? ëª©ì 
+1. **ì¸í„°í˜ì´ìŠ¤ ì •ì˜** (ê³„ì•½)
    ```csharp
    public interface IDBAccessService
    {
@@ -44,14 +44,14 @@ nU3.Connectivity/
    }
    ```
 
-2. **Å¬¶óÀÌ¾ğÆ® ±âº» ±¸Çö**
+2. **í´ë¼ì´ì–¸íŠ¸ ê¸°ë³¸ êµ¬í˜„**
    ```csharp
    public abstract class DBAccessClientBase : IDBAccessService
    {
-       // ¿ø°İ È£ÃâÀ» À§ÇÑ Ãß»ó ¸Ş¼­µå
+       // ì›ê²© í˜¸ì¶œì„ ìœ„í•œ ì¶”ìƒ ë©”ì„œë“œ
        protected abstract Task<T> RemoteExecuteAsync<T>(string method, object[] args);
        
-       // ÀÎÅÍÆäÀÌ½º ±¸Çö - ¿ø°İ ¼­¹ö È£Ãâ
+       // ì¸í„°í˜ì´ìŠ¤ êµ¬í˜„ - ì›ê²© ì„œë²„ í˜¸ì¶œ
        public async Task<bool> ConnectAsync()
        {
            return await RemoteExecuteAsync<bool>(nameof(Connect), null);
@@ -59,25 +59,25 @@ nU3.Connectivity/
    }
    ```
 
-#### ?? Æ¯Â¡
-- ? **°è¾à(Contract) Á¤ÀÇ**: ÀÎÅÍÆäÀÌ½º·Î API ±Ô°İ ¸í½Ã
-- ? **Å¬¶óÀÌ¾ğÆ® Ãß»óÈ­**: ¿ø°İ È£Ãâ ·ÎÁ÷ Ä¸½¶È­
-- ? **°øÀ¯ °¡´É**: Å¬¶óÀÌ¾ğÆ®¿Í ¼­¹ö°¡ °°Àº ÀÎÅÍÆäÀÌ½º »ç¿ë
+#### ?? íŠ¹ì§•
+- ? **ê³„ì•½(Contract) ì •ì˜**: ì¸í„°í˜ì´ìŠ¤ë¡œ API ê·œê²© ëª…ì‹œ
+- ? **í´ë¼ì´ì–¸íŠ¸ ì¶”ìƒí™”**: ì›ê²© í˜¸ì¶œ ë¡œì§ ìº¡ìŠí™”
+- ? **ê³µìœ  ê°€ëŠ¥**: í´ë¼ì´ì–¸íŠ¸ì™€ ì„œë²„ê°€ ê°™ì€ ì¸í„°í˜ì´ìŠ¤ ì‚¬ìš©
 
 ---
 
-### 2?? **nU3.Server.Connectivity** (¼­¹ö ±¸Çö)
+### 2?? **nU3.Server.Connectivity** (ì„œë²„ êµ¬í˜„)
 
-#### ?? ÆÄÀÏ ±¸Á¶
+#### ?? íŒŒì¼ êµ¬ì¡°
 ```
 nU3.Server.Connectivity/
-¦§¦¡¦¡ Services/
-¦¢   ¦§¦¡¦¡ ServerDBAccessService.cs         # ¼­¹ö DB ±¸Çö
-¦¢   ¦¦¦¡¦¡ ServerFileTransferService.cs     # ¼­¹ö ÆÄÀÏ ±¸Çö
+â”œâ”€â”€ Services/
+â”‚   â”œâ”€â”€ ServerDBAccessService.cs         # ì„œë²„ DB êµ¬í˜„
+â”‚   â””â”€â”€ ServerFileTransferService.cs     # ì„œë²„ íŒŒì¼ êµ¬í˜„
 ```
 
-#### ?? ¸ñÀû
-**½ÇÁ¦ ºñÁî´Ï½º ·ÎÁ÷ ±¸Çö** (¼­¹ö Ãø)
+#### ?? ëª©ì 
+**ì‹¤ì œ ë¹„ì¦ˆë‹ˆìŠ¤ ë¡œì§ êµ¬í˜„** (ì„œë²„ ì¸¡)
 
 ```csharp
 public class ServerDBAccessService : IDisposable
@@ -85,7 +85,7 @@ public class ServerDBAccessService : IDisposable
     private DbConnection? _connection;
     private DbTransaction? _transaction;
     
-    // ½ÇÁ¦ DB ¿¬°á ¹× Äõ¸® ½ÇÇà
+    // ì‹¤ì œ DB ì—°ê²° ë° ì¿¼ë¦¬ ì‹¤í–‰
     public async Task<bool> ConnectAsync()
     {
         if (_connection == null)
@@ -96,7 +96,7 @@ public class ServerDBAccessService : IDisposable
         
         if (_connection.State != ConnectionState.Open)
         {
-            await _connection.OpenAsync();  // ¡ç ½ÇÁ¦ DB ¿¬°á
+            await _connection.OpenAsync();  // â† ì‹¤ì œ DB ì—°ê²°
         }
         return true;
     }
@@ -104,7 +104,7 @@ public class ServerDBAccessService : IDisposable
     public async Task<DataTable> ExecuteDataTableAsync(string commandText, ...)
     {
         using var cmd = CreateCommand(commandText, parameters);
-        using var reader = await cmd.ExecuteReaderAsync();  // ¡ç ½ÇÁ¦ Äõ¸® ½ÇÇà
+        using var reader = await cmd.ExecuteReaderAsync();  // â† ì‹¤ì œ ì¿¼ë¦¬ ì‹¤í–‰
         var dt = new DataTable();
         dt.Load(reader);
         return dt;
@@ -112,53 +112,53 @@ public class ServerDBAccessService : IDisposable
 }
 ```
 
-#### ?? Æ¯Â¡
-- ? **½ÇÁ¦ ±¸Çö**: DB ¿¬°á, Äõ¸® ½ÇÇà, Æ®·£Àè¼Ç °ü¸®
-- ? **¼­¹ö Àü¿ë**: ASP.NET Core¿¡¼­¸¸ »ç¿ë
-- ? **¸®¼Ò½º °ü¸®**: IDisposable·Î ¿¬°á/Æ®·£Àè¼Ç Á¤¸®
+#### ?? íŠ¹ì§•
+- ? **ì‹¤ì œ êµ¬í˜„**: DB ì—°ê²°, ì¿¼ë¦¬ ì‹¤í–‰, íŠ¸ëœì­ì…˜ ê´€ë¦¬
+- ? **ì„œë²„ ì „ìš©**: ASP.NET Coreì—ì„œë§Œ ì‚¬ìš©
+- ? **ë¦¬ì†ŒìŠ¤ ê´€ë¦¬**: IDisposableë¡œ ì—°ê²°/íŠ¸ëœì­ì…˜ ì •ë¦¬
 
 ---
 
-## ?? Åë½Å Èå¸§
+## ?? í†µì‹  íë¦„
 
-### ÀüÃ¼ ¾ÆÅ°ÅØÃ³
+### ì „ì²´ ì•„í‚¤í…ì²˜
 
 ```
-¦£¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¤
-¦¢                     Client Side (WinForms)                       ¦¢
-¦§¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦©
-¦¢                                                                  ¦¢
-¦¢  nU3.Shell                                                       ¦¢
-¦¢     ¡é                                                            ¦¢
-¦¢  DBAccessClient (extends DBAccessClientBase)                    ¦¢
-¦¢     ¡é                                                            ¦¢
-¦¢  [nU3.Connectivity]                                              ¦¢
-¦¢     IDBAccessService (interface)                                 ¦¢
-¦¢     DBAccessClientBase (abstract)                                ¦¢
-¦¢         ¡é HTTP Request                                           ¦¢
-¦¢         RemoteExecuteAsync("Connect", ...)                       ¦¢
-¦¢                                                                  ¦¢
-¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¥
-                             ¡é HTTP/REST
-¦£¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¤
-¦¢                      Server Side (ASP.NET Core)                  ¦¢
-¦§¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦©
-¦¢                                                                  ¦¢
-¦¢  nU3.Server.Host                                                 ¦¢
-¦¢     ¡é                                                            ¦¢
-¦¢  DBAccessController                                              ¦¢
-¦¢     ¡é                                                            ¦¢
-¦¢  [nU3.Server.Connectivity]                                       ¦¢
-¦¢     ServerDBAccessService                                        ¦¢
-¦¢         ¡é Actual DB Call                                         ¦¢
-¦¢         Oracle Database                                          ¦¢
-¦¢                                                                  ¦¢
-¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¥
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚                     Client Side (WinForms)                       â”‚
+â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¤
+â”‚                                                                  â”‚
+â”‚  nU3.Shell                                                       â”‚
+â”‚     â†“                                                            â”‚
+â”‚  DBAccessClient (extends DBAccessClientBase)                    â”‚
+â”‚     â†“                                                            â”‚
+â”‚  [nU3.Connectivity]                                              â”‚
+â”‚     IDBAccessService (interface)                                 â”‚
+â”‚     DBAccessClientBase (abstract)                                â”‚
+â”‚         â†“ HTTP Request                                           â”‚
+â”‚         RemoteExecuteAsync("Connect", ...)                       â”‚
+â”‚                                                                  â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+                             â†“ HTTP/REST
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚                      Server Side (ASP.NET Core)                  â”‚
+â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¤
+â”‚                                                                  â”‚
+â”‚  nU3.Server.Host                                                 â”‚
+â”‚     â†“                                                            â”‚
+â”‚  DBAccessController                                              â”‚
+â”‚     â†“                                                            â”‚
+â”‚  [nU3.Server.Connectivity]                                       â”‚
+â”‚     ServerDBAccessService                                        â”‚
+â”‚         â†“ Actual DB Call                                         â”‚
+â”‚         Oracle Database                                          â”‚
+â”‚                                                                  â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
 ```
 
 ---
 
-## ?? ÄÚµå ºñ±³
+## ?? ì½”ë“œ ë¹„êµ
 
 ### Client Side (nU3.Connectivity)
 
@@ -166,23 +166,23 @@ public class ServerDBAccessService : IDisposable
 // DBAccessClientBase.cs
 public abstract class DBAccessClientBase : IDBAccessService
 {
-    // ¿ø°İ È£Ãâ Ãß»ó ¸Ş¼­µå
+    // ì›ê²© í˜¸ì¶œ ì¶”ìƒ ë©”ì„œë“œ
     protected abstract Task<T> RemoteExecuteAsync<T>(string method, object[] args);
     
-    // Connect ±¸Çö - ¿ø°İ ¼­¹ö È£Ãâ
+    // Connect êµ¬í˜„ - ì›ê²© ì„œë²„ í˜¸ì¶œ
     public async Task<bool> ConnectAsync()
     {
         return await RemoteExecuteAsync<bool>(nameof(Connect), null);
-        // ¡è HTTP POST https://server/api/v1/db/connect È£Ãâ
+        // â†‘ HTTP POST https://server/api/v1/db/connect í˜¸ì¶œ
     }
     
-    // Query ±¸Çö - ¿ø°İ ¼­¹ö È£Ãâ
+    // Query êµ¬í˜„ - ì›ê²© ì„œë²„ í˜¸ì¶œ
     public async Task<DataTable> ExecuteDataTableAsync(string cmd, Dictionary<string, object>? params)
     {
         return await RemoteExecuteAsync<DataTable>(
             nameof(ExecuteDataTable), 
             new object[] { cmd, params });
-        // ¡è HTTP POST https://server/api/v1/db/query/table È£Ãâ
+        // â†‘ HTTP POST https://server/api/v1/db/query/table í˜¸ì¶œ
     }
 }
 ```
@@ -195,7 +195,7 @@ public class ServerDBAccessService : IDisposable
 {
     private DbConnection? _connection;
     
-    // Connect ±¸Çö - ½ÇÁ¦ DB ¿¬°á
+    // Connect êµ¬í˜„ - ì‹¤ì œ DB ì—°ê²°
     public async Task<bool> ConnectAsync()
     {
         if (_connection == null)
@@ -206,16 +206,16 @@ public class ServerDBAccessService : IDisposable
         
         if (_connection.State != ConnectionState.Open)
         {
-            await _connection.OpenAsync();  // ¡ç ½ÇÁ¦ Oracle DB ¿¬°á
+            await _connection.OpenAsync();  // â† ì‹¤ì œ Oracle DB ì—°ê²°
         }
         return true;
     }
     
-    // Query ±¸Çö - ½ÇÁ¦ Äõ¸® ½ÇÇà
+    // Query êµ¬í˜„ - ì‹¤ì œ ì¿¼ë¦¬ ì‹¤í–‰
     public async Task<DataTable> ExecuteDataTableAsync(string cmd, Dictionary<string, object>? params)
     {
         using var command = CreateCommand(cmd, params);
-        using var reader = await command.ExecuteReaderAsync();  // ¡ç ½ÇÁ¦ Äõ¸® ½ÇÇà
+        using var reader = await command.ExecuteReaderAsync();  // â† ì‹¤ì œ ì¿¼ë¦¬ ì‹¤í–‰
         var dt = new DataTable();
         dt.Load(reader);
         return dt;
@@ -225,88 +225,88 @@ public class ServerDBAccessService : IDisposable
 
 ---
 
-## ?? ºĞ¸®ÀÇ ÀåÁ¡
+## ?? ë¶„ë¦¬ì˜ ì¥ì 
 
-### 1. **°ü½É»çÀÇ ºĞ¸® (Separation of Concerns)**
+### 1. **ê´€ì‹¬ì‚¬ì˜ ë¶„ë¦¬ (Separation of Concerns)**
 
 ```
-Å¬¶óÀÌ¾ğÆ® °ü½É»ç:
-- ¿ø°İ ¼­¹ö¿Í Åë½Å
-- ÀÀ´ä Ã³¸®
-- ¿¡·¯ ÇÚµé¸µ
+í´ë¼ì´ì–¸íŠ¸ ê´€ì‹¬ì‚¬:
+- ì›ê²© ì„œë²„ì™€ í†µì‹ 
+- ì‘ë‹µ ì²˜ë¦¬
+- ì—ëŸ¬ í•¸ë“¤ë§
 
-¼­¹ö °ü½É»ç:
-- ½ÇÁ¦ ºñÁî´Ï½º ·ÎÁ÷
-- DB ¿¬°á °ü¸®
-- Æ®·£Àè¼Ç °ü¸®
-- º¸¾È
+ì„œë²„ ê´€ì‹¬ì‚¬:
+- ì‹¤ì œ ë¹„ì¦ˆë‹ˆìŠ¤ ë¡œì§
+- DB ì—°ê²° ê´€ë¦¬
+- íŠ¸ëœì­ì…˜ ê´€ë¦¬
+- ë³´ì•ˆ
 ```
 
-### 2. **Àç»ç¿ë¼º**
+### 2. **ì¬ì‚¬ìš©ì„±**
 
 ```csharp
-// nU3.Connectivity´Â ¿©·¯ Å¬¶óÀÌ¾ğÆ®¿¡¼­ »ç¿ë °¡´É
+// nU3.ConnectivityëŠ” ì—¬ëŸ¬ í´ë¼ì´ì–¸íŠ¸ì—ì„œ ì‚¬ìš© ê°€ëŠ¥
 - nU3.Shell (WinForms)
-- ÇâÈÄ nU3.Mobile (Xamarin)
-- ÇâÈÄ nU3.Web (Blazor WASM)
+- í–¥í›„ nU3.Mobile (Xamarin)
+- í–¥í›„ nU3.Web (Blazor WASM)
 
-// ¸ğµÎ °°Àº ÀÎÅÍÆäÀÌ½º »ç¿ë!
+// ëª¨ë‘ ê°™ì€ ì¸í„°í˜ì´ìŠ¤ ì‚¬ìš©!
 ```
 
-### 3. **Å×½ºÆ® ¿ëÀÌ¼º**
+### 3. **í…ŒìŠ¤íŠ¸ ìš©ì´ì„±**
 
 ```csharp
-// Å¬¶óÀÌ¾ğÆ® Å×½ºÆ® - Mock ¼­¹ö
+// í´ë¼ì´ì–¸íŠ¸ í…ŒìŠ¤íŠ¸ - Mock ì„œë²„
 public class MockDBAccessClient : DBAccessClientBase
 {
     protected override Task<T> RemoteExecuteAsync<T>(string method, object[] args)
     {
-        // Mock ÀÀ´ä ¹İÈ¯
+        // Mock ì‘ë‹µ ë°˜í™˜
         return Task.FromResult(default(T));
     }
 }
 
-// ¼­¹ö Å×½ºÆ® - Mock DB Connection
+// ì„œë²„ í…ŒìŠ¤íŠ¸ - Mock DB Connection
 var mockConnection = new MockDbConnection();
 var service = new ServerDBAccessService("connStr", () => mockConnection);
 ```
 
-### 4. **µ¶¸³ÀûÀÎ ¹èÆ÷**
+### 4. **ë…ë¦½ì ì¸ ë°°í¬**
 
 ```
-Å¬¶óÀÌ¾ğÆ® ¾÷µ¥ÀÌÆ®:
-- nU3.Shell Àç¹èÆ÷
-- nU3.Connectivity Æ÷ÇÔ
+í´ë¼ì´ì–¸íŠ¸ ì—…ë°ì´íŠ¸:
+- nU3.Shell ì¬ë°°í¬
+- nU3.Connectivity í¬í•¨
 
-¼­¹ö ¾÷µ¥ÀÌÆ®:
-- nU3.Server.Host Àç¹èÆ÷
-- nU3.Server.Connectivity Æ÷ÇÔ
+ì„œë²„ ì—…ë°ì´íŠ¸:
+- nU3.Server.Host ì¬ë°°í¬
+- nU3.Server.Connectivity í¬í•¨
 
-ÀÎÅÍÆäÀÌ½º º¯°æ ½Ã¿¡¸¸ ¾çÂÊ ¸ğµÎ ¾÷µ¥ÀÌÆ® ÇÊ¿ä!
+ì¸í„°í˜ì´ìŠ¤ ë³€ê²½ ì‹œì—ë§Œ ì–‘ìª½ ëª¨ë‘ ì—…ë°ì´íŠ¸ í•„ìš”!
 ```
 
-### 5. **¸íÈ®ÇÑ °è¾à(Contract)**
+### 5. **ëª…í™•í•œ ê³„ì•½(Contract)**
 
 ```csharp
-// IDBAccessService ÀÎÅÍÆäÀÌ½º°¡ °è¾à ¿ªÇÒ
-// Å¬¶óÀÌ¾ğÆ®¿Í ¼­¹ö ¸ğµÎ ÀÌ °è¾àÀ» ÁØ¼ö
-// API ¹öÀü °ü¸® °¡´É
+// IDBAccessService ì¸í„°í˜ì´ìŠ¤ê°€ ê³„ì•½ ì—­í• 
+// í´ë¼ì´ì–¸íŠ¸ì™€ ì„œë²„ ëª¨ë‘ ì´ ê³„ì•½ì„ ì¤€ìˆ˜
+// API ë²„ì „ ê´€ë¦¬ ê°€ëŠ¥
 
-public interface IDBAccessService  // ¡ç API Contract
+public interface IDBAccessService  // â† API Contract
 {
-    Task<bool> ConnectAsync();     // ¡ç ¸ğµÎ°¡ ±¸ÇöÇØ¾ß ÇÔ
+    Task<bool> ConnectAsync();     // â† ëª¨ë‘ê°€ êµ¬í˜„í•´ì•¼ í•¨
     Task<DataTable> ExecuteDataTableAsync(string cmd, ...);
 }
 ```
 
 ---
 
-## ?? ½ÇÁ¦ »ç¿ë ¿¹½Ã
+## ?? ì‹¤ì œ ì‚¬ìš© ì˜ˆì‹œ
 
 ### Client Side (nU3.Shell)
 
 ```csharp
-// WinForms ¾ÖÇÃ¸®ÄÉÀÌ¼Ç
+// WinForms ì• í”Œë¦¬ì¼€ì´ì…˜
 public class MyForm : Form
 {
     private readonly DBAccessClient _dbClient;
@@ -319,12 +319,12 @@ public class MyForm : Form
     private async void btnConnect_Click(object sender, EventArgs e)
     {
         var connected = await _dbClient.ConnectAsync();
-        // ¡è HTTP ¿äÃ» Àü¼Û ¡æ ¼­¹ö È£Ãâ
+        // â†‘ HTTP ìš”ì²­ ì „ì†¡ â†’ ì„œë²„ í˜¸ì¶œ
         
         if (connected)
         {
             var dt = await _dbClient.ExecuteDataTableAsync("SELECT * FROM Users");
-            // ¡è HTTP ¿äÃ» Àü¼Û ¡æ ¼­¹ö¿¡¼­ Äõ¸® ½ÇÇà ¡æ °á°ú ¹İÈ¯
+            // â†‘ HTTP ìš”ì²­ ì „ì†¡ â†’ ì„œë²„ì—ì„œ ì¿¼ë¦¬ ì‹¤í–‰ â†’ ê²°ê³¼ ë°˜í™˜
             
             dataGridView1.DataSource = dt;
         }
@@ -344,14 +344,14 @@ public class DBAccessController : ControllerBase
     
     public DBAccessController(ServerDBAccessService dbService)
     {
-        _dbService = dbService;  // DI·Î ÁÖÀÔ
+        _dbService = dbService;  // DIë¡œ ì£¼ì…
     }
     
     [HttpPost("connect")]
     public async Task<IActionResult> Connect()
     {
         var result = await _dbService.ConnectAsync();
-        // ¡è ½ÇÁ¦ Oracle DB ¿¬°á
+        // â†‘ ì‹¤ì œ Oracle DB ì—°ê²°
         return Ok(result);
     }
     
@@ -359,7 +359,7 @@ public class DBAccessController : ControllerBase
     public async Task<IActionResult> ExecuteDataTable([FromBody] QueryDto request)
     {
         var dt = await _dbService.ExecuteDataTableAsync(request.CommandText, request.Parameters);
-        // ¡è ½ÇÁ¦ Oracle Äõ¸® ½ÇÇà
+        // â†‘ ì‹¤ì œ Oracle ì¿¼ë¦¬ ì‹¤í–‰
         return Ok(ConvertToJson(dt));
     }
 }
@@ -367,58 +367,58 @@ public class DBAccessController : ControllerBase
 
 ---
 
-## ?? ÀÇÁ¸¼º °ü°è
+## ?? ì˜ì¡´ì„± ê´€ê³„
 
 ```
 nU3.Shell (WinForms)
-    ¡é depends on
+    â†“ depends on
 nU3.Connectivity (Client Interface + Client Implementation)
-    ¡è referenced by (ÀÎÅÍÆäÀÌ½º¸¸)
+    â†‘ referenced by (ì¸í„°í˜ì´ìŠ¤ë§Œ)
 nU3.Server.Connectivity (Server Implementation)
-    ¡é used by
+    â†“ used by
 nU3.Server.Host (ASP.NET Core)
 ```
 
-**Áß¿ä:** `nU3.Server.Connectivity`´Â `nU3.Connectivity`¸¦ ÂüÁ¶ÇÏ¿© ÀÎÅÍÆäÀÌ½º¸¦ ¾ËÁö¸¸, Å¬¶óÀÌ¾ğÆ® ±¸ÇöÀº »ç¿ëÇÏÁö ¾ÊÀ½!
+**ì¤‘ìš”:** `nU3.Server.Connectivity`ëŠ” `nU3.Connectivity`ë¥¼ ì°¸ì¡°í•˜ì—¬ ì¸í„°í˜ì´ìŠ¤ë¥¼ ì•Œì§€ë§Œ, í´ë¼ì´ì–¸íŠ¸ êµ¬í˜„ì€ ì‚¬ìš©í•˜ì§€ ì•ŠìŒ!
 
 ---
 
-## ?? °á·Ğ
+## ?? ê²°ë¡ 
 
-### ? **ºĞ¸® ÀÌÀ¯ ¿ä¾à**
+### ? **ë¶„ë¦¬ ì´ìœ  ìš”ì•½**
 
-1. **¾ÆÅ°ÅØÃ³ ºĞ¸®**: Client-Server ±¸Á¶
-2. **Ã¥ÀÓ ºĞ¸®**: Å¬¶óÀÌ¾ğÆ®´Â Åë½Å, ¼­¹ö´Â ºñÁî´Ï½º ·ÎÁ÷
-3. **Àç»ç¿ë¼º**: ¿©·¯ Å¬¶óÀÌ¾ğÆ®¿¡¼­ µ¿ÀÏ ÀÎÅÍÆäÀÌ½º »ç¿ë
-4. **Å×½ºÆ® ¿ëÀÌ¼º**: °¢°¢ µ¶¸³ÀûÀ¸·Î Å×½ºÆ® °¡´É
-5. **À¯Áöº¸¼ö¼º**: Å¬¶óÀÌ¾ğÆ®¿Í ¼­¹ö¸¦ µ¶¸³ÀûÀ¸·Î ¼öÁ¤ °¡´É
+1. **ì•„í‚¤í…ì²˜ ë¶„ë¦¬**: Client-Server êµ¬ì¡°
+2. **ì±…ì„ ë¶„ë¦¬**: í´ë¼ì´ì–¸íŠ¸ëŠ” í†µì‹ , ì„œë²„ëŠ” ë¹„ì¦ˆë‹ˆìŠ¤ ë¡œì§
+3. **ì¬ì‚¬ìš©ì„±**: ì—¬ëŸ¬ í´ë¼ì´ì–¸íŠ¸ì—ì„œ ë™ì¼ ì¸í„°í˜ì´ìŠ¤ ì‚¬ìš©
+4. **í…ŒìŠ¤íŠ¸ ìš©ì´ì„±**: ê°ê° ë…ë¦½ì ìœ¼ë¡œ í…ŒìŠ¤íŠ¸ ê°€ëŠ¥
+5. **ìœ ì§€ë³´ìˆ˜ì„±**: í´ë¼ì´ì–¸íŠ¸ì™€ ì„œë²„ë¥¼ ë…ë¦½ì ìœ¼ë¡œ ìˆ˜ì • ê°€ëŠ¥
 
-### ?? **ÇÁ·ÎÁ§Æ® ¿ªÇÒ**
+### ?? **í”„ë¡œì íŠ¸ ì—­í• **
 
-| ÇÁ·ÎÁ§Æ® | ¿ªÇÒ | Æ÷ÇÔ ³»¿ë |
+| í”„ë¡œì íŠ¸ | ì—­í•  | í¬í•¨ ë‚´ìš© |
 |---------|------|-----------|
-| **nU3.Connectivity** | °è¾à + Å¬¶óÀÌ¾ğÆ® | ÀÎÅÍÆäÀÌ½º, Å¬¶óÀÌ¾ğÆ® ±â¹İ Å¬·¡½º |
-| **nU3.Server.Connectivity** | ¼­¹ö ±¸Çö | ½ÇÁ¦ DB/ÆÄÀÏ Ã³¸® ·ÎÁ÷ |
+| **nU3.Connectivity** | ê³„ì•½ + í´ë¼ì´ì–¸íŠ¸ | ì¸í„°í˜ì´ìŠ¤, í´ë¼ì´ì–¸íŠ¸ ê¸°ë°˜ í´ë˜ìŠ¤ |
+| **nU3.Server.Connectivity** | ì„œë²„ êµ¬í˜„ | ì‹¤ì œ DB/íŒŒì¼ ì²˜ë¦¬ ë¡œì§ |
 
-### ?? **ÀÌÁ¡**
+### ?? **ì´ì **
 
 ```
-Å¬¶óÀÌ¾ğÆ® °³¹ßÀÚ:
-¡æ nU3.ConnectivityÀÇ ÀÎÅÍÆäÀÌ½º¸¸ ¾Ë¸é µÊ
-¡æ ¼­¹ö ±¸Çö ¼¼ºÎ»çÇ× ¸ô¶óµµ µÊ
+í´ë¼ì´ì–¸íŠ¸ ê°œë°œì:
+â†’ nU3.Connectivityì˜ ì¸í„°í˜ì´ìŠ¤ë§Œ ì•Œë©´ ë¨
+â†’ ì„œë²„ êµ¬í˜„ ì„¸ë¶€ì‚¬í•­ ëª°ë¼ë„ ë¨
 
-¼­¹ö °³¹ßÀÚ:
-¡æ ÀÎÅÍÆäÀÌ½º °è¾à¸¸ ÁöÅ°¸é µÊ
-¡æ Å¬¶óÀÌ¾ğÆ® ±¸Çö ½Å°æ ¾È ½áµµ µÊ
+ì„œë²„ ê°œë°œì:
+â†’ ì¸í„°í˜ì´ìŠ¤ ê³„ì•½ë§Œ ì§€í‚¤ë©´ ë¨
+â†’ í´ë¼ì´ì–¸íŠ¸ êµ¬í˜„ ì‹ ê²½ ì•ˆ ì¨ë„ ë¨
 
-°á°ú:
-¡æ µ¶¸³ÀûÀÎ °³¹ß °¡´É
-¡æ º´·Ä °³¹ß °¡´É
-¡æ ¸íÈ®ÇÑ Ã¥ÀÓ ºĞ¸®
+ê²°ê³¼:
+â†’ ë…ë¦½ì ì¸ ê°œë°œ ê°€ëŠ¥
+â†’ ë³‘ë ¬ ê°œë°œ ê°€ëŠ¥
+â†’ ëª…í™•í•œ ì±…ì„ ë¶„ë¦¬
 ```
 
-**ÀÌ°ÍÀÌ ÀüÇüÀûÀÎ Clean Architecture / Onion Architecture ÆĞÅÏÀÔ´Ï´Ù!** ??
+**ì´ê²ƒì´ ì „í˜•ì ì¸ Clean Architecture / Onion Architecture íŒ¨í„´ì…ë‹ˆë‹¤!** ??
 
 ---
 
-**ÃÖÁ¾ ´äº¯:** µÎ ÇÁ·ÎÁ§Æ®´Â Client-Server ¾ÆÅ°ÅØÃ³¸¦ À§ÇØ ÀÇµµÀûÀ¸·Î ºĞ¸®µÇ¾úÀ¸¸ç, °¢°¢ Å¬¶óÀÌ¾ğÆ® Ãø Ãß»óÈ­¿Í ¼­¹ö Ãø ±¸ÇöÀ» ´ã´çÇÕ´Ï´Ù.
+**ìµœì¢… ë‹µë³€:** ë‘ í”„ë¡œì íŠ¸ëŠ” Client-Server ì•„í‚¤í…ì²˜ë¥¼ ìœ„í•´ ì˜ë„ì ìœ¼ë¡œ ë¶„ë¦¬ë˜ì—ˆìœ¼ë©°, ê°ê° í´ë¼ì´ì–¸íŠ¸ ì¸¡ ì¶”ìƒí™”ì™€ ì„œë²„ ì¸¡ êµ¬í˜„ì„ ë‹´ë‹¹í•©ë‹ˆë‹¤.

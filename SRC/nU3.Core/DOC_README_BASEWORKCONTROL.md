@@ -1,362 +1,362 @@
-# BaseWorkControl - ÄÁÅØ½ºÆ® Àü´Ş ¹× ¸®¼Ò½º °ü¸® °¡ÀÌµå
-
-## °³¿ä
-
-BaseWorkControlÀÌ µ¿Àû ·Îµå/¾ğ·Îµå¸¦ Áö¿øÇÏ¸ç, ÀÛ¾÷ ÄÁÅØ½ºÆ® Àü´Ş ¹× ¸®¼Ò½º °ü¸® ±â´ÉÀ» Á¦°øÇÕ´Ï´Ù.
-
-## ÁÖ¿ä ±â´É
-
-### 1. ÀÛ¾÷ ÄÁÅØ½ºÆ® (WorkContext)
-
-¸ğµâ °£ µ¥ÀÌÅÍ Àü´ŞÀ» À§ÇÑ Ç¥ÁØÈ­µÈ ÄÁÅØ½ºÆ®
-
-#### ÄÁÅØ½ºÆ®¿¡ Æ÷ÇÔµÇ´Â Á¤º¸
-- **CurrentPatient**: ÇöÀç ¼±ÅÃµÈ È¯ÀÚ Á¤º¸
-- **CurrentExam**: ÇöÀç ¼±ÅÃµÈ °Ë»ç Á¤º¸  
-- **CurrentAppointment**: ÇöÀç ¼±ÅÃµÈ ¿¹¾à Á¤º¸
-- **CurrentUser**: ÇöÀç ·Î±×ÀÎÇÑ »ç¿ëÀÚ Á¤º¸
-- **Permissions**: ¸ğµâº° »ç¿ëÀÚ ±ÇÇÑ Á¤º¸
-- **Parameters**: ºÎ¸ğ ¸ğµâ¿¡¼­ Àü´ŞµÈ ÆÄ¶ó¹ÌÅÍ
-- **AdditionalData**: È®Àå °¡´ÉÇÑ Ãß°¡ µ¥ÀÌÅÍ
+  # BaseWorkControl - ê¸°ë³¸ ì‘ì—… ì»¨íŠ¸ë¡¤ ì‚¬ìš© ê°€ì´ë“œ
+
+  ## ê°œìš”
+
+  BaseWorkControlì€ ëª¨ë“  ì‘ì—… í™”ë©´ ì»¨íŠ¸ë¡¤ì˜ ê¸°ë³¸ì´ ë˜ë©°, í‘œì¤€ ê¸°ëŠ¥ê³¼ ë¦¬ì†ŒìŠ¤ ê´€ë¦¬ë¥¼ ì œê³µí•©ë‹ˆë‹¤.
+
+  ## ì£¼ìš” ê¸°ëŠ¥
+
+  ### 1. ì‘ì—… ì»¨í…ìŠ¤íŠ¸ (WorkContext)
+
+  í™”ë©´ ê°„ ê³µìœ ë˜ëŠ” ì»¨í…ìŠ¤íŠ¸
+
+  #### ì»¨í…ìŠ¤íŠ¸ì— í¬í•¨ëœ ì •ë³´
+  - **CurrentPatient**: í˜„ì¬ ì„ íƒëœ í™˜ì ì •ë³´
+  - **CurrentExam**: í˜„ì¬ ì„ íƒëœ ê²€ì‚¬ ì •ë³´
+  - **CurrentAppointment**: í˜„ì¬ ì„ íƒëœ ì˜ˆì•½ ì •ë³´
+  - **CurrentUser**: í˜„ì¬ ë¡œê·¸ì¸í•œ ì‚¬ìš©ì ì •ë³´
+  - **Permissions**: ê° ë²„íŠ¼/ê¸°ëŠ¥ì˜ ê¶Œí•œ ì •ë³´
+  - **Parameters**: í™”ë©´ìœ¼ë¡œ ì „ë‹¬ë˜ëŠ” ë§¤ê°œë³€ìˆ˜
+  - **AdditionalData**: ì¶”ê°€ ì •ë³´ë¥¼ ì €ì¥í•˜ëŠ” ê³µê°„
 
-### 2. ±ÇÇÑ °ü¸® (ModulePermissions)
-
-°¢ ¸ğµâº° ¼¼¹ĞÇÑ ±ÇÇÑ Á¦¾î
-
-#### ±âº» ±ÇÇÑ
-- `CanRead`: Á¶È¸ ±ÇÇÑ
-- `CanCreate`: »ı¼º ±ÇÇÑ
-- `CanUpdate`: ¼öÁ¤ ±ÇÇÑ
-- `CanDelete`: »èÁ¦ ±ÇÇÑ
-- `CanPrint`: ÀÎ¼â ±ÇÇÑ
-- `CanExport`: ³»º¸³»±â ±ÇÇÑ
-- `CanApprove`: ½ÂÀÎ ±ÇÇÑ
-- `CanCancel`: Ãë¼Ò ±ÇÇÑ
-- `CustomPermissions`: »ç¿ëÀÚ Á¤ÀÇ ±ÇÇÑ
-
-### 3. ¸®¼Ò½º °ü¸®
-
-µ¿Àû ¾ğ·Îµå¸¦ Áö¿øÇÏ´Â ¸í½ÃÀû ¸®¼Ò½º Á¤¸®
-
-#### ¸®¼Ò½º °ü¸® ±â´É
-- **RegisterDisposable()**: Disposable ¸®¼Ò½º ÀÚµ¿ µî·Ï
-- **ReleaseResources()**: ¸í½ÃÀû ¸®¼Ò½º Á¤¸® (ÅÇ ´İ±â ½Ã È£Ãâ)
-- **OnReleaseResources()**: ÆÄ»ı Å¬·¡½º¿¡¼­ Á¤¸® ·ÎÁ÷ ±¸Çö
-- **CancellationToken**: ºñµ¿±â ÀÛ¾÷ Ãë¼Ò Áö¿ø
-
-### 4. »ı¸íÁÖ±â °ü¸®
-
-È­¸éÀÇ È°¼ºÈ­/ºñÈ°¼ºÈ­ »óÅÂ °ü¸®
-
-#### »ı¸íÁÖ±â ¸Ş¼­µå
-- `OnScreenActivated()`: È­¸é È°¼ºÈ­ ½Ã
-- `OnScreenDeactivated()`: È­¸é ºñÈ°¼ºÈ­ ½Ã
-- `OnBeforeClose()`: ´İ±â Àü
-
-## »ç¿ë ¹æ¹ı
-
-### 1. ±âº» ±¸Á¶
-
-```csharp
-using System;
-using nU3.Core.UI;
-using nU3.Core.Context;
-using nU3.Models;
-
-public class MyWorkControl : BaseWorkControl
-{
-    public override string ScreenId => "MY_SCREEN_001";
-    public override string ScreenTitle => "³» ÀÛ¾÷ È­¸é";
-
-    public MyWorkControl()
-    {
-        InitializeLayout();
-    }
-
-    protected override void InitializeLayout()
-    {
-        // UI ÃÊ±âÈ­
-    }
-}
-```
-
-### 2. ÄÁÅØ½ºÆ® »ç¿ë
-
-```csharp
-protected override void OnContextInitialized(WorkContext oldContext, WorkContext newContext)
-{
-    base.OnContextInitialized(oldContext, newContext);
-
-    // È¯ÀÚ Á¤º¸ »ç¿ë
-    if (newContext.CurrentPatient != null)
-    {
-        var patientId = newContext.CurrentPatient.PatientId;
-        var patientName = newContext.CurrentPatient.PatientName;
-        LoadPatientData(patientId);
-    }
-
-    // »ç¿ëÀÚ Á¤º¸ »ç¿ë
-    if (newContext.CurrentUser != null)
-    {
-        var userId = newContext.CurrentUser.UserId;
-        var userName = newContext.CurrentUser.UserName;
-    }
-
-    // ÆÄ¶ó¹ÌÅÍ »ç¿ë
-    var mode = newContext.GetParameter<string>("Mode", "View");
-    var recordId = newContext.GetParameter<int>("RecordId", 0);
-}
-
-protected override void OnContextChanged(WorkContext oldContext, WorkContext newContext)
-{
-    base.OnContextChanged(oldContext, newContext);
-
-    // ÄÁÅØ½ºÆ® º¯°æ ½Ã UI ¾÷µ¥ÀÌÆ®
-    UpdateUI();
-}
-```
-
-### 3. ±ÇÇÑ È®ÀÎ
-
-```csharp
-private void BtnSave_Click(object sender, EventArgs e)
-{
-    // °£´ÜÇÑ ±ÇÇÑ È®ÀÎ
-    if (!CanUpdate)
-    {
-        MessageBox.Show("¼öÁ¤ ±ÇÇÑÀÌ ¾ø½À´Ï´Ù.");
-        return;
-    }
-
-    SaveData();
-}
-
-private void InitializeUI()
-{
-    // ±ÇÇÑ¿¡ µû¶ó ¹öÆ° È°¼ºÈ­
-    btnSave.Enabled = CanUpdate;
-    btnDelete.Enabled = CanDelete;
-    btnPrint.Enabled = CanPrint;
-    btnExport.Enabled = CanExport;
-}
-```
-
-### 4. ¸®¼Ò½º °ü¸®
-
-```csharp
-public class MyWorkControl : BaseWorkControl
-{
-    private Timer _refreshTimer;
-    private SqlConnection _connection;
-    private CancellationTokenSource _searchCancellation;
-
-    public MyWorkControl()
-    {
-        // Å¸ÀÌ¸Ó »ı¼º ¹× ÀÚµ¿ µî·Ï
-        _refreshTimer = new Timer();
-        _refreshTimer.Interval = 5000;
-        _refreshTimer.Tick += RefreshTimer_Tick;
-        RegisterDisposable(_refreshTimer); // ÀÚµ¿ Á¤¸® µî·Ï
-
-        // µ¥ÀÌÅÍº£ÀÌ½º ¿¬°á (¼öµ¿ Á¤¸® ÇÊ¿ä)
-        _connection = new SqlConnection(connectionString);
-        RegisterDisposable(_connection); // ÀÚµ¿ Á¤¸® µî·Ï
-    }
-
-    protected override void OnReleaseResources()
-    {
-        base.OnReleaseResources();
-
-        // ÁøÇà ÁßÀÎ ÀÛ¾÷ Ãë¼Ò
-        _searchCancellation?.Cancel();
-        _searchCancellation?.Dispose();
-        _searchCancellation = null;
-
-        // Å¸ÀÌ¸Ó Á¤Áö
-        _refreshTimer?.Stop();
-
-        // ÀÌº¥Æ® ±¸µ¶ ÇØÁ¦
-        if (_refreshTimer != null)
-            _refreshTimer.Tick -= RefreshTimer_Tick;
-
-        LogInfo("Resources released");
-    }
-}
-```
-
-### 5. ºñµ¿±â ÀÛ¾÷°ú Ãë¼Ò ÅäÅ«
-
-```csharp
-private async void BtnSearch_Click(object sender, EventArgs e)
-{
-    try
-    {
-        // CancellationToken »ç¿ë (¾ğ·Îµå ½Ã ÀÚµ¿ Ãë¼Ò)
-        var results = await SearchDataAsync(keyword, CancellationToken);
-        DisplayResults(results);
-    }
-    catch (OperationCanceledException)
-    {
-        LogInfo("Search cancelled");
-    }
-    catch (Exception ex)
-    {
-        LogError("Search failed", ex);
-    }
-}
-
-private async Task<List<Patient>> SearchDataAsync(string keyword, CancellationToken cancellationToken)
-{
-    // Ãë¼Ò ÅäÅ«À» »ç¿ëÇÑ ºñµ¿±â ÀÛ¾÷
-    var results = await _patientService.SearchAsync(keyword, cancellationToken);
-    return results;
-}
-```
-
-### 6. »ı¸íÁÖ±â °ü¸®
-
-```csharp
-protected override void OnScreenActivated()
-{
-    base.OnScreenActivated();
-
-    // È­¸é È°¼ºÈ­ ½Ã
-    _refreshTimer?.Start();
-    RefreshData();
-    LogInfo("Screen activated");
-}
-
-protected override void OnScreenDeactivated()
-{
-    base.OnScreenDeactivated();
-
-    // È­¸é ºñÈ°¼ºÈ­ ½Ã
-    _refreshTimer?.Stop();
-    SaveTemporaryData();
-    LogInfo("Screen deactivated");
-}
-
-protected override bool OnBeforeClose()
-{
-    // ´İ±â Àü È®ÀÎ
-    if (HasUnsavedChanges())
-    {
-        var result = MessageBox.Show(
-            "ÀúÀåÇÏÁö ¾ÊÀº º¯°æ»çÇ×ÀÌ ÀÖ½À´Ï´Ù. ´İÀ¸½Ã°Ú½À´Ï±î?",
-            "È®ÀÎ",
-            MessageBoxButtons.YesNo);
-
-        return result == DialogResult.Yes;
-    }
-
-    return true;
-}
-```
-
-## ÀÎÅÍÆäÀÌ½º ±â¹İ ¼³°è
-
-MainShellFormÀº ÀÎÅÍÆäÀÌ½º ±â¹İÀ¸·Î ¸ğµâÀ» °ü¸®ÇÕ´Ï´Ù:
-
-```csharp
-// ÄÁÅØ½ºÆ® ÃÊ±âÈ­
-if (content is IWorkContextProvider contextProvider)
-{
-    var context = CreateWorkContext();
-    contextProvider.InitializeContext(context);
-}
-
-// »ı¸íÁÖ±â °ü¸®
-if (control is ILifecycleAware lifecycleAware)
-{
-    lifecycleAware.OnActivated();
-}
-
-// ¸®¼Ò½º Á¤¸®
-if (control is IResourceManager resourceManager)
-{
-    resourceManager.ReleaseResources();
-}
-```
-
-## ¸ğ¹ü »ç·Ê
-
-### 1. Ç×»ó ±ÇÇÑ È®ÀÎ
-
-```csharp
-private void PerformSensitiveOperation()
-{
-    if (!CanUpdate)
-    {
-        MessageBox.Show("±ÇÇÑÀÌ ¾ø½À´Ï´Ù.");
-        LogAudit(AuditAction.Update, "Entity", "123", "Permission denied");
-        return;
-    }
-
-    DoUpdate();
-    LogAudit(AuditAction.Update, "Entity", "123", "Updated successfully");
-}
-```
-
-### 2. ¸®¼Ò½º´Â Ç×»ó µî·Ï
-
-```csharp
-public MyWorkControl()
-{
-    // IDisposable ¸®¼Ò½º´Â Ç×»ó µî·Ï
-    _timer = new Timer();
-    RegisterDisposable(_timer);
-
-    _connection = new SqlConnection();
-    RegisterDisposable(_connection);
-
-    _client = new HttpClient();
-    RegisterDisposable(_client);
-}
-```
-
-### 3. ºñµ¿±â ÀÛ¾÷Àº Ãë¼Ò ÅäÅ« »ç¿ë
-
-```csharp
-private async Task LoadDataAsync()
-{
-    try
-    {
-        // CancellationToken Ç×»ó »ç¿ë
-        var data = await _service.GetDataAsync(CancellationToken);
-        DisplayData(data);
-    }
-    catch (OperationCanceledException)
-    {
-        // Á¤»óÀûÀÎ Ãë¼Ò
-        LogInfo("Operation cancelled");
-    }
-}
-```
-
-### 4. ·Î±ë È°¿ë
-
-```csharp
-protected override void OnContextInitialized(WorkContext oldContext, WorkContext newContext)
-{
-    base.OnContextInitialized(oldContext, newContext);
-
-    LogInfo($"Context initialized - User: {newContext.CurrentUser?.UserId}");
-    
-    if (newContext.CurrentPatient != null)
-    {
-        LogAudit(AuditAction.Read, "Patient", newContext.CurrentPatient.PatientId);
-    }
-}
-```
-
-## ÁÖÀÇ»çÇ×
-
-1. **ÄÁÅØ½ºÆ®´Â ºÒº¯À¸·Î Ãë±Ş**: Clone()À» »ç¿ëÇÏ¿© »õ ÀÎ½ºÅÏ½º »ı¼º
-2. **±ÇÇÑ È®ÀÎ ÇÊ¼ö**: ¸ğµç ¹Î°¨ÇÑ ÀÛ¾÷ Àü¿¡ ±ÇÇÑ È®ÀÎ
-3. **¸®¼Ò½º Á¤¸®**: RegisterDisposable() ¶Ç´Â OnReleaseResources() ±¸Çö
-4. **ºñµ¿±â ÀÛ¾÷**: CancellationToken ¹İµå½Ã »ç¿ë
-5. **·Î±ë**: Áß¿äÇÑ ÀÛ¾÷Àº ¹İµå½Ã ·Î±ë ¹× ¿Àµ÷
-
-## ¶óÀÌ¼±½º
-
-? 2024 nU3 Framework
+  ### 2. ê¶Œí•œ ì œì–´ (ModulePermissions)
+
+  ê° ë²„íŠ¼/ê¸°ëŠ¥ë³„ ê¶Œí•œ
+
+  #### ê¸°ë³¸ ê¶Œí•œ
+  - `CanRead`: ì¡°íšŒ ê¶Œí•œ
+  - `CanCreate`: ìƒì„± ê¶Œí•œ
+  - `CanUpdate`: ìˆ˜ì • ê¶Œí•œ
+  - `CanDelete`: ì‚­ì œ ê¶Œí•œ
+  - `CanPrint`: ì¸ì‡„ ê¶Œí•œ
+  - `CanExport`: ë‚´ë³´ë‚´ê¸° ê¶Œí•œ
+  - `CanApprove`: ìŠ¹ì¸ ê¶Œí•œ
+  - `CanCancel`: ì·¨ì†Œ ê¶Œí•œ
+  - `CustomPermissions`: ì‚¬ìš©ì ì •ì˜ ê¶Œí•œ
+
+  ### 3. ë¦¬ì†ŒìŠ¤ ê´€ë¦¬
+
+  ëª¨ë“  í™”ë©´ ì»¨íŠ¸ë¡¤ì— ëŒ€í•œ ë¦¬ì†ŒìŠ¤ ê´€ë¦¬
+
+  #### ë¦¬ì†ŒìŠ¤ ê´€ë¦¬ ë©”ì„œë“œ
+  - **RegisterDisposable()**: Disposable ë¦¬ì†ŒìŠ¤ ìë™ ê´€ë¦¬
+  - **ReleaseResources()**: í™”ë©´ ì¢…ë£Œ ì‹œ ë¦¬ì†ŒìŠ¤ í•´ì œ (BeforeClose ì‹œ í˜¸ì¶œ)
+  - **OnReleaseResources()**: ReleaseResources í˜¸ì¶œ í›„ ìˆ˜í–‰í•˜ëŠ” ë¡œì§ (ì‚¬ìš©ì ì •ì˜)
+  - **CancellationToken**: ë¹„ë™ê¸° ì‘ì—… ì·¨ì†Œ í† í°
+
+  ### 4. ë¼ì´í”„ì‚¬ì´í´ ë©”ì„œë“œ
+
+  í™”ë©´ í™œì„±í™”/ë¹„í™œì„±í™” ì œì–´
+
+  #### ë¼ì´í”„ì‚¬ì´í´ ë©”ì„œë“œ
+  - `OnScreenActivated()`: í™”ë©´ í™œì„±í™” ì‹œ
+  - `OnScreenDeactivated()`: í™”ë©´ ë¹„í™œì„±í™” ì‹œ
+  - `OnBeforeClose()`: ë‹«ê¸° ì „
+
+  ## ì‚¬ìš© ì˜ˆì‹œ
+
+  ### 1. ê¸°ë³¸ ì‚¬ìš©
+
+  ```csharp
+  using System;
+  using nU3.Core.UI;
+  using nU3.Core.Context;
+  using nU3.Models;
+
+  public class MyWorkControl : BaseWorkControl
+  {
+      public override string ScreenId => "MY_SCREEN_001";
+      public override string ScreenTitle => "ë‚´ ì‘ì—… í™”ë©´";
+
+      public MyWorkControl()
+      {
+          InitializeLayout();
+      }
+
+      protected override void InitializeLayout()
+      {
+          // UI ì´ˆê¸°í™”
+      }
+  }
+  ```
+
+  ### 2. ì»¨í…ìŠ¤íŠ¸ ì‚¬ìš©
+
+  ```csharp
+  protected override void OnContextInitialized(WorkContext oldContext, WorkContext newContext)
+  {
+      base.OnContextInitialized(oldContext, newContext);
+
+      // í™˜ì ì •ë³´ í™•ì¸
+      if (newContext.CurrentPatient != null)
+      {
+          var patientId = newContext.CurrentPatient.PatientId;
+          var patientName = newContext.CurrentPatient.PatientName;
+          LoadPatientData(patientId);
+      }
+
+      // ì‚¬ìš©ì ì •ë³´ í™•ì¸
+      if (newContext.CurrentUser != null)
+      {
+          var userId = newContext.CurrentUser.UserId;
+          var userName = newContext.CurrentUser.UserName;
+      }
+
+      // ë§¤ê°œë³€ìˆ˜ í™•ì¸
+      var mode = newContext.GetParameter<string>("Mode", "View");
+      var recordId = newContext.GetParameter<int>("RecordId", 0);
+  }
+
+  protected override void OnContextChanged(WorkContext oldContext, WorkContext newContext)
+  {
+      base.OnContextChanged(oldContext, newContext);
+
+      // ì»¨í…ìŠ¤íŠ¸ ë³€ê²½ ì‹œ UI ê°±ì‹ 
+      UpdateUI();
+  }
+  ```
+
+  ### 3. ê¶Œí•œ í™•ì¸
+
+  ```csharp
+  private void BtnSave_Click(object sender, EventArgs e)
+  {
+      // ìˆ˜ì • ê¶Œí•œ í™•ì¸
+      if (!CanUpdate)
+      {
+          MessageBox.Show("ìˆ˜ì • ê¶Œí•œì´ ì—†ìŠµë‹ˆë‹¤.");
+          return;
+      }
+
+      SaveData();
+  }
+
+  private void InitializeUI()
+  {
+      // ê° ë²„íŠ¼ì˜ ê¶Œí•œì— ë”°ë¼ í™œì„±í™”
+      btnSave.Enabled = CanUpdate;
+      btnDelete.Enabled = CanDelete;
+      btnPrint.Enabled = CanPrint;
+      btnExport.Enabled = CanExport;
+  }
+  ```
+
+  ### 4. ë¦¬ì†ŒìŠ¤ ê´€ë¦¬
+
+  ```csharp
+  public class MyWorkControl : BaseWorkControl
+  {
+      private Timer _refreshTimer;
+      private SqlConnection _connection;
+      private CancellationTokenSource _searchCancellation;
+
+      public MyWorkControl()
+      {
+          // íƒ€ì´ë¨¸ ë“±ë¡ (ìë™ ê´€ë¦¬)
+          _refreshTimer = new Timer();
+          _refreshTimer.Interval = 5000;
+          _refreshTimer.Tick += RefreshTimer_Tick;
+          RegisterDisposable(_refreshTimer); // ìë™ ë¦¬ì†ŒìŠ¤ ê´€ë¦¬
+
+          // ë°ì´í„°ë² ì´ìŠ¤ ì—°ê²° (í…Œì´ë¸” ë“±ë¡ í•„ìš”)
+          _connection = new SqlConnection(connectionString);
+          RegisterDisposable(_connection); // ìë™ ë¦¬ì†ŒìŠ¤ ê´€ë¦¬
+      }
+
+      protected override void OnReleaseResources()
+      {
+          base.OnReleaseResources();
+
+          // ì·¨ì†Œ í† í° ì •ë¦¬
+          _searchCancellation?.Cancel();
+          _searchCancellation?.Dispose();
+          _searchCancellation = null;
+
+          // íƒ€ì´ë¨¸ ì¤‘ì§€
+          _refreshTimer?.Stop();
+
+          // ì´ë²¤íŠ¸ í•¸ë“¤ëŸ¬ ì •ë¦¬
+          if (_refreshTimer != null)
+              _refreshTimer.Tick -= RefreshTimer_Tick;
+
+          LogInfo("Resources released");
+      }
+  }
+  ```
+
+  ### 5. ë¹„ë™ê¸° ì‘ì—…ì˜ ì·¨ì†Œ ì§€ì›
+
+  ```csharp
+  private async void BtnSearch_Click(object sender, EventArgs e)
+  {
+      try
+      {
+          // CancellationToken ì „ë‹¬ (ìë™ ë¦¬ì†ŒìŠ¤ ê´€ë¦¬)
+          var results = await SearchDataAsync(keyword, CancellationToken);
+          DisplayResults(results);
+      }
+      catch (OperationCanceledException)
+      {
+          LogInfo("Search cancelled");
+      }
+      catch (Exception ex)
+      {
+          LogError("Search failed", ex);
+      }
+  }
+
+  private async Task<List<Patient>> SearchDataAsync(string keyword, CancellationToken cancellationToken)
+  {
+      // ì‘ì—… ì·¨ì†Œ ì§€ì› ë¹„ë™ê¸° ì‘ì—…
+      var results = await _patientService.SearchAsync(keyword, cancellationToken);
+      return results;
+  }
+  ```
+
+  ### 6. ë¼ì´í”„ì‚¬ì´í´ ë©”ì„œë“œ
+
+  ```csharp
+  protected override void OnScreenActivated()
+  {
+      base.OnScreenActivated();
+
+      // í™”ë©´ í™œì„±í™” ì‹œ
+      _refreshTimer?.Start();
+      RefreshData();
+      LogInfo("Screen activated");
+  }
+
+  protected override void OnScreenDeactivated()
+  {
+      base.OnScreenDeactivated();
+
+      // í™”ë©´ ë¹„í™œì„±í™” ì‹œ
+      _refreshTimer?.Stop();
+      SaveTemporaryData();
+      LogInfo("Screen deactivated");
+  }
+
+  protected override bool OnBeforeClose()
+  {
+      // ë‹«ê¸° ì „ í™•ì¸
+      if (HasUnsavedChanges())
+      {
+          var result = MessageBox.Show(
+              "ì €ì¥í•˜ì§€ ì•Šì€ ë°ì´í„°ê°€ ìˆìŠµë‹ˆë‹¤. ì €ì¥í•˜ì‹œê² ìŠµë‹ˆê¹Œ?",
+              "í™•ì¸",
+              MessageBoxButtons.YesNo);
+
+          return result == DialogResult.Yes;
+      }
+
+      return true;
+  }
+  ```
+
+  ## ë‹¤ì–‘í•œ ì¸í„°í˜ì´ìŠ¤ ì‚¬ìš©
+
+  MainShellFormì—ì„œ ë‹¤ì–‘í•œ ì¸í„°í˜ì´ìŠ¤ë¥¼ ì‚¬ìš©í•©ë‹ˆë‹¤:
+
+  ```csharp
+  // ì»¨í…ìŠ¤íŠ¸ ì´ˆê¸°í™”
+  if (content is IWorkContextProvider contextProvider)
+  {
+      var context = CreateWorkContext();
+      contextProvider.InitializeContext(context);
+  }
+
+  // ë¼ì´í”„ì‚¬ì´í´ ë©”ì„œë“œ
+  if (control is ILifecycleAware lifecycleAware)
+  {
+      lifecycleAware.OnActivated();
+  }
+
+  // ë¦¬ì†ŒìŠ¤ ê´€ë¦¬
+  if (control is IResourceManager resourceManager)
+  {
+      resourceManager.ReleaseResources();
+  }
+  ```
+
+  ## í‘œì¤€ ì‚¬ìš©
+
+  ### 1. ê¶Œí•œ í™•ì¸ ì‚¬ìš©
+
+  ```csharp
+  private void PerformSensitiveOperation()
+  {
+      if (!CanUpdate)
+      {
+          MessageBox.Show("ìˆ˜ì • ê¶Œí•œì´ ì—†ìŠµë‹ˆë‹¤.");
+          LogAudit(AuditAction.Update, "Entity", "123", "Permission denied");
+          return;
+      }
+
+      DoUpdate();
+      LogAudit(AuditAction.Update, "Entity", "123", "Updated successfully");
+  }
+  ```
+
+  ### 2. ë¦¬ì†ŒìŠ¤ ì•ˆì „ ì‚¬ìš©
+
+  ```csharp
+  public MyWorkControl()
+  {
+      // IDisposable ë¦¬ì†ŒìŠ¤ ë“±ë¡
+      _timer = new Timer();
+      RegisterDisposable(_timer);
+
+      _connection = new SqlConnection();
+      RegisterDisposable(_connection);
+
+      _client = new HttpClient();
+      RegisterDisposable(_client);
+  }
+  ```
+
+  ### 3. ë¹„ë™ê¸° ì‘ì—…ì˜ ì·¨ì†Œ ì§€ì› ì‚¬ìš©
+
+  ```csharp
+  private async Task LoadDataAsync()
+  {
+      try
+      {
+          // CancellationToken ì „ë‹¬
+          var data = await _service.GetDataAsync(CancellationToken);
+          DisplayData(data);
+      }
+      catch (OperationCanceledException)
+      {
+          // ì‘ì—… ì·¨ì†Œ
+          LogInfo("Operation cancelled");
+      }
+  }
+  ```
+
+  ### 4. ë¡œê·¸ ì‚¬ìš©
+
+  ```csharp
+  protected override void OnContextInitialized(WorkContext oldContext, WorkContext newContext)
+  {
+      base.OnContextInitialized(oldContext, newContext);
+
+      LogInfo($"Context initialized - User: {newContext.CurrentUser?.UserId}");
+
+      if (newContext.CurrentPatient != null)
+      {
+          LogAudit(AuditAction.Read, "Patient", newContext.CurrentPatient.PatientId);
+      }
+  }
+  ```
+
+  ## íŒ
+
+  1. **ì»¨í…ìŠ¤íŠ¸ ì•ˆì „ ì²˜ë¦¬**: Clone()ì„ ì‚¬ìš©í•˜ì—¬ ì»¨íŠ¸ë¡¤ ê°„ ì „ë‹¬ ì•ˆì „
+  2. **ê¶Œí•œ í™•ì¸ ì‹œì‘**: ëª¨ë“  ì¤‘ìš”í•œ ì‘ì—… ì „ ê¶Œí•œ í™•ì¸ í•„ìˆ˜
+  3. **ë¦¬ì†ŒìŠ¤ ê´€ë¦¬**: RegisterDisposable() ë˜ëŠ” OnReleaseResources() ì‚¬ìš©
+  4. **ë¹„ë™ê¸° ì‘ì—…**: CancellationToken í•„ìˆ˜ ì „ë‹¬
+  5. **ë¡œê·¸**: ì¤‘ìš”í•œ ì‘ì—… í›„ í•„ìˆ˜ ë¡œê·¸ ê¸°ë¡
+
+  ## ë¼ì´ì„ ìŠ¤ ì •ë³´
+
+  (c) 2024 nU3 Framework

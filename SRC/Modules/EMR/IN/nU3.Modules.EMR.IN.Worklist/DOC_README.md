@@ -1,541 +1,549 @@
-# È¯ÀÚ ¸®½ºÆ® ¹× »ó¼¼Á¤º¸ ¸ğµâ - »ç¿ë °¡ÀÌµå
-
-## °³¿ä
-
-È¯ÀÚ ¸ñ·Ï°ú »ó¼¼Á¤º¸¸¦ Ç¥½ÃÇÏ´Â µÎ °³ÀÇ ¸ğµâÀ» ÅëÇØ EventBus ±â¹İÀÇ ¸ğµâ °£ Åë½ÅÀ» ½Ã¿¬ÇÕ´Ï´Ù.
-
-## ±¸ÇöµÈ ¸ğµâ
-
-### 1. PatientListControl (È¯ÀÚ ¸ñ·Ï)
-- **ProgramID**: `EMR_PATIENT_LIST_001`
-- **¿ªÇÒ**: ÀÌº¥Æ® ¹ßÇàÀÚ (Publisher)
-- **±â´É**:
-  - È¯ÀÚ ¸®½ºÆ® Ç¥½Ã (DevExpress GridControl)
-  - È¯ÀÚ ¼±ÅÃ ½Ã ´Ù¸¥ ¸ğµâ·Î ÀÌº¥Æ® ÀüÆÄ
-  - °Ë»ö ¹× ÇÊÅÍ¸µ ±â´É
-  - ´õºíÅ¬¸¯ ½Ã »ó¼¼È­¸é ¿­±â
-
-### 2. PatientDetailControl (È¯ÀÚ »ó¼¼Á¤º¸)
-- **ProgramID**: `EMR_PATIENT_DETAIL_001`
-- **¿ªÇÒ**: ÀÌº¥Æ® ±¸µ¶ÀÚ (Subscriber)
-- **±â´É**:
-  - È¯ÀÚ ±âº» Á¤º¸ Ç¥½Ã
-  - ¿¬¶ôÃ³ Á¤º¸ Ç¥½Ã
-  - ¼ö½ÅµÈ ÀÌº¥Æ® ·Î±× Ç¥½Ã
-  - ´Ù¸¥ ¸ğµâ¿¡¼­ È¯ÀÚ ¼±ÅÃ ½Ã ÀÚµ¿ °»½Å
-
-### 3. SampleWorkControl (»ùÇÃ ÀÛ¾÷È­¸é)
-- **ProgramID**: `EMR_SAMPLE_001`
-- **¿ªÇÒ**: ÀÌº¥Æ® ±¸µ¶ÀÚ + Å×½ºÆ®
-- **±â´É**:
-  - È¯ÀÚ ¼±ÅÃ ÀÌº¥Æ® ±¸µ¶
-  - ÀÌº¥Æ® ·Î±× Ç¥½Ã
-  - Å×½ºÆ® ÀÌº¥Æ® ¹ßÇà ¹öÆ°
-
-## Åë½Å Èå¸§
-
-```
-¦£¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¤
-¦¢ PatientListControl  ¦¢ (È¯ÀÚ ¸ñ·Ï)
-¦¢   (ÀÌº¥Æ® ¹ßÇàÀÚ)    ¦¢
-¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¨¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¥
-           ¦¢ È¯ÀÚ Å¬¸¯
-           ¦¢
-           ¡é Publish(PatientSelectedEvent)
-           ¦¢
-¦£¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦ª¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¤
-¦¢         EventAggregator                 ¦¢
-¦¢           (EventBus)                    ¦¢
-¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¨¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¨¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¥
-           ¦¢            ¦¢
-           ¡é            ¡é
-¦£¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¤  ¦£¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¤
-¦¢ PatientDetail    ¦¢  ¦¢ SampleWork       ¦¢
-¦¢ Control          ¦¢  ¦¢ Control          ¦¢
-¦¢ (ÀÚµ¿ °»½Å)       ¦¢  ¦¢ (ÀÚµ¿ °»½Å)       ¦¢
-¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¥  ¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¥
-```
-
-## »ç¿ë ¹æ¹ı
-
-### 1. ¸ğµâ ¿­±â
-
-Deployer¸¦ ÅëÇØ ¸Ş´º¿¡ µî·ÏÇÏ°Å³ª, Á÷Á¢ ÇÁ·Î±×·¥ ID·Î ¿­±â:
-
-```
-¸Ş´º: EMR > È¯ÀÚ ¸ñ·Ï
-ProgramID: EMR_PATIENT_LIST_001
-
-¸Ş´º: EMR > È¯ÀÚ »ó¼¼Á¤º¸
-ProgramID: EMR_PATIENT_DETAIL_001
-
-¸Ş´º: EMR > »ùÇÃ ÀÛ¾÷È­¸é
-ProgramID: EMR_SAMPLE_001
-```
-
-### 2. Å×½ºÆ® ½Ã³ª¸®¿À
-
-#### ½Ã³ª¸®¿À 1: È¯ÀÚ ¸ñ·Ï ¡æ »ó¼¼Á¤º¸ ÀÚµ¿ °»½Å
-
-1. **È¯ÀÚ ¸ñ·Ï** ¿­±â
-2. **È¯ÀÚ »ó¼¼Á¤º¸** ¿­±â
-3. **È¯ÀÚ ¸ñ·Ï**¿¡¼­ È¯ÀÚ Å¬¸¯
-4. **È¯ÀÚ »ó¼¼Á¤º¸**°¡ ÀÚµ¿À¸·Î °»½ÅµÊ ?
-
-```
-[È¯ÀÚ ¸ñ·Ï]
-    ¡é È¯ÀÚ Å¬¸¯ (¿¹: ±èÃ¶¼ö)
-    ¡é
-[EventBus]
-    ¡é PatientSelectedEvent
-    ¡é
-[È¯ÀÚ »ó¼¼Á¤º¸]
-    ¡é OnPatientSelected() È£Ãâ
-    ¡é ±èÃ¶¼ö Á¤º¸ ÀÚµ¿ Ç¥½Ã
-```
-
-#### ½Ã³ª¸®¿À 2: MainShell Å×½ºÆ® È¯ÀÚ ¼±ÅÃ
-
-1. **È¯ÀÚ »ó¼¼Á¤º¸** ¿­±â
-2. **½Ã½ºÅÛ ¸Ş´º** > **È¯ÀÚ ¼±ÅÃ Å×½ºÆ®** Å¬¸¯
-3. ¸ğµç ¿­·ÁÀÖ´Â ¸ğµâ¿¡ Å×½ºÆ® È¯ÀÚ Á¤º¸ ÀüÆÄµÊ ?
-
-#### ½Ã³ª¸®¿À 3: ¿©·¯ ¸ğµâ µ¿½Ã °»½Å
-
-1. **È¯ÀÚ ¸ñ·Ï** ¿­±â
-2. **È¯ÀÚ »ó¼¼Á¤º¸** ¿­±â
-3. **»ùÇÃ ÀÛ¾÷È­¸é** ¿­±â
-4. **È¯ÀÚ ¸ñ·Ï**¿¡¼­ È¯ÀÚ Å¬¸¯
-5. ¸ğµç ¸ğµâÀÌ µ¿½Ã¿¡ °»½ÅµÊ ?
-
-```
-[È¯ÀÚ ¸ñ·Ï] ¡æ ÀÌº¥Æ® ¹ßÇà
-    ¡é
-[EventBus] ¡æ ºê·ÎµåÄ³½ºÆ®
-    ¡é
-    ¦§¦¡¡æ [È¯ÀÚ »ó¼¼Á¤º¸] ¡æ °»½ÅµÊ
-    ¦§¦¡¡æ [»ùÇÃ ÀÛ¾÷È­¸é] ¡æ °»½ÅµÊ
-    ¦¦¦¡¡æ [±âÅ¸ ¿­·ÁÀÖ´Â ¸ğµâµé] ¡æ °»½ÅµÊ
-```
-
-## ÄÚµå ¿¹½Ã
-
-### ¹ßÇàÀÚ (PatientListControl)
-
-```csharp
-// È¯ÀÚ ¼±ÅÃ ½Ã
-private void GridView_FocusedRowChanged(object sender, FocusedRowChangedEventArgs e)
-{
-    var selectedPatient = GetSelectedPatient();
-    if (selectedPatient != null)
-    {
-        // 1. ÀÚ½ÅÀÇ ÄÁÅØ½ºÆ® ¾÷µ¥ÀÌÆ®
-        var newContext = Context.Clone();
-        newContext.CurrentPatient = selectedPatient;
-        UpdateContext(newContext);
-
-        // 2. ´Ù¸¥ ¸ğµâ¿¡ ÀÌº¥Æ® ¹ßÇà
-        EventBus?.GetEvent<PatientSelectedEvent>()
-            .Publish(new PatientSelectedEventPayload
-            {
-                Patient = selectedPatient,
-                Source = ProgramID // "EMR_PATIENT_LIST_001"
-            });
-    }
-}
-```
-
-### ±¸µ¶ÀÚ (PatientDetailControl)
-
-```csharp
-// È­¸é È°¼ºÈ­ ½Ã ÀÌº¥Æ® ±¸µ¶
-protected override void OnScreenActivated()
-{
-    base.OnScreenActivated();
-
-    EventBus?.GetEvent<PatientSelectedEvent>()
-        .Subscribe(OnPatientSelected);
-}
-
-// ÀÌº¥Æ® ¼ö½Å Ã³¸®
-private void OnPatientSelected(object payload)
-{
-    if (payload is not PatientSelectedEventPayload evt)
-        return;
-
-    // ÀÚ±â ÀÚ½ÅÀÌ ¹ßÇàÇÑ ÀÌº¥Æ®´Â ¹«½Ã
-    if (evt.Source == ProgramID)
-        return;
-
-    // È¯ÀÚ Á¤º¸ Ç¥½Ã
-    DisplayPatientInfo(evt.Patient);
-
-    // ÄÁÅØ½ºÆ® ¾÷µ¥ÀÌÆ®
-    var newContext = Context.Clone();
-    newContext.CurrentPatient = evt.Patient;
-    UpdateContext(newContext);
-}
-```
-
-## ÁÖ¿ä ±â´É
-
-### PatientListControl
-
-#### 1. È¯ÀÚ °Ë»ö
-```csharp
-private void BtnSearch_Click(object sender, EventArgs e)
-{
-    var keyword = txtSearch.Text?.Trim();
-    var filtered = _patients.Where(p =>
-        p.PatientName.Contains(keyword) ||
-        p.PatientId.Contains(keyword)).ToList();
-
-    gridControl.DataSource = filtered;
-}
-```
-
-#### 2. È¯ÀÚ ¼±ÅÃ ÀüÆÄ
-```csharp
-private void PublishPatientSelected(PatientInfoDto patient)
-{
-    EventBus?.GetEvent<PatientSelectedEvent>()
-        .Publish(new PatientSelectedEventPayload
-        {
-            Patient = patient,
-            Source = ProgramID
-        });
-
-    LogInfo($"?? PatientSelectedEvent published: {patient.PatientName}");
-}
-```
-
-#### 3. ´õºíÅ¬¸¯ ½Ã »ó¼¼È­¸é ¿­±â
-```csharp
-private void GridView_DoubleClick(object sender, EventArgs e)
-{
-    var selectedPatient = GetSelectedPatient();
-    if (selectedPatient != null)
-    {
-        // ³×ºñ°ÔÀÌ¼Ç ¿äÃ»
-        EventBus?.GetEvent<NavigationRequestEvent>()
-            .Publish(new NavigationRequestEventPayload
-            {
-                TargetScreenId = "EMR_PATIENT_DETAIL_001",
-                Context = CreateContextWithPatient(selectedPatient),
-                Source = ProgramID
-            });
-    }
-}
-```
-
-### PatientDetailControl
-
-#### 1. ´ÙÁß ÀÌº¥Æ® ±¸µ¶
-```csharp
-private void SubscribeToEvents()
-{
-    // È¯ÀÚ ¼±ÅÃ ÀÌº¥Æ®
-    EventBus?.GetEvent<PatientSelectedEvent>()
-        .Subscribe(OnPatientSelected);
-
-    // È¯ÀÚ ¾÷µ¥ÀÌÆ® ÀÌº¥Æ®
-    EventBus?.GetEvent<PatientUpdatedEvent>()
-        .Subscribe(OnPatientUpdated);
-
-    // ÄÁÅØ½ºÆ® º¯°æ ÀÌº¥Æ®
-    EventBus?.GetEvent<WorkContextChangedEvent>()
-        .Subscribe(OnWorkContextChanged);
-}
-```
-
-#### 2. ÀÌº¥Æ® ·Î±× Ç¥½Ã
-```csharp
-private void AddEventLog(string message)
-{
-    var timestamp = DateTime.Now.ToString("HH:mm:ss.fff");
-    var logMessage = $"[{timestamp}] {message}\r\n";
-
-    memoEventLog.Text += logMessage;
-    memoEventLog.SelectionStart = memoEventLog.Text.Length;
-    memoEventLog.ScrollToCaret();
-}
-```
-
-#### 3. ÀÚµ¿ °»½Å
-```csharp
-private void OnPatientSelected(object payload)
-{
-    if (payload is not PatientSelectedEventPayload evt)
-        return;
-
-    AddEventLog($"?? PatientSelectedEvent received from '{evt.Source}'");
-    AddEventLog($"   Patient: {evt.Patient.PatientName}");
-
-    // UI ÀÚµ¿ °»½Å
-    DisplayPatientInfo(evt.Patient);
-    UpdateStatus($"È¯ÀÚ ¼±ÅÃµÊ: {evt.Patient.PatientName}", Color.Blue);
-}
-```
-
-## ÀÌº¥Æ® Å¸ÀÔ
-
-### PatientSelectedEvent
-```csharp
-public class PatientSelectedEventPayload
-{
-    public PatientInfoDto Patient { get; set; }  // ¼±ÅÃµÈ È¯ÀÚ
-    public string Source { get; set; }            // ÀÌº¥Æ® ¹ßÇàÀÚ ID
-}
-```
-
-**¿ëµµ**: È¯ÀÚ°¡ ¼±ÅÃµÇ¾úÀ» ¶§ ´Ù¸¥ ¸ğµâ¿¡ ¾Ë¸²
-
-### PatientUpdatedEvent
-```csharp
-public class PatientUpdatedEventPayload
-{
-    public PatientInfoDto Patient { get; set; }   // ¾÷µ¥ÀÌÆ®µÈ È¯ÀÚ
-    public string Source { get; set; }
-    public string UpdatedBy { get; set; }         // ¾÷µ¥ÀÌÆ® ¼öÇàÀÚ
-}
-```
-
-**¿ëµµ**: È¯ÀÚ Á¤º¸°¡ º¯°æµÇ¾úÀ» ¶§ ´Ù¸¥ ¸ğµâ¿¡ ¾Ë¸²
-
-### WorkContextChangedEvent
-```csharp
-public class WorkContextChangedEventPayload
-{
-    public WorkContext OldContext { get; set; }   // ÀÌÀü ÄÁÅØ½ºÆ®
-    public WorkContext NewContext { get; set; }   // »õ ÄÁÅØ½ºÆ®
-    public string Source { get; set; }
-    public string ChangedProperty { get; set; }   // º¯°æµÈ ¼Ó¼º
-}
-```
-
-**¿ëµµ**: ÀüÃ¼ ÀÛ¾÷ ÄÁÅØ½ºÆ®°¡ º¯°æµÇ¾úÀ» ¶§
-
-### NavigationRequestEvent
-```csharp
-public class NavigationRequestEventPayload
-{
-    public string TargetScreenId { get; set; }    // ¿­ È­¸é ID
-    public WorkContext Context { get; set; }      // Àü´ŞÇÒ ÄÁÅØ½ºÆ®
-    public string Source { get; set; }
-}
-```
-
-**¿ëµµ**: ´Ù¸¥ È­¸éÀ» ¿­µµ·Ï ¿äÃ»
-
-## ¸ğ¹ü »ç·Ê
-
-### 1. Ç×»ó Source È®ÀÎ
-```csharp
-// ? Good - ÀÚ½ÅÀÌ ¹ßÇàÇÑ ÀÌº¥Æ®´Â ¹«½Ã
-if (evt.Source == ProgramID)
-    return;
-
-// ? Bad - ¹«ÇÑ ·çÇÁ À§Çè
-// Source È®ÀÎ ¾øÀÌ ¸ğµç ÀÌº¥Æ® Ã³¸®
-```
-
-### 2. Null Ã¼Å©
-```csharp
-// ? Good
-if (payload is not PatientSelectedEventPayload evt)
-    return;
-
-if (evt.Patient == null)
-    return;
-
-// ? Bad
-var evt = (PatientSelectedEventPayload)payload; // NullReferenceException À§Çè
-```
-
-### 3. UI ½º·¹µå È®ÀÎ
-```csharp
-// ? Good - Å©·Î½º ½º·¹µå ¾ÈÀü
-if (InvokeRequired)
-{
-    Invoke(new Action(() => DisplayPatientInfo(patient)));
-}
-else
-{
-    DisplayPatientInfo(patient);
-}
-```
-
-### 4. ·Î±ë È°¿ë
-```csharp
-// ? Good - µğ¹ö±ë ¿ëÀÌ
-AddEventLog($"?? Event received from {evt.Source}");
-LogInfo($"Patient selected: {patient.PatientName}");
-LogAudit(AuditAction.Read, "Patient", patient.PatientId);
-```
-
-## Æ®·¯ºí½´ÆÃ
-
-### 1. ÀÌº¥Æ®°¡ ¼ö½ÅµÇÁö ¾ÊÀ½
-
-**¿øÀÎ**: EventBus°¡ ¼³Á¤µÇÁö ¾ÊÀ½
-
-**ÇØ°á**:
-```csharp
-protected override void OnScreenActivated()
-{
-    base.OnScreenActivated();
-
-    // EventBus null Ã¼Å©
-    if (EventBus == null)
-    {
-        LogWarning("EventBus is not set!");
-        return;
-    }
-
-    // ÀÌº¥Æ® ±¸µ¶
-    EventBus.GetEvent<PatientSelectedEvent>()
-        .Subscribe(OnPatientSelected);
-}
-```
-
-### 2. ÀÌº¥Æ®°¡ Áßº¹À¸·Î Ã³¸®µÊ
-
-**¿øÀÎ**: ÀÚ½ÅÀÌ ¹ßÇàÇÑ ÀÌº¥Æ®µµ ¼ö½Å
-
-**ÇØ°á**:
-```csharp
-private void OnPatientSelected(object payload)
-{
-    if (payload is not PatientSelectedEventPayload evt)
-        return;
-
-    // ÀÚ½ÅÀÌ ¹ßÇàÇÑ ÀÌº¥Æ®´Â ¹«½Ã
-    if (evt.Source == ProgramID)
-        return;
-
-    // Ã³¸®
-}
-```
-
-### 3. UI°¡ ¾÷µ¥ÀÌÆ®µÇÁö ¾ÊÀ½
-
-**¿øÀÎ**: Å©·Î½º ½º·¹µå Á¢±Ù
-
-**ÇØ°á**:
-```csharp
-private void OnPatientSelected(object payload)
-{
-    // ... ÀÌº¥Æ® Ã³¸® ...
-
-    // UI ½º·¹µå¿¡¼­ ½ÇÇà
-    if (InvokeRequired)
-    {
-        Invoke(new Action(() => UpdateUI(patient)));
-    }
-    else
-    {
-        UpdateUI(patient);
-    }
-}
-```
-
-## È®Àå °¡´É¼º
-
-### ´Ù¸¥ ÀÌº¥Æ® Ãß°¡
-
-```csharp
-// 1. ÀÌº¥Æ® Á¤ÀÇ (StandardEvents.cs)
-public class VitalSignUpdatedEvent : PubSubEvent { }
-
-public class VitalSignUpdatedEventPayload
-{
-    public VitalSignDto VitalSign { get; set; }
-    public PatientInfoDto Patient { get; set; }
-    public string Source { get; set; }
-}
-
-// 2. ¹ßÇà
-EventBus?.GetEvent<VitalSignUpdatedEvent>()
-    .Publish(new VitalSignUpdatedEventPayload
-    {
-        VitalSign = vitalSign,
-        Patient = patient,
-        Source = ProgramID
-    });
-
-// 3. ±¸µ¶
-EventBus?.GetEvent<VitalSignUpdatedEvent>()
-    .Subscribe(OnVitalSignUpdated);
-```
-
-### ´Ù¸¥ ¸ğµâ¿¡¼­ »ç¿ë
-
-```csharp
-// ¾î¶² ¸ğµâ¿¡¼­µç µ¿ÀÏÇÑ ÆĞÅÏ »ç¿ë
-public class MyCustomControl : BaseWorkControl
-{
-    protected override void OnScreenActivated()
-    {
-        base.OnScreenActivated();
-
-        // È¯ÀÚ ¼±ÅÃ ÀÌº¥Æ® ±¸µ¶
-        EventBus?.GetEvent<PatientSelectedEvent>()
-            .Subscribe(OnPatientSelected);
-    }
-
-    private void OnPatientSelected(object payload)
-    {
-        if (payload is not PatientSelectedEventPayload evt)
-            return;
-
-        if (evt.Source == ProgramID)
-            return;
-
-        // ³ª¸¸ÀÇ Ã³¸® ·ÎÁ÷
-        ProcessPatientSelection(evt.Patient);
-    }
-}
-```
-
-## ¼º´É ÃÖÀûÈ­
-
-### 1. ÀÌº¥Æ® ÇÊÅÍ¸µ
-```csharp
-// °ü·Ã ¾ø´Â ÀÌº¥Æ®´Â ºü¸£°Ô ¹«½Ã
-private void OnPatientSelected(object payload)
-{
-    if (payload is not PatientSelectedEventPayload evt)
-        return; // ºü¸¥ ¸®ÅÏ
-
-    if (evt.Source == ProgramID)
-        return; // ºü¸¥ ¸®ÅÏ
-
-    // ÇöÀç ÇÊ¿äÇÑ °æ¿ì¸¸ Ã³¸®
-    if (!IsNeedToProcess(evt))
-        return;
-
-    // ½ÇÁ¦ Ã³¸®
-    Process(evt);
-}
-```
-
-### 2. ´ë·® µ¥ÀÌÅÍ´Â ID¸¸ Àü´Ş
-```csharp
-// ? Bad - Å« µ¥ÀÌÅÍ Àü´Ş
-public class PatientDetailDataPayload
-{
-    public List<ExamResultDto> AllExamResults { get; set; } // ´ë·® µ¥ÀÌÅÍ
-    public List<VitalSignDto> AllVitalSigns { get; set; }
-}
-
-// ? Good - ID¸¸ Àü´ŞÇÏ°í ÇÊ¿ä½Ã Á¶È¸
-public class PatientDataChangedPayload
-{
-    public string PatientId { get; set; }
-    public string ChangedType { get; set; } // "ExamResult", "VitalSign" µî
-}
-```
-
-## ¶óÀÌ¼±½º
-
-? 2024 nU3 Framework
+  # í™˜ì ëª©ë¡ í™”ë©´ ê¸°ë³¸ ì‚¬ìš© ê°€ì´ë“œ - ìë™ ë¬¸ì„œ
+
+  ## ê°œìš”
+
+  í™˜ì ëª©ë¡ í™”ë©´ì„ êµ¬í˜„í•˜ë ¤ë©´ ê¸°ë³¸ ì»¨íŠ¸ë¡¤ê³¼ EventBusë¥¼ ì‚¬ìš©í•˜ì—¬ í†µì‹ í•©ë‹ˆë‹¤.
+
+  ## ì£¼ìš” ì»¨íŠ¸ë¡¤
+
+  ### 1. PatientListControl (í™˜ì ëª©ë¡)
+  - **ProgramID**: `EMR_PATIENT_LIST_001`
+  - **ì—­í• **: ì´ë²¤íŠ¸ ë°œí–‰ì (Publisher)
+  - **ê¸°ëŠ¥**:
+    - í™˜ì ëª©ë¡ í‘œì‹œ (DevExpress GridControl)
+    - í™˜ì ì„ íƒ ì‹œ ì´ë²¤íŠ¸ ë°œí–‰
+    - ê²€ìƒ‰ ë° ì •ë ¬ ê¸°ëŠ¥
+    - ë”ë¸”í´ë¦­ìœ¼ë¡œ ìƒì„¸ í™”ë©´ ì´ë™
+
+  ### 2. PatientDetailControl (í™˜ì ìƒì„¸)
+  - **ProgramID**: `EMR_PATIENT_DETAIL_001`
+  - **ì—­í• **: ì´ë²¤íŠ¸ êµ¬ë…ì (Subscriber)
+  - **ê¸°ëŠ¥**:
+    - í™˜ì ê¸°ë³¸ ì •ë³´ í‘œì‹œ
+    - ì§„ë£Œ ì²˜ë¦¬ í™”ë©´ í‘œì‹œ
+    - ì´ë²¤íŠ¸ ë¡œê·¸ í‘œì‹œ
+    - ë‹¤ë¥¸ í™”ë©´ìœ¼ë¡œ í™˜ì ì „ë‹¬ ê°€ëŠ¥
+
+  ### 3. SampleWorkControl (ì‹œìŠ¤í…œ ì‹œë²” í™”ë©´)
+  - **ProgramID**: `EMR_SAMPLE_001`
+  - **ì—­í• **: ì´ë²¤íŠ¸ ë°œí–‰ì + í…ŒìŠ¤íŠ¸
+  - **ê¸°ëŠ¥**:
+    - í™˜ì ëª©ë¡ ì´ë²¤íŠ¸ ë°œí–‰
+    - ì´ë²¤íŠ¸ ë¡œê·¸ í‘œì‹œ
+    - í…ŒìŠ¤íŠ¸ ì´ë²¤íŠ¸ ë²„íŠ¼
+
+  ## ì´ë²¤íŠ¸ íë¦„
+
+  ```
+  í™˜ì ëª©ë¡ í™”ë©´ â”€â”€â”€â”€â”¬â”€â”€ (ì´ë²¤íŠ¸ ë°œí–‰) â”€â”€â”€â”¬â”€â”€ EventAggregator (EventBus) â”€â”€â”€â”¬â”€â”€â”€â”
+  â”‚                   â”‚                  â”‚                        â”‚        â”‚
+  â”‚                   â”‚                  â”‚                        â”‚        â”‚
+  â”‚                   â”‚                  â”‚                        â”‚        â”‚
+  â”‚                   â”‚                  â”‚                        â”‚        â”‚
+  â””â”€ PatientListControl (í™˜ì ëª©ë¡) â”€â”€â”˜
+       (ì´ë²¤íŠ¸ ë°œí–‰ì)         â”‚
+                             â”‚
+                             â”‚  ì´ë™ ìš”ì²­
+                             â”‚
+                     â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”˜
+                     â”‚
+                     â”‚
+                     â”‚
+                     â”‚
+  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+  â”‚           EventAggregator                      â”‚
+  â”‚           (EventBus)                           â”‚
+  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+                     â”‚            â”‚
+                     â”‚            â”‚
+                     â”‚            â”‚
+                     â”‚            â”‚
+  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”´â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+  â”‚ PatientDetail  â”‚  â”‚  SampleWork  â”‚  â”‚
+  â”‚ Control          â”‚  â”‚  Control          â”‚
+  â”‚ (ë°œí–‰ì)       â”‚  â”‚  (ë°œí–‰ì)       â”‚
+  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”´â”€â”€â”€â”´â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”´â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+  ```
+
+  ## ë©”ë‰´ ì„¤ì •
+
+  ### 1. ê¸°ë³¸ ë©”ë‰´
+
+  Deployerì—ì„œ ë‹¤ìŒê³¼ ê°™ì´ ë©”ë‰´ë¥¼ ì„¤ì •í•©ë‹ˆë‹¤:
+
+  ```
+  ë©”ë‰´: EMR > í™˜ì ëª©ë¡
+  ProgramID: EMR_PATIENT_LIST_001
+
+  ë©”ë‰´: EMR > í™˜ì ìƒì„¸
+  ProgramID: EMR_PATIENT_DETAIL_001
+
+  ë©”ë‰´: EMR > ì‹œë²” í™”ë©´
+  ProgramID: EMR_SAMPLE_001
+  ```
+
+  ### 2. í…ŒìŠ¤íŠ¸ ì²˜ë¦¬
+
+  #### í…ŒìŠ¤íŠ¸ ì²˜ë¦¬ 1: í™˜ì ëª©ë¡ì—ì„œ ìƒì„¸ í™”ë©´ìœ¼ë¡œ ì´ë™
+
+  1. **í™˜ì ëª©ë¡**ì—ì„œ ì„ íƒ
+  2. **í™˜ì ìƒì„¸**ë¡œ ì „í™˜
+  3. **í™˜ì ëª©ë¡**ì„ ëˆ„ë¥¸ í™˜ì íƒ­ìœ¼ë¡œ ì „í™˜
+  4. ì„ íƒëœ í™˜ì ì»¨íŠ¸ë¡¤ ì „ë‹¬
+
+  ```
+  [í™˜ì ëª©ë¡]
+      â””â”€ í™˜ì ì»¨íŠ¸ë¡¤ (ì˜ˆ: ê¹€ì² ìˆ˜)
+          â”‚
+  [EventBus]
+      â””â”€ PatientSelectedEvent
+          â”‚
+  [í™˜ì ìƒì„¸]
+      â””â”€ OnPatientSelected() í˜¸ì¶œ
+          â””â”€ ì„ íƒëœ í™˜ì ì»¨íŠ¸ë¡¤ í‘œì‹œ
+  ```
+
+  #### í…ŒìŠ¤íŠ¸ ì²˜ë¦¬ 2: MainShell í…ŒìŠ¤íŠ¸ í™˜ì ì „í™˜
+
+  1. **í™˜ì ìƒì„¸** ë©”ë‰´ ì„ íƒ
+  2. **ë©”ë‰´** > **í™˜ì ëª©ë¡ í…ŒìŠ¤íŠ¸** í´ë¦­
+  3. ë©”ë‰´ì—ì„œ í…ŒìŠ¤íŠ¸ í™˜ì ì „í™˜ ê°€ëŠ¥
+
+  #### í…ŒìŠ¤íŠ¸ ì²˜ë¦¬ 3: í™˜ì ì „í™˜ ì „ì²´ í…ŒìŠ¤íŠ¸
+
+  1. **í™˜ì ëª©ë¡** í™”ë©´ ì‹¤í–‰
+  2. **í™˜ì ìƒì„¸** í™”ë©´ ì‹¤í–‰
+  3. **ì‹œë²” í™”ë©´** ì‹¤í–‰
+  4. **í™˜ì ëª©ë¡**ì—ì„œ í™˜ì ì»¨íŠ¸ë¡¤ ì„ íƒ
+  5. ë©”ë‰´ì—ì„œ í™˜ì ì „í™˜ ê°€ëŠ¥
+
+  ```
+  [í™˜ì ëª©ë¡]ìœ¼ë¡œ ì´ë²¤íŠ¸ ë°œí–‰
+      â”‚
+  [EventBus] ë¡œë”©
+      â”‚
+      â””â”€ ë©”ë‰´ì—ì„œ [í™˜ì ìƒì„¸]ë¡œ ì „í™˜
+      â””â”€ ë©”ë‰´ì—ì„œ [ì‹œë²” í™”ë©´]ìœ¼ë¡œ ì „í™˜
+      â””â”€ ë©”ë‰´ì—ì„œ [ë‹¤ë¥¸ í™”ë©´]ìœ¼ë¡œ ì „í™˜
+  ```
+
+  ## ì‚¬ìš© ì˜ˆì‹œ
+
+  ### ê¸°ë³¸ êµ¬í˜„ (PatientListControl)
+
+  ```csharp
+  // í™˜ì ëª©ë¡ ì»¨íŠ¸ë¡¤
+  private void GridView_FocusedRowChanged(object sender, FocusedRowChangedEventArgs e)
+  {
+      var selectedPatient = GetSelectedPatient();
+      if (selectedPatient != null)
+      {
+          // 1. í™”ë©´ ì»¨í…ìŠ¤íŠ¸ë¥¼ ìƒˆë¡œ ì„¤ì •
+          var newContext = Context.Clone();
+          newContext.CurrentPatient = selectedPatient;
+          UpdateContext(newContext);
+
+          // 2. ë‹¤ë¥¸ í™”ë©´ìœ¼ë¡œ ì´ë²¤íŠ¸ ë°œí–‰
+          EventBus?.GetEvent<PatientSelectedEvent>()
+              .Publish(new PatientSelectedEventPayload
+              {
+                  Patient = selectedPatient,
+                  Source = ProgramID // "EMR_PATIENT_LIST_001"
+              });
+      }
+  }
+  ```
+
+  ### ê¸°ë³¸ êµ¬í˜„ (PatientDetailControl)
+
+  ```csharp
+  // í™”ë©´ í™œì„±í™” ì‹œ ì´ë²¤íŠ¸ êµ¬ë…
+  protected override void OnScreenActivated()
+  {
+      base.OnScreenActivated();
+
+      EventBus?.GetEvent<PatientSelectedEvent>()
+          .Subscribe(OnPatientSelected);
+  }
+
+  // ì´ë²¤íŠ¸ ì²˜ë¦¬
+  private void OnPatientSelected(object payload)
+  {
+      if (payload is not PatientSelectedEventPayload evt)
+          return;
+
+      // ìì‹ ì˜ í™”ë©´ì—ì„œ ë°œí–‰ëœ ì´ë²¤íŠ¸ëŠ” ë¬´ì‹œ
+      if (evt.Source == ProgramID)
+          return;
+
+      // í™˜ì ìƒì„¸ í‘œì‹œ
+      DisplayPatientInfo(evt.Patient);
+
+      // ì»¨í…ìŠ¤íŠ¸ ì—…ë°ì´íŠ¸
+      var newContext = Context.Clone();
+      newContext.CurrentPatient = evt.Patient;
+      UpdateContext(newContext);
+  }
+  ```
+
+  ## ì£¼ìš” ê¸°ëŠ¥
+
+  ### PatientListControl
+
+  #### 1. í™˜ì ê²€ìƒ‰
+  ```csharp
+  private void BtnSearch_Click(object sender, EventArgs e)
+  {
+      var keyword = txtSearch.Text?.Trim();
+      var filtered = _patients.Where(p =>
+          p.PatientName.Contains(keyword) ||
+          p.PatientId.Contains(keyword)).ToList();
+
+      gridControl.DataSource = filtered;
+  }
+  ```
+
+  #### 2. í™˜ì ì „í™˜ ë°œí–‰
+  ```csharp
+  private void PublishPatientSelected(PatientInfoDto patient)
+  {
+      EventBus?.GetEvent<PatientSelectedEvent>()
+          .Publish(new PatientSelectedEventPayload
+          {
+              Patient = patient,
+              Source = ProgramID
+          });
+
+      LogInfo($"í™˜ì PatientSelectedEvent ë°œí–‰: {patient.PatientName}");
+  }
+  ```
+
+  #### 3. ë”ë¸”í´ë¦­ìœ¼ë¡œ í™”ë©´ ì´ë™
+  ```csharp
+  private void GridView_DoubleClick(object sender, EventArgs e)
+  {
+      var selectedPatient = GetSelectedPatient();
+      if (selectedPatient != null)
+      {
+          // ë°”ë¡œê°€ê¸° ìš”ì²­
+          EventBus?.GetEvent<NavigationRequestEvent>()
+              .Publish(new NavigationRequestEventPayload
+              {
+                  TargetScreenId = "EMR_PATIENT_DETAIL_001",
+                  Context = CreateContextWithPatient(selectedPatient),
+                  Source = ProgramID
+              });
+      }
+  }
+  ```
+
+  ### PatientDetailControl
+
+  #### 1. ì´ë²¤íŠ¸ êµ¬ë…
+  ```csharp
+  private void SubscribeToEvents()
+  {
+      // í™˜ì ëª©ë¡ ì´ë²¤íŠ¸
+      EventBus?.GetEvent<PatientSelectedEvent>()
+          .Subscribe(OnPatientSelected);
+
+      // í™˜ì ìƒì„¸ ëª©ë¡ ì´ë²¤íŠ¸
+      EventBus?.GetEvent<PatientUpdatedEvent>()
+          .Subscribe(OnPatientUpdated);
+
+      // ì»¨í…ìŠ¤íŠ¸ ë³€ê²½ ì´ë²¤íŠ¸
+      EventBus?.GetEvent<WorkContextChangedEvent>()
+          .Subscribe(OnWorkContextChanged);
+  }
+  ```
+
+  #### 2. ì´ë²¤íŠ¸ ë¡œê·¸ í‘œì‹œ
+  ```csharp
+  private void AddEventLog(string message)
+  {
+      var timestamp = DateTime.Now.ToString("HH:mm:ss.fff");
+      var logMessage = $"[{timestamp}] {message}\r\n";
+
+      memoEventLog.Text += logMessage;
+      memoEventLog.SelectionStart = memoEventLog.Text.Length;
+      memoEventLog.ScrollToCaret();
+  }
+  ```
+
+  #### 3. ì²˜ë¦¬
+  ```csharp
+  private void OnPatientSelected(object payload)
+  {
+      if (payload is not PatientSelectedEventPayload evt)
+          return;
+
+      AddEventLog($"ì´ë²¤íŠ¸ ë°œí–‰í•œ '{evt.Source}'ì—ì„œ PatientSelectedEvent ìˆ˜ì‹ ");
+      AddEventLog($"   í™˜ì: {evt.Patient.PatientName}");
+
+      // UI ì²˜ë¦¬
+      DisplayPatientInfo(evt.Patient);
+      UpdateStatus($"í™˜ì ì„ íƒë¨: {evt.Patient.PatientName}", Color.Blue);
+  }
+  ```
+
+  ## ì´ë²¤íŠ¸ íƒ€ì…
+
+  ### PatientSelectedEvent
+  ```csharp
+  public class PatientSelectedEventPayload
+  {
+      public PatientInfoDto Patient { get; set; }  // ì„ íƒëœ í™˜ì
+      public string Source { get; set; }            // ì´ë²¤íŠ¸ ë°œí–‰ì ID
+  }
+  ```
+
+  **ìš©ë„**: ì‚¬ìš©ìê°€ ì„ íƒë˜ë©´ ë‹¤ë¥¸ í™”ë©´ìœ¼ë¡œ ì•Œë¦¼
+
+  ### PatientUpdatedEvent
+  ```csharp
+  public class PatientUpdatedEventPayload
+  {
+      public PatientInfoDto Patient { get; set; }   // ì—…ë°ì´íŠ¸ëœ í™˜ì
+      public string Source { get; set; }
+      public string UpdatedBy { get; set; }         // ì—…ë°ì´íŠ¸ ë°œí–‰ì
+  }
+  ```
+
+  **ìš©ë„**: í™˜ì ìƒì„¸ì—ì„œ ì—…ë°ì´íŠ¸ë˜ë©´ ë‹¤ë¥¸ í™”ë©´ìœ¼ë¡œ ì•Œë¦¼
+
+  ### WorkContextChangedEvent
+  ```csharp
+  public class WorkContextChangedEventPayload
+  {
+      public WorkContext OldContext { get; set; }   // ì´ì „ ì»¨í…ìŠ¤íŠ¸
+      public WorkContext NewContext { get; set; }   // ìƒˆ ì»¨í…ìŠ¤íŠ¸
+      public string Source { get; set; }
+      public string ChangedProperty { get; set; }   // ë³€ê²½ëœ ì†ì„±
+  }
+  ```
+
+  **ìš©ë„**: ì „ì²´ ì‘ì—… ì»¨í…ìŠ¤íŠ¸ê°€ ë³€ê²½ë˜ì—ˆì„ ë•Œ
+
+  ### NavigationRequestEvent
+  ```csharp
+  public class NavigationRequestEventPayload
+  {
+      public string TargetScreenId { get; set; }    // ëŒ€ìƒ í™”ë©´ ID
+      public WorkContext Context { get; set; }      // í™”ë©´ ì»¨í…ìŠ¤íŠ¸
+      public string Source { get; set; }
+  }
+  ```
+
+  **ìš©ë„**: ë‹¤ë¥¸ í™”ë©´ìœ¼ë¡œ ì´ë™ ìš”ì²­
+
+  ## íŒ
+
+  ### ì²´í¬ Source
+  ```csharp
+  // Good - ìì‹ ì˜ í™”ë©´ì—ì„œ ë°œí–‰ëœ ì´ë²¤íŠ¸ëŠ” ë¬´ì‹œ
+  if (evt.Source == ProgramID)
+      return;
+
+  // Bad - Source í™•ì¸ ì•ˆ í•˜ë©´ ì´ë²¤íŠ¸ ì²˜ë¦¬
+  ```
+
+  ### Null ì²´í¬
+  ```csharp
+  // Good
+  if (payload is not PatientSelectedEventPayload evt)
+      return;
+
+  if (evt.Patient == null)
+      return;
+
+  // Bad
+  var evt = (PatientSelectedEventPayload)payload; // NullReferenceException ë°œìƒ
+  ```
+
+  ### UI ìŠ¤ë ˆë“œ ì²´í¬
+  ```csharp
+  // Good - UI ìŠ¤ë ˆë“œì—ì„œ ì²˜ë¦¬
+  if (InvokeRequired)
+  {
+      Invoke(new Action(() => DisplayPatientInfo(patient)));
+  }
+  else
+  {
+      DisplayPatientInfo(patient);
+  }
+  ```
+
+  ### ë¡œê·¸ í™œìš©
+  ```csharp
+  // Good - ì ì ˆí•œ ë¡œê·¸
+  AddEventLog($"Event received from {evt.Source}");
+  LogInfo($"Patient selected: {patient.PatientName}");
+  LogAudit(AuditAction.Read, "Patient", patient.PatientId);
+  ```
+
+  ## ì‹¤ìˆ˜ ë°©ì§€
+
+  ### 1. EventBus null ì²´í¬
+
+  **ë¬¸ì œ**: EventBusê°€ nullì¸ ê²½ìš°
+
+  **í•´ê²°**:
+  ```csharp
+  protected override void OnScreenActivated()
+  {
+      base.OnScreenActivated();
+
+      // EventBus null ì²´í¬
+      if (EventBus == null)
+      {
+          LogWarning("EventBus is not set!");
+          return;
+      }
+
+      // ì´ë²¤íŠ¸ êµ¬ë…
+      EventBus.GetEvent<PatientSelectedEvent>()
+          .Subscribe(OnPatientSelected);
+  }
+  ```
+
+  ### 2. ì´ë²¤íŠ¸ ì¤‘ë³µ ì²˜ë¦¬
+
+  **ë¬¸ì œ**: ìì‹ ì˜ í™”ë©´ì—ì„œ ë°œí–‰ëœ ì´ë²¤íŠ¸ê°€ ë˜ë‹¤ì‹œ ì²˜ë¦¬
+
+  **í•´ê²°**:
+  ```csharp
+  private void OnPatientSelected(object payload)
+  {
+      if (payload is not PatientSelectedEventPayload evt)
+          return;
+
+      // ìì‹ ì˜ í™”ë©´ì—ì„œ ë°œí–‰ëœ ì´ë²¤íŠ¸ëŠ” ë¬´ì‹œ
+      if (evt.Source == ProgramID)
+          return;
+
+      // ì²˜ë¦¬
+  }
+  ```
+
+  ### 3. UI ìŠ¤ë ˆë“œì—ì„œ ì²˜ë¦¬
+
+  **ë¬¸ì œ**: UI ìŠ¤ë ˆë“œì—ì„œ ì²˜ë¦¬í•˜ì§€ ì•ŠìŒ
+
+  **í•´ê²°**:
+  ```csharp
+  private void OnPatientSelected(object payload)
+  {
+      // ... ì´ë²¤íŠ¸ ì²˜ë¦¬ ...
+
+      // UI ìŠ¤ë ˆë“œì—ì„œ ì²˜ë¦¬
+      if (InvokeRequired)
+      {
+          Invoke(new Action(() => UpdateUI(patient)));
+      }
+      else
+      {
+          UpdateUI(patient);
+      }
+  }
+  ```
+
+  ## ì¶”ê°€ ì´ë²¤íŠ¸ ì˜ˆì‹œ
+
+  ### VitalSign ì—…ë°ì´íŠ¸ ì´ë²¤íŠ¸ ì¶”ê°€
+
+  ```csharp
+  // 1. ì´ë²¤íŠ¸ ì •ì˜ (StandardEvents.cs)
+  public class VitalSignUpdatedEvent : PubSubEvent { }
+
+  public class VitalSignUpdatedEventPayload
+  {
+      public VitalSignDto VitalSign { get; set; }
+      public PatientInfoDto Patient { get; set; }
+      public string Source { get; set; }
+  }
+
+  // 2. ë°œí–‰
+  EventBus?.GetEvent<VitalSignUpdatedEvent>()
+      .Publish(new VitalSignUpdatedEventPayload
+      {
+          VitalSign = vitalSign,
+          Patient = patient,
+          Source = ProgramID
+      });
+
+  // 3. êµ¬ë…
+  EventBus?.GetEvent<VitalSignUpdatedEvent>()
+      .Subscribe(OnVitalSignUpdated);
+  ```
+
+  ### ë‹¤ë¥¸ í™”ë©´ìœ¼ë¡œ ì „í™˜ ê°€ëŠ¥
+
+  ```csharp
+  // ì–´ë–¤ í™”ë©´ì—ì„œë“ ì§€ ì‹¤í–‰ ê°€ëŠ¥í•œ ì»¨íŠ¸ë¡¤
+  public class MyCustomControl : BaseWorkControl
+  {
+      protected override void OnScreenActivated()
+      {
+          base.OnScreenActivated();
+
+          // í™˜ì ëª©ë¡ ì´ë²¤íŠ¸ êµ¬ë…
+          EventBus?.GetEvent<PatientSelectedEvent>()
+              .Subscribe(OnPatientSelected);
+      }
+
+      private void OnPatientSelected(object payload)
+      {
+          if (payload is not PatientSelectedEventPayload evt)
+              return;
+
+          if (evt.Source == ProgramID)
+              return;
+
+          // í•„ìš”í•œ ì²˜ë¦¬
+          ProcessPatientSelection(evt.Patient);
+      }
+  }
+  ```
+
+  ## ì—…ë°ì´íŠ¸ íŒ
+
+  ### 1. ì´ë²¤íŠ¸ ë°ì´í„°
+  ```csharp
+  // ë°ì´í„°ë² ì´ìŠ¤ ì¡°íšŒ ì—†ì´ ì´ë²¤íŠ¸ ë°ì´í„°ë¡œ ì²˜ë¦¬
+  private void OnPatientSelected(object payload)
+  {
+      if (payload is not PatientSelectedEventPayload evt)
+          return; // í˜•ì‹ í™•ì¸
+
+      if (evt.Source == ProgramID)
+          return; // ì†ŒìŠ¤ í™•ì¸
+
+      // í•„ìš”í•œ ì •ë³´ë¡œ ì²˜ë¦¬
+      if (!IsNeedToProcess(evt))
+          return;
+
+      // ì²˜ë¦¬
+      Process(evt);
+  }
+  ```
+
+  ### 2. ì •ë³´ì˜ í¬ê¸°ì™€ ID í™•ì¸
+  ```csharp
+  // Bad - í° ë°ì´í„°ë¥¼ ì „ë‹¬
+  public class PatientDetailDataPayload
+  {
+      public List<ExamResultDto> AllExamResults { get; set; } // ëª¨ë“  ê²€ì‚¬ ê²°ê³¼
+      public List<VitalSignDto> AllVitalSigns { get; set; }
+  }
+
+  // Good - IDë¡œ ì¡°íšŒ ê°€ëŠ¥í•˜ê²Œ
+  public class PatientDataChangedPayload
+  {
+      public string PatientId { get; set; }
+      public string ChangedType { get; set; } // "ExamResult", "VitalSign" ë“±
+  }
+  ```
+
+  ## ë¼ì´ì„ ìŠ¤ ì •ë³´
+
+  (c) 2024 nU3 Framework

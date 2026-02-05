@@ -1,49 +1,49 @@
-# Framework ÄÄÆ÷³ÍÆ® ÀÚµ¿ ¾÷µ¥ÀÌÆ® ÅëÇÕ °¡ÀÌµå
+# Framework ì»´í¬ë„ŒíŠ¸ ìë™ ì—…ë°ì´íŠ¸ í†µí•© ê°€ì´ë“œ
 
-## BaseInstallPath °³³ä Á¤¸®
+## BaseInstallPath ê°œë… ì •ë¦¬
 
-### °æ·Î °è»ê °ø½Ä
+### ê²½ë¡œ ê³„ì‚° ê³µì‹
 
 ```
-ÃÖÁ¾ ¼³Ä¡ °æ·Î = BaseInstallPath + InstallPath + FileName
+ìµœì¢… ì„¤ì¹˜ ê²½ë¡œ = BaseInstallPath + InstallPath + FileName
 
-¿¹½Ã:
+ì˜ˆì‹œ:
   BaseInstallPath: "C:\Program Files\nU3.Shell\"
   InstallPath: "plugins"
   FileName: "MyPlugin.dll"
   
-  ¡æ C:\Program Files\nU3.Shell\plugins\MyPlugin.dll
+  â†’ C:\Program Files\nU3.Shell\plugins\MyPlugin.dll
 ```
 
-### BaseInstallPath °áÁ¤ ¹æ¹ı
+### BaseInstallPath ê²°ì • ë°©ë²•
 
 ```csharp
-// ¹æ¹ı 1: ÀÚµ¿ (±âº»°ª - ½ÇÇà ÆÄÀÏ À§Ä¡)
+// ë°©ë²• 1: ìë™ (ê¸°ë³¸ê°’ - ì‹¤í–‰ íŒŒì¼ ìœ„ì¹˜)
 var updateService = new ComponentUpdateService(componentRepo);
 // BaseInstallPath = AppDomain.CurrentDomain.BaseDirectory
-// ¿¹: C:\Program Files\nU3.Shell\
+// ì˜ˆ: C:\Program Files\nU3.Shell\
 
-// ¹æ¹ı 2: ¸í½ÃÀû ÁöÁ¤
+// ë°©ë²• 2: ëª…ì‹œì  ì§€ì •
 var updateService = new ComponentUpdateService(
     componentRepo, 
     installBasePath: @"C:\MyApp\"
 );
 ```
 
-### È¯°æº° BaseInstallPath
+### í™˜ê²½ë³„ BaseInstallPath
 
-| È¯°æ | BaseInstallPath | ¼³¸í |
+| í™˜ê²½ | BaseInstallPath | ì„¤ëª… |
 |------|----------------|------|
-| **Production** | `C:\Program Files\nU3.Shell\` | ÀÏ¹İ ¼³Ä¡ |
-| **Development** | `D:\Projects\nU3.Framework\bin\Debug\` | °³¹ß Áß |
-| **Portable** | `D:\MyApps\nU3\` | USB µî Æ÷ÅÍºí ¼³Ä¡ |
-| **Test** | `C:\Temp\TestEnv\` | Å×½ºÆ® È¯°æ |
+| **Production** | `C:\Program Files\nU3.Shell\` | ì¼ë°˜ ì„¤ì¹˜ |
+| **Development** | `D:\Projects\nU3.Framework\bin\Debug\` | ê°œë°œ ì¤‘ |
+| **Portable** | `D:\MyApps\nU3\` | USB ë“± í¬í„°ë¸” ì„¤ì¹˜ |
+| **Test** | `C:\Temp\TestEnv\` | í…ŒìŠ¤íŠ¸ í™˜ê²½ |
 
 ---
 
-## Bootstrapper ÅëÇÕ
+## Bootstrapper í†µí•©
 
-### ½Ã³ª¸®¿À: ¾Û ½ÃÀÛ Àü ÀÚµ¿ ¾÷µ¥ÀÌÆ®
+### ì‹œë‚˜ë¦¬ì˜¤: ì•± ì‹œì‘ ì „ ìë™ ì—…ë°ì´íŠ¸
 
 ```csharp
 // nU3.Bootstrapper\Program.cs
@@ -69,37 +69,37 @@ namespace nU3.Bootstrapper
 
             try
             {
-                // 1. DI ¼³Á¤
+                // 1. DI ì„¤ì •
                 var services = new ServiceCollection();
                 services.AddSingleton<LocalDatabaseManager>();
                 services.AddScoped<IComponentRepository, SQLiteComponentRepository>();
                 var provider = services.BuildServiceProvider();
 
-                // 2. ÄÄÆ÷³ÍÆ® ¾÷µ¥ÀÌÆ® ¼­ºñ½º »ı¼º
+                // 2. ì»´í¬ë„ŒíŠ¸ ì—…ë°ì´íŠ¸ ì„œë¹„ìŠ¤ ìƒì„±
                 var componentRepo = provider.GetRequiredService<IComponentRepository>();
                 
-                // ½ÇÇà ÆÄÀÏÀÌ ÀÖ´Â µğ·ºÅä¸®¸¦ ±âÁØÀ¸·Î ¼³Á¤
-                // ¿¹: C:\Program Files\nU3.Shell\nU3.Bootstrapper.exe
-                //  ¡æ BaseInstallPath = C:\Program Files\nU3.Shell\
+                // ì‹¤í–‰ íŒŒì¼ì´ ìˆëŠ” ë””ë ‰í† ë¦¬ë¥¼ ê¸°ì¤€ìœ¼ë¡œ ì„¤ì •
+                // ì˜ˆ: C:\Program Files\nU3.Shell\nU3.Bootstrapper.exe
+                //  â†’ BaseInstallPath = C:\Program Files\nU3.Shell\
                 var baseInstallPath = AppDomain.CurrentDomain.BaseDirectory;
                 
                 var updateService = new ComponentUpdateService(componentRepo, baseInstallPath);
 
-                // 3. ¾÷µ¥ÀÌÆ® È®ÀÎ ¹× ½ÇÇà
+                // 3. ì—…ë°ì´íŠ¸ í™•ì¸ ë° ì‹¤í–‰
                 var updateTask = CheckAndUpdateComponents(updateService);
                 updateTask.Wait();
 
                 if (!updateTask.Result)
                 {
                     MessageBox.Show(
-                        "ÄÄÆ÷³ÍÆ® ¾÷µ¥ÀÌÆ®¿¡ ½ÇÆĞÇß½À´Ï´Ù.\nÇÁ·Î±×·¥À» Á¾·áÇÕ´Ï´Ù.",
-                        "¾÷µ¥ÀÌÆ® ½ÇÆĞ",
+                        "ì»´í¬ë„ŒíŠ¸ ì—…ë°ì´íŠ¸ì— ì‹¤íŒ¨í–ˆìŠµë‹ˆë‹¤.\ní”„ë¡œê·¸ë¨ì„ ì¢…ë£Œí•©ë‹ˆë‹¤.",
+                        "ì—…ë°ì´íŠ¸ ì‹¤íŒ¨",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Error);
                     return;
                 }
 
-                // 4. ¸ŞÀÎ Shell ½ÇÇà
+                // 4. ë©”ì¸ Shell ì‹¤í–‰
                 var shellPath = Path.Combine(baseInstallPath, "nU3.Shell.exe");
                 if (File.Exists(shellPath))
                 {
@@ -107,12 +107,12 @@ namespace nU3.Bootstrapper
                 }
                 else
                 {
-                    MessageBox.Show("nU3.Shell.exe¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù.", "¿À·ù");
+                    MessageBox.Show("nU3.Shell.exeë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.", "ì˜¤ë¥˜");
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"ºÎÆ®½ºÆ®·¦ ¿À·ù: {ex.Message}", "¿À·ù");
+                MessageBox.Show($"ë¶€íŠ¸ìŠ¤íŠ¸ë© ì˜¤ë¥˜: {ex.Message}", "ì˜¤ë¥˜");
             }
         }
 
@@ -120,17 +120,17 @@ namespace nU3.Bootstrapper
         {
             try
             {
-                // ÇÊ¼ö ÄÄÆ÷³ÍÆ® È®ÀÎ
+                // í•„ìˆ˜ ì»´í¬ë„ŒíŠ¸ í™•ì¸
                 var missing = updateService.GetMissingComponents();
                 var updates = updateService.CheckForUpdates();
 
                 if (!missing.Any() && !updates.Any())
                 {
-                    Console.WriteLine("¸ğµç ÄÄÆ÷³ÍÆ®°¡ ÃÖ½ÅÀÔ´Ï´Ù.");
+                    Console.WriteLine("ëª¨ë“  ì»´í¬ë„ŒíŠ¸ê°€ ìµœì‹ ì…ë‹ˆë‹¤.");
                     return true;
                 }
 
-                // ÁøÇà·ü Ç¥½Ã Æû
+                // ì§„í–‰ë¥  í‘œì‹œ í¼
                 using var progressForm = new BootstrapProgressForm();
                 progressForm.Show();
 
@@ -141,21 +141,21 @@ namespace nU3.Bootstrapper
                         p.PercentComplete);
                 });
 
-                // ¾÷µ¥ÀÌÆ® ½ÇÇà
+                // ì—…ë°ì´íŠ¸ ì‹¤í–‰
                 var result = await updateService.UpdateAllAsync(progress);
 
                 if (result.Success)
                 {
-                    progressForm.UpdateProgress("¾÷µ¥ÀÌÆ® ¿Ï·á", 100);
-                    await Task.Delay(1000);  // 1ÃÊ ´ë±â
+                    progressForm.UpdateProgress("ì—…ë°ì´íŠ¸ ì™„ë£Œ", 100);
+                    await Task.Delay(1000);  // 1ì´ˆ ëŒ€ê¸°
                     return true;
                 }
                 else
                 {
                     MessageBox.Show(
-                        $"{result.Message}\n\n½ÇÆĞ ¸ñ·Ï:\n" +
+                        $"{result.Message}\n\nì‹¤íŒ¨ ëª©ë¡:\n" +
                         string.Join("\n", result.FailedComponents.Select(f => $"- {f.ComponentId}: {f.Error}")),
-                        "¾÷µ¥ÀÌÆ® ½ÇÆĞ",
+                        "ì—…ë°ì´íŠ¸ ì‹¤íŒ¨",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Warning);
                     return false;
@@ -163,14 +163,14 @@ namespace nU3.Bootstrapper
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"¾÷µ¥ÀÌÆ® È®ÀÎ Áß ¿À·ù: {ex.Message}", "¿À·ù");
+                MessageBox.Show($"ì—…ë°ì´íŠ¸ í™•ì¸ ì¤‘ ì˜¤ë¥˜: {ex.Message}", "ì˜¤ë¥˜");
                 return false;
             }
         }
     }
 
     /// <summary>
-    /// °£´ÜÇÑ ÁøÇà·ü Ç¥½Ã Æû
+    /// ê°„ë‹¨í•œ ì§„í–‰ë¥  í‘œì‹œ í¼
     /// </summary>
     public class BootstrapProgressForm : Form
     {
@@ -179,7 +179,7 @@ namespace nU3.Bootstrapper
 
         public BootstrapProgressForm()
         {
-            this.Text = "nU3 Framework - ¾÷µ¥ÀÌÆ® Áß";
+            this.Text = "nU3 Framework - ì—…ë°ì´íŠ¸ ì¤‘";
             this.Size = new System.Drawing.Size(400, 120);
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
             this.StartPosition = FormStartPosition.CenterScreen;
@@ -189,7 +189,7 @@ namespace nU3.Bootstrapper
 
             _lblStatus = new Label
             {
-                Text = "ÄÄÆ÷³ÍÆ® È®ÀÎ Áß...",
+                Text = "ì»´í¬ë„ŒíŠ¸ í™•ì¸ ì¤‘...",
                 Left = 20,
                 Top = 20,
                 Width = 350
@@ -224,18 +224,18 @@ namespace nU3.Bootstrapper
 
 ---
 
-## Shell¿¡¼­ ¼±ÅÃÀû ¾÷µ¥ÀÌÆ®
+## Shellì—ì„œ ì„ íƒì  ì—…ë°ì´íŠ¸
 
-### ½Ã³ª¸®¿À: ½ÃÀÛ ½Ã ¹é±×¶ó¿îµå Ã¼Å©
+### ì‹œë‚˜ë¦¬ì˜¤: ì‹œì‘ ì‹œ ë°±ê·¸ë¼ìš´ë“œ ì²´í¬
 
 ```csharp
 // nU3.Shell\MainShellForm.cs
 private async void MainShellForm_Load(object sender, EventArgs e)
 {
-    // ¹é±×¶ó¿îµå¿¡¼­ ¾÷µ¥ÀÌÆ® È®ÀÎ
+    // ë°±ê·¸ë¼ìš´ë“œì—ì„œ ì—…ë°ì´íŠ¸ í™•ì¸
     _ = Task.Run(async () =>
     {
-        await Task.Delay(5000);  // 5ÃÊ ÈÄ È®ÀÎ
+        await Task.Delay(5000);  // 5ì´ˆ í›„ í™•ì¸
         
         var componentRepo = Program.ServiceProvider.GetRequiredService<IComponentRepository>();
         var updateService = new ComponentUpdateService(componentRepo);
@@ -246,7 +246,7 @@ private async void MainShellForm_Load(object sender, EventArgs e)
         {
             this.Invoke((MethodInvoker)delegate
             {
-                toolStripStatusUpdate.Text = $"¾÷µ¥ÀÌÆ® {updates.Count}°³ °¡´É";
+                toolStripStatusUpdate.Text = $"ì—…ë°ì´íŠ¸ {updates.Count}ê°œ ê°€ëŠ¥";
                 toolStripStatusUpdate.ForeColor = Color.Orange;
                 toolStripStatusUpdate.IsLink = true;
                 toolStripStatusUpdate.Click += (s, e) => ShowUpdateDialog();
@@ -262,18 +262,18 @@ private async void ShowUpdateDialog()
     
     var updates = updateService.CheckForUpdates();
     
-    var msg = "´ÙÀ½ ÄÄÆ÷³ÍÆ®¸¦ ¾÷µ¥ÀÌÆ®ÇÒ ¼ö ÀÖ½À´Ï´Ù:\n\n" +
+    var msg = "ë‹¤ìŒ ì»´í¬ë„ŒíŠ¸ë¥¼ ì—…ë°ì´íŠ¸í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤:\n\n" +
               string.Join("\n", updates.Select(u => $"- {u.ComponentName} ({u.Version})")) +
-              "\n\nÁö±İ ¾÷µ¥ÀÌÆ®ÇÏ½Ã°Ú½À´Ï±î?\n(¾÷µ¥ÀÌÆ® ÈÄ Àç½ÃÀÛÀÌ ÇÊ¿äÇÕ´Ï´Ù)";
+              "\n\nì§€ê¸ˆ ì—…ë°ì´íŠ¸í•˜ì‹œê² ìŠµë‹ˆê¹Œ?\n(ì—…ë°ì´íŠ¸ í›„ ì¬ì‹œì‘ì´ í•„ìš”í•©ë‹ˆë‹¤)";
     
-    if (MessageBox.Show(msg, "¾÷µ¥ÀÌÆ® È®ÀÎ", MessageBoxButtons.YesNo) != DialogResult.Yes)
+    if (MessageBox.Show(msg, "ì—…ë°ì´íŠ¸ í™•ì¸", MessageBoxButtons.YesNo) != DialogResult.Yes)
         return;
     
     try
     {
         var result = await AsyncOperationHelper.ExecuteWithProgressAsync(
             this,
-            "ÄÄÆ÷³ÍÆ® ¾÷µ¥ÀÌÆ® Áß...",
+            "ì»´í¬ë„ŒíŠ¸ ì—…ë°ì´íŠ¸ ì¤‘...",
             async (ct, progress) =>
             {
                 var updateProgress = new Progress<ComponentUpdateProgressEventArgs>(p =>
@@ -293,8 +293,8 @@ private async void ShowUpdateDialog()
         if (result.Success)
         {
             MessageBox.Show(
-                "¾÷µ¥ÀÌÆ®°¡ ¿Ï·áµÇ¾ú½À´Ï´Ù.\nÇÁ·Î±×·¥À» Àç½ÃÀÛÇØÁÖ¼¼¿ä.",
-                "¿Ï·á",
+                "ì—…ë°ì´íŠ¸ê°€ ì™„ë£Œë˜ì—ˆìŠµë‹ˆë‹¤.\ní”„ë¡œê·¸ë¨ì„ ì¬ì‹œì‘í•´ì£¼ì„¸ìš”.",
+                "ì™„ë£Œ",
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Information);
             Application.Exit();
@@ -302,107 +302,107 @@ private async void ShowUpdateDialog()
     }
     catch (OperationCanceledException)
     {
-        MessageBox.Show("¾÷µ¥ÀÌÆ®°¡ Ãë¼ÒµÇ¾ú½À´Ï´Ù.", "Ãë¼Ò");
+        MessageBox.Show("ì—…ë°ì´íŠ¸ê°€ ì·¨ì†Œë˜ì—ˆìŠµë‹ˆë‹¤.", "ì·¨ì†Œ");
     }
 }
 ```
 
 ---
 
-## °æ·Î ¼³Á¤ Ã¼Å©¸®½ºÆ®
+## ê²½ë¡œ ì„¤ì • ì²´í¬ë¦¬ìŠ¤íŠ¸
 
-### Deployer¿¡¼­ ¹èÆ÷ ½Ã
+### Deployerì—ì„œ ë°°í¬ ì‹œ
 
 ```
-? ¿Ã¹Ù¸¥ ¼³Á¤:
-  InstallPath: ""                     ¡æ ·çÆ®
-  InstallPath: "plugins"              ¡æ plugins\
-  InstallPath: "resources\images"     ¡æ resources\images\
+? ì˜¬ë°”ë¥¸ ì„¤ì •:
+  InstallPath: ""                     â†’ ë£¨íŠ¸
+  InstallPath: "plugins"              â†’ plugins\
+  InstallPath: "resources\images"     â†’ resources\images\
 
-? Àß¸øµÈ ¼³Á¤:
-  InstallPath: "C:\Program Files\"    ¡æ Àı´ë °æ·Î X
-  InstallPath: "..\OtherApp\"         ¡æ »óÀ§ °æ·Î X
-  InstallPath: "/plugins"             ¡æ ½½·¡½Ã(/) ´ë½Å ¹é½½·¡½Ã(\) »ç¿ë
+? ì˜ëª»ëœ ì„¤ì •:
+  InstallPath: "C:\Program Files\"    â†’ ì ˆëŒ€ ê²½ë¡œ X
+  InstallPath: "..\OtherApp\"         â†’ ìƒìœ„ ê²½ë¡œ X
+  InstallPath: "/plugins"             â†’ ìŠ¬ë˜ì‹œ(/) ëŒ€ì‹  ë°±ìŠ¬ë˜ì‹œ(\) ì‚¬ìš©
 ```
 
-### Å¬¶óÀÌ¾ğÆ®¿¡¼­ ¼³Ä¡ ½Ã
+### í´ë¼ì´ì–¸íŠ¸ì—ì„œ ì„¤ì¹˜ ì‹œ
 
 ```csharp
-// ComponentUpdateService°¡ ÀÚµ¿À¸·Î Ã³¸®
+// ComponentUpdateServiceê°€ ìë™ìœ¼ë¡œ ì²˜ë¦¬
 var installPath = GetInstallPath(component);
 // "C:\Program Files\nU3.Shell\" + "plugins" + "MyPlugin.dll"
 // = "C:\Program Files\nU3.Shell\plugins\MyPlugin.dll"
 
-// Æú´õ ÀÚµ¿ »ı¼º
+// í´ë” ìë™ ìƒì„±
 var directory = Path.GetDirectoryName(installPath);
 if (!Directory.Exists(directory))
     Directory.CreateDirectory(directory);
     
-// ÆÄÀÏ º¹»ç
+// íŒŒì¼ ë³µì‚¬
 File.Copy(cacheFile, installPath, overwrite: true);
 ```
 
 ---
 
-## ½ÇÁ¦ »ç¿ë Èå¸§
+## ì‹¤ì œ ì‚¬ìš© íë¦„
 
-### 1. Deployer¿¡¼­ ¹èÆ÷
-
-```
-°ü¸®ÀÚ ÀÛ¾÷:
-¦£¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¤
-¦¢ [Smart Deploy] Å¬¸¯                     ¦¢
-¦¢   ¡é                                     ¦¢
-¦¢ nU3.Core.dll ¼±ÅÃ                       ¦¢
-¦¢   ¡é                                     ¦¢
-¦¢ ÀÚµ¿ ºĞ¼®:                              ¦¢
-¦¢   ComponentId: "nU3.Core"               ¦¢
-¦¢   ComponentType: FrameworkCore          ¦¢
-¦¢   InstallPath: ""  ¡ç ÀÚµ¿ ¼³Á¤ (·çÆ®)   ¦¢
-¦¢   Priority: 10                          ¦¢
-¦¢   ¡é                                     ¦¢
-¦¢ DB ÀúÀå + ¼­¹ö º¹»ç                     ¦¢
-¦¢   SYS_COMPONENT_MST                     ¦¢
-¦¢   SYS_COMPONENT_VER                     ¦¢
-¦¢   D:\ServerStorage\Components\...       ¦¢
-¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¥
-```
-
-### 2. Bootstrapper¿¡¼­ ¾÷µ¥ÀÌÆ®
+### 1. Deployerì—ì„œ ë°°í¬
 
 ```
-Å¬¶óÀÌ¾ğÆ® ½ÃÀÛ:
-¦£¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¤
-¦¢ Bootstrapper.exe ½ÇÇà                   ¦¢
-¦¢   ¡é                                     ¦¢
-¦¢ DB¿¡¼­ È°¼º ¹öÀü Á¶È¸                   ¦¢
-¦¢   ¡é                                     ¦¢
-¦¢ ·ÎÄÃ ¼³Ä¡ È®ÀÎ:                         ¦¢
-¦¢   BaseInstallPath = C:\Program Files\   ¦¢
-¦¢                     nU3.Shell\          ¦¢
-¦¢   ¡é                                     ¦¢
-¦¢ °æ·Î °è»ê:                              ¦¢
-¦¢   "" + "nU3.Core.dll"                   ¦¢
-¦¢   = C:\...\nU3.Shell\nU3.Core.dll       ¦¢
-¦¢   ¡é                                     ¦¢
-¦¢ ºñ±³:                                   ¦¢
-¦¢   ¼­¹ö ¹öÀü: 1.0.1.0                    ¦¢
-¦¢   ·ÎÄÃ ¹öÀü: 1.0.0.0                    ¦¢
-¦¢   ¡æ ¾÷µ¥ÀÌÆ® ÇÊ¿ä!                      ¦¢
-¦¢   ¡é                                     ¦¢
-¦¢ ´Ù¿î·Îµå:                               ¦¢
-¦¢   ¼­¹ö ¡æ Ä³½Ã                           ¦¢
-¦¢   Ä³½Ã ¡æ ¼³Ä¡ °æ·Î                      ¦¢
-¦¢   ¡é                                     ¦¢
-¦¢ Shell ½ÇÇà                              ¦¢
-¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¥
+ê´€ë¦¬ì ì‘ì—…:
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚ [Smart Deploy] í´ë¦­                     â”‚
+â”‚   â†“                                     â”‚
+â”‚ nU3.Core.dll ì„ íƒ                       â”‚
+â”‚   â†“                                     â”‚
+â”‚ ìë™ ë¶„ì„:                              â”‚
+â”‚   ComponentId: "nU3.Core"               â”‚
+â”‚   ComponentType: FrameworkCore          â”‚
+â”‚   InstallPath: ""  â† ìë™ ì„¤ì • (ë£¨íŠ¸)   â”‚
+â”‚   Priority: 10                          â”‚
+â”‚   â†“                                     â”‚
+â”‚ DB ì €ì¥ + ì„œë²„ ë³µì‚¬                     â”‚
+â”‚   SYS_COMPONENT_MST                     â”‚
+â”‚   SYS_COMPONENT_VER                     â”‚
+â”‚   D:\ServerStorage\Components\...       â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+```
+
+### 2. Bootstrapperì—ì„œ ì—…ë°ì´íŠ¸
+
+```
+í´ë¼ì´ì–¸íŠ¸ ì‹œì‘:
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚ Bootstrapper.exe ì‹¤í–‰                   â”‚
+â”‚   â†“                                     â”‚
+â”‚ DBì—ì„œ í™œì„± ë²„ì „ ì¡°íšŒ                   â”‚
+â”‚   â†“                                     â”‚
+â”‚ ë¡œì»¬ ì„¤ì¹˜ í™•ì¸:                         â”‚
+â”‚   BaseInstallPath = C:\Program Files\   â”‚
+â”‚                     nU3.Shell\          â”‚
+â”‚   â†“                                     â”‚
+â”‚ ê²½ë¡œ ê³„ì‚°:                              â”‚
+â”‚   "" + "nU3.Core.dll"                   â”‚
+â”‚   = C:\...\nU3.Shell\nU3.Core.dll       â”‚
+â”‚   â†“                                     â”‚
+â”‚ ë¹„êµ:                                   â”‚
+â”‚   ì„œë²„ ë²„ì „: 1.0.1.0                    â”‚
+â”‚   ë¡œì»¬ ë²„ì „: 1.0.0.0                    â”‚
+â”‚   â†’ ì—…ë°ì´íŠ¸ í•„ìš”!                      â”‚
+â”‚   â†“                                     â”‚
+â”‚ ë‹¤ìš´ë¡œë“œ:                               â”‚
+â”‚   ì„œë²„ â†’ ìºì‹œ                           â”‚
+â”‚   ìºì‹œ â†’ ì„¤ì¹˜ ê²½ë¡œ                      â”‚
+â”‚   â†“                                     â”‚
+â”‚ Shell ì‹¤í–‰                              â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
 ```
 
 ---
 
-## ½ÇÀü ÄÚµå ¿¹½Ã
+## ì‹¤ì „ ì½”ë“œ ì˜ˆì‹œ
 
-### BootstrapperÀÇ Main ÇÔ¼ö
+### Bootstrapperì˜ Main í•¨ìˆ˜
 
 ```csharp
 [STAThread]
@@ -411,14 +411,14 @@ static void Main()
     Application.EnableVisualStyles();
     Application.SetCompatibleTextRenderingDefault(false);
 
-    // ÇöÀç ½ÇÇà °æ·Î¸¦ BaseInstallPath·Î »ç¿ë
+    // í˜„ì¬ ì‹¤í–‰ ê²½ë¡œë¥¼ BaseInstallPathë¡œ ì‚¬ìš©
     var baseInstallPath = AppDomain.CurrentDomain.BaseDirectory;
     Console.WriteLine($"BaseInstallPath: {baseInstallPath}");
     
-    // ¿¹: C:\Program Files\nU3.Shell\
+    // ì˜ˆ: C:\Program Files\nU3.Shell\
     //     D:\Projects\nU3.Framework\bin\Debug\
 
-    // DI ¼³Á¤
+    // DI ì„¤ì •
     var services = new ServiceCollection();
     services.AddSingleton<LocalDatabaseManager>();
     services.AddScoped<IComponentRepository, SQLiteComponentRepository>();
@@ -427,35 +427,35 @@ static void Main()
     var componentRepo = provider.GetRequiredService<IComponentRepository>();
     var updateService = new ComponentUpdateService(componentRepo, baseInstallPath);
 
-    // ¾÷µ¥ÀÌÆ® ½ÇÇà
+    // ì—…ë°ì´íŠ¸ ì‹¤í–‰
     var updateResult = ExecuteUpdates(updateService);
     
     if (updateResult)
     {
-        // Shell ½ÇÇà
+        // Shell ì‹¤í–‰
         LaunchShell(baseInstallPath);
     }
 }
 
 private static bool ExecuteUpdates(ComponentUpdateService updateService)
 {
-    // ÇÊ¼ö ÄÄÆ÷³ÍÆ® È®ÀÎ
+    // í•„ìˆ˜ ì»´í¬ë„ŒíŠ¸ í™•ì¸
     var missing = updateService.GetMissingComponents();
     if (missing.Any())
     {
-        Console.WriteLine($"ÇÊ¼ö ÄÄÆ÷³ÍÆ® {missing.Count}°³ ´©¶ô!");
-        // °­Á¦ ´Ù¿î·Îµå
+        Console.WriteLine($"í•„ìˆ˜ ì»´í¬ë„ŒíŠ¸ {missing.Count}ê°œ ëˆ„ë½!");
+        // ê°•ì œ ë‹¤ìš´ë¡œë“œ
     }
 
-    // ¾÷µ¥ÀÌÆ® È®ÀÎ
+    // ì—…ë°ì´íŠ¸ í™•ì¸
     var updates = updateService.CheckForUpdates();
     if (!updates.Any())
     {
-        Console.WriteLine("¸ğµç ÄÄÆ÷³ÍÆ® ÃÖ½Å ¹öÀü");
+        Console.WriteLine("ëª¨ë“  ì»´í¬ë„ŒíŠ¸ ìµœì‹  ë²„ì „");
         return true;
     }
 
-    Console.WriteLine($"{updates.Count}°³ ¾÷µ¥ÀÌÆ® ½ÃÀÛ...");
+    Console.WriteLine($"{updates.Count}ê°œ ì—…ë°ì´íŠ¸ ì‹œì‘...");
     
     using var progressForm = new BootstrapProgressForm();
     progressForm.Show();
@@ -475,12 +475,12 @@ private static bool ExecuteUpdates(ComponentUpdateService updateService)
 
     if (result.Success)
     {
-        Console.WriteLine("? ¸ğµç ¾÷µ¥ÀÌÆ® ¿Ï·á");
+        Console.WriteLine("? ëª¨ë“  ì—…ë°ì´íŠ¸ ì™„ë£Œ");
         return true;
     }
     else
     {
-        Console.WriteLine($"? ¾÷µ¥ÀÌÆ® ½ÇÆĞ: {result.Message}");
+        Console.WriteLine($"? ì—…ë°ì´íŠ¸ ì‹¤íŒ¨: {result.Message}");
         foreach (var (id, error) in result.FailedComponents)
         {
             Console.WriteLine($"  - {id}: {error}");
@@ -495,7 +495,7 @@ private static void LaunchShell(string baseInstallPath)
     
     if (!File.Exists(shellPath))
     {
-        MessageBox.Show($"ShellÀ» Ã£À» ¼ö ¾ø½À´Ï´Ù:\n{shellPath}", "¿À·ù");
+        MessageBox.Show($"Shellì„ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤:\n{shellPath}", "ì˜¤ë¥˜");
         return;
     }
 
@@ -512,26 +512,26 @@ private static void LaunchShell(string baseInstallPath)
 
 ---
 
-## °æ·Î °ËÁõ
+## ê²½ë¡œ ê²€ì¦
 
-### ¼³Ä¡ Àü °ËÁõ
+### ì„¤ì¹˜ ì „ ê²€ì¦
 
 ```csharp
 public bool ValidateInstallPath(ComponentMstDto component)
 {
-    // 1. Àı´ë °æ·Î Ã¼Å©
+    // 1. ì ˆëŒ€ ê²½ë¡œ ì²´í¬
     if (Path.IsPathRooted(component.InstallPath))
     {
         throw new ArgumentException("InstallPath must be relative path");
     }
 
-    // 2. »óÀ§ °æ·Î Ã¼Å©
+    // 2. ìƒìœ„ ê²½ë¡œ ì²´í¬
     if (component.InstallPath?.Contains("..") == true)
     {
         throw new ArgumentException("InstallPath cannot contain '..'");
     }
 
-    // 3. ÃÖÁ¾ °æ·Î »ı¼º °¡´É ¿©ºÎ
+    // 3. ìµœì¢… ê²½ë¡œ ìƒì„± ê°€ëŠ¥ ì—¬ë¶€
     try
     {
         var fullPath = GetInstallPath(component);
@@ -547,17 +547,17 @@ public bool ValidateInstallPath(ComponentMstDto component)
 
 ---
 
-## ¿ä¾à
+## ìš”ì•½
 
-| Ç×¸ñ | ¼³¸í | ¿¹½Ã |
+| í•­ëª© | ì„¤ëª… | ì˜ˆì‹œ |
 |------|------|------|
-| **BaseInstallPath** | ½ÇÇà ÆÄÀÏ À§Ä¡ (ÀÚµ¿) | `C:\Program Files\nU3.Shell\` |
-| **InstallPath** | »ó´ë °æ·Î (DB ¼³Á¤) | `""`, `plugins`, `resources\images` |
-| **FileName** | ÆÄÀÏ¸í (DB ¼³Á¤) | `nU3.Core.dll`, `MyPlugin.dll` |
-| **ÃÖÁ¾ °æ·Î** | Base + Install + File | `C:\...\nU3.Shell\plugins\MyPlugin.dll` |
+| **BaseInstallPath** | ì‹¤í–‰ íŒŒì¼ ìœ„ì¹˜ (ìë™) | `C:\Program Files\nU3.Shell\` |
+| **InstallPath** | ìƒëŒ€ ê²½ë¡œ (DB ì„¤ì •) | `""`, `plugins`, `resources\images` |
+| **FileName** | íŒŒì¼ëª… (DB ì„¤ì •) | `nU3.Core.dll`, `MyPlugin.dll` |
+| **ìµœì¢… ê²½ë¡œ** | Base + Install + File | `C:\...\nU3.Shell\plugins\MyPlugin.dll` |
 
-**ÇÙ½É ¿øÄ¢:**
-- ? InstallPath´Â **»ó´ë °æ·Î**¸¸ »ç¿ë
-- ? BaseInstallPath´Â **ÀÚµ¿ °áÁ¤** (½ÇÇà À§Ä¡)
-- ? ºó°ª(`""`) = ·çÆ® µğ·ºÅä¸®
-- ? Æú´õ´Â ÀÚµ¿ »ı¼ºµÊ
+**í•µì‹¬ ì›ì¹™:**
+- ? InstallPathëŠ” **ìƒëŒ€ ê²½ë¡œ**ë§Œ ì‚¬ìš©
+- ? BaseInstallPathëŠ” **ìë™ ê²°ì •** (ì‹¤í–‰ ìœ„ì¹˜)
+- ? ë¹ˆê°’(`""`) = ë£¨íŠ¸ ë””ë ‰í† ë¦¬
+- ? í´ë”ëŠ” ìë™ ìƒì„±ë¨

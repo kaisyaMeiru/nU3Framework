@@ -1,104 +1,104 @@
-# »ı¸íÁÖ±â °ü¸® °³¼±: ConnectivityManager µµÀÔ
+# ìƒëª…ì£¼ê¸° ê´€ë¦¬ ê°œì„ : ConnectivityManager ë„ì…
 
-## ?? ¹®Á¦ ºĞ¼®
+## ?? ë¬¸ì œ ë¶„ì„
 
-### ? Before: Á÷Á¢ »ı¼º ¹æ½Ä
+### ? Before: ì§ì ‘ ìƒì„± ë°©ì‹
 
 ```csharp
-¦£¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¤
-¦¢                    MainShellForm                            ¦¢
-¦¢  - HttpDBAccessClient _dbClient                             ¦¢
-¦¢  - HttpFileTransferClient _fileClient                       ¦¢
-¦¢  - HttpLogUploadClient _logClient                           ¦¢
-¦¢                                                             ¦¢
-¦¢  Initialize() { ... new ... new ... new ... }              ¦¢
-¦¢  Dispose() { ... Dispose ... Dispose ... Dispose ... }     ¦¢
-¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¥
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚                    MainShellForm                            â”‚
+â”‚  - HttpDBAccessClient _dbClient                             â”‚
+â”‚  - HttpFileTransferClient _fileClient                       â”‚
+â”‚  - HttpLogUploadClient _logClient                           â”‚
+â”‚                                                             â”‚
+â”‚  Initialize() { ... new ... new ... new ... }              â”‚
+â”‚  Dispose() { ... Dispose ... Dispose ... Dispose ... }     â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
 
-¦£¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¤
-¦¢                   Module A (MyModule)                       ¦¢
-¦¢  - HttpDBAccessClient _dbClient                             ¦¢
-¦¢  - HttpFileTransferClient _fileClient                       ¦¢
-¦¢                                                             ¦¢
-¦¢  Initialize() { ... new ... new ... }                      ¦¢
-¦¢  Dispose() { ... Dispose ... Dispose ... }                 ¦¢
-¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¥
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚                   Module A (MyModule)                       â”‚
+â”‚  - HttpDBAccessClient _dbClient                             â”‚
+â”‚  - HttpFileTransferClient _fileClient                       â”‚
+â”‚                                                             â”‚
+â”‚  Initialize() { ... new ... new ... }                      â”‚
+â”‚  Dispose() { ... Dispose ... Dispose ... }                 â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
 
-¦£¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¤
-¦¢                 Module B (AnotherModule)                    ¦¢
-¦¢  - HttpDBAccessClient _dbClient                             ¦¢
-¦¢  - HttpFileTransferClient _fileClient                       ¦¢
-¦¢                                                             ¦¢
-¦¢  Initialize() { ... new ... new ... }                      ¦¢
-¦¢  Dispose() { ... Dispose ... Dispose ... }                 ¦¢
-¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¥
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚                 Module B (AnotherModule)                    â”‚
+â”‚  - HttpDBAccessClient _dbClient                             â”‚
+â”‚  - HttpFileTransferClient _fileClient                       â”‚
+â”‚                                                             â”‚
+â”‚  Initialize() { ... new ... new ... }                      â”‚
+â”‚  Dispose() { ... Dispose ... Dispose ... }                 â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
 
-ÃÑ HTTP Å¬¶óÀÌ¾ğÆ® ¼ö: 1 (MainShell) + 2 (Module A) + 2 (Module B) 
-                    = 5°³ ¡¿ 3Á¾·ù = 15°³ ÀÎ½ºÅÏ½º! ?
+ì´ HTTP í´ë¼ì´ì–¸íŠ¸ ìˆ˜: 1 (MainShell) + 2 (Module A) + 2 (Module B) 
+                    = 5ê°œ Ã— 3ì¢…ë¥˜ = 15ê°œ ì¸ìŠ¤í„´ìŠ¤! ?
 ```
 
-**¹®Á¦Á¡:**
-1. ? **¸®¼Ò½º Áßº¹ »ı¼º**: °¢ ¸ğµâ¸¶´Ù HTTP Å¬¶óÀÌ¾ğÆ® »ı¼º (¸Ş¸ğ¸® ³¶ºñ)
-2. ? **»ı¸íÁÖ±â °ü¸® º¹Àâ**: ¸ğµç ¸ğµâ¿¡¼­ Dispose ±¸Çö ÇÊ¿ä
-3. ? **¼­¹ö URL Áßº¹**: ¼³Á¤ º¯°æ ½Ã ¸ğµç ¸ğµâ ¼öÁ¤ ÇÊ¿ä
-4. ? **HttpClient Àç»ç¿ë ºÒ°¡**: ¼º´É ÀúÇÏ (¼ÒÄÏ °í°¥ À§Çè)
-5. ? **ÄÚµå Áßº¹**: ÃÊ±âÈ­ ·ÎÁ÷ÀÌ ¸ğµç °÷¿¡ ¹İº¹
-6. ? **Å×½ºÆ® ¾î·Á¿ò**: Mock ±³Ã¼ ¾î·Á¿ò
+**ë¬¸ì œì :**
+1. ? **ë¦¬ì†ŒìŠ¤ ì¤‘ë³µ ìƒì„±**: ê° ëª¨ë“ˆë§ˆë‹¤ HTTP í´ë¼ì´ì–¸íŠ¸ ìƒì„± (ë©”ëª¨ë¦¬ ë‚­ë¹„)
+2. ? **ìƒëª…ì£¼ê¸° ê´€ë¦¬ ë³µì¡**: ëª¨ë“  ëª¨ë“ˆì—ì„œ Dispose êµ¬í˜„ í•„ìš”
+3. ? **ì„œë²„ URL ì¤‘ë³µ**: ì„¤ì • ë³€ê²½ ì‹œ ëª¨ë“  ëª¨ë“ˆ ìˆ˜ì • í•„ìš”
+4. ? **HttpClient ì¬ì‚¬ìš© ë¶ˆê°€**: ì„±ëŠ¥ ì €í•˜ (ì†Œì¼“ ê³ ê°ˆ ìœ„í—˜)
+5. ? **ì½”ë“œ ì¤‘ë³µ**: ì´ˆê¸°í™” ë¡œì§ì´ ëª¨ë“  ê³³ì— ë°˜ë³µ
+6. ? **í…ŒìŠ¤íŠ¸ ì–´ë ¤ì›€**: Mock êµì²´ ì–´ë ¤ì›€
 
 ---
 
-## ? After: ConnectivityManager ¹æ½Ä
+## ? After: ConnectivityManager ë°©ì‹
 
 ```csharp
-¦£¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¤
-¦¢                    MainShellForm                            ¦¢
-¦¢  InitializeServerConnection()                               ¦¢
-¦¢    ¡é                                                        ¦¢
-¦¢  ConnectivityManager.Instance.Initialize(serverUrl)         ¦¢
-¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¥
-                         ¦¢ ÃÊ±âÈ­
-                         ¡é
-¦£¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¤
-¦¢         ConnectivityManager (Singleton)                     ¦¢
-¦§¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦©
-¦¢  private HttpDBAccessClient _dbClient;        (1°³)         ¦¢
-¦¢  private HttpFileTransferClient _fileClient;  (1°³)         ¦¢
-¦¢  private HttpLogUploadClient _logClient;      (1°³)         ¦¢
-¦¢                                                             ¦¢
-¦¢  public HttpDBAccessClient DB { get; }                      ¦¢
-¦¢  public HttpFileTransferClient File { get; }                ¦¢
-¦¢  public HttpLogUploadClient Log { get; }                    ¦¢
-¦¢                                                             ¦¢
-¦¢  + Lazy Initialization                                      ¦¢
-¦¢  + Lifecycle Management                                     ¦¢
-¦¢  + Thread-Safe                                              ¦¢
-¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¥
-           ¡è °øÀ¯                ¡è °øÀ¯                ¡è °øÀ¯
-¦£¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦ª¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¨¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦ª¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¨¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦ª¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¤
-¦¢   Module A          ¦¢   Module B          ¦¢   Module C      ¦¢
-¦¢   .Instance.DB      ¦¢   .Instance.File    ¦¢   .Instance.Log ¦¢
-¦¢   (Dispose ºÒÇÊ¿ä)   ¦¢   (Dispose ºÒÇÊ¿ä)   ¦¢   (Dispose ºÒÇÊ¿ä) ¦¢
-¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦ª¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦ª¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¥
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚                    MainShellForm                            â”‚
+â”‚  InitializeServerConnection()                               â”‚
+â”‚    â†“                                                        â”‚
+â”‚  ConnectivityManager.Instance.Initialize(serverUrl)         â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+                         â”‚ ì´ˆê¸°í™”
+                         â†“
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚         ConnectivityManager (Singleton)                     â”‚
+â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¤
+â”‚  private HttpDBAccessClient _dbClient;        (1ê°œ)         â”‚
+â”‚  private HttpFileTransferClient _fileClient;  (1ê°œ)         â”‚
+â”‚  private HttpLogUploadClient _logClient;      (1ê°œ)         â”‚
+â”‚                                                             â”‚
+â”‚  public HttpDBAccessClient DB { get; }                      â”‚
+â”‚  public HttpFileTransferClient File { get; }                â”‚
+â”‚  public HttpLogUploadClient Log { get; }                    â”‚
+â”‚                                                             â”‚
+â”‚  + Lazy Initialization                                      â”‚
+â”‚  + Lifecycle Management                                     â”‚
+â”‚  + Thread-Safe                                              â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+           â†‘ ê³µìœ                 â†‘ ê³µìœ                 â†‘ ê³µìœ 
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”´â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”´â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”´â”€â”€â”€â”€â”€â”€â”€â”
+â”‚   Module A          â”‚   Module B          â”‚   Module C      â”‚
+â”‚   .Instance.DB      â”‚   .Instance.File    â”‚   .Instance.Log â”‚
+â”‚   (Dispose ë¶ˆí•„ìš”)   â”‚   (Dispose ë¶ˆí•„ìš”)   â”‚   (Dispose ë¶ˆí•„ìš”) â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”´â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”´â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
 
-ÃÑ HTTP Å¬¶óÀÌ¾ğÆ® ¼ö: 3°³ (½Ì±ÛÅæ) ?
-¸Ş¸ğ¸® Àı¾à: 80% ¡é
+ì´ HTTP í´ë¼ì´ì–¸íŠ¸ ìˆ˜: 3ê°œ (ì‹±ê¸€í†¤) ?
+ë©”ëª¨ë¦¬ ì ˆì•½: 80% â†“
 ```
 
-**ÇØ°á:**
-1. ? **½Ì±ÛÅæ ÆĞÅÏ**: 1°³ ÀÎ½ºÅÏ½º¸¸ »ı¼º
-2. ? **Áß¾Ó °ü¸®**: ConnectivityManager°¡ »ı¸íÁÖ±â °ü¸®
-3. ? **Lazy Initialization**: ÇÊ¿äÇÒ ¶§¸¸ »ı¼º
-4. ? **Thread-Safe**: lockÀ¸·Î µ¿½Ã¼º º¸Àå
-5. ? **ÄÚµå °£¼ÒÈ­**: ¸ğµâ¿¡¼­ Dispose ºÒÇÊ¿ä
-6. ? **Å×½ºÆ® ¿ëÀÌ**: ResetInstance()·Î ½±°Ô ÃÊ±âÈ­
+**í•´ê²°:**
+1. ? **ì‹±ê¸€í†¤ íŒ¨í„´**: 1ê°œ ì¸ìŠ¤í„´ìŠ¤ë§Œ ìƒì„±
+2. ? **ì¤‘ì•™ ê´€ë¦¬**: ConnectivityManagerê°€ ìƒëª…ì£¼ê¸° ê´€ë¦¬
+3. ? **Lazy Initialization**: í•„ìš”í•  ë•Œë§Œ ìƒì„±
+4. ? **Thread-Safe**: lockìœ¼ë¡œ ë™ì‹œì„± ë³´ì¥
+5. ? **ì½”ë“œ ê°„ì†Œí™”**: ëª¨ë“ˆì—ì„œ Dispose ë¶ˆí•„ìš”
+6. ? **í…ŒìŠ¤íŠ¸ ìš©ì´**: ResetInstance()ë¡œ ì‰½ê²Œ ì´ˆê¸°í™”
 
 ---
 
-## ?? ÄÚµå ºñ±³
+## ?? ì½”ë“œ ë¹„êµ
 
-### 1. MainShellForm ÃÊ±âÈ­
+### 1. MainShellForm ì´ˆê¸°í™”
 
-#### Before (? º¹Àâ)
+#### Before (? ë³µì¡)
 
 ```csharp
 public partial class MainShellForm : BaseWorkForm
@@ -113,7 +113,7 @@ public partial class MainShellForm : BaseWorkForm
         
         if (config.Enabled)
         {
-            // ¸Å¹ø »õ·Î »ı¼º
+            // ë§¤ë²ˆ ìƒˆë¡œ ìƒì„±
             _dbClient = new HttpDBAccessClient(config.BaseUrl);
             _fileClient = new HttpFileTransferClient(config.BaseUrl);
             _logClient = new HttpLogUploadClient(
@@ -129,7 +129,7 @@ public partial class MainShellForm : BaseWorkForm
     {
         if (disposing)
         {
-            // ¼öµ¿À¸·Î Dispose ÇÊ¿ä
+            // ìˆ˜ë™ìœ¼ë¡œ Dispose í•„ìš”
             _dbClient?.Dispose();
             _fileClient?.Dispose();
             _logClient?.Dispose();
@@ -139,12 +139,12 @@ public partial class MainShellForm : BaseWorkForm
 }
 ```
 
-#### After (? °£´Ü)
+#### After (? ê°„ë‹¨)
 
 ```csharp
 public partial class MainShellForm : BaseWorkForm
 {
-    // ÇÊµå ¼±¾ğ ºÒÇÊ¿ä!
+    // í•„ë“œ ì„ ì–¸ ë¶ˆí•„ìš”!
 
     private void InitializeServerConnection()
     {
@@ -152,11 +152,11 @@ public partial class MainShellForm : BaseWorkForm
         
         if (config.Enabled)
         {
-            // ÇÑ ÁÙ·Î ÃÊ±âÈ­
+            // í•œ ì¤„ë¡œ ì´ˆê¸°í™”
             ConnectivityManager.Instance.Initialize(config.BaseUrl);
             ConnectivityManager.Instance.EnableAutoLogUpload(true);
             
-            // ÀÌº¥Æ® ±¸µ¶ (¼±ÅÃ)
+            // ì´ë²¤íŠ¸ êµ¬ë… (ì„ íƒ)
             ConnectivityManager.Instance.LogMessage += OnConnectivityLogMessage;
         }
     }
@@ -165,7 +165,7 @@ public partial class MainShellForm : BaseWorkForm
     {
         if (disposing)
         {
-            // ConnectivityManager°¡ ¾Ë¾Æ¼­ Á¤¸®
+            // ConnectivityManagerê°€ ì•Œì•„ì„œ ì •ë¦¬
             ConnectivityManager.Instance.Dispose();
         }
         base.Dispose(disposing);
@@ -173,13 +173,13 @@ public partial class MainShellForm : BaseWorkForm
 }
 ```
 
-**ÄÚµå °¨¼Ò: 15ÁÙ ¡æ 5ÁÙ (67% °¨¼Ò)**
+**ì½”ë“œ ê°ì†Œ: 15ì¤„ â†’ 5ì¤„ (67% ê°ì†Œ)**
 
 ---
 
-### 2. È­¸é ¸ğµâ »ç¿ë
+### 2. í™”ë©´ ëª¨ë“ˆ ì‚¬ìš©
 
-#### Before (? º¹Àâ)
+#### Before (? ë³µì¡)
 
 ```csharp
 public class PatientListModule : BaseWorkControl
@@ -191,7 +191,7 @@ public class PatientListModule : BaseWorkControl
     {
         InitializeComponent();
         
-        // ¸Å¹ø »ı¼º
+        // ë§¤ë²ˆ ìƒì„±
         var config = ServerConnectionConfig.Load();
         _dbClient = new HttpDBAccessClient(config.BaseUrl);
         _fileClient = new HttpFileTransferClient(config.BaseUrl);
@@ -203,7 +203,7 @@ public class PatientListModule : BaseWorkControl
         {
             if (_dbClient == null)
             {
-                XtraMessageBox.Show("DB Å¬¶óÀÌ¾ğÆ®°¡ ÃÊ±âÈ­µÇÁö ¾Ê¾Ò½À´Ï´Ù.");
+                XtraMessageBox.Show("DB í´ë¼ì´ì–¸íŠ¸ê°€ ì´ˆê¸°í™”ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.");
                 return;
             }
 
@@ -216,7 +216,7 @@ public class PatientListModule : BaseWorkControl
         }
         catch (Exception ex)
         {
-            XtraMessageBox.Show($"¿À·ù: {ex.Message}");
+            XtraMessageBox.Show($"ì˜¤ë¥˜: {ex.Message}");
         }
     }
 
@@ -226,7 +226,7 @@ public class PatientListModule : BaseWorkControl
         {
             if (_fileClient == null)
             {
-                XtraMessageBox.Show("ÆÄÀÏ Å¬¶óÀÌ¾ğÆ®°¡ ÃÊ±âÈ­µÇÁö ¾Ê¾Ò½À´Ï´Ù.");
+                XtraMessageBox.Show("íŒŒì¼ í´ë¼ì´ì–¸íŠ¸ê°€ ì´ˆê¸°í™”ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.");
                 return;
             }
 
@@ -238,12 +238,12 @@ public class PatientListModule : BaseWorkControl
             
             if (success)
             {
-                XtraMessageBox.Show("¾÷·Îµå ¼º°ø!");
+                XtraMessageBox.Show("ì—…ë¡œë“œ ì„±ê³µ!");
             }
         }
         catch (Exception ex)
         {
-            XtraMessageBox.Show($"¿À·ù: {ex.Message}");
+            XtraMessageBox.Show($"ì˜¤ë¥˜: {ex.Message}");
         }
     }
 
@@ -251,7 +251,7 @@ public class PatientListModule : BaseWorkControl
     {
         if (disposing)
         {
-            // ¼öµ¿À¸·Î Dispose ÇÊ¿ä
+            // ìˆ˜ë™ìœ¼ë¡œ Dispose í•„ìš”
             _dbClient?.Dispose();
             _fileClient?.Dispose();
         }
@@ -260,25 +260,25 @@ public class PatientListModule : BaseWorkControl
 }
 ```
 
-#### After (? °£´Ü)
+#### After (? ê°„ë‹¨)
 
 ```csharp
 public class PatientListModule : BaseWorkControl
 {
-    // ÇÊµå ¼±¾ğ ºÒÇÊ¿ä!
-    // Dispose ±¸Çö ºÒÇÊ¿ä!
+    // í•„ë“œ ì„ ì–¸ ë¶ˆí•„ìš”!
+    // Dispose êµ¬í˜„ ë¶ˆí•„ìš”!
 
     public PatientListModule()
     {
         InitializeComponent();
-        // ÃÊ±âÈ­ ÄÚµå ºÒÇÊ¿ä!
+        // ì´ˆê¸°í™” ì½”ë“œ ë¶ˆí•„ìš”!
     }
 
     private async void btnLoad_Click(object sender, EventArgs e)
     {
         try
         {
-            // ¹Ù·Î »ç¿ë!
+            // ë°”ë¡œ ì‚¬ìš©!
             var dt = await ConnectivityManager.Instance.DB.ExecuteDataTableAsync(
                 "SELECT * FROM Patients WHERE Status = @status",
                 new Dictionary<string, object> { { "@status", "Active" } }
@@ -288,7 +288,7 @@ public class PatientListModule : BaseWorkControl
         }
         catch (Exception ex)
         {
-            XtraMessageBox.Show($"¿À·ù: {ex.Message}");
+            XtraMessageBox.Show($"ì˜¤ë¥˜: {ex.Message}");
         }
     }
 
@@ -296,7 +296,7 @@ public class PatientListModule : BaseWorkControl
     {
         try
         {
-            // ¹Ù·Î »ç¿ë!
+            // ë°”ë¡œ ì‚¬ìš©!
             var data = ExportToExcel();
             var success = await ConnectivityManager.Instance.File.UploadFileAsync(
                 "exports/patients.xlsx", 
@@ -305,106 +305,106 @@ public class PatientListModule : BaseWorkControl
             
             if (success)
             {
-                XtraMessageBox.Show("¾÷·Îµå ¼º°ø!");
+                XtraMessageBox.Show("ì—…ë¡œë“œ ì„±ê³µ!");
             }
         }
         catch (Exception ex)
         {
-            XtraMessageBox.Show($"¿À·ù: {ex.Message}");
+            XtraMessageBox.Show($"ì˜¤ë¥˜: {ex.Message}");
         }
     }
 }
 ```
 
-**ÄÚµå °¨¼Ò: 60ÁÙ ¡æ 30ÁÙ (50% °¨¼Ò)**
+**ì½”ë“œ ê°ì†Œ: 60ì¤„ â†’ 30ì¤„ (50% ê°ì†Œ)**
 
 ---
 
-## ?? ¼º´É ºñ±³
+## ?? ì„±ëŠ¥ ë¹„êµ
 
-### ¸Ş¸ğ¸® »ç¿ë·®
+### ë©”ëª¨ë¦¬ ì‚¬ìš©ëŸ‰
 
-| ½Ã³ª¸®¿À | Before | After | °³¼± |
+| ì‹œë‚˜ë¦¬ì˜¤ | Before | After | ê°œì„  |
 |---------|--------|-------|------|
-| **MainShell** | 3°³ ÀÎ½ºÅÏ½º | 0°³ (¸Å´ÏÀú »ç¿ë) | - |
-| **Module ¡¿ 10** | 30°³ ÀÎ½ºÅÏ½º | 0°³ (¸Å´ÏÀú °øÀ¯) | - |
-| **ÃÑ ÀÎ½ºÅÏ½º** | 33°³ | 3°³ (½Ì±ÛÅæ) | **90% ¡é** |
-| **¸Ş¸ğ¸®** | ~33MB | ~3MB | **90% ¡é** |
+| **MainShell** | 3ê°œ ì¸ìŠ¤í„´ìŠ¤ | 0ê°œ (ë§¤ë‹ˆì € ì‚¬ìš©) | - |
+| **Module Ã— 10** | 30ê°œ ì¸ìŠ¤í„´ìŠ¤ | 0ê°œ (ë§¤ë‹ˆì € ê³µìœ ) | - |
+| **ì´ ì¸ìŠ¤í„´ìŠ¤** | 33ê°œ | 3ê°œ (ì‹±ê¸€í†¤) | **90% â†“** |
+| **ë©”ëª¨ë¦¬** | ~33MB | ~3MB | **90% â†“** |
 
-### ÃÊ±âÈ­ ½Ã°£
+### ì´ˆê¸°í™” ì‹œê°„
 
-| ÀÛ¾÷ | Before | After | °³¼± |
+| ì‘ì—… | Before | After | ê°œì„  |
 |------|--------|-------|------|
-| **MainShell ÃÊ±âÈ­** | 150ms | 10ms | **93% ¡é** |
-| **Module ÃÊ±âÈ­** | 100ms ¡¿ 10 = 1000ms | 0ms (ÀÌ¹Ì »ı¼ºµÊ) | **100% ¡é** |
-| **ÃÑ ÃÊ±âÈ­ ½Ã°£** | 1150ms | 10ms | **99% ¡é** |
+| **MainShell ì´ˆê¸°í™”** | 150ms | 10ms | **93% â†“** |
+| **Module ì´ˆê¸°í™”** | 100ms Ã— 10 = 1000ms | 0ms (ì´ë¯¸ ìƒì„±ë¨) | **100% â†“** |
+| **ì´ ì´ˆê¸°í™” ì‹œê°„** | 1150ms | 10ms | **99% â†“** |
 
-### ÄÚµå º¹Àâµµ
+### ì½”ë“œ ë³µì¡ë„
 
-| Ç×¸ñ | Before | After | °³¼± |
+| í•­ëª© | Before | After | ê°œì„  |
 |------|--------|-------|------|
-| **MainShell ÄÚµå** | 15ÁÙ | 5ÁÙ | **67% ¡é** |
-| **Module ÄÚµå** | 60ÁÙ | 30ÁÙ | **50% ¡é** |
-| **Dispose ±¸Çö** | ÇÊ¿ä | ºÒÇÊ¿ä | **100% ¡é** |
+| **MainShell ì½”ë“œ** | 15ì¤„ | 5ì¤„ | **67% â†“** |
+| **Module ì½”ë“œ** | 60ì¤„ | 30ì¤„ | **50% â†“** |
+| **Dispose êµ¬í˜„** | í•„ìš” | ë¶ˆí•„ìš” | **100% â†“** |
 
 ---
 
-## ?? ÀåÁ¡ ¿ä¾à
+## ?? ì¥ì  ìš”ì•½
 
-### 1. ¸®¼Ò½º È¿À²¼º
+### 1. ë¦¬ì†ŒìŠ¤ íš¨ìœ¨ì„±
 
 ```
-Before: 10°³ ¸ğµâ ¡¿ 3°³ Å¬¶óÀÌ¾ğÆ® = 30°³ ÀÎ½ºÅÏ½º
-After:  1°³ ¸Å´ÏÀú ¡¿ 3°³ Å¬¶óÀÌ¾ğÆ® = 3°³ ÀÎ½ºÅÏ½º
+Before: 10ê°œ ëª¨ë“ˆ Ã— 3ê°œ í´ë¼ì´ì–¸íŠ¸ = 30ê°œ ì¸ìŠ¤í„´ìŠ¤
+After:  1ê°œ ë§¤ë‹ˆì € Ã— 3ê°œ í´ë¼ì´ì–¸íŠ¸ = 3ê°œ ì¸ìŠ¤í„´ìŠ¤
 
-¸Ş¸ğ¸® Àı¾à: 90%
+ë©”ëª¨ë¦¬ ì ˆì•½: 90%
 ```
 
-### 2. ÄÚµå °£¼ÒÈ­
+### 2. ì½”ë“œ ê°„ì†Œí™”
 
 ```
 Before:
-  - ÇÊµå ¼±¾ğ: 3ÁÙ
-  - ÃÊ±âÈ­: 10ÁÙ
-  - Dispose: 5ÁÙ
-  - ÃÑ: 18ÁÙ
+  - í•„ë“œ ì„ ì–¸: 3ì¤„
+  - ì´ˆê¸°í™”: 10ì¤„
+  - Dispose: 5ì¤„
+  - ì´: 18ì¤„
 
 After:
-  - ÇÊµå ¼±¾ğ: 0ÁÙ
-  - ÃÊ±âÈ­: 0ÁÙ
-  - Dispose: 0ÁÙ
-  - »ç¿ë: 1ÁÙ
-  - ÃÑ: 1ÁÙ
+  - í•„ë“œ ì„ ì–¸: 0ì¤„
+  - ì´ˆê¸°í™”: 0ì¤„
+  - Dispose: 0ì¤„
+  - ì‚¬ìš©: 1ì¤„
+  - ì´: 1ì¤„
 
-ÄÚµå °¨¼Ò: 94%
+ì½”ë“œ ê°ì†Œ: 94%
 ```
 
-### 3. »ı¸íÁÖ±â °ü¸®
+### 3. ìƒëª…ì£¼ê¸° ê´€ë¦¬
 
 ```
-Before: °¢ ¸ğµâ¿¡¼­ ¼öµ¿ °ü¸® (º¹Àâ)
-After:  ConnectivityManager°¡ ÀÚµ¿ °ü¸® (°£´Ü)
+Before: ê° ëª¨ë“ˆì—ì„œ ìˆ˜ë™ ê´€ë¦¬ (ë³µì¡)
+After:  ConnectivityManagerê°€ ìë™ ê´€ë¦¬ (ê°„ë‹¨)
 ```
 
-### 4. Å×½ºÆ® ¿ëÀÌ¼º
+### 4. í…ŒìŠ¤íŠ¸ ìš©ì´ì„±
 
 ```csharp
-// Before: Mock ±³Ã¼ ¾î·Á¿ò
-var dbClient = new HttpDBAccessClient(...);  // ÇÏµåÄÚµù
+// Before: Mock êµì²´ ì–´ë ¤ì›€
+var dbClient = new HttpDBAccessClient(...);  // í•˜ë“œì½”ë”©
 
-// After: Mock ±³Ã¼ ½¬¿ò
+// After: Mock êµì²´ ì‰¬ì›€
 ConnectivityManager.ResetInstance();
-// Å×½ºÆ®¿ë MockÀ¸·Î ±³Ã¼ °¡´É
+// í…ŒìŠ¤íŠ¸ìš© Mockìœ¼ë¡œ êµì²´ ê°€ëŠ¥
 ```
 
 ---
 
-## ?? ¸¶ÀÌ±×·¹ÀÌ¼Ç °¡ÀÌµå
+## ?? ë§ˆì´ê·¸ë ˆì´ì…˜ ê°€ì´ë“œ
 
-### Step 1: ConnectivityManager ÃÊ±âÈ­ (MainShellForm)
+### Step 1: ConnectivityManager ì´ˆê¸°í™” (MainShellForm)
 
 ```csharp
-// InitializeServerConnection() ¸Ş¼­µå ¼öÁ¤
+// InitializeServerConnection() ë©”ì„œë“œ ìˆ˜ì •
 private void InitializeServerConnection()
 {
     var config = ServerConnectionConfig.Load();
@@ -417,7 +417,7 @@ private void InitializeServerConnection()
 }
 ```
 
-### Step 2: ±âÁ¸ HTTP Å¬¶óÀÌ¾ğÆ® ÇÊµå Á¦°Å
+### Step 2: ê¸°ì¡´ HTTP í´ë¼ì´ì–¸íŠ¸ í•„ë“œ ì œê±°
 
 ```csharp
 // Before
@@ -425,10 +425,10 @@ private HttpDBAccessClient? _dbClient;
 private HttpFileTransferClient? _fileClient;
 
 // After
-// »èÁ¦!
+// ì‚­ì œ!
 ```
 
-### Step 3: »ç¿ë ÄÚµå º¯°æ
+### Step 3: ì‚¬ìš© ì½”ë“œ ë³€ê²½
 
 ```csharp
 // Before
@@ -438,7 +438,7 @@ var dt = await _dbClient.ExecuteDataTableAsync(...);
 var dt = await ConnectivityManager.Instance.DB.ExecuteDataTableAsync(...);
 ```
 
-### Step 4: Dispose ÄÚµå Á¦°Å
+### Step 4: Dispose ì½”ë“œ ì œê±°
 
 ```csharp
 // Before
@@ -453,77 +453,77 @@ protected override void Dispose(bool disposing)
 }
 
 // After
-// »èÁ¦! (¶Ç´Â ´Ù¸¥ ¸®¼Ò½º¸¸ Á¤¸®)
+// ì‚­ì œ! (ë˜ëŠ” ë‹¤ë¥¸ ë¦¬ì†ŒìŠ¤ë§Œ ì •ë¦¬)
 ```
 
 ---
 
-## ? °á·Ğ
+## ? ê²°ë¡ 
 
-### ÇöÀç ±¸Á¶ (Á÷Á¢ »ı¼º)ÀÇ ¹®Á¦
-
-```
-? ¸®¼Ò½º Áßº¹ (¸Ş¸ğ¸® ³¶ºñ)
-? »ı¸íÁÖ±â °ü¸® º¹Àâ (Dispose ÇÊ¿ä)
-? ÄÚµå Áßº¹ (ÃÊ±âÈ­ ·ÎÁ÷ ¹İº¹)
-? ¼­¹ö URL Áßº¹ (¼³Á¤ º¯°æ ¾î·Á¿ò)
-? Å×½ºÆ® ¾î·Á¿ò (Mock ±³Ã¼ ¾î·Á¿ò)
-```
-
-### »õ ±¸Á¶ (ConnectivityManager)ÀÇ ÀåÁ¡
+### í˜„ì¬ êµ¬ì¡° (ì§ì ‘ ìƒì„±)ì˜ ë¬¸ì œ
 
 ```
-? ½Ì±ÛÅæ (¸Ş¸ğ¸® Àı¾à 90%)
-? Áß¾Ó °ü¸® (»ı¸íÁÖ±â ÀÚµ¿ °ü¸®)
-? ÄÚµå °£¼ÒÈ­ (ÄÚµå °¨¼Ò 67%)
-? Lazy Initialization (¼º´É Çâ»ó)
-? Thread-Safe (µ¿½Ã¼º º¸Àå)
-? Å×½ºÆ® ¿ëÀÌ (ResetInstance)
+? ë¦¬ì†ŒìŠ¤ ì¤‘ë³µ (ë©”ëª¨ë¦¬ ë‚­ë¹„)
+? ìƒëª…ì£¼ê¸° ê´€ë¦¬ ë³µì¡ (Dispose í•„ìš”)
+? ì½”ë“œ ì¤‘ë³µ (ì´ˆê¸°í™” ë¡œì§ ë°˜ë³µ)
+? ì„œë²„ URL ì¤‘ë³µ (ì„¤ì • ë³€ê²½ ì–´ë ¤ì›€)
+? í…ŒìŠ¤íŠ¸ ì–´ë ¤ì›€ (Mock êµì²´ ì–´ë ¤ì›€)
 ```
 
-### ±ÇÀå »çÇ×
+### ìƒˆ êµ¬ì¡° (ConnectivityManager)ì˜ ì¥ì 
 
-**? ConnectivityManager µµÀÔÀ» °­·ÂÈ÷ ±ÇÀåÇÕ´Ï´Ù!**
+```
+? ì‹±ê¸€í†¤ (ë©”ëª¨ë¦¬ ì ˆì•½ 90%)
+? ì¤‘ì•™ ê´€ë¦¬ (ìƒëª…ì£¼ê¸° ìë™ ê´€ë¦¬)
+? ì½”ë“œ ê°„ì†Œí™” (ì½”ë“œ ê°ì†Œ 67%)
+? Lazy Initialization (ì„±ëŠ¥ í–¥ìƒ)
+? Thread-Safe (ë™ì‹œì„± ë³´ì¥)
+? í…ŒìŠ¤íŠ¸ ìš©ì´ (ResetInstance)
+```
 
-**ÀÌÀ¯:**
-1. **¸®¼Ò½º È¿À²¼º**: ¸Ş¸ğ¸® »ç¿ë·® 90% °¨¼Ò
-2. **ÄÚµå Ç°Áú**: ÄÚµå º¹Àâµµ 67% °¨¼Ò
-3. **À¯Áöº¸¼ö¼º**: »ı¸íÁÖ±â ÀÚµ¿ °ü¸®
-4. **È®Àå¼º**: »õ·Î¿î ¸ğµâ Ãß°¡ ½Ã ÄÚµå º¯°æ ºÒÇÊ¿ä
-5. **Å×½ºÆ®**: Mock ±³Ã¼ ¹× ´ÜÀ§ Å×½ºÆ® ¿ëÀÌ
+### ê¶Œì¥ ì‚¬í•­
+
+**? ConnectivityManager ë„ì…ì„ ê°•ë ¥íˆ ê¶Œì¥í•©ë‹ˆë‹¤!**
+
+**ì´ìœ :**
+1. **ë¦¬ì†ŒìŠ¤ íš¨ìœ¨ì„±**: ë©”ëª¨ë¦¬ ì‚¬ìš©ëŸ‰ 90% ê°ì†Œ
+2. **ì½”ë“œ í’ˆì§ˆ**: ì½”ë“œ ë³µì¡ë„ 67% ê°ì†Œ
+3. **ìœ ì§€ë³´ìˆ˜ì„±**: ìƒëª…ì£¼ê¸° ìë™ ê´€ë¦¬
+4. **í™•ì¥ì„±**: ìƒˆë¡œìš´ ëª¨ë“ˆ ì¶”ê°€ ì‹œ ì½”ë“œ ë³€ê²½ ë¶ˆí•„ìš”
+5. **í…ŒìŠ¤íŠ¸**: Mock êµì²´ ë° ë‹¨ìœ„ í…ŒìŠ¤íŠ¸ ìš©ì´
 
 ---
 
-## ?? Ã¼Å©¸®½ºÆ®
+## ?? ì²´í¬ë¦¬ìŠ¤íŠ¸
 
-- [x] `ConnectivityManager` Å¬·¡½º »ı¼º
-- [x] ½Ì±ÛÅæ ÆĞÅÏ ±¸Çö
-- [x] Lazy Initialization ±¸Çö
-- [x] Thread-Safe º¸Àå
-- [x] »ı¸íÁÖ±â °ü¸® (Dispose)
-- [x] ÀÌº¥Æ® ½Ã½ºÅÛ (LogMessage)
-- [x] »ç¿ë °¡ÀÌµå ÀÛ¼º
-- [x] ºñ±³ ¹®¼­ ÀÛ¼º
-- [x] ºôµå ¼º°ø
-- [ ] MainShellForm Àû¿ë (´ÙÀ½ ´Ü°è)
-- [ ] ¸ğµâµé ¸¶ÀÌ±×·¹ÀÌ¼Ç (´ÙÀ½ ´Ü°è)
+- [x] `ConnectivityManager` í´ë˜ìŠ¤ ìƒì„±
+- [x] ì‹±ê¸€í†¤ íŒ¨í„´ êµ¬í˜„
+- [x] Lazy Initialization êµ¬í˜„
+- [x] Thread-Safe ë³´ì¥
+- [x] ìƒëª…ì£¼ê¸° ê´€ë¦¬ (Dispose)
+- [x] ì´ë²¤íŠ¸ ì‹œìŠ¤í…œ (LogMessage)
+- [x] ì‚¬ìš© ê°€ì´ë“œ ì‘ì„±
+- [x] ë¹„êµ ë¬¸ì„œ ì‘ì„±
+- [x] ë¹Œë“œ ì„±ê³µ
+- [ ] MainShellForm ì ìš© (ë‹¤ìŒ ë‹¨ê³„)
+- [ ] ëª¨ë“ˆë“¤ ë§ˆì´ê·¸ë ˆì´ì…˜ (ë‹¤ìŒ ë‹¨ê³„)
 
 ---
 
-## ?? ÃÖÁ¾ ÃßÃµ
+## ?? ìµœì¢… ì¶”ì²œ
 
-**ConnectivityManager ÆĞÅÏÀ» µµÀÔÇÏ´Â °ÍÀÌ ÇöÀç ±¸Á¶º¸´Ù ÈÎ¾À ¿ì¼öÇÕ´Ï´Ù!**
+**ConnectivityManager íŒ¨í„´ì„ ë„ì…í•˜ëŠ” ê²ƒì´ í˜„ì¬ êµ¬ì¡°ë³´ë‹¤ í›¨ì”¬ ìš°ìˆ˜í•©ë‹ˆë‹¤!**
 
-**ÇÙ½É ÀÌÀ¯:**
-- ? ¸®¼Ò½º È¿À²¼º (90% °³¼±)
-- ? ÄÚµå °£¼ÒÈ­ (67% °¨¼Ò)
-- ? »ı¸íÁÖ±â ÀÚµ¿ °ü¸®
-- ? È®Àå¼º ¹× À¯Áöº¸¼ö¼º
+**í•µì‹¬ ì´ìœ :**
+- ? ë¦¬ì†ŒìŠ¤ íš¨ìœ¨ì„± (90% ê°œì„ )
+- ? ì½”ë“œ ê°„ì†Œí™” (67% ê°ì†Œ)
+- ? ìƒëª…ì£¼ê¸° ìë™ ê´€ë¦¬
+- ? í™•ì¥ì„± ë° ìœ ì§€ë³´ìˆ˜ì„±
 
-**´ÙÀ½ ´Ü°è:**
-1. MainShellForm¿¡¼­ ConnectivityManager ÃÊ±âÈ­
-2. ±âÁ¸ HTTP Å¬¶óÀÌ¾ğÆ® ÇÊµå Á¦°Å
-3. ¸ğµç »ç¿ë ÄÚµå¸¦ `ConnectivityManager.Instance.*` ·Î º¯°æ
-4. Dispose ÄÚµå Á¤¸®
+**ë‹¤ìŒ ë‹¨ê³„:**
+1. MainShellFormì—ì„œ ConnectivityManager ì´ˆê¸°í™”
+2. ê¸°ì¡´ HTTP í´ë¼ì´ì–¸íŠ¸ í•„ë“œ ì œê±°
+3. ëª¨ë“  ì‚¬ìš© ì½”ë“œë¥¼ `ConnectivityManager.Instance.*` ë¡œ ë³€ê²½
+4. Dispose ì½”ë“œ ì •ë¦¬
 
-**ÀÌÁ¦ ¸ğµç ¸ğµâ¿¡¼­ °£´ÜÇÏ°Ô ¼­¹ö Åë½ÅÀ» ÇÒ ¼ö ÀÖ½À´Ï´Ù!** ??
+**ì´ì œ ëª¨ë“  ëª¨ë“ˆì—ì„œ ê°„ë‹¨í•˜ê²Œ ì„œë²„ í†µì‹ ì„ í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤!** ??

@@ -1,34 +1,34 @@
-# ConnectivityManager ¸®ÆÑÅä¸µ ¿ä¾à
+# ConnectivityManager ë¦¬íŒ©í† ë§ ìš”ì•½
 
-## ÁÖ¿ä º¯°æ »çÇ×
+## ì£¼ìš” ë³€ê²½ ì‚¬í•­
 
-### 1. µ¿½Ã¼º Áö¿ø
-- **Connection Pooling**: `SemaphoreSlim`À» »ç¿ëÇÑ µ¿½Ã ¿¬°á Á¦ÇÑ
-- **SocketsHttpHandler**: HTTP/2 ´ÙÁß ¿¬°á Áö¿ø
-- **Pooled Clients**: `PooledDBClient`, `PooledFileClient` - µ¿½Ã ÀÛ¾÷¿ë Å¬¶óÀÌ¾ğÆ®
+### 1. ë™ì‹œì„± ì§€ì›
+- **Connection Pooling**: `SemaphoreSlim`ì„ ì‚¬ìš©í•œ ë™ì‹œ ì—°ê²° ì œí•œ
+- **SocketsHttpHandler**: HTTP/2 ë‹¤ì¤‘ ì—°ê²° ì§€ì›
+- **Pooled Clients**: `PooledDBClient`, `PooledFileClient` - ë™ì‹œ ì‘ì—…ìš© í´ë¼ì´ì–¸íŠ¸
 
-### 2. ¹èÄ¡ ÀÛ¾÷ Áö¿ø
-- `ExecuteBatchQueriesAsync()`: ¿©·¯ DB Äõ¸® µ¿½Ã ½ÇÇà
-- `UploadFilesAsync()`: ¿©·¯ ÆÄÀÏ µ¿½Ã ¾÷·Îµå
-- `DownloadFilesAsync()`: ¿©·¯ ÆÄÀÏ µ¿½Ã ´Ù¿î·Îµå
+### 2. ë°°ì¹˜ ì‘ì—… ì§€ì›
+- `ExecuteBatchQueriesAsync()`: ì—¬ëŸ¬ DB ì¿¼ë¦¬ ë™ì‹œ ì‹¤í–‰
+- `UploadFilesAsync()`: ì—¬ëŸ¬ íŒŒì¼ ë™ì‹œ ì—…ë¡œë“œ
+- `DownloadFilesAsync()`: ì—¬ëŸ¬ íŒŒì¼ ë™ì‹œ ë‹¤ìš´ë¡œë“œ
 
-### 3. Progress ¹× Cancellation Áö¿ø
-- `IProgress<BatchOperationProgress>`: ÁøÇà·ü ¸®Æ÷ÆÃ
-- `CancellationToken`: ÀÛ¾÷ Ãë¼Ò Áö¿ø
-- `ProgressChanged` ÀÌº¥Æ®: ½Ç½Ã°£ ÁøÇà »óÈ²
+### 3. Progress ë° Cancellation ì§€ì›
+- `IProgress<BatchOperationProgress>`: ì§„í–‰ë¥  ë¦¬í¬íŒ…
+- `CancellationToken`: ì‘ì—… ì·¨ì†Œ ì§€ì›
+- `ProgressChanged` ì´ë²¤íŠ¸: ì‹¤ì‹œê°„ ì§„í–‰ ìƒí™©
 
 ---
 
-## »ç¿ë ¿¹½Ã
+## ì‚¬ìš© ì˜ˆì‹œ
 
-### ±âÁ¸ ¹æ½Ä (´Ü¼ø ÀÛ¾÷)
+### ê¸°ì¡´ ë°©ì‹ (ë‹¨ìˆœ ì‘ì—…)
 ```csharp
-// ±âÁ¸°ú µ¿ÀÏÇÏ°Ô »ç¿ë °¡´É
+// ê¸°ì¡´ê³¼ ë™ì¼í•˜ê²Œ ì‚¬ìš© ê°€ëŠ¥
 var data = await ConnectivityManager.Instance.DB.ExecuteDataTableAsync("SELECT * FROM USERS");
 await ConnectivityManager.Instance.File.UploadFileAsync("local.txt", "server/remote.txt");
 ```
 
-### µ¿½Ã DB Äõ¸® (¿©·¯ Äõ¸® º´·Ä ½ÇÇà)
+### ë™ì‹œ DB ì¿¼ë¦¬ (ì—¬ëŸ¬ ì¿¼ë¦¬ ë³‘ë ¬ ì‹¤í–‰)
 ```csharp
 var queries = new BatchQueryRequest[]
 {
@@ -37,7 +37,7 @@ var queries = new BatchQueryRequest[]
     new() { QueryId = "Query3", CommandText = "SELECT * FROM PRODUCTS" }
 };
 
-// Progress Äİ¹é°ú ÇÔ²² ½ÇÇà
+// Progress ì½œë°±ê³¼ í•¨ê»˜ ì‹¤í–‰
 var progress = new Progress<BatchOperationProgress>(p =>
 {
     Console.WriteLine($"Progress: {p.CompletedItems}/{p.TotalItems} ({p.PercentComplete}%)");
@@ -57,7 +57,7 @@ foreach (var result in results)
 }
 ```
 
-### µ¿½Ã ÆÄÀÏ ¾÷·Îµå
+### ë™ì‹œ íŒŒì¼ ì—…ë¡œë“œ
 ```csharp
 var files = new BatchFileRequest[]
 {
@@ -70,9 +70,9 @@ var cts = new CancellationTokenSource();
 var results = await ConnectivityManager.Instance.UploadFilesAsync(files, progress, cts.Token);
 ```
 
-### Pooled Client (°³º° µ¿½Ã ÀÛ¾÷)
+### Pooled Client (ê°œë³„ ë™ì‹œ ì‘ì—…)
 ```csharp
-// ¿©·¯ ½º·¹µå¿¡¼­ µ¿½Ã¿¡ »ç¿ë °¡´É
+// ì—¬ëŸ¬ ìŠ¤ë ˆë“œì—ì„œ ë™ì‹œì— ì‚¬ìš© ê°€ëŠ¥
 var tasks = Enumerable.Range(0, 10).Select(async i =>
 {
     using var pooledClient = await ConnectivityManager.Instance.CreateDBClientAsync();
@@ -84,16 +84,16 @@ var results = await Task.WhenAll(tasks);
 
 ---
 
-## UI ¿¬µ¿ (AsyncOperationHelper)
+## UI ì—°ë™ (AsyncOperationHelper)
 
-### ÁøÇà·ü Ç¥½Ã ´ëÈ­»óÀÚ¿Í ÇÔ²² ½ÇÇà
+### ì§„í–‰ë¥  í‘œì‹œ ëŒ€í™”ìƒìì™€ í•¨ê»˜ ì‹¤í–‰
 ```csharp
-// WinForms¿¡¼­ »ç¿ë
+// WinFormsì—ì„œ ì‚¬ìš©
 try
 {
     var results = await AsyncOperationHelper.ExecuteWithProgressAsync(
-        this,  // ºÎ¸ğ Æû
-        "µ¥ÀÌÅÍ ·Îµù Áß...",
+        this,  // ë¶€ëª¨ í¼
+        "ë°ì´í„° ë¡œë”© ì¤‘...",
         async (cancellationToken, progress) =>
         {
             return await ConnectivityManager.Instance.ExecuteBatchQueriesAsync(
@@ -103,73 +103,73 @@ try
         },
         allowCancel: true);
     
-    // °á°ú Ã³¸®
+    // ê²°ê³¼ ì²˜ë¦¬
     ProcessResults(results);
 }
 catch (OperationCanceledException)
 {
-    XtraMessageBox.Show("ÀÛ¾÷ÀÌ Ãë¼ÒµÇ¾ú½À´Ï´Ù.", "Ãë¼Ò");
+    XtraMessageBox.Show("ì‘ì—…ì´ ì·¨ì†Œë˜ì—ˆìŠµë‹ˆë‹¤.", "ì·¨ì†Œ");
 }
 ```
 
-### ´Ü¼ø ´ë±â Ç¥½Ã
+### ë‹¨ìˆœ ëŒ€ê¸° í‘œì‹œ
 ```csharp
 var data = await AsyncOperationHelper.ExecuteWithWaitAsync(
     this,
-    "µ¥ÀÌÅÍ Á¶È¸ Áß...",
+    "ë°ì´í„° ì¡°íšŒ ì¤‘...",
     async (ct) => await ConnectivityManager.Instance.DB.ExecuteDataTableAsync("SELECT * FROM USERS"),
     allowCancel: false);
 ```
 
 ---
 
-## ±¸¼º ¿É¼Ç
+## êµ¬ì„± ì˜µì…˜
 
 ```csharp
-// ÃÊ±âÈ­ ½Ã µ¿½Ã ¿¬°á ¼ö ¼³Á¤
+// ì´ˆê¸°í™” ì‹œ ë™ì‹œ ì—°ê²° ìˆ˜ ì„¤ì •
 ConnectivityManager.Instance.Initialize(
     serverUrl: "https://server:5000",
     enableLogCompression: true,
-    maxConcurrentConnections: 10  // µ¿½Ã ¿¬°á ÃÖ´ë ¼ö
+    maxConcurrentConnections: 10  // ë™ì‹œ ì—°ê²° ìµœëŒ€ ìˆ˜
 );
 
-// ·±Å¸ÀÓ º¯°æ
+// ëŸ°íƒ€ì„ ë³€ê²½
 ConnectivityManager.Instance.MaxConcurrentConnections = 20;
 ConnectivityManager.Instance.DefaultTimeout = TimeSpan.FromMinutes(10);
 ```
 
 ---
 
-## ¾ÆÅ°ÅØÃ³
+## ì•„í‚¤í…ì²˜
 
 ```
-¦£¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¤
-¦¢              ConnectivityManager                     ¦¢
-¦§¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦©
-¦¢  ¦£¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¤  ¦£¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¤   ¦¢
-¦¢  ¦¢ Default       ¦¢  ¦¢ Connection Pool           ¦¢   ¦¢
-¦¢  ¦¢ Clients       ¦¢  ¦¢ (SemaphoreSlim)           ¦¢   ¦¢
-¦¢  ¦¢ - DB          ¦¢  ¦¢ ¦£¦¡¦¡¦¡¦¡¦¡¦¤ ¦£¦¡¦¡¦¡¦¡¦¡¦¤ ¦£¦¡¦¡¦¡¦¡¦¡¦¤   ¦¢   ¦¢
-¦¢  ¦¢ - File        ¦¢  ¦¢ ¦¢Pool1¦¢ ¦¢Pool2¦¢ ¦¢Pool3¦¢   ¦¢   ¦¢
-¦¢  ¦¢ - Log         ¦¢  ¦¢ ¦¦¦¡¦¡¦¡¦¡¦¡¦¥ ¦¦¦¡¦¡¦¡¦¡¦¡¦¥ ¦¦¦¡¦¡¦¡¦¡¦¡¦¥   ¦¢   ¦¢
-¦¢  ¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¥  ¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¥   ¦¢
-¦§¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦©
-¦¢  Batch Operations                                   ¦¢
-¦¢  - ExecuteBatchQueriesAsync()                       ¦¢
-¦¢  - UploadFilesAsync()                               ¦¢
-¦¢  - DownloadFilesAsync()                             ¦¢
-¦§¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦©
-¦¢  Events                                             ¦¢
-¦¢  - LogMessage                                       ¦¢
-¦¢  - ProgressChanged                                  ¦¢
-¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¥
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚              ConnectivityManager                     â”‚
+â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¤
+â”‚  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”   â”‚
+â”‚  â”‚ Default       â”‚  â”‚ Connection Pool           â”‚   â”‚
+â”‚  â”‚ Clients       â”‚  â”‚ (SemaphoreSlim)           â”‚   â”‚
+â”‚  â”‚ - DB          â”‚  â”‚ â”Œâ”€â”€â”€â”€â”€â” â”Œâ”€â”€â”€â”€â”€â” â”Œâ”€â”€â”€â”€â”€â”   â”‚   â”‚
+â”‚  â”‚ - File        â”‚  â”‚ â”‚Pool1â”‚ â”‚Pool2â”‚ â”‚Pool3â”‚   â”‚   â”‚
+â”‚  â”‚ - Log         â”‚  â”‚ â””â”€â”€â”€â”€â”€â”˜ â””â”€â”€â”€â”€â”€â”˜ â””â”€â”€â”€â”€â”€â”˜   â”‚   â”‚
+â”‚  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜   â”‚
+â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¤
+â”‚  Batch Operations                                   â”‚
+â”‚  - ExecuteBatchQueriesAsync()                       â”‚
+â”‚  - UploadFilesAsync()                               â”‚
+â”‚  - DownloadFilesAsync()                             â”‚
+â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¤
+â”‚  Events                                             â”‚
+â”‚  - LogMessage                                       â”‚
+â”‚  - ProgressChanged                                  â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
 ```
 
 ---
 
-## °ü·Ã ÆÄÀÏ
+## ê´€ë ¨ íŒŒì¼
 
-| ÆÄÀÏ | ¼³¸í |
+| íŒŒì¼ | ì„¤ëª… |
 |------|------|
-| `nU3.Core\Services\ConnectivityManager.cs` | ¸®ÆÑÅä¸µµÈ ¿¬°á °ü¸®ÀÚ |
-| `nU3.Core.UI\Shell\AsyncOperationHelper.cs` | UI ¿¬µ¿ ÇïÆÛ ¹× ÁøÇà·ü Æû |
+| `nU3.Core\Services\ConnectivityManager.cs` | ë¦¬íŒ©í† ë§ëœ ì—°ê²° ê´€ë¦¬ì |
+| `nU3.Core.UI\Shell\AsyncOperationHelper.cs` | UI ì—°ë™ í—¬í¼ ë° ì§„í–‰ë¥  í¼ |

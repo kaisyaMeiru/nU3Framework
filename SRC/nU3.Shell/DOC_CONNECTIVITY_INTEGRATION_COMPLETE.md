@@ -1,24 +1,24 @@
-# MainShellForm ConnectivityManager ÅëÇÕ ¿Ï·á
+# MainShellForm ConnectivityManager í†µí•© ì™„ë£Œ
 
-## ?? ±¸Çö ³»¿ë
+## ?? êµ¬í˜„ ë‚´ìš©
 
-MainShellForm¿¡¼­ ConnectivityManagerÀÇ ÀüÃ¼ »ı¸íÁÖ±â¸¦ ±¸ÇöÇß½À´Ï´Ù:
-- ? ÃÊ±âÈ­ (Initialization)
-- ? »ç¿ë (Usage)
-- ? Á¾·á ½Ã Á¤¸® (Cleanup)
+MainShellFormì—ì„œ ConnectivityManagerì˜ ì „ì²´ ìƒëª…ì£¼ê¸°ë¥¼ êµ¬í˜„í–ˆìŠµë‹ˆë‹¤:
+- ? ì´ˆê¸°í™” (Initialization)
+- ? ì‚¬ìš© (Usage)
+- ? ì¢…ë£Œ ì‹œ ì •ë¦¬ (Cleanup)
 
 ---
 
-## ?? ±¸Çö ¼¼ºÎ»çÇ×
+## ?? êµ¬í˜„ ì„¸ë¶€ì‚¬í•­
 
-### 1. ÃÊ±âÈ­ (InitializeServerConnection)
+### 1. ì´ˆê¸°í™” (InitializeServerConnection)
 
 ```csharp
 private void InitializeServerConnection()
 {
     try
     {
-        // 1. ¼³Á¤ ÆÄÀÏ ·Îµå
+        // 1. ì„¤ì • íŒŒì¼ ë¡œë“œ
         var config = ServerConnectionConfig.Load();
         
         if (!config.Enabled)
@@ -28,22 +28,22 @@ private void InitializeServerConnection()
             return;
         }
 
-        // 2. ConnectivityManager ÃÊ±âÈ­
+        // 2. ConnectivityManager ì´ˆê¸°í™”
         ConnectivityManager.Instance.Initialize(
             config.BaseUrl,
-            enableLogCompression: true  // ¾ĞÃà È°¼ºÈ­ (90% ´ë¿ªÆø Àı¾à)
+            enableLogCompression: true  // ì••ì¶• í™œì„±í™” (90% ëŒ€ì—­í­ ì ˆì•½)
         );
 
-        // 3. ·Î±× ÀÌº¥Æ® ±¸µ¶
+        // 3. ë¡œê·¸ ì´ë²¤íŠ¸ êµ¬ë…
         ConnectivityManager.Instance.LogMessage += OnConnectivityLogMessage;
 
-        // 4. ÀÚµ¿ ·Î±× ¾÷·Îµå È°¼ºÈ­
+        // 4. ìë™ ë¡œê·¸ ì—…ë¡œë“œ í™œì„±í™”
         if (config.AutoLogUpload)
         {
             ConnectivityManager.Instance.EnableAutoLogUpload(true);
         }
 
-        // 5. ºñµ¿±â ¿¬°á Å×½ºÆ®
+        // 5. ë¹„ë™ê¸° ì—°ê²° í…ŒìŠ¤íŠ¸
         Task.Run(async () =>
         {
             var connected = await ConnectivityManager.Instance.TestConnectionAsync();
@@ -71,35 +71,35 @@ private void InitializeServerConnection()
 }
 ```
 
-**ÃÊ±âÈ­ ¼ø¼­:**
-1. ¼³Á¤ ÆÄÀÏ ·Îµå (`appsettings.json`)
-2. ConnectivityManager ÃÊ±âÈ­ (½Ì±ÛÅæ)
-3. ·Î±× ÀÌº¥Æ® ±¸µ¶
-4. ÀÚµ¿ ·Î±× ¾÷·Îµå ¼³Á¤
-5. ¼­¹ö ¿¬°á Å×½ºÆ® (ºñµ¿±â)
+**ì´ˆê¸°í™” ìˆœì„œ:**
+1. ì„¤ì • íŒŒì¼ ë¡œë“œ (`appsettings.json`)
+2. ConnectivityManager ì´ˆê¸°í™” (ì‹±ê¸€í†¤)
+3. ë¡œê·¸ ì´ë²¤íŠ¸ êµ¬ë…
+4. ìë™ ë¡œê·¸ ì—…ë¡œë“œ ì„¤ì •
+5. ì„œë²„ ì—°ê²° í…ŒìŠ¤íŠ¸ (ë¹„ë™ê¸°)
 
 ---
 
-### 2. »ç¿ë (Usage)
+### 2. ì‚¬ìš© (Usage)
 
-#### ¿¡·¯ ¹ß»ı ½Ã Áï½Ã ·Î±× ¾÷·Îµå
+#### ì—ëŸ¬ ë°œìƒ ì‹œ ì¦‰ì‹œ ë¡œê·¸ ì—…ë¡œë“œ
 
 ```csharp
 private void HandleUnhandledException(Exception exception, string source)
 {
     try
     {
-        // ·Î±× ±â·Ï
+        // ë¡œê·¸ ê¸°ë¡
         LogManager.Critical($"Unhandled Exception - {source}", "Error", exception);
 
-        // ¼­¹ö¿¡ ·Î±× ¾÷·Îµå (ConnectivityManager »ç¿ë)
+        // ì„œë²„ì— ë¡œê·¸ ì—…ë¡œë“œ (ConnectivityManager ì‚¬ìš©)
         if (_serverConnectionEnabled && ConnectivityManager.Instance.IsInitialized)
         {
             Task.Run(async () =>
             {
                 try
                 {
-                    // Áï½Ã ¾÷·Îµå
+                    // ì¦‰ì‹œ ì—…ë¡œë“œ
                     await ConnectivityManager.Instance.Log.UploadCurrentLogImmediatelyAsync();
                     
                     LogManager.Info("Error log uploaded to server", "Shell");
@@ -118,28 +118,28 @@ private void HandleUnhandledException(Exception exception, string source)
 }
 ```
 
-#### ¼­¹ö ¿¬°á »óÅÂ Ç¥½Ã
+#### ì„œë²„ ì—°ê²° ìƒíƒœ í‘œì‹œ
 
 ```csharp
 private void ShowServerConnectionStatus()
 {
-    var status = ConnectivityManager.Instance.IsInitialized ? "ÃÊ±âÈ­µÊ" : "ÃÊ±âÈ­ ¾È µÊ";
-    var serverUrl = ConnectivityManager.Instance.ServerUrl ?? "¾øÀ½";
-    var compression = ConnectivityManager.Instance.EnableLogCompression ? "È°¼ºÈ­" : "ºñÈ°¼ºÈ­";
-    var connected = _serverConnectionEnabled ? "¿¬°áµÊ" : "¿¬°á ¾È µÊ";
+    var status = ConnectivityManager.Instance.IsInitialized ? "ì´ˆê¸°í™”ë¨" : "ì´ˆê¸°í™” ì•ˆ ë¨";
+    var serverUrl = ConnectivityManager.Instance.ServerUrl ?? "ì—†ìŒ";
+    var compression = ConnectivityManager.Instance.EnableLogCompression ? "í™œì„±í™”" : "ë¹„í™œì„±í™”";
+    var connected = _serverConnectionEnabled ? "ì—°ê²°ë¨" : "ì—°ê²° ì•ˆ ë¨";
 
-    var message = $"¼­¹ö ¿¬°á »óÅÂ\n\n" +
-                 $"»óÅÂ: {status}\n" +
-                 $"¼­¹ö URL: {serverUrl}\n" +
-                 $"¿¬°á: {connected}\n" +
-                 $"·Î±× ¾ĞÃà: {compression}\n\n" +
-                 $"¼³Á¤Àº appsettings.json ÆÄÀÏ¿¡¼­ º¯°æÇÒ ¼ö ÀÖ½À´Ï´Ù.";
+    var message = $"ì„œë²„ ì—°ê²° ìƒíƒœ\n\n" +
+                 $"ìƒíƒœ: {status}\n" +
+                 $"ì„œë²„ URL: {serverUrl}\n" +
+                 $"ì—°ê²°: {connected}\n" +
+                 $"ë¡œê·¸ ì••ì¶•: {compression}\n\n" +
+                 $"ì„¤ì •ì€ appsettings.json íŒŒì¼ì—ì„œ ë³€ê²½í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤.";
 
-    XtraMessageBox.Show(message, "¼­¹ö ¿¬°á »óÅÂ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+    XtraMessageBox.Show(message, "ì„œë²„ ì—°ê²° ìƒíƒœ", MessageBoxButtons.OK, MessageBoxIcon.Information);
 }
 ```
 
-#### ¼­¹ö ¿¬°á Å×½ºÆ®
+#### ì„œë²„ ì—°ê²° í…ŒìŠ¤íŠ¸
 
 ```csharp
 private async void TestServerConnection()
@@ -147,8 +147,8 @@ private async void TestServerConnection()
     if (!ConnectivityManager.Instance.IsInitialized)
     {
         XtraMessageBox.Show(
-            "¼­¹ö ¿¬°áÀÌ ÃÊ±âÈ­µÇÁö ¾Ê¾Ò½À´Ï´Ù.",
-            "¿¬°á ¾È µÊ",
+            "ì„œë²„ ì—°ê²°ì´ ì´ˆê¸°í™”ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.",
+            "ì—°ê²° ì•ˆ ë¨",
             MessageBoxButtons.OK,
             MessageBoxIcon.Warning);
         return;
@@ -159,19 +159,19 @@ private async void TestServerConnection()
     if (connected)
     {
         barStaticItemServer.Caption = $"?? {ConnectivityManager.Instance.ServerUrl}";
-        XtraMessageBox.Show("¼­¹ö ¿¬°á ¼º°ø!", "¿¬°á ¼º°ø");
+        XtraMessageBox.Show("ì„œë²„ ì—°ê²° ì„±ê³µ!", "ì—°ê²° ì„±ê³µ");
     }
     else
     {
         barStaticItemServer.Caption = $"?? {ConnectivityManager.Instance.ServerUrl} (Failed)";
-        XtraMessageBox.Show("¼­¹ö ¿¬°á ½ÇÆĞ!", "¿¬°á ½ÇÆĞ");
+        XtraMessageBox.Show("ì„œë²„ ì—°ê²° ì‹¤íŒ¨!", "ì—°ê²° ì‹¤íŒ¨");
     }
 }
 ```
 
 ---
 
-### 3. Á¾·á ½Ã Á¤¸® (MainShellForm_FormClosing)
+### 3. ì¢…ë£Œ ì‹œ ì •ë¦¬ (MainShellForm_FormClosing)
 
 ```csharp
 private void MainShellForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -180,7 +180,7 @@ private void MainShellForm_FormClosing(object sender, FormClosingEventArgs e)
     {
         try
         {
-            // 1. ¿¡·¯ ¸®Æ÷ÆÃ ÀÌº¥Æ® ±¸µ¶ ÇØÁ¦
+            // 1. ì—ëŸ¬ ë¦¬í¬íŒ… ì´ë²¤íŠ¸ êµ¬ë… í•´ì œ
             if (_errorReportingEnabled)
             {
                 Application.ThreadException -= Application_ThreadException;
@@ -188,7 +188,7 @@ private void MainShellForm_FormClosing(object sender, FormClosingEventArgs e)
                 TaskScheduler.UnobservedTaskException -= TaskScheduler_UnobservedTaskException;
             }
 
-            // 2. ¼­¹ö ¿¬°áµÈ °æ¿ì ´ë±â ÁßÀÎ ·Î±× ¾÷·Îµå
+            // 2. ì„œë²„ ì—°ê²°ëœ ê²½ìš° ëŒ€ê¸° ì¤‘ì¸ ë¡œê·¸ ì—…ë¡œë“œ
             if (_serverConnectionEnabled && ConnectivityManager.Instance.IsInitialized)
             {
                 try
@@ -197,11 +197,11 @@ private void MainShellForm_FormClosing(object sender, FormClosingEventArgs e)
                     
                     var uploadTask = Task.Run(async () =>
                     {
-                        // ´ë±â ÁßÀÎ ¸ğµç ·Î±× ¾÷·Îµå
+                        // ëŒ€ê¸° ì¤‘ì¸ ëª¨ë“  ë¡œê·¸ ì—…ë¡œë“œ
                         await ConnectivityManager.Instance.Log.UploadAllPendingLogsAsync();
                     });
 
-                    // ÃÖ´ë 10ÃÊ ´ë±â
+                    // ìµœëŒ€ 10ì´ˆ ëŒ€ê¸°
                     if (!uploadTask.Wait(TimeSpan.FromSeconds(10)))
                     {
                         LogManager.Warning("Log upload timeout during shutdown", "Shell");
@@ -216,15 +216,15 @@ private void MainShellForm_FormClosing(object sender, FormClosingEventArgs e)
                     LogManager.Warning($"Failed to upload pending logs: {ex.Message}", "Shell");
                 }
 
-                // 3. ConnectivityManager ÀÌº¥Æ® ±¸µ¶ ÇØÁ¦
+                // 3. ConnectivityManager ì´ë²¤íŠ¸ êµ¬ë… í•´ì œ
                 ConnectivityManager.Instance.LogMessage -= OnConnectivityLogMessage;
                 
-                // 4. ConnectivityManager Á¤¸®
+                // 4. ConnectivityManager ì •ë¦¬
                 ConnectivityManager.Instance.Dispose();
                 LogManager.Info("ConnectivityManager disposed", "Shell");
             }
 
-            // 5. LogManager Á¾·á
+            // 5. LogManager ì¢…ë£Œ
             if (_loggingEnabled)
             {
                 LogManager.Instance.Shutdown();
@@ -238,93 +238,93 @@ private void MainShellForm_FormClosing(object sender, FormClosingEventArgs e)
 }
 ```
 
-**Á¾·á ¼ø¼­:**
-1. ¿¡·¯ ¸®Æ÷ÆÃ ÀÌº¥Æ® ±¸µ¶ ÇØÁ¦
-2. ´ë±â ÁßÀÎ ·Î±× ¾÷·Îµå (ÃÖ´ë 10ÃÊ)
-3. ConnectivityManager ÀÌº¥Æ® ±¸µ¶ ÇØÁ¦
-4. ConnectivityManager Á¤¸® (Dispose)
-5. LogManager Á¾·á
+**ì¢…ë£Œ ìˆœì„œ:**
+1. ì—ëŸ¬ ë¦¬í¬íŒ… ì´ë²¤íŠ¸ êµ¬ë… í•´ì œ
+2. ëŒ€ê¸° ì¤‘ì¸ ë¡œê·¸ ì—…ë¡œë“œ (ìµœëŒ€ 10ì´ˆ)
+3. ConnectivityManager ì´ë²¤íŠ¸ êµ¬ë… í•´ì œ
+4. ConnectivityManager ì •ë¦¬ (Dispose)
+5. LogManager ì¢…ë£Œ
 
 ---
 
-## ?? »ı¸íÁÖ±â ´ÙÀÌ¾î±×·¥
+## ?? ìƒëª…ì£¼ê¸° ë‹¤ì´ì–´ê·¸ë¨
 
 ```
-¾Û ½ÃÀÛ
-  ¦¢
-  ¡é
-¦£¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¤
-¦¢ 1. InitializeServerConnection()                            ¦¢
-¦¢    - ServerConnectionConfig.Load()                         ¦¢
-¦¢    - ConnectivityManager.Instance.Initialize(serverUrl)    ¦¢
-¦¢    - LogMessage ÀÌº¥Æ® ±¸µ¶                                  ¦¢
-¦¢    - EnableAutoLogUpload(true)                             ¦¢
-¦¢    - TestConnectionAsync() (ºñµ¿±â)                         ¦¢
-¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¥
-  ¦¢
-  ¡é
-¦£¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¤
-¦¢ 2. »ç¿ë (Runtime)                                          ¦¢
-¦¢    - HandleUnhandledException()                            ¦¢
-¦¢      ¡æ Log.UploadCurrentLogImmediatelyAsync()             ¦¢
-¦¢    - ShowServerConnectionStatus()                          ¦¢
-¦¢    - TestServerConnection()                                ¦¢
-¦¢      ¡æ TestConnectionAsync()                               ¦¢
-¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¥
-  ¦¢
-  ¡é
-¦£¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¤
-¦¢ 3. MainShellForm_FormClosing()                             ¦¢
-¦¢    - ¿¡·¯ ¸®Æ÷ÆÃ ÀÌº¥Æ® ±¸µ¶ ÇØÁ¦                             ¦¢
-¦¢    - Log.UploadAllPendingLogsAsync() (10ÃÊ ´ë±â)           ¦¢
-¦¢    - LogMessage ÀÌº¥Æ® ±¸µ¶ ÇØÁ¦                             ¦¢
-¦¢    - ConnectivityManager.Instance.Dispose()                ¦¢
-¦¢    - LogManager.Instance.Shutdown()                        ¦¢
-¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¥
-  ¦¢
-  ¡é
-¾Û Á¾·á
+ì•± ì‹œì‘
+  â”‚
+  â†“
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚ 1. InitializeServerConnection()                            â”‚
+â”‚    - ServerConnectionConfig.Load()                         â”‚
+â”‚    - ConnectivityManager.Instance.Initialize(serverUrl)    â”‚
+â”‚    - LogMessage ì´ë²¤íŠ¸ êµ¬ë…                                  â”‚
+â”‚    - EnableAutoLogUpload(true)                             â”‚
+â”‚    - TestConnectionAsync() (ë¹„ë™ê¸°)                         â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+  â”‚
+  â†“
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚ 2. ì‚¬ìš© (Runtime)                                          â”‚
+â”‚    - HandleUnhandledException()                            â”‚
+â”‚      â†’ Log.UploadCurrentLogImmediatelyAsync()             â”‚
+â”‚    - ShowServerConnectionStatus()                          â”‚
+â”‚    - TestServerConnection()                                â”‚
+â”‚      â†’ TestConnectionAsync()                               â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+  â”‚
+  â†“
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚ 3. MainShellForm_FormClosing()                             â”‚
+â”‚    - ì—ëŸ¬ ë¦¬í¬íŒ… ì´ë²¤íŠ¸ êµ¬ë… í•´ì œ                             â”‚
+â”‚    - Log.UploadAllPendingLogsAsync() (10ì´ˆ ëŒ€ê¸°)           â”‚
+â”‚    - LogMessage ì´ë²¤íŠ¸ êµ¬ë… í•´ì œ                             â”‚
+â”‚    - ConnectivityManager.Instance.Dispose()                â”‚
+â”‚    - LogManager.Instance.Shutdown()                        â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+  â”‚
+  â†“
+ì•± ì¢…ë£Œ
 ```
 
 ---
 
-## ?? ÁÖ¿ä ±â´É
+## ?? ì£¼ìš” ê¸°ëŠ¥
 
-### 1. ÀÚµ¿ ¿¬°á Å×½ºÆ® (ºñµ¿±â)
+### 1. ìë™ ì—°ê²° í…ŒìŠ¤íŠ¸ (ë¹„ë™ê¸°)
 
 ```csharp
-// ÃÊ±âÈ­ ½Ã ÀÚµ¿À¸·Î ¿¬°á Å×½ºÆ® (¹é±×¶ó¿îµå)
+// ì´ˆê¸°í™” ì‹œ ìë™ìœ¼ë¡œ ì—°ê²° í…ŒìŠ¤íŠ¸ (ë°±ê·¸ë¼ìš´ë“œ)
 Task.Run(async () =>
 {
     var connected = await ConnectivityManager.Instance.TestConnectionAsync();
-    // UI ¾÷µ¥ÀÌÆ® (Invoke)
+    // UI ì—…ë°ì´íŠ¸ (Invoke)
 });
 ```
 
-### 2. »óÅÂ¹Ù Ç¥½Ã
+### 2. ìƒíƒœë°” í‘œì‹œ
 
 ```csharp
-?? https://localhost:64229          // ¿¬°á ¼º°ø
-?? https://localhost:64229 (No Response)  // ÀÀ´ä ¾øÀ½
-?? https://localhost:64229 (Error)  // ¿À·ù
-?? Server: Disabled                 // ºñÈ°¼ºÈ­
+?? https://localhost:64229          // ì—°ê²° ì„±ê³µ
+?? https://localhost:64229 (No Response)  // ì‘ë‹µ ì—†ìŒ
+?? https://localhost:64229 (Error)  // ì˜¤ë¥˜
+?? Server: Disabled                 // ë¹„í™œì„±í™”
 ```
 
-### 3. ½Ã½ºÅÛ ¸Ş´º ÅëÇÕ
+### 3. ì‹œìŠ¤í…œ ë©”ë‰´ í†µí•©
 
 ```
-½Ã½ºÅÛ
-¦§¦¡¦¡ ¸Ş´º »õ·Î°íÄ§
-¦§¦¡¦¡ ¸ğµç ÅÇ ´İ±â
-¦§¦¡¦¡ ¼­¹ö ¿¬°á »óÅÂ          ¡ç NEW!
-¦§¦¡¦¡ ¼­¹ö ¿¬°á Å×½ºÆ®         ¡ç NEW!
-¦§¦¡¦¡ ¿¡·¯ ¸®Æ÷ÆÃ ¼³Á¤
-¦§¦¡¦¡ Å©·¡½Ã ¸®Æ÷Æ® Å×½ºÆ®
-¦§¦¡¦¡ Á¤º¸
-¦¦¦¡¦¡ Á¾·á
+ì‹œìŠ¤í…œ
+â”œâ”€â”€ ë©”ë‰´ ìƒˆë¡œê³ ì¹¨
+â”œâ”€â”€ ëª¨ë“  íƒ­ ë‹«ê¸°
+â”œâ”€â”€ ì„œë²„ ì—°ê²° ìƒíƒœ          â† NEW!
+â”œâ”€â”€ ì„œë²„ ì—°ê²° í…ŒìŠ¤íŠ¸         â† NEW!
+â”œâ”€â”€ ì—ëŸ¬ ë¦¬í¬íŒ… ì„¤ì •
+â”œâ”€â”€ í¬ë˜ì‹œ ë¦¬í¬íŠ¸ í…ŒìŠ¤íŠ¸
+â”œâ”€â”€ ì •ë³´
+â””â”€â”€ ì¢…ë£Œ
 ```
 
-### 4. ·Î±× ÀÌº¥Æ® ÅëÇÕ
+### 4. ë¡œê·¸ ì´ë²¤íŠ¸ í†µí•©
 
 ```csharp
 private void OnConnectivityLogMessage(object? sender, LogMessageEventArgs e)
@@ -346,25 +346,25 @@ private void OnConnectivityLogMessage(object? sender, LogMessageEventArgs e)
 
 ---
 
-## ?? ¼öÁ¤µÈ ÆÄÀÏ
+## ?? ìˆ˜ì •ëœ íŒŒì¼
 
 ```
 ?? nU3.Shell/MainShellForm.cs
-   - InitializeServerConnection() Ãß°¡
-   - OnConnectivityLogMessage() Ãß°¡
-   - ShowServerConnectionStatus() Ãß°¡
-   - TestServerConnection() Ãß°¡
-   - MainShellForm_FormClosing() ¼öÁ¤ (Á¤¸® ·ÎÁ÷)
+   - InitializeServerConnection() ì¶”ê°€
+   - OnConnectivityLogMessage() ì¶”ê°€
+   - ShowServerConnectionStatus() ì¶”ê°€
+   - TestServerConnection() ì¶”ê°€
+   - MainShellForm_FormClosing() ìˆ˜ì • (ì •ë¦¬ ë¡œì§)
 
 ?? nU3.Shell/Configuration/ServerConnectionConfig.cs
-   - AutoLogUpload ¼Ó¼º Ãß°¡
+   - AutoLogUpload ì†ì„± ì¶”ê°€
 
-? ºôµå ¼º°ø
+? ë¹Œë“œ ì„±ê³µ
 ```
 
 ---
 
-## ?? ¼³Á¤ ÆÄÀÏ (appsettings.json)
+## ?? ì„¤ì • íŒŒì¼ (appsettings.json)
 
 ```json
 {
@@ -393,75 +393,75 @@ private void OnConnectivityLogMessage(object? sender, LogMessageEventArgs e)
 
 ---
 
-## ? Ã¼Å©¸®½ºÆ®
+## ? ì²´í¬ë¦¬ìŠ¤íŠ¸
 
-- [x] ConnectivityManager ÃÊ±âÈ­
-- [x] ·Î±× ÀÌº¥Æ® ±¸µ¶
-- [x] ÀÚµ¿ ·Î±× ¾÷·Îµå ¼³Á¤
-- [x] ¼­¹ö ¿¬°á Å×½ºÆ® (ºñµ¿±â)
-- [x] »óÅÂ¹Ù Ç¥½Ã
-- [x] ½Ã½ºÅÛ ¸Ş´º ÅëÇÕ
-- [x] ¿¡·¯ ¹ß»ı ½Ã ·Î±× ¾÷·Îµå
-- [x] Á¾·á ½Ã ´ë±â ·Î±× ¾÷·Îµå
-- [x] ÀÌº¥Æ® ±¸µ¶ ÇØÁ¦
-- [x] ConnectivityManager Á¤¸®
-- [x] ºôµå ¼º°ø
+- [x] ConnectivityManager ì´ˆê¸°í™”
+- [x] ë¡œê·¸ ì´ë²¤íŠ¸ êµ¬ë…
+- [x] ìë™ ë¡œê·¸ ì—…ë¡œë“œ ì„¤ì •
+- [x] ì„œë²„ ì—°ê²° í…ŒìŠ¤íŠ¸ (ë¹„ë™ê¸°)
+- [x] ìƒíƒœë°” í‘œì‹œ
+- [x] ì‹œìŠ¤í…œ ë©”ë‰´ í†µí•©
+- [x] ì—ëŸ¬ ë°œìƒ ì‹œ ë¡œê·¸ ì—…ë¡œë“œ
+- [x] ì¢…ë£Œ ì‹œ ëŒ€ê¸° ë¡œê·¸ ì—…ë¡œë“œ
+- [x] ì´ë²¤íŠ¸ êµ¬ë… í•´ì œ
+- [x] ConnectivityManager ì •ë¦¬
+- [x] ë¹Œë“œ ì„±ê³µ
 
 ---
 
-## ?? »ç¿ë Èå¸§
+## ?? ì‚¬ìš© íë¦„
 
-### 1. ¾Û ½ÃÀÛ
+### 1. ì•± ì‹œì‘
 
 ```
-1. MainShellForm »ı¼ºÀÚ
+1. MainShellForm ìƒì„±ì
 2. InitializeLogging()
 3. InitializeServerConnection()
-   ¡é
+   â†“
    - ServerConnectionConfig.Load()
    - ConnectivityManager.Instance.Initialize()
-   - ·Î±× ÀÌº¥Æ® ±¸µ¶
-   - ÀÚµ¿ ·Î±× ¾÷·Îµå ¼³Á¤
-   - ¹é±×¶ó¿îµå ¿¬°á Å×½ºÆ®
+   - ë¡œê·¸ ì´ë²¤íŠ¸ êµ¬ë…
+   - ìë™ ë¡œê·¸ ì—…ë¡œë“œ ì„¤ì •
+   - ë°±ê·¸ë¼ìš´ë“œ ì—°ê²° í…ŒìŠ¤íŠ¸
 4. InitializeErrorReporting()
 5. MainShellForm_Load()
 ```
 
-### 2. ·±Å¸ÀÓ
+### 2. ëŸ°íƒ€ì„
 
 ```
-»ç¿ëÀÚ ÀÛ¾÷
-  ¡é
-¿¡·¯ ¹ß»ı (HandleUnhandledException)
-  ¡é
+ì‚¬ìš©ì ì‘ì—…
+  â†“
+ì—ëŸ¬ ë°œìƒ (HandleUnhandledException)
+  â†“
 LogManager.Critical()
-  ¡é
+  â†“
 ConnectivityManager.Log.UploadCurrentLogImmediatelyAsync()
-  ¡é
-¼­¹ö¿¡ ·Î±× ¾÷·Îµå (¾ĞÃà)
+  â†“
+ì„œë²„ì— ë¡œê·¸ ì—…ë¡œë“œ (ì••ì¶•)
 ```
 
-### 3. ¾Û Á¾·á
+### 3. ì•± ì¢…ë£Œ
 
 ```
-»ç¿ëÀÚ Á¾·á ¿äÃ»
-  ¡é
+ì‚¬ìš©ì ì¢…ë£Œ ìš”ì²­
+  â†“
 MainShellForm_FormClosing()
-  ¡é
-´ë±â ÁßÀÎ ·Î±× ¾÷·Îµå (ÃÖ´ë 10ÃÊ)
-  ¡é
+  â†“
+ëŒ€ê¸° ì¤‘ì¸ ë¡œê·¸ ì—…ë¡œë“œ (ìµœëŒ€ 10ì´ˆ)
+  â†“
 ConnectivityManager.Dispose()
-  ¡é
+  â†“
 LogManager.Shutdown()
-  ¡é
-¾Û Á¾·á
+  â†“
+ì•± ì¢…ë£Œ
 ```
 
 ---
 
-## ?? ´ÙÀ½ ´Ü°è
+## ?? ë‹¤ìŒ ë‹¨ê³„
 
-### ¸ğµâ¿¡¼­ »ç¿ë
+### ëª¨ë“ˆì—ì„œ ì‚¬ìš©
 
 ```csharp
 public class PatientListModule : BaseWorkControl
@@ -470,7 +470,7 @@ public class PatientListModule : BaseWorkControl
     {
         try
         {
-            // Connectivity ¼Ó¼º »ç¿ë (BaseWorkControl¿¡¼­ Á¦°ø)
+            // Connectivity ì†ì„± ì‚¬ìš© (BaseWorkControlì—ì„œ ì œê³µ)
             var dt = await Connectivity.DB.ExecuteDataTableAsync(
                 "SELECT * FROM Patients",
                 null
@@ -482,7 +482,7 @@ public class PatientListModule : BaseWorkControl
         {
             LogError("Failed to load patients", ex);
             
-            // ¿¡·¯ ¹ß»ı ½Ã ·Î±× Áï½Ã ¾÷·Îµå
+            // ì—ëŸ¬ ë°œìƒ ì‹œ ë¡œê·¸ ì¦‰ì‹œ ì—…ë¡œë“œ
             await Connectivity.Log.UploadCurrentLogImmediatelyAsync();
         }
     }
@@ -491,30 +491,30 @@ public class PatientListModule : BaseWorkControl
 
 ---
 
-## ?? ¼º´É °³¼±
+## ?? ì„±ëŠ¥ ê°œì„ 
 
-| Ç×¸ñ | Before | After | °³¼± |
+| í•­ëª© | Before | After | ê°œì„  |
 |------|--------|-------|------|
-| **HTTP Å¬¶óÀÌ¾ğÆ®** | °¢ ¸ğµâ¸¶´Ù »ı¼º | ½Ì±ÛÅæ (°øÀ¯) | 90% ¡é |
-| **·Î±× ¾ĞÃà** | ¾øÀ½ | Gzip (90%) | 10¹è ºü¸§ |
-| **ÀÚµ¿ ¾÷·Îµå** | ¾øÀ½ | ¸ÅÀÏ 2½Ã ÀÚµ¿ | ¡Ä |
-| **¿¡·¯ ½Ã ¾÷·Îµå** | ¼öµ¿ | ÀÚµ¿ | 100% |
+| **HTTP í´ë¼ì´ì–¸íŠ¸** | ê° ëª¨ë“ˆë§ˆë‹¤ ìƒì„± | ì‹±ê¸€í†¤ (ê³µìœ ) | 90% â†“ |
+| **ë¡œê·¸ ì••ì¶•** | ì—†ìŒ | Gzip (90%) | 10ë°° ë¹ ë¦„ |
+| **ìë™ ì—…ë¡œë“œ** | ì—†ìŒ | ë§¤ì¼ 2ì‹œ ìë™ | âˆ |
+| **ì—ëŸ¬ ì‹œ ì—…ë¡œë“œ** | ìˆ˜ë™ | ìë™ | 100% |
 
 ---
 
-## ?? ¿Ï·á!
+## ?? ì™„ë£Œ!
 
-**MainShellForm¿¡¼­ ConnectivityManagerÀÇ ÀüÃ¼ »ı¸íÁÖ±â°¡ ¿Ïº®ÇÏ°Ô ÅëÇÕµÇ¾ú½À´Ï´Ù!**
+**MainShellFormì—ì„œ ConnectivityManagerì˜ ì „ì²´ ìƒëª…ì£¼ê¸°ê°€ ì™„ë²½í•˜ê²Œ í†µí•©ë˜ì—ˆìŠµë‹ˆë‹¤!**
 
-### ÇÙ½É ±â´É
+### í•µì‹¬ ê¸°ëŠ¥
 
 ```
-? ÃÊ±âÈ­: ServerConnectionConfig ¡æ ConnectivityManager.Initialize()
-? »ç¿ë: ConnectivityManager.Instance.DB/File/Log
-? Á¤¸®: FormClosing ¡æ UploadAllPending ¡æ Dispose
-? »óÅÂ Ç¥½Ã: »óÅÂ¹Ù + ½Ã½ºÅÛ ¸Ş´º
-? ÀÚµ¿ ¾÷·Îµå: ¸ÅÀÏ 2½Ã + ¿¡·¯ ¹ß»ı ½Ã
-? ¾ĞÃà Àü¼Û: Gzip (90% Àı¾à)
+? ì´ˆê¸°í™”: ServerConnectionConfig â†’ ConnectivityManager.Initialize()
+? ì‚¬ìš©: ConnectivityManager.Instance.DB/File/Log
+? ì •ë¦¬: FormClosing â†’ UploadAllPending â†’ Dispose
+? ìƒíƒœ í‘œì‹œ: ìƒíƒœë°” + ì‹œìŠ¤í…œ ë©”ë‰´
+? ìë™ ì—…ë¡œë“œ: ë§¤ì¼ 2ì‹œ + ì—ëŸ¬ ë°œìƒ ì‹œ
+? ì••ì¶• ì „ì†¡: Gzip (90% ì ˆì•½)
 ```
 
-**¸ğµç °ÍÀÌ ÀÚµ¿À¸·Î °ü¸®µË´Ï´Ù!** ??
+**ëª¨ë“  ê²ƒì´ ìë™ìœ¼ë¡œ ê´€ë¦¬ë©ë‹ˆë‹¤!** ??

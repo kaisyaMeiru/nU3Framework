@@ -1,12 +1,12 @@
-# ConnectivityManager °³º° Å×½ºÆ® ±â´É Ãß°¡ ¿Ï·á
+# ConnectivityManager ê°œë³„ í…ŒìŠ¤íŠ¸ ê¸°ëŠ¥ ì¶”ê°€ ì™„ë£Œ
 
-## ?? ±¸Çö ³»¿ë
+## ?? êµ¬í˜„ ë‚´ìš©
 
-`TestConnectionAsync` ¸Ş¼­µå¸¦ **DB, File Transfer, Log Upload** °³º° Å×½ºÆ®·Î ºĞ¸®Çß½À´Ï´Ù.
+`TestConnectionAsync` ë©”ì„œë“œë¥¼ **DB, File Transfer, Log Upload** ê°œë³„ í…ŒìŠ¤íŠ¸ë¡œ ë¶„ë¦¬í–ˆìŠµë‹ˆë‹¤.
 
 ---
 
-## ? Ãß°¡µÈ ¸Ş¼­µå
+## ? ì¶”ê°€ëœ ë©”ì„œë“œ
 
 ### 1. TestDBConnectionAsync()
 ```csharp
@@ -31,7 +31,7 @@ public async Task<bool> TestFileConnectionAsync()
     try
     {
         EnsureInitialized();
-        _ = File; // Å¬¶óÀÌ¾ğÆ® ÃÊ±âÈ­ Å×½ºÆ®
+        _ = File; // í´ë¼ì´ì–¸íŠ¸ ì´ˆê¸°í™” í…ŒìŠ¤íŠ¸
         return true;
     }
     catch
@@ -49,7 +49,7 @@ public async Task<bool> TestLogConnectionAsync()
     {
         EnsureInitialized();
         
-        // Å×½ºÆ® ·Î±× ÆÄÀÏ »ı¼º ¹× ¾÷·Îµå
+        // í…ŒìŠ¤íŠ¸ ë¡œê·¸ íŒŒì¼ ìƒì„± ë° ì—…ë¡œë“œ
         var tempFile = Path.GetTempFileName();
         try
         {
@@ -127,7 +127,7 @@ public async Task<ConnectivityTestResult> TestAllConnectionsAsync()
 
 ---
 
-## ?? ConnectivityTestResult Å¬·¡½º
+## ?? ConnectivityTestResult í´ë˜ìŠ¤
 
 ```csharp
 public class ConnectivityTestResult
@@ -169,27 +169,27 @@ public class ConnectivityTestResult
 
 ---
 
-## ??? MainShellForm ÅëÇÕ
+## ??? MainShellForm í†µí•©
 
-### ½Ã½ºÅÛ ¸Ş´º ±¸Á¶
+### ì‹œìŠ¤í…œ ë©”ë‰´ êµ¬ì¡°
 
 ```
-½Ã½ºÅÛ
-¦§¦¡¦¡ ¸Ş´º »õ·Î°íÄ§
-¦§¦¡¦¡ ¸ğµç ÅÇ ´İ±â
-¦§¦¡¦¡ ¼­¹ö ¿¬°á »óÅÂ
-¦§¦¡¦¡ ¼­¹ö ¿¬°á Å×½ºÆ® (ÀüÃ¼)          ¡ç ÀüÃ¼ Å×½ºÆ®
-¦§¦¡¦¡ °³º° ¼­ºñ½º Å×½ºÆ®               ¡ç NEW!
-¦¢   ¦§¦¡¦¡ Database ¿¬°á Å×½ºÆ®          ¡ç DB¸¸ Å×½ºÆ®
-¦¢   ¦§¦¡¦¡ File Transfer ¿¬°á Å×½ºÆ®      ¡ç File¸¸ Å×½ºÆ®
-¦¢   ¦¦¦¡¦¡ Log Upload ¿¬°á Å×½ºÆ®         ¡ç Log¸¸ Å×½ºÆ®
-¦§¦¡¦¡ ¿¡·¯ ¸®Æ÷ÆÃ ¼³Á¤
-¦§¦¡¦¡ Å©·¡½Ã ¸®Æ÷Æ® Å×½ºÆ®
-¦§¦¡¦¡ Á¤º¸
-¦¦¦¡¦¡ Á¾·á
+ì‹œìŠ¤í…œ
+â”œâ”€â”€ ë©”ë‰´ ìƒˆë¡œê³ ì¹¨
+â”œâ”€â”€ ëª¨ë“  íƒ­ ë‹«ê¸°
+â”œâ”€â”€ ì„œë²„ ì—°ê²° ìƒíƒœ
+â”œâ”€â”€ ì„œë²„ ì—°ê²° í…ŒìŠ¤íŠ¸ (ì „ì²´)          â† ì „ì²´ í…ŒìŠ¤íŠ¸
+â”œâ”€â”€ ê°œë³„ ì„œë¹„ìŠ¤ í…ŒìŠ¤íŠ¸               â† NEW!
+â”‚   â”œâ”€â”€ Database ì—°ê²° í…ŒìŠ¤íŠ¸          â† DBë§Œ í…ŒìŠ¤íŠ¸
+â”‚   â”œâ”€â”€ File Transfer ì—°ê²° í…ŒìŠ¤íŠ¸      â† Fileë§Œ í…ŒìŠ¤íŠ¸
+â”‚   â””â”€â”€ Log Upload ì—°ê²° í…ŒìŠ¤íŠ¸         â† Logë§Œ í…ŒìŠ¤íŠ¸
+â”œâ”€â”€ ì—ëŸ¬ ë¦¬í¬íŒ… ì„¤ì •
+â”œâ”€â”€ í¬ë˜ì‹œ ë¦¬í¬íŠ¸ í…ŒìŠ¤íŠ¸
+â”œâ”€â”€ ì •ë³´
+â””â”€â”€ ì¢…ë£Œ
 ```
 
-### °³º° Å×½ºÆ® ¸Ş¼­µå
+### ê°œë³„ í…ŒìŠ¤íŠ¸ ë©”ì„œë“œ
 
 #### 1. TestDatabaseConnection()
 ```csharp
@@ -197,7 +197,7 @@ private async Task TestDatabaseConnection()
 {
     if (!ConnectivityManager.Instance.IsInitialized)
     {
-        XtraMessageBox.Show("¼­¹ö ¿¬°áÀÌ ÃÊ±âÈ­µÇÁö ¾Ê¾Ò½À´Ï´Ù.", "¿À·ù");
+        XtraMessageBox.Show("ì„œë²„ ì—°ê²°ì´ ì´ˆê¸°í™”ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.", "ì˜¤ë¥˜");
         return;
     }
 
@@ -208,19 +208,19 @@ private async Task TestDatabaseConnection()
         if (connected)
         {
             XtraMessageBox.Show(
-                $"Database ¿¬°á ¼º°ø!\n\n¼­¹ö: {ConnectivityManager.Instance.ServerUrl}",
-                "¿¬°á ¼º°ø");
+                $"Database ì—°ê²° ì„±ê³µ!\n\nì„œë²„: {ConnectivityManager.Instance.ServerUrl}",
+                "ì—°ê²° ì„±ê³µ");
         }
         else
         {
             XtraMessageBox.Show(
-                $"Database ¿¬°á ½ÇÆĞ!\n\n¼­¹ö: {ConnectivityManager.Instance.ServerUrl}",
-                "¿¬°á ½ÇÆĞ");
+                $"Database ì—°ê²° ì‹¤íŒ¨!\n\nì„œë²„: {ConnectivityManager.Instance.ServerUrl}",
+                "ì—°ê²° ì‹¤íŒ¨");
         }
     }
     catch (Exception ex)
     {
-        XtraMessageBox.Show($"Database Å×½ºÆ® Áß ¿À·ù!\n\n{ex.Message}", "¿À·ù");
+        XtraMessageBox.Show($"Database í…ŒìŠ¤íŠ¸ ì¤‘ ì˜¤ë¥˜!\n\n{ex.Message}", "ì˜¤ë¥˜");
     }
 }
 ```
@@ -231,7 +231,7 @@ private async Task TestFileConnection()
 {
     if (!ConnectivityManager.Instance.IsInitialized)
     {
-        XtraMessageBox.Show("¼­¹ö ¿¬°áÀÌ ÃÊ±âÈ­µÇÁö ¾Ê¾Ò½À´Ï´Ù.", "¿À·ù");
+        XtraMessageBox.Show("ì„œë²„ ì—°ê²°ì´ ì´ˆê¸°í™”ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.", "ì˜¤ë¥˜");
         return;
     }
 
@@ -242,19 +242,19 @@ private async Task TestFileConnection()
         if (connected)
         {
             XtraMessageBox.Show(
-                $"File Transfer ¿¬°á ¼º°ø!\n\n¼­¹ö: {ConnectivityManager.Instance.ServerUrl}",
-                "¿¬°á ¼º°ø");
+                $"File Transfer ì—°ê²° ì„±ê³µ!\n\nì„œë²„: {ConnectivityManager.Instance.ServerUrl}",
+                "ì—°ê²° ì„±ê³µ");
         }
         else
         {
             XtraMessageBox.Show(
-                $"File Transfer ¿¬°á ½ÇÆĞ!\n\n¼­¹ö: {ConnectivityManager.Instance.ServerUrl}",
-                "¿¬°á ½ÇÆĞ");
+                $"File Transfer ì—°ê²° ì‹¤íŒ¨!\n\nì„œë²„: {ConnectivityManager.Instance.ServerUrl}",
+                "ì—°ê²° ì‹¤íŒ¨");
         }
     }
     catch (Exception ex)
     {
-        XtraMessageBox.Show($"File Transfer Å×½ºÆ® Áß ¿À·ù!\n\n{ex.Message}", "¿À·ù");
+        XtraMessageBox.Show($"File Transfer í…ŒìŠ¤íŠ¸ ì¤‘ ì˜¤ë¥˜!\n\n{ex.Message}", "ì˜¤ë¥˜");
     }
 }
 ```
@@ -265,7 +265,7 @@ private async Task TestLogConnection()
 {
     if (!ConnectivityManager.Instance.IsInitialized)
     {
-        XtraMessageBox.Show("¼­¹ö ¿¬°áÀÌ ÃÊ±âÈ­µÇÁö ¾Ê¾Ò½À´Ï´Ù.", "¿À·ù");
+        XtraMessageBox.Show("ì„œë²„ ì—°ê²°ì´ ì´ˆê¸°í™”ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.", "ì˜¤ë¥˜");
         return;
     }
 
@@ -276,31 +276,31 @@ private async Task TestLogConnection()
         if (connected)
         {
             XtraMessageBox.Show(
-                $"Log Upload ¿¬°á ¼º°ø!\n\n¼­¹ö: {ConnectivityManager.Instance.ServerUrl}\n\nÅ×½ºÆ® ·Î±× ÆÄÀÏÀÌ ¾÷·ÎµåµÇ¾ú½À´Ï´Ù.",
-                "¿¬°á ¼º°ø");
+                $"Log Upload ì—°ê²° ì„±ê³µ!\n\nì„œë²„: {ConnectivityManager.Instance.ServerUrl}\n\ní…ŒìŠ¤íŠ¸ ë¡œê·¸ íŒŒì¼ì´ ì—…ë¡œë“œë˜ì—ˆìŠµë‹ˆë‹¤.",
+                "ì—°ê²° ì„±ê³µ");
         }
         else
         {
             XtraMessageBox.Show(
-                $"Log Upload ¿¬°á ½ÇÆĞ!\n\n¼­¹ö: {ConnectivityManager.Instance.ServerUrl}",
-                "¿¬°á ½ÇÆĞ");
+                $"Log Upload ì—°ê²° ì‹¤íŒ¨!\n\nì„œë²„: {ConnectivityManager.Instance.ServerUrl}",
+                "ì—°ê²° ì‹¤íŒ¨");
         }
     }
     catch (Exception ex)
     {
-        XtraMessageBox.Show($"Log Upload Å×½ºÆ® Áß ¿À·ù!\n\n{ex.Message}", "¿À·ù");
+        XtraMessageBox.Show($"Log Upload í…ŒìŠ¤íŠ¸ ì¤‘ ì˜¤ë¥˜!\n\n{ex.Message}", "ì˜¤ë¥˜");
     }
 }
 ```
 
-### ÀüÃ¼ Å×½ºÆ® (TestServerConnection)
+### ì „ì²´ í…ŒìŠ¤íŠ¸ (TestServerConnection)
 
 ```csharp
 private async void TestServerConnection()
 {
-    // ...progress form Ç¥½Ã...
+    // ...progress form í‘œì‹œ...
     
-    // ÀüÃ¼ Å×½ºÆ® ½ÇÇà
+    // ì „ì²´ í…ŒìŠ¤íŠ¸ ì‹¤í–‰
     var result = await ConnectivityManager.Instance.TestAllConnectionsAsync();
 
     if (result.AllConnected)
@@ -308,95 +308,95 @@ private async void TestServerConnection()
         barStaticItemServer.Caption = $"?? {ConnectivityManager.Instance.ServerUrl}";
         
         XtraMessageBox.Show(
-            $"¼­¹ö ¿¬°á ¼º°ø!\n\n" +
-            $"¼­¹ö: {ConnectivityManager.Instance.ServerUrl}\n\n" +
-            $"? Database: ¿¬°áµÊ\n" +
-            $"? File Transfer: ¿¬°áµÊ\n" +
-            $"? Log Upload: ¿¬°áµÊ",
-            "¿¬°á ¼º°ø");
+            $"ì„œë²„ ì—°ê²° ì„±ê³µ!\n\n" +
+            $"ì„œë²„: {ConnectivityManager.Instance.ServerUrl}\n\n" +
+            $"? Database: ì—°ê²°ë¨\n" +
+            $"? File Transfer: ì—°ê²°ë¨\n" +
+            $"? Log Upload: ì—°ê²°ë¨",
+            "ì—°ê²° ì„±ê³µ");
     }
     else
     {
-        barStaticItemServer.Caption = $"?? {ConnectivityManager.Instance.ServerUrl} (ÀÏºÎ ½ÇÆĞ)";
+        barStaticItemServer.Caption = $"?? {ConnectivityManager.Instance.ServerUrl} (ì¼ë¶€ ì‹¤íŒ¨)";
         
         var statusMessage = new StringBuilder();
-        statusMessage.AppendLine($"¼­¹ö: {ConnectivityManager.Instance.ServerUrl}");
+        statusMessage.AppendLine($"ì„œë²„: {ConnectivityManager.Instance.ServerUrl}");
         statusMessage.AppendLine();
-        statusMessage.AppendLine($"{(result.DBConnected ? "?" : "?")} Database: {(result.DBConnected ? "¿¬°áµÊ" : $"½ÇÆĞ - {result.DBError}")}");
-        statusMessage.AppendLine($"{(result.FileConnected ? "?" : "?")} File Transfer: {(result.FileConnected ? "¿¬°áµÊ" : $"½ÇÆĞ - {result.FileError}")}");
-        statusMessage.AppendLine($"{(result.LogConnected ? "?" : "?")} Log Upload: {(result.LogConnected ? "¿¬°áµÊ" : $"½ÇÆĞ - {result.LogError}")}");
+        statusMessage.AppendLine($"{(result.DBConnected ? "?" : "?")} Database: {(result.DBConnected ? "ì—°ê²°ë¨" : $"ì‹¤íŒ¨ - {result.DBError}")}");
+        statusMessage.AppendLine($"{(result.FileConnected ? "?" : "?")} File Transfer: {(result.FileConnected ? "ì—°ê²°ë¨" : $"ì‹¤íŒ¨ - {result.FileError}")}");
+        statusMessage.AppendLine($"{(result.LogConnected ? "?" : "?")} Log Upload: {(result.LogConnected ? "ì—°ê²°ë¨" : $"ì‹¤íŒ¨ - {result.LogError}")}");
         
-        XtraMessageBox.Show(statusMessage.ToString(), "¿¬°á Å×½ºÆ® °á°ú");
+        XtraMessageBox.Show(statusMessage.ToString(), "ì—°ê²° í…ŒìŠ¤íŠ¸ ê²°ê³¼");
     }
 }
 ```
 
 ---
 
-## ?? ¼öÁ¤µÈ ÆÄÀÏ
+## ?? ìˆ˜ì •ëœ íŒŒì¼
 
 ```
 ?? nU3.Core/Services/ConnectivityManager.cs
-   - TestConnectionAsync() °³¼±
-   - TestDBConnectionAsync() Ãß°¡
-   - TestFileConnectionAsync() Ãß°¡
-   - TestLogConnectionAsync() Ãß°¡
-   - TestAllConnectionsAsync() Ãß°¡
-   - ConnectivityTestResult Å¬·¡½º Ãß°¡
+   - TestConnectionAsync() ê°œì„ 
+   - TestDBConnectionAsync() ì¶”ê°€
+   - TestFileConnectionAsync() ì¶”ê°€
+   - TestLogConnectionAsync() ì¶”ê°€
+   - TestAllConnectionsAsync() ì¶”ê°€
+   - ConnectivityTestResult í´ë˜ìŠ¤ ì¶”ê°€
 
 ?? nU3.Shell/MainShellForm.cs
-   - °³º° ¼­ºñ½º Å×½ºÆ® ¼­ºê¸Ş´º Ãß°¡
-   - TestDatabaseConnection() Ãß°¡
-   - TestFileConnection() Ãß°¡
-   - TestLogConnection() Ãß°¡
-   - TestServerConnection() °³¼± (»ó¼¼ °á°ú Ç¥½Ã)
+   - ê°œë³„ ì„œë¹„ìŠ¤ í…ŒìŠ¤íŠ¸ ì„œë¸Œë©”ë‰´ ì¶”ê°€
+   - TestDatabaseConnection() ì¶”ê°€
+   - TestFileConnection() ì¶”ê°€
+   - TestLogConnection() ì¶”ê°€
+   - TestServerConnection() ê°œì„  (ìƒì„¸ ê²°ê³¼ í‘œì‹œ)
 
-? ºôµå ¼º°ø
+? ë¹Œë“œ ì„±ê³µ
 ```
 
 ---
 
-## ?? »ç¿ë ½Ã³ª¸®¿À
+## ?? ì‚¬ìš© ì‹œë‚˜ë¦¬ì˜¤
 
-### ½Ã³ª¸®¿À 1: ÀüÃ¼ Å×½ºÆ®
+### ì‹œë‚˜ë¦¬ì˜¤ 1: ì „ì²´ í…ŒìŠ¤íŠ¸
 
 ```
-»ç¿ëÀÚ: ½Ã½ºÅÛ > ¼­¹ö ¿¬°á Å×½ºÆ® (ÀüÃ¼) Å¬¸¯
-°á°ú: 
-  ? Database: ¿¬°áµÊ
-  ? File Transfer: ¿¬°áµÊ
-  ? Log Upload: ¿¬°áµÊ
+ì‚¬ìš©ì: ì‹œìŠ¤í…œ > ì„œë²„ ì—°ê²° í…ŒìŠ¤íŠ¸ (ì „ì²´) í´ë¦­
+ê²°ê³¼: 
+  ? Database: ì—°ê²°ë¨
+  ? File Transfer: ì—°ê²°ë¨
+  ? Log Upload: ì—°ê²°ë¨
   
-»óÅÂ¹Ù: ?? https://localhost:64229
+ìƒíƒœë°”: ?? https://localhost:64229
 ```
 
-### ½Ã³ª¸®¿À 2: Database¸¸ ¹®Á¦
+### ì‹œë‚˜ë¦¬ì˜¤ 2: Databaseë§Œ ë¬¸ì œ
 
 ```
-»ç¿ëÀÚ: ½Ã½ºÅÛ > ¼­¹ö ¿¬°á Å×½ºÆ® (ÀüÃ¼) Å¬¸¯
-°á°ú:
-  ? Database: ½ÇÆĞ - Connection refused
-  ? File Transfer: ¿¬°áµÊ
-  ? Log Upload: ¿¬°áµÊ
+ì‚¬ìš©ì: ì‹œìŠ¤í…œ > ì„œë²„ ì—°ê²° í…ŒìŠ¤íŠ¸ (ì „ì²´) í´ë¦­
+ê²°ê³¼:
+  ? Database: ì‹¤íŒ¨ - Connection refused
+  ? File Transfer: ì—°ê²°ë¨
+  ? Log Upload: ì—°ê²°ë¨
   
-»óÅÂ¹Ù: ?? https://localhost:64229 (ÀÏºÎ ½ÇÆĞ)
+ìƒíƒœë°”: ?? https://localhost:64229 (ì¼ë¶€ ì‹¤íŒ¨)
 ```
 
-### ½Ã³ª¸®¿À 3: °³º° ¼­ºñ½º Å×½ºÆ®
+### ì‹œë‚˜ë¦¬ì˜¤ 3: ê°œë³„ ì„œë¹„ìŠ¤ í…ŒìŠ¤íŠ¸
 
 ```
-»ç¿ëÀÚ: ½Ã½ºÅÛ > °³º° ¼­ºñ½º Å×½ºÆ® > Database ¿¬°á Å×½ºÆ® Å¬¸¯
-°á°ú:
-  ? Database ¿¬°á ½ÇÆĞ!
-  ¼­¹ö: https://localhost:64229
-  µ¥ÀÌÅÍº£ÀÌ½º ¼­ºñ½º°¡ ½ÇÇà ÁßÀÎÁö È®ÀÎÇÏ¼¼¿ä.
+ì‚¬ìš©ì: ì‹œìŠ¤í…œ > ê°œë³„ ì„œë¹„ìŠ¤ í…ŒìŠ¤íŠ¸ > Database ì—°ê²° í…ŒìŠ¤íŠ¸ í´ë¦­
+ê²°ê³¼:
+  ? Database ì—°ê²° ì‹¤íŒ¨!
+  ì„œë²„: https://localhost:64229
+  ë°ì´í„°ë² ì´ìŠ¤ ì„œë¹„ìŠ¤ê°€ ì‹¤í–‰ ì¤‘ì¸ì§€ í™•ì¸í•˜ì„¸ìš”.
 ```
 
 ---
 
-## ?? Å×½ºÆ® °á°ú ¿¹½Ã
+## ?? í…ŒìŠ¤íŠ¸ ê²°ê³¼ ì˜ˆì‹œ
 
-### ¼º°ø ÄÉÀÌ½º
+### ì„±ê³µ ì¼€ì´ìŠ¤
 ```
 Connectivity Test Results (2024-01-27 14:30:15)
 Overall: ? All Connected
@@ -406,7 +406,7 @@ File Transfer: ? Connected
 Log Upload:    ? Connected
 ```
 
-### ºÎºĞ ½ÇÆĞ ÄÉÀÌ½º
+### ë¶€ë¶„ ì‹¤íŒ¨ ì¼€ì´ìŠ¤
 ```
 Connectivity Test Results (2024-01-27 14:30:15)
 Overall: ? Some Failed
@@ -416,7 +416,7 @@ File Transfer: ? Connected
 Log Upload:    ? Connected
 ```
 
-### ÀüÃ¼ ½ÇÆĞ ÄÉÀÌ½º
+### ì „ì²´ ì‹¤íŒ¨ ì¼€ì´ìŠ¤
 ```
 Connectivity Test Results (2024-01-27 14:30:15)
 Overall: ? Some Failed
@@ -430,52 +430,52 @@ General Error: Server is offline
 
 ---
 
-## ? ÀÌÁ¡
+## ? ì´ì 
 
-### 1. ¼¼ºĞÈ­µÈ Áø´Ü
-- ¾î¶² ¼­ºñ½º¿¡ ¹®Á¦°¡ ÀÖ´ÂÁö Áï½Ã ÆÄ¾Ç
-- ºÒÇÊ¿äÇÑ ÀüÃ¼ Å×½ºÆ® ½Ã°£ Àı¾à
+### 1. ì„¸ë¶„í™”ëœ ì§„ë‹¨
+- ì–´ë–¤ ì„œë¹„ìŠ¤ì— ë¬¸ì œê°€ ìˆëŠ”ì§€ ì¦‰ì‹œ íŒŒì•…
+- ë¶ˆí•„ìš”í•œ ì „ì²´ í…ŒìŠ¤íŠ¸ ì‹œê°„ ì ˆì•½
 
-### 2. À¯¿¬ÇÑ Å×½ºÆ®
-- ÀüÃ¼ Å×½ºÆ®: ÇÑ ¹ø¿¡ ¸ğµç ¼­ºñ½º È®ÀÎ
-- °³º° Å×½ºÆ®: Æ¯Á¤ ¼­ºñ½º¸¸ ºü¸£°Ô Å×½ºÆ®
+### 2. ìœ ì—°í•œ í…ŒìŠ¤íŠ¸
+- ì „ì²´ í…ŒìŠ¤íŠ¸: í•œ ë²ˆì— ëª¨ë“  ì„œë¹„ìŠ¤ í™•ì¸
+- ê°œë³„ í…ŒìŠ¤íŠ¸: íŠ¹ì • ì„œë¹„ìŠ¤ë§Œ ë¹ ë¥´ê²Œ í…ŒìŠ¤íŠ¸
 
-### 3. »ó¼¼ÇÑ ¿À·ù Á¤º¸
-- °¢ ¼­ºñ½ºº° ¿À·ù ¸Ş½ÃÁö Á¦°ø
-- ¹®Á¦ ÇØ°áÀ» À§ÇÑ ÈùÆ® Á¦°ø
+### 3. ìƒì„¸í•œ ì˜¤ë¥˜ ì •ë³´
+- ê° ì„œë¹„ìŠ¤ë³„ ì˜¤ë¥˜ ë©”ì‹œì§€ ì œê³µ
+- ë¬¸ì œ í•´ê²°ì„ ìœ„í•œ íŒíŠ¸ ì œê³µ
 
-### 4. »ç¿ëÀÚ Ä£È­Àû
-- ¼­ºê¸Ş´º·Î ±ò²ûÇÏ°Ô ±¸¼º
-- Á÷°üÀûÀÎ ¾ÆÀÌÄÜ (?/?)
-- ÇÑ±Û ¸Ş½ÃÁö
+### 4. ì‚¬ìš©ì ì¹œí™”ì 
+- ì„œë¸Œë©”ë‰´ë¡œ ê¹”ë”í•˜ê²Œ êµ¬ì„±
+- ì§ê´€ì ì¸ ì•„ì´ì½˜ (?/?)
+- í•œê¸€ ë©”ì‹œì§€
 
 ---
 
-## ?? ¿Ï·á!
+## ?? ì™„ë£Œ!
 
-**ConnectivityManagerÀÇ °³º° Å×½ºÆ® ±â´ÉÀÌ ¿Ïº®ÇÏ°Ô ±¸ÇöµÇ¾ú½À´Ï´Ù!**
+**ConnectivityManagerì˜ ê°œë³„ í…ŒìŠ¤íŠ¸ ê¸°ëŠ¥ì´ ì™„ë²½í•˜ê²Œ êµ¬í˜„ë˜ì—ˆìŠµë‹ˆë‹¤!**
 
-### ÁÖ¿ä ±â´É
-
-```
-? ÀüÃ¼ Å×½ºÆ®: TestAllConnectionsAsync()
-? DB Å×½ºÆ®: TestDBConnectionAsync()
-? File Å×½ºÆ®: TestFileConnectionAsync()
-? Log Å×½ºÆ®: TestLogConnectionAsync()
-? »ó¼¼ °á°ú: ConnectivityTestResult
-? UI ÅëÇÕ: ½Ã½ºÅÛ ¸Ş´º ¼­ºê¸Ş´º
-```
-
-### »ç¿ë¹ı
+### ì£¼ìš” ê¸°ëŠ¥
 
 ```
-½Ã½ºÅÛ ¸Ş´º
-  ¡é
-¼­¹ö ¿¬°á Å×½ºÆ® (ÀüÃ¼) ¡ç ¸ğµç ¼­ºñ½º Å×½ºÆ®
-  ¶Ç´Â
-°³º° ¼­ºñ½º Å×½ºÆ®
-  ¡é
-Database / File Transfer / Log Upload ¡ç ¼±ÅÃÀû Å×½ºÆ®
+? ì „ì²´ í…ŒìŠ¤íŠ¸: TestAllConnectionsAsync()
+? DB í…ŒìŠ¤íŠ¸: TestDBConnectionAsync()
+? File í…ŒìŠ¤íŠ¸: TestFileConnectionAsync()
+? Log í…ŒìŠ¤íŠ¸: TestLogConnectionAsync()
+? ìƒì„¸ ê²°ê³¼: ConnectivityTestResult
+? UI í†µí•©: ì‹œìŠ¤í…œ ë©”ë‰´ ì„œë¸Œë©”ë‰´
 ```
 
-**¿Ïº®ÇÕ´Ï´Ù!** ??
+### ì‚¬ìš©ë²•
+
+```
+ì‹œìŠ¤í…œ ë©”ë‰´
+  â†“
+ì„œë²„ ì—°ê²° í…ŒìŠ¤íŠ¸ (ì „ì²´) â† ëª¨ë“  ì„œë¹„ìŠ¤ í…ŒìŠ¤íŠ¸
+  ë˜ëŠ”
+ê°œë³„ ì„œë¹„ìŠ¤ í…ŒìŠ¤íŠ¸
+  â†“
+Database / File Transfer / Log Upload â† ì„ íƒì  í…ŒìŠ¤íŠ¸
+```
+
+**ì™„ë²½í•©ë‹ˆë‹¤!** ??

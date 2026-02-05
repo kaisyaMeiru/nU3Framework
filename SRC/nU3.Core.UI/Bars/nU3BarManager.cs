@@ -1,4 +1,4 @@
-﻿using DevExpress.XtraBars;
+using DevExpress.XtraBars;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace nU3.Core.UI.Controls.Bars
 {
+    /// <summary>
+    /// nU3 Framework 표준 BarManager 컴포넌트
+    /// </summary>
     [ToolboxItem(true)]
     public class nU3BarManager : BarManager, InU3Control
     {

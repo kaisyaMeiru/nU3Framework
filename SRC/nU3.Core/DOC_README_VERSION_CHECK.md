@@ -1,437 +1,434 @@
-# ModuleLoaderService ¹öÀü Ã¼Å© °¡ÀÌµå
-
-## °³¿ä
-
-ÇÁ·Î±×·¥ ½ÇÇà ½Ã **ProgId, ModuleId, Version**À» ¸ğµÎ Ã¼Å©ÇÏ¿© ÃÖ½Å ¹öÀü ÀÚµ¿ ¾÷µ¥ÀÌÆ® ±â´ÉÀÌ Ãß°¡µÇ¾ú½À´Ï´Ù.
-
-## ?? ¾÷µ¥ÀÌÆ® Èå¸§
-
-```
-[¸Ş´º Å¬¸¯]
-    ¡é
-[ProgId, ModuleId È¹µæ]
-    ¡é
-[DB¿¡¼­ ÃÖ½Å ¹öÀü Á¶È¸]
-    ¡é
-[·ÎÄÃ ¹öÀü°ú ºñ±³]
-    ¡é
-    ¦§¦¡ °°À½ ¡æ ¹Ù·Î ½ÇÇà
-    ¦¦¦¡ ´Ù¸§ ¡æ ¾÷µ¥ÀÌÆ®
-           ¡é
-       [Remote Server]
-           ¡é Download
-       [Cache]
-           ¡é Deploy
-       [Runtime]
-           ¡é Reload
-       [½ÇÇà]
-```
-
-## ÁÖ¿ä º¯°æ»çÇ×
-
-### 1. **¹öÀü ÃßÀû**
-
-```csharp
-private readonly Dictionary<string, string> _loadedModuleVersions;
-// ModuleId ¡æ Version ¸ÅÇÎ
-```
-
-**·ÎµåµÈ ¸ğµâÀÇ ¹öÀüÀ» ¸Ş¸ğ¸®¿¡ ÀúÀå:**
-```csharp
-_loadedModuleVersions["PROG_EMR_IN_Worklist"] = "1.0.2.0"
-```
-
-### 2. **¹öÀü Ã¼Å© ¸Ş¼­µå**
-
-```csharp
-/// <summary>
-/// ÇÁ·Î±×·¥ ½ÇÇà Àü ¹öÀü Ã¼Å© ¹× ¾÷µ¥ÀÌÆ®
-/// </summary>
-public bool EnsureModuleUpdated(string progId, string moduleId)
-{
-    // 1. DB¿¡¼­ ÃÖ½Å ¹öÀü Á¶È¸
-    var activeVersion = _moduleRepo.GetActiveVersions()
-        .FirstOrDefault(v => v.ModuleId == moduleId);
-    
-    // 2. ·ÎµåµÈ ¹öÀü°ú ºñ±³
-    if (_loadedModuleVersions.TryGetValue(moduleId, out var loadedVersion))
-    {
-        if (loadedVersion == activeVersion.Version)
-            return true;  // ÀÌ¹Ì ÃÖ½Å
-    }
-    
-    // 3. ¾÷µ¥ÀÌÆ® ÇÊ¿ä
-    return UpdateSingleModule(module, activeVersion);
-}
-```
-
-### 3. **ÀÚµ¿ ¾÷µ¥ÀÌÆ® ¸Ş¼­µå**
-
-```csharp
-private bool UpdateSingleModule(ModuleMstDto module, ModuleVerDto version)
-{
-    // 1. Server ¡æ Cache (Download)
-    if (NeedsDownload(cacheFile, serverFile, version))
-    {
-        DownloadToCache(serverFile, cacheFile, module.ModuleName, version.Version);
-    }
-    
-    // 2. Cache ¡æ Runtime (Deploy)
-    DeployToRuntime(cacheFile, runtimeFile, module.ModuleName, version.Version);
-    
-    // 3. Reload
-    ReloadModule(runtimeFile, module.ModuleId, version.Version);
-}
-```
-
-## »ç¿ë ¹æ¹ı
-
-### ¹æ¹ı 1: ¹öÀü Ã¼Å© Æ÷ÇÔ (±ÇÀå ?)
-
-```csharp
-// MainShellForm.cs - ¸Ş´º Å¬¸¯ Ã³¸®
-private void OnMenuItemClick(string menuId)
-{
-    var menuRepo = Program.ServiceProvider.GetRequiredService<IMenuRepository>();
-    var menu = menuRepo.GetMenuById(menuId);
-    
-    if (string.IsNullOrEmpty(menu.ProgId))
-        return;
-    
-    // ? ProgId, ModuleId ¸ğµÎ »ç¿ë
-    var progRepo = Program.ServiceProvider.GetRequiredService<IProgramRepository>();
-    var program = progRepo.GetProgramById(menu.ProgId);
-    
-    if (program == null)
-        return;
-    
-    // ? ¹öÀü Ã¼Å© ¹× ÀÚµ¿ ¾÷µ¥ÀÌÆ®
-    var instance = _moduleLoader.CreateProgramInstanceWithVersionCheck(
-        program.ProgId, 
-        program.ModuleId
-    );
-    
-    if (instance is BaseWorkControl control)
-    {
-        OpenProgramInTab(control);
-    }
-}
-```
-
-### ¹æ¹ı 2: °£´ÜÇÑ ¹æ½Ä (¹öÀü Ã¼Å© ¾øÀ½)
-
-```csharp
-// Å×½ºÆ®³ª °£´ÜÇÑ °æ¿ì
-var instance = _moduleLoader.CreateProgramInstance(progId);
-```
-
-### ¹æ¹ı 3: ¼öµ¿ ¹öÀü Ã¼Å©
-
-```csharp
-// »çÀü¿¡ ¹öÀü Ã¼Å©
-if (_moduleLoader.EnsureModuleUpdated(progId, moduleId))
-{
-    var instance = _moduleLoader.CreateProgramInstance(progId);
-}
-```
-
-## ½ÇÁ¦ ½Ã³ª¸®¿À
-
-### ½Ã³ª¸®¿À 1: ÃÖ½Å ¹öÀü (¾÷µ¥ÀÌÆ® ºÒÇÊ¿ä)
-
-```
-»ç¿ëÀÚ: È¯ÀÚ ¸ñ·Ï ¸Ş´º Å¬¸¯
-    ¡é
-½Ã½ºÅÛ:
-  - ProgId: "EMR_PATIENT_LIST_001"
-  - ModuleId: "PROG_EMR_IN_Worklist"
-  - DB Version: "1.0.2.0"
-  - Loaded Version: "1.0.2.0"
-    ¡é
-°á°ú: ? ¹öÀü ÀÏÄ¡, ¹Ù·Î ½ÇÇà
-½Ã°£: ~50ms
-```
-
-### ½Ã³ª¸®¿À 2: ¾÷µ¥ÀÌÆ® ÇÊ¿ä
-
-```
-»ç¿ëÀÚ: È¯ÀÚ ¸ñ·Ï ¸Ş´º Å¬¸¯
-    ¡é
-½Ã½ºÅÛ:
-  - ProgId: "EMR_PATIENT_LIST_001"
-  - ModuleId: "PROG_EMR_IN_Worklist"
-  - DB Version: "1.0.3.0" ¡ç »õ ¹öÀü!
-  - Loaded Version: "1.0.2.0"
-    ¡é
-ÀÚµ¿ ¾÷µ¥ÀÌÆ®:
-  1. [Server] ¡æ [Cache] Download (1~5ÃÊ)
-  2. [Cache] ¡æ [Runtime] Deploy (~100ms)
-  3. Reload Assembly (~200ms)
-    ¡é
-°á°ú: ? ¾÷µ¥ÀÌÆ® ¿Ï·á ÈÄ ½ÇÇà
-½Ã°£: ~1~6ÃÊ
-```
-
-### ½Ã³ª¸®¿À 3: Ã¹ ½ÇÇà (DLL ¾øÀ½)
-
-```
-»ç¿ëÀÚ: ½Å±Ô ¸ğµâ ¸Ş´º Å¬¸¯
-    ¡é
-½Ã½ºÅÛ:
-  - ProgId: "NEW_MODULE_001"
-  - ModuleId: "PROG_EMR_NEW_Module"
-  - Loaded Version: null ¡ç ¾øÀ½!
-    ¡é
-ÀÚµ¿ ´Ù¿î·Îµå:
-  1. [Server] ¡æ [Cache] Download
-  2. [Cache] ¡æ [Runtime] Deploy
-  3. Load Assembly
-    ¡é
-°á°ú: ? ´Ù¿î·Îµå ÈÄ ½ÇÇà
-```
-
-## DB ½ºÅ°¸¶ È°¿ë
-
-### SYS_MODULE_MST (¸ğµâ ¸¶½ºÅÍ)
-
-```sql
-SELECT 
-    MODULE_ID,      -- "PROG_EMR_IN_Worklist"
-    MODULE_NAME,    -- "È¯ÀÚ °ü¸® ¸ğµâ"
-    CATEGORY,       -- "EMR"
-    SUB_SYSTEM,     -- "IN"
-    FILE_NAME       -- "nU3.Modules.EMR.IN.Worklist.dll"
-FROM SYS_MODULE_MST
-WHERE MODULE_ID = 'PROG_EMR_IN_Worklist';
-```
-
-### SYS_MODULE_VER (¹öÀü Á¤º¸)
-
-```sql
-SELECT 
-    MODULE_ID,      -- "PROG_EMR_IN_Worklist"
-    VERSION,        -- "1.0.3.0"
-    FILE_HASH,      -- "a1b2c3d4..."
-    FILE_SIZE,      -- 245760
-    STORAGE_PATH,   -- "D:\ServerStorage\EMR\IN\..."
-    IS_ACTIVE       -- "Y"
-FROM SYS_MODULE_VER
-WHERE MODULE_ID = 'PROG_EMR_IN_Worklist'
-  AND IS_ACTIVE = 'Y'
-ORDER BY REG_DATE DESC
-LIMIT 1;
-```
-
-### SYS_PROGRAM (ÇÁ·Î±×·¥ Á¤º¸)
-
-```sql
-SELECT 
-    PROG_ID,        -- "EMR_PATIENT_LIST_001"
-    MODULE_ID,      -- "PROG_EMR_IN_Worklist"
-    PROG_NAME,      -- "È¯ÀÚ ¸ñ·Ï"
-    IS_ACTIVE       -- "Y"
-FROM SYS_PROGRAM
-WHERE PROG_ID = 'EMR_PATIENT_LIST_001';
-```
-
-## ¸Ş´º ±¸¼º ÃÖÀûÈ­
-
-### ±âÁ¸ ¹æ½Ä (ºñÈ¿À²Àû)
-
-```csharp
-// ? DB Á¶È¸ ¸¹À½
-foreach (var menu in menus)
-{
-    var program = progRepo.GetProgram(menu.ProgId);  // DB Á¶È¸
-    var module = moduleRepo.GetModule(program.ModuleId);  // DB Á¶È¸
-    
-    CreateMenuItem(menu.MenuName, program.ProgName);
-}
-```
-
-### °³¼±µÈ ¹æ½Ä (È¿À²Àû)
-
-```csharp
-// ? ÇÑ ¹ø¿¡ Á¶È¸
-var menus = menuRepo.GetAllMenus();
-var programs = progRepo.GetAllPrograms()
-    .ToDictionary(p => p.ProgId);
-var attrs = _moduleLoader.GetProgramAttributes();
-
-foreach (var menu in menus)
-{
-    if (programs.TryGetValue(menu.ProgId, out var program))
-    {
-        if (attrs.TryGetValue(menu.ProgId, out var attr))
-        {
-            // ? DB Á¶È¸ ¾øÀÌ ¸ğµç Á¤º¸ »ç¿ë
-            CreateMenuItem(
-                menu.MenuName,
-                attr.ProgramName,
-                program.ModuleId,  // ½ÇÇà ½Ã ¹öÀü Ã¼Å©¿ë
-                attr.SystemType,
-                attr.AuthLevel
-            );
-        }
-    }
-}
-```
-
-## ·Î±ë
-
-### ¹öÀü Ã¼Å© ·Î±×
-
-```
-[ModuleLoader] Checking version for PROG_EMR_IN_Worklist
-[ModuleLoader] DB Version: 1.0.3.0
-[ModuleLoader] Loaded Version: 1.0.2.0
-[ModuleLoader] Update needed
-```
-
-### ´Ù¿î·Îµå ·Î±×
-
-```
-[ModuleLoader] Downloading: È¯ÀÚ °ü¸® ¸ğµâ v1.0.3.0
-[ModuleLoader] Server: D:\ServerStorage\EMR\IN\nU3.Modules.EMR.IN.Worklist.dll
-[ModuleLoader] Cache: C:\Users\...\AppData\...\Cache\EMR\IN\...
-[ModuleLoader] Downloaded to cache: È¯ÀÚ °ü¸® ¸ğµâ v1.0.3.0
-```
-
-### ¹èÆ÷ ·Î±×
-
-```
-[ModuleLoader] Deploying: È¯ÀÚ °ü¸® ¸ğµâ v1.0.3.0
-[ModuleLoader] Cache: C:\Users\...\Cache\EMR\IN\...
-[ModuleLoader] Runtime: C:\Program Files\nU3.Shell\Modules\EMR\IN\...
-[ModuleLoader] Deployed to runtime: È¯ÀÚ °ü¸® ¸ğµâ v1.0.3.0
-```
-
-### ·Îµå ·Î±×
-
-```
-[ModuleLoader] Reloaded: EMR_PATIENT_LIST_001 (v1.0.3.0)
-[ModuleLoader] Created instance: EMR_PATIENT_LIST_001 (Module: PROG_EMR_IN_Worklist)
-```
-
-## ¿À·ù Ã³¸®
-
-### 1. ¼­¹ö ÆÄÀÏ ¾øÀ½
-
-```csharp
-if (!File.Exists(serverFile))
-{
-    MessageBox.Show(
-        "¼­¹ö¿¡¼­ ¸ğµâÀ» Ã£À» ¼ö ¾ø½À´Ï´Ù.\n°ü¸®ÀÚ¿¡°Ô ¹®ÀÇÇÏ¼¼¿ä.",
-        "¸ğµâ ·Îµå ½ÇÆĞ",
-        MessageBoxButtons.OK,
-        MessageBoxIcon.Error
-    );
-    return null;
-}
-```
-
-### 2. ÆÄÀÏ Àá±è (½ÇÇà Áß)
-
-```csharp
-catch (IOException ex)
-{
-    MessageBox.Show(
-        "¸ğµâÀÌ »ç¿ë ÁßÀÔ´Ï´Ù.\nÇÁ·Î±×·¥À» Àç½ÃÀÛÇÏ¸é ¾÷µ¥ÀÌÆ®°¡ Àû¿ëµË´Ï´Ù.",
-        "¾÷µ¥ÀÌÆ® ¿¹¾àµÊ",
-        MessageBoxButtons.OK,
-        MessageBoxIcon.Information
-    );
-}
-```
-
-### 3. ¹öÀü Á¤º¸ ¾øÀ½
-
-```csharp
-if (activeVersion == null)
-{
-    MessageBox.Show(
-        "¸ğµâ ¹öÀü Á¤º¸¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù.",
-        "¹öÀü È®ÀÎ ½ÇÆĞ",
-        MessageBoxButtons.OK,
-        MessageBoxIcon.Warning
-    );
-}
-```
-
-## ¼º´É ÃÖÀûÈ­
-
-### 1. ºñµ¿±â ´Ù¿î·Îµå (¼±ÅÃÀû)
-
-```csharp
-public async Task<bool> EnsureModuleUpdatedAsync(string progId, string moduleId)
-{
-    // ¹é±×¶ó¿îµå¿¡¼­ ´Ù¿î·Îµå
-    await Task.Run(() => UpdateSingleModule(module, version));
-}
-```
-
-### 2. º´·Ä ¾÷µ¥ÀÌÆ® (Bootstrap)
-
-```csharp
-public void CheckAndUpdateModulesParallel()
-{
-    var modules = _moduleRepo.GetAllModules();
-    
-    Parallel.ForEach(modules, new ParallelOptions { MaxDegreeOfParallelism = 4 },
-        module =>
-        {
-            // º´·Ä ¾÷µ¥ÀÌÆ®
-            UpdateSingleModule(module, GetActiveVersion(module.ModuleId));
-        });
-}
-```
-
-### 3. Ä³½Ã »çÀü ·Îµå
-
-```csharp
-// ¾ÖÇÃ¸®ÄÉÀÌ¼Ç ½ÃÀÛ ½Ã
-_moduleLoader.LoadAllModules();
-// ¡æ ¸ğµç DLLÀ» ¹Ì¸® ·ÎµåÇÏ¿© ¸Ş¸ğ¸® Ä³½Ã ±¸Ãà
-```
-
-## ¸¶ÀÌ±×·¹ÀÌ¼Ç Ã¼Å©¸®½ºÆ®
-
-### ±âÁ¸ ÄÚµå º¯°æ
-
-- [ ] ¸Ş´º Å¬¸¯ ÇÚµé·¯ ¼öÁ¤
-- [ ] `CreateProgramInstance()` ¡æ `CreateProgramInstanceWithVersionCheck()` º¯°æ
-- [ ] ProgId + ModuleId ÇÔ²² Àü´Ş
-- [ ] ¿À·ù Ã³¸® Ãß°¡
-
-### DB ½ºÅ°¸¶ È®ÀÎ
-
-- [ ] `SYS_MODULE_VER` Å×ÀÌºí Á¸Àç
-- [ ] `VERSION` ÄÃ·³ Á¸Àç
-- [ ] `FILE_HASH` ÄÃ·³ Á¸Àç
-- [ ] `IS_ACTIVE` ÄÃ·³ Á¸Àç
-
-### Å×½ºÆ®
-
-- [ ] ÃÖ½Å ¹öÀü ½ÇÇà (¾÷µ¥ÀÌÆ® ºÒÇÊ¿ä)
-- [ ] ±¸¹öÀü ½ÇÇà (ÀÚµ¿ ¾÷µ¥ÀÌÆ®)
-- [ ] ½Å±Ô ¸ğµâ ½ÇÇà (Ã¹ ´Ù¿î·Îµå)
-- [ ] ¼­¹ö ÆÄÀÏ ¾ø´Â °æ¿ì
-- [ ] ÆÄÀÏ Àá±è »óÅÂ Ã³¸®
-
-## °á·Ğ
-
-? **¿Ïº®ÇÑ ¹öÀü °ü¸® ½Ã½ºÅÛ!**
-
-- **ProgId**: ÇÁ·Î±×·¥ ½Äº°
-- **ModuleId**: ¸ğµâ ½Äº°
-- **Version**: ¹öÀü Ã¼Å© ¹× ÀÚµ¿ ¾÷µ¥ÀÌÆ®
-
-```
-¸Ş´º Å¬¸¯ ¡æ ¹öÀü Ã¼Å© ¡æ ÀÚµ¿ ¾÷µ¥ÀÌÆ® ¡æ ½ÇÇà
-```
-
-»ç¿ëÀÚ´Â **Ç×»ó ÃÖ½Å ¹öÀü**À» ÀÚµ¿À¸·Î »ç¿ëÇÏ°Ô µË´Ï´Ù! ??
-
-## ¶óÀÌ¼±½º
-
-? 2024 nU3 Framework
+  # ModuleLoaderService ë²„ì „ í™•ì¸ ê°€ì´ë“œ
+
+  ## ê°œìš”
+
+  í”„ë¡œê·¸ë¨ ì‹¤í–‰ ì‹œ **ProgId, ModuleId, Version**ì„ í™•ì¸í•˜ì—¬ ì´ì „ì— ë¡œë“œëœ ëª¨ë“ˆì´ ìˆëŠ”ì§€ í™•ì¸í•˜ê³ , í•„ìš”í•œ ê²½ìš° ìƒˆ ë²„ì „ì„ ë‹¤ìš´ë¡œë“œí•˜ì—¬ ë¡œë“œí•©ë‹ˆë‹¤.
+
+  ## ë©”ì¸ ì²˜ë¦¬ íë¦„
+
+  ```
+  [ë©”ë‰´ í´ë¦­]
+      â†“
+  [ProgId, ModuleId íšë“]
+      â†“
+  [DBì— ìˆëŠ” ëª¨ë“ˆ ì¡°íšŒ]
+      â†“
+  [ì—…ë°ì´íŠ¸ í•„ìš” ì—¬ë¶€ í™•ì¸]
+      â†“
+  í•„ìš” ì‹œ ì¦‰ì‹œ ì—…ë°ì´íŠ¸
+      â”œâ”€ [Remote Server]
+      â”‚     â”œâ”€ Download
+      â”‚     â””â”€ [Cache]
+      â”‚           â”œâ”€ Deploy
+      â”‚           â””â”€ [Runtime]
+      â”‚                 â””â”€ Reload
+  ```
+
+  ## í•µì‹¬ ë©”ì„œë“œ
+
+  ### 1. **ë©”ëª¨ë¦¬ì— ìˆëŠ” ëª¨ë“ˆ ë²„ì „**
+
+  ```csharp
+  private readonly Dictionary<string, string> _loadedModuleVersions;
+  // ModuleIdì™€ Version ë§¤í•‘
+  ```
+
+  **ë¡œë“œëœ ëª¨ë“ˆì„ ë©”ëª¨ë¦¬ì— ì €ì¥:**
+  ```csharp
+  _loadedModuleVersions["PROG_EMR_IN_Worklist"] = "1.0.2.0"
+  ```
+
+  ### 2. **ë²„ì „ í™•ì¸ ë©”ì„œë“œ**
+
+  ```csharp
+  /// <summary>
+  /// í”„ë¡œê·¸ë¨ ì‹¤í–‰ ì‹œ í•„ìš”í•œ ëª¨ë“ˆì´ ìˆëŠ”ì§€ í™•ì¸í•˜ê³  ì—…ë°ì´íŠ¸í• ì§€ ê²°ì •
+  /// </summary>
+  public bool EnsureModuleUpdated(string progId, string moduleId)
+  {
+      // 1. DBì— ìˆëŠ” í™œì„± ë²„ì „ ì¡°íšŒ
+      var activeVersion = _moduleRepo.GetActiveVersions()
+          .FirstOrDefault(v => v.ModuleId == moduleId);
+
+      // 2. ë¡œë“œëœ ëª¨ë“ˆ í™•ì¸
+      if (_loadedModuleVersions.TryGetValue(moduleId, out var loadedVersion))
+      {
+          if (loadedVersion == activeVersion.Version)
+              return true;  // ì´ë¯¸ ìµœì‹  ë²„ì „
+      }
+
+      // 3. ì—…ë°ì´íŠ¸ í•„ìš”
+      return UpdateSingleModule(module, activeVersion);
+  }
+  ```
+
+  ### 3. **ìë™ ì—…ë°ì´íŠ¸ ë©”ì„œë“œ**
+
+  ```csharp
+  private bool UpdateSingleModule(ModuleMstDto module, ModuleVerDto version)
+  {
+      // 1. Server â†’ Cache (Download)
+      if (NeedsDownload(cacheFile, serverFile, version))
+      {
+          DownloadToCache(serverFile, cacheFile, module.ModuleName, version.Version);
+      }
+
+      // 2. Cache â†’ Runtime (Deploy)
+      DeployToRuntime(cacheFile, runtimeFile, module.ModuleName, version.Version);
+
+      // 3. Reload
+      ReloadModule(runtimeFile, module.ModuleId, version.Version);
+  }
+  ```
+
+  ## ì‚¬ìš© ì˜ˆì‹œ
+
+  ### ì‚¬ìš© ì˜ˆì‹œ 1: ë²„ì „ í™•ì¸ ë° ì—…ë°ì´íŠ¸ (ê¸°ë³¸)
+
+  ```csharp
+  // MainShellForm.cs - ë©”ë‰´ í´ë¦­ ì²˜ë¦¬
+  private void OnMenuItemClick(string menuId)
+  {
+      var menuRepo = Program.ServiceProvider.GetRequiredService<IMenuRepository>();
+      var menu = menuRepo.GetMenuById(menuId);
+
+      if (string.IsNullOrEmpty(menu.ProgId))
+          return;
+
+      // ProgId, ModuleId ì–»ê¸°
+      var progRepo = Program.ServiceProvider.GetRequiredService<IProgramRepository>();
+      var program = progRepo.GetProgramById(menu.ProgId);
+
+      if (program == null)
+          return;
+
+      // ë²„ì „ í™•ì¸í•˜ê³  í•„ìš”ì‹œ ì—…ë°ì´íŠ¸
+      var instance = _moduleLoader.CreateProgramInstanceWithVersionCheck(
+          program.ProgId,
+          program.ModuleId
+      );
+
+      if (instance is BaseWorkControl control)
+      {
+          OpenProgramInTab(control);
+      }
+  }
+  ```
+
+  ### ì‚¬ìš© ì˜ˆì‹œ 2: ì—…ë°ì´íŠ¸ ì•ˆ í•¨ (ë²„ì „ í™•ì¸ ì•ˆ í•¨)
+
+  ```csharp
+  // ë°ëª¨ë¥¼ ìœ„í•œ ê²½ìš°
+  var instance = _moduleLoader.CreateProgramInstance(progId);
+  ```
+
+  ### ì‚¬ìš© ì˜ˆì‹œ 3: ëª¨ë“ˆ ì—…ë°ì´íŠ¸ í™•ì¸
+
+  ```csharp
+  // ëª¨ë“ˆ ì—…ë°ì´íŠ¸ í™•ì¸
+  if (_moduleLoader.EnsureModuleUpdated(progId, moduleId))
+  {
+      var instance = _moduleLoader.CreateProgramInstance(progId);
+  }
+  ```
+
+  ## ì„±ëŠ¥ ì²˜ë¦¬
+
+  ### ì²˜ë¦¬ ì‹œë‚˜ë¦¬ì˜¤ 1: ë²„ì „ í™•ì¸ (ë‹¨ìˆœ)
+
+  ```
+  ìƒí™©: ìƒˆë¡œìš´ ë©”ë‰´ í´ë¦­
+      â†“
+  ì‹œìŠ¤í…œ:
+    - ProgId: "EMR_PATIENT_LIST_001"
+    - ModuleId: "PROG_EMR_IN_Worklist"
+    - DB Version: "1.0.2.0"
+    - Loaded Version: "1.0.2.0"
+      â†“
+  ê²°ê³¼: ì´ë¯¸ ìµœì‹  ë°°í¬, ì¦‰ì‹œ ë¡œë“œ
+  ì‹œê°„: ~50ms
+  ```
+
+  ### ì²˜ë¦¬ ì‹œë‚˜ë¦¬ì˜¤ 2: ì—…ë°ì´íŠ¸ í•„ìš”
+
+  ```
+  ìƒí™©: ìƒˆë¡œìš´ ë©”ë‰´ í´ë¦­
+      â†“
+  ì‹œìŠ¤í…œ:
+    - ProgId: "EMR_PATIENT_LIST_001"
+    - ModuleId: "PROG_EMR_IN_Worklist"
+    - DB Version: "1.0.3.0" (ì—…ë°ì´íŠ¸ í•„ìš”!)
+    - Loaded Version: "1.0.2.0"
+      â†“
+  ìë™ ì—…ë°ì´íŠ¸:
+    1. [Server] â†’ [Cache] Download (1~5ì´ˆ)
+    2. [Cache] â†’ [Runtime] Deploy (~100ms)
+    3. Reload Assembly (~200ms)
+      â†“
+  ê²°ê³¼: ì—…ë°ì´íŠ¸ í›„ ì¦‰ì‹œ ë¡œë“œ
+  ì‹œê°„: ~1~6ì´ˆ
+  ```
+
+  ### ì²˜ë¦¬ ì‹œë‚˜ë¦¬ì˜¤ 3: ìµœì´ˆ ë¡œë“œ (DLL ë‹¤ìš´ë¡œë“œ)
+
+  ```
+  ìƒí™©: ìƒˆë¡œìš´ ëª¨ë“ˆ ë©”ë‰´
+      â†“
+  ì‹œìŠ¤í…œ:
+    - ProgId: "NEW_MODULE_001"
+    - ModuleId: "PROG_EMR_NEW_Module"
+    - Loaded Version: null (ìµœì´ˆ ë¡œë“œ!)
+      â†“
+  ìë™ ë‹¤ìš´ë¡œë“œ:
+    1. [Server] â†’ [Cache] Download
+    2. [Cache] â†’ [Runtime] Deploy
+    3. Load Assembly
+      â†“
+  ê²°ê³¼: ë‹¤ìš´ë¡œë“œ í›„ ì¦‰ì‹œ ë¡œë“œ
+  ```
+
+  ## DB í‚¤ì›Œë“œ í™œìš©
+
+  ### SYS_MODULE_MST (ëª¨ë“ˆ ë§ˆìŠ¤í„°)
+
+  ```sql
+  SELECT
+      MODULE_ID,      -- "PROG_EMR_IN_Worklist"
+      MODULE_NAME,    -- "í™˜ì ëª©ë¡ í¼"
+      CATEGORY,       -- "EMR"
+      SUB_SYSTEM,     -- "IN"
+      FILE_NAME       -- "nU3.Modules.EMR.IN.Worklist.dll"
+  FROM SYS_MODULE_MST
+  WHERE MODULE_ID = 'PROG_EMR_IN_Worklist';
+  ```
+
+  ### SYS_MODULE_VER (ë²„ì „ ë§ˆìŠ¤í„°)
+
+  ```sql
+  SELECT
+      MODULE_ID,      -- "PROG_EMR_IN_Worklist"
+      VERSION,        -- "1.0.3.0"
+      FILE_HASH,      -- "a1b2c3d4..."
+      FILE_SIZE,      -- 245760
+      STORAGE_PATH,   -- "D:\ServerStorage\EMR\IN\..."
+      IS_ACTIVE       -- "Y"
+  FROM SYS_MODULE_VER
+  WHERE MODULE_ID = 'PROG_EMR_IN_Worklist'
+    AND IS_ACTIVE = 'Y'
+  ORDER BY REG_DATE DESC
+  LIMIT 1;
+  ```
+
+  ### SYS_PROGRAM (í”„ë¡œê·¸ë¨ ë§ˆìŠ¤í„°)
+
+  ```sql
+  SELECT
+      PROG_ID,        -- "EMR_PATIENT_LIST_001"
+      MODULE_ID,      -- "PROG_EMR_IN_Worklist"
+      PROG_NAME,      -- "í™˜ì ëª©ë¡"
+      IS_ACTIVE       -- "Y"
+  FROM SYS_PROGRAM
+  WHERE PROG_ID = 'EMR_PATIENT_LIST_001';
+  ```
+
+  ## ë©”ë‰´ ë™ì  ë¡œë”©
+
+  ### ìµœì í™” (ë‹¨ìˆœ)
+
+  ```csharp
+  // DB ì¡°íšŒ ìµœì í™”
+  foreach (var menu in menus)
+  {
+      var program = progRepo.GetProgram(menu.ProgId);  // DB ì¡°íšŒ
+      var module = moduleRepo.GetModule(program.ModuleId);  // DB ì¡°íšŒ
+
+      CreateMenuItem(menu.MenuName, program.ProgName);
+  }
+  ```
+
+  ### ìµœì í™” (ê³ ê¸‰)
+
+  ```csharp
+  // ë©”ë‰´ì™€ ê´€ë ¨ ì •ë³´ ì¡°íšŒ ìµœì í™”
+  var menus = menuRepo.GetAllMenus();
+  var programs = progRepo.GetAllPrograms()
+      .ToDictionary(p => p.ProgId);
+  var attrs = _moduleLoader.GetProgramAttributes();
+
+  foreach (var menu in menus)
+  {
+      if (programs.TryGetValue(menu.ProgId, out var program))
+      {
+          if (attrs.TryGetValue(menu.ProgId, out var attr))
+          {
+              // DB ì¡°íšŒë¥¼ í•„ìš”ë¡œ í•˜ëŠ” ê²½ìš° ë©”ë‰´ ì •ë³´ë§Œ ìƒì„±
+              CreateMenuItem(
+                  menu.MenuName,
+                  attr.ProgramName,
+                  program.ModuleId,  // ë²„ì „ í™•ì¸ ê°€ëŠ¥
+                  attr.SystemType,
+                  attr.AuthLevel
+              );
+          }
+      }
+  }
+  ```
+
+  ## ë¡œê·¸
+
+  ### ë²„ì „ í™•ì¸ ë¡œê·¸
+
+  ```
+  [ModuleLoader] Checking version for PROG_EMR_IN_Worklist
+  [ModuleLoader] DB Version: 1.0.3.0
+  [ModuleLoader] Loaded Version: 1.0.2.0
+  [ModuleLoader] Update needed
+  ```
+
+  ### ë‹¤ìš´ë¡œë“œ ë¡œê·¸
+
+  ```
+  [ModuleLoader] Downloading: í™˜ì ëª©ë¡ í¼ v1.0.3.0
+  [ModuleLoader] Server: D:\ServerStorage\EMR\IN\nU3.Modules.EMR.IN.Worklist.dll
+  [ModuleLoader] Cache: C:\Users\...\AppData\...\Cache\EMR\IN\...
+  [ModuleLoader] Downloaded to cache: í™˜ì ëª©ë¡ í¼ v1.0.3.0
+  ```
+
+  ### ë°°í¬ ë¡œê·¸
+
+  ```
+  [ModuleLoader] Deploying: í™˜ì ëª©ë¡ í¼ v1.0.3.0
+  [ModuleLoader] Cache: C:\Users\...\Cache\EMR\IN\...
+  [ModuleLoader] Runtime: C:\Program Files\nU3.Shell\Modules\EMR\IN\...
+  [ModuleLoader] Deployed to runtime: í™˜ì ëª©ë¡ í¼ v1.0.3.0
+  ```
+
+  ### ë¡œë“œ ë¡œê·¸
+
+  ```
+  [ModuleLoader] Reloaded: EMR_PATIENT_LIST_001 (v1.0.3.0)
+  [ModuleLoader] Created instance: EMR_PATIENT_LIST_001 (Module: PROG_EMR_IN_Worklist)
+  ```
+
+  ## ì˜¤ë¥˜ ì²˜ë¦¬
+
+  ### 1. ì„œë²„ íŒŒì¼ ì¡´ì¬ ì•ˆ í•¨
+
+  ```csharp
+  if (!File.Exists(serverFile))
+  {
+      MessageBox.Show(
+          "í•„ìš”í•œ ì„œë²„ íŒŒì¼ì„ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.\nê´€ë¦¬ìì—ê²Œ ë¬¸ì˜í•˜ì„¸ìš”.",
+          "ëª¨ë“ˆ ë‹¤ìš´ë¡œë“œ ì‹¤íŒ¨",
+          MessageBoxButtons.OK,
+          MessageBoxIcon.Error
+      );
+      return null;
+  }
+  ```
+
+  ### 2. ë‹¤ìš´ë¡œë“œ ì‹¤íŒ¨ (ê¶Œí•œ ë¬¸ì œ)
+
+  ```csharp
+  catch (IOException ex)
+  {
+      MessageBox.Show(
+          "íŒŒì¼ ë‹¤ìš´ë¡œë“œì— ì‹¤íŒ¨í–ˆìŠµë‹ˆë‹¤.\ní”„ë¡œê·¸ë¨ì„ ê´€ë¦¬ì ê¶Œí•œìœ¼ë¡œ ì‹¤í–‰í•˜ë©´ ì—…ë°ì´íŠ¸ê°€ ê°€ëŠ¥í•©ë‹ˆë‹¤.",
+          "ì—…ë°ì´íŠ¸ ì‹¤íŒ¨",
+          MessageBoxButtons.OK,
+          MessageBoxIcon.Information
+      );
+  }
+  ```
+
+  ### 3. ë²„ì „ í™•ì¸ ì‹¤íŒ¨
+
+  ```csharp
+  if (activeVersion == null)
+  {
+      MessageBox.Show(
+          "í™œì„± ë²„ì „ì„ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.",
+          "ë²„ì „ í™•ì¸ ì‹¤íŒ¨",
+          MessageBoxButtons.OK,
+          MessageBoxIcon.Warning
+      );
+  }
+  ```
+
+  ## ë³‘ë ¬ ì²˜ë¦¬ ìµœì í™”
+
+  ### 1. ë¹„ë™ê¸° ì—…ë°ì´íŠ¸ (ìµœì‹ )
+
+  ```csharp
+  public async Task<bool> EnsureModuleUpdatedAsync(string progId, string moduleId)
+  {
+      // ë³‘ë ¬ë¡œ ì—…ë°ì´íŠ¸
+      await Task.Run(() => UpdateSingleModule(module, version));
+  }
+  ```
+
+  ### 2. ë³‘ë ¬ ì—…ë°ì´íŠ¸ (Bootstrap)
+
+  ```csharp
+  public void CheckAndUpdateModulesParallel()
+  {
+      var modules = _moduleRepo.GetAllModules();
+
+      Parallel.ForEach(modules, new ParallelOptions { MaxDegreeOfParallelism = 4 },
+          module =>
+          {
+              // ë³‘ë ¬ ì—…ë°ì´íŠ¸
+              UpdateSingleModule(module, GetActiveVersion(module.ModuleId));
+          });
+  }
+  ```
+
+  ### 3. ìºì‹œ ë¯¸ë¦¬ ë¡œë“œ
+
+  ```csharp
+  // í”„ë¡œê·¸ë¨ ì‹œì‘ ì „ ëª¨ë“  DLL ë¯¸ë¦¬ ë¡œë“œ
+  _moduleLoader.LoadAllModules();
+  // ì‚¬ìš©í•  ë•Œë§ˆë‹¤ ë©”ëª¨ë¦¬ ìºì‹œì—ì„œ ì¦‰ì‹œ ë¡œë“œ
+  ```
+
+  ## í”ŒëŸ¬ê·¸ì¸ í”„ë¡œê·¸ë˜ë° ì²´í¬ë¦¬ìŠ¤íŠ¸
+
+  ### í•µì‹¬ ì—…ë°ì´íŠ¸
+
+  - [ ] ë©”ë‰´ í´ë¦­ ì²˜ë¦¬ ìµœì í™”
+  - [ ] `CreateProgramInstance()` â†’ `CreateProgramInstanceWithVersionCheck()` ë³€ê²½
+  - [ ] ProgId + ModuleId ì¡°í•© ì‚¬ìš©
+  - [ ] ì˜¤ë¥˜ ì²˜ë¦¬ ì¶”ê°€
+
+  ### DB í‚¤ì›Œë“œ í™•ì¸
+
+  - [ ] `SYS_MODULE_VER` í…Œì´ë¸” í™•ì¸
+  - [ ] `VERSION` ì»¬ëŸ¼ í™•ì¸
+  - [ ] `FILE_HASH` ì»¬ëŸ¼ í™•ì¸
+  - [ ] `IS_ACTIVE` ì»¬ëŸ¼ í™•ì¸
+
+  ### í…ŒìŠ¤íŠ¸
+
+  - [ ] ë²„ì „ í™•ì¸ (ì—…ë°ì´íŠ¸ í•„ìš” ì‹œ)
+  - [ ] ìë™ ì—…ë°ì´íŠ¸ (ì¸í„°ë„· í•„ìš”)
+  - [ ] ìµœì´ˆ ë¡œë“œ (ìƒˆ ëª¨ë“ˆ)
+  - [ ] ì—…ë°ì´íŠ¸ ì„±ê³µ ì‹œ ë¡œê·¸
+  - [ ] ì—…ë°ì´íŠ¸ ì‹¤íŒ¨ ì‹œ ì˜¤ë¥˜ ì²˜ë¦¬
+
+  ## ìš”ì•½
+
+  **í•©ë¦¬ì ì¸ ë²„ì „ í™•ì¸ ì‹œìŠ¤í…œ!**
+
+  - **ProgId**: í”„ë¡œê·¸ë¨ ì‹ë³„
+  - **ModuleId**: ëª¨ë“ˆ ì‹ë³„
+  - **Version**: ë²„ì „ í™•ì¸ ë° ìë™ ì—…ë°ì´íŠ¸ ë©”ì»¤ë‹ˆì¦˜
+
+  ```
+  ë©”ë‰´ í´ë¦­ ì‹œ ë²„ì „ í™•ì¸ ë° ìë™ ì—…ë°ì´íŠ¸ ì‹œìŠ¤í…œ í™œì„±í™”
+  ```
+
+  ê°œë°œìëŠ” **í•­ìƒ ìµœì‹  ë²„ì „**ì„ ì‚¬ìš©í•˜ì—¬ í”„ë¡œê·¸ë¨ì„ ì‹¤í–‰í•©ë‹ˆë‹¤!
+
+  ## ë¼ì´ì„ ìŠ¤ ì •ë³´
+
+  (c) 2024 nU3 Framework

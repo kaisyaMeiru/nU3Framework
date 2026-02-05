@@ -12,8 +12,8 @@ using System.Reflection;
 namespace nU3.Core.UI
 {
     /// <summary>
-    /// ¸ğµç MDI ÀÚ½Ä ÀÛ¾÷ È­¸éÀÇ ±âº» Å¬·¡½ºÀÔ´Ï´Ù.
-    /// È­¸é »ı¸íÁÖ±â(È°¼ºÈ­/ºñÈ°¼ºÈ­), ÄÁÅØ½ºÆ® °ü¸®, ¸®¼Ò½º ÇØÁ¦ µîÀ» Á¦°øÇÕ´Ï´Ù.
+    /// ë³‘ì› MDI ìì‹ ì‘ì—… í™”ë©´ì˜ ê¸°ë³¸ í´ë˜ìŠ¤ì…ë‹ˆë‹¤.
+    /// í™”ë©´ ìƒëª…ì£¼ê¸°(í™œì„±í™”/ë¹„í™œì„±í™”), ì»¨í…ìŠ¤íŠ¸ ê³µìœ , ë¦¬ì†ŒìŠ¤ í•´ì œ ë“±ì„ ê´€ë¦¬í•©ë‹ˆë‹¤.
     /// </summary>
     public class BaseWorkControl : UserControl, IBaseWorkControl, IBaseWorkControlExpand, IDisposable
     {
@@ -28,8 +28,8 @@ namespace nU3.Core.UI
         #region IScreenIdentifier Implementation
 
         /// <summary>
-        /// È­¸é ½Äº°ÀÚ(Program ID)
-        /// nU3ProgramInfo ¾îÆ®¸®ºäÆ®°¡ ÀÖÀ¸¸é ÇØ´ç °ªÀ» »ç¿ëÇÕ´Ï´Ù.
+        /// í™”ë©´ ì‹ë³„ì(Program ID)
+        /// nU3ProgramInfo ì–´íŠ¸ë¦¬ë·°íŠ¸ê°€ ì„¤ì •ëœ ê²½ìš° í•´ë‹¹ ê°’ì„ ì‚¬ìš©í•©ë‹ˆë‹¤.
         /// </summary>
         public virtual string ProgramID
         {
@@ -46,8 +46,8 @@ namespace nU3.Core.UI
         }
 
         /// <summary>
-        /// È­¸é Ç¥½Ã Á¦¸ñ
-        /// nU3ProgramInfo ¾îÆ®¸®ºäÆ®°¡ ÀÖÀ¸¸é ÇØ´ç °ªÀ» »ç¿ëÇÕ´Ï´Ù.
+        /// í™”ë©´ í‘œì‹œ ì œëª©
+        /// nU3ProgramInfo ì–´íŠ¸ë¦¬ë·°íŠ¸ê°€ ì„¤ì •ëœ ê²½ìš° í•´ë‹¹ ê°’ì„ ì‚¬ìš©í•©ë‹ˆë‹¤.
         /// </summary>
         public virtual string ProgramTitle
         {
@@ -68,38 +68,38 @@ namespace nU3.Core.UI
         #region Properties
 
         /// <summary>
-        /// ÀÌº¥Æ® ¹ö½º (¾ÖÇÃ¸®ÄÉÀÌ¼Ç ³»ºÎ ÀÌº¥Æ® Àü¼Û)
+        /// ì´ë²¤íŠ¸ ë²„ìŠ¤ (ì• í”Œë¦¬ì¼€ì´ì…˜ ë‚´ë¶€ ì´ë²¤íŠ¸ í†µì‹ )
         /// </summary>
         public nU3.Core.Events.IEventAggregator EventBus { get; set; }
 
         /// <summary>
-        /// ÇöÀç ÀÛ¾÷ ÄÁÅØ½ºÆ®
+        /// í˜„ì¬ ì‘ì—… ì»¨í…ìŠ¤íŠ¸
         /// </summary>
         public WorkContext Context => _workContext;
 
         /// <summary>
-        /// ¿¬°á¼º ¸Å´ÏÀú (¼­¹ö Åë½Å¿ë)
-        /// DB, ÆÄÀÏ Àü¼Û, ·Î±× ¾÷·Îµå µîÀ» ´ã´çÇÕ´Ï´Ù.
+        /// ì—°ê²°ì„± ë§¤ë‹ˆì € (ì „ì—­ ì‹±ê¸€í†¤)
+        /// DB, íŒŒì¼ ì „ì†¡, ë¡œê·¸ ì—…ë¡œë“œ ë“±ì„ ê´€ë¦¬í•©ë‹ˆë‹¤.
         /// </summary>
         protected ConnectivityManager Connectivity => ConnectivityManager.Instance;
 
         /// <summary>
-        /// ·Î°Å
+        /// ë¡œê±°
         /// </summary>
         protected ILogger Logger => LogManager.Instance.Logger;
 
         /// <summary>
-        /// °¨»ç ·Î°Å
+        /// ê°ì‚¬ ë¡œê±°
         /// </summary>
         protected IAuditLogger AuditLogger => LogManager.Instance.AuditLogger;
 
         /// <summary>
-        /// Ãë¼Ò ÅäÅ«
+        /// ì·¨ì†Œ í† í°
         /// </summary>
         protected CancellationToken CancellationToken => _cancellationTokenSource.Token;
 
         /// <summary>
-        /// È°¼ºÈ­ ¿©ºÎ
+        /// í™œì„±í™” ì—¬ë¶€
         /// </summary>
         public bool IsActivated => _isActivated;
 
@@ -126,7 +126,7 @@ namespace nU3.Core.UI
         #region IWorkContextProvider Implementation
 
         /// <summary>
-        /// ÀÛ¾÷ ÄÁÅØ½ºÆ® ÃÊ±âÈ­ (IWorkContextProvider)
+        /// ì‘ì—… ì»¨í…ìŠ¤íŠ¸ ì´ˆê¸°í™” (IWorkContextProvider)
         /// </summary>
         public virtual void InitializeContext(WorkContext context)
         {
@@ -144,7 +144,7 @@ namespace nU3.Core.UI
         }
 
         /// <summary>
-        /// ÀÛ¾÷ ÄÁÅØ½ºÆ® °»½Å (IWorkContextProvider)
+        /// ì‘ì—… ì»¨í…ìŠ¤íŠ¸ ì—…ë°ì´íŠ¸ (IWorkContextProvider)
         /// </summary>
         public virtual void UpdateContext(WorkContext context)
         {
@@ -162,7 +162,7 @@ namespace nU3.Core.UI
         }
 
         /// <summary>
-        /// ÇöÀç ÄÁÅØ½ºÆ® º¹»çº»À» ¹İÈ¯ÇÕ´Ï´Ù.
+        /// í˜„ì¬ ì»¨í…ìŠ¤íŠ¸ ë³µì‚¬ë³¸ì„ ë°˜í™˜í•©ë‹ˆë‹¤.
         /// </summary>
         public WorkContext GetContext()
         {
@@ -170,19 +170,17 @@ namespace nU3.Core.UI
         }
 
         /// <summary>
-        /// ÄÁÅØ½ºÆ® ÃÊ±âÈ­ ÈÄ È£ÃâµÇ´Â ÈÅ(ÆÄ»ı Å¬·¡½º¿¡¼­ ÀçÁ¤ÀÇ)
+        /// ì»¨í…ìŠ¤íŠ¸ ì´ˆê¸°í™” ì‹œ í˜¸ì¶œë˜ëŠ” í›…(í•˜ìœ„ í´ë˜ìŠ¤ì—ì„œ ì¬ì •ì˜)
         /// </summary>
         protected virtual void OnContextInitialized(WorkContext oldContext, WorkContext newContext)
         {
-            // ÆÄ»ı Å¬·¡½º¿¡¼­ ÇÊ¿ä½Ã ¿À¹ö¶óÀÌµå
         }
 
         /// <summary>
-        /// ÄÁÅØ½ºÆ® º¯°æ ½Ã È£ÃâµÇ´Â ÈÅ(ÆÄ»ı Å¬·¡½º¿¡¼­ ÀçÁ¤ÀÇ)
+        /// ì»¨í…ìŠ¤íŠ¸ ë³€ê²½ ì‹œ í˜¸ì¶œë˜ëŠ” í›…(í•˜ìœ„ í´ë˜ìŠ¤ì—ì„œ ì¬ì •ì˜)
         /// </summary>
         protected virtual void OnContextChanged(WorkContext oldContext, WorkContext newContext)
         {
-            // ÆÄ»ı Å¬·¡½º¿¡¼­ ÇÊ¿ä½Ã ¿À¹ö¶óÀÌµå
         }
 
         #endregion
@@ -190,7 +188,7 @@ namespace nU3.Core.UI
         #region ILifecycleAware Implementation
 
         /// <summary>
-        /// È­¸é È°¼ºÈ­ ½Ã È£ÃâµË´Ï´Ù. (ILifecycleAware)
+        /// í™”ë©´ í™œì„±í™” ì‹œ í˜¸ì¶œë©ë‹ˆë‹¤. (ILifecycleAware)
         /// </summary>
         public virtual void OnActivated()
         {
@@ -211,7 +209,7 @@ namespace nU3.Core.UI
         }
 
         /// <summary>
-        /// È­¸é ºñÈ°¼ºÈ­ ½Ã È£ÃâµË´Ï´Ù. (ILifecycleAware)
+        /// í™”ë©´ ë¹„í™œì„±í™” ì‹œ í˜¸ì¶œë©ë‹ˆë‹¤. (ILifecycleAware)
         /// </summary>
         public virtual void OnDeactivated()
         {
@@ -232,7 +230,7 @@ namespace nU3.Core.UI
         }
 
         /// <summary>
-        /// ´İ±â °¡´É ¿©ºÎ È®ÀÎ (ILifecycleAware)
+        /// ë‹«ê¸° ê°€ëŠ¥ ì—¬ë¶€ í™•ì¸ (ILifecycleAware)
         /// </summary>
         public virtual bool CanClose()
         {
@@ -248,27 +246,25 @@ namespace nU3.Core.UI
         }
 
         /// <summary>
-        /// È­¸é È°¼ºÈ­ ½Ã È£ÃâµÇ´Â ÈÅ
+        /// í™”ë©´ í™œì„±í™” ì‹œ í˜¸ì¶œë˜ëŠ” í›…
         /// </summary>
         protected virtual void OnScreenActivated()
         {
-            // ÆÄ»ı Å¬·¡½º¿¡¼­ ÇÊ¿ä½Ã ¿À¹ö¶óÀÌµå
         }
 
         /// <summary>
-        /// È­¸é ºñÈ°¼ºÈ­ ½Ã È£ÃâµÇ´Â ÈÅ
+        /// í™”ë©´ ë¹„í™œì„±í™” ì‹œ í˜¸ì¶œë˜ëŠ” í›…
         /// </summary>
         protected virtual void OnScreenDeactivated()
         {
-            // ÆÄ»ı Å¬·¡½º¿¡¼­ ÇÊ¿ä½Ã ¿À¹ö¶óÀÌµå
         }
 
         /// <summary>
-        /// ´İ±â Àü¿¡ È£ÃâµÇ´Â ÈÅ (±âº»ÀûÀ¸·Î true ¹İÈ¯)
+        /// ë‹«ê¸° ì§ì „ í˜¸ì¶œë˜ëŠ” í›… (ê¸°ë³¸ì ìœ¼ë¡œ true ë°˜í™˜)
         /// </summary>
         protected virtual bool OnBeforeClose()
         {
-            return true; // ±âº»ÀûÀ¸·Î ´İ±â Çã¿ë
+            return true; // ê¸°ë³¸ì ìœ¼ë¡œ ë‹«ê¸° í—ˆìš©
         }
 
         #endregion
@@ -276,7 +272,7 @@ namespace nU3.Core.UI
         #region IResourceManager Implementation
 
         /// <summary>
-        /// ¸®¼Ò½º ÇØÁ¦ (IResourceManager)
+        /// ë¦¬ì†ŒìŠ¤ í•´ì œ (IResourceManager)
         /// </summary>
         public virtual void ReleaseResources()
         {
@@ -287,13 +283,13 @@ namespace nU3.Core.UI
             {
                 LogInfo($"Releasing resources for {ProgramTitle ?? this.GetType().Name}");
 
-                // Ãë¼Ò ¿äÃ»
+                // ë¹„ë™ê¸° ì‘ì—… ì·¨ì†Œ ìš”ì²­
                 _cancellationTokenSource?.Cancel();
 
-                // ÆÄ»ı Å¬·¡½º ¸®¼Ò½º ÇØÁ¦ ÈÅ
+                // í•˜ìœ„ í´ë˜ìŠ¤ ë¦¬ì†ŒìŠ¤ í•´ì œ í›… í˜¸ì¶œ
                 OnReleaseResources();
 
-                // µî·ÏµÈ Disposable ÀÎ½ºÅÏ½º ÇØÁ¦
+                // ë“±ë¡ëœ Disposable ì¸ìŠ¤í„´ìŠ¤ ì •ë¦¬
                 foreach (var disposable in _disposables)
                 {
                     try
@@ -316,12 +312,11 @@ namespace nU3.Core.UI
         }
 
         /// <summary>
-        /// ÆÄ»ı Å¬·¡½º¿¡¼­ ¸®¼Ò½º ÇØÁ¦ ·ÎÁ÷À» ±¸ÇöÇÕ´Ï´Ù.
+        /// í•˜ìœ„ í´ë˜ìŠ¤ì—ì„œ ë¦¬ì†ŒìŠ¤ í•´ì œ ë¡œì§ì„ ì¬ì •ì˜í•©ë‹ˆë‹¤.
+        /// ì˜ˆ: íƒ€ì´ë¨¸ ì¤‘ì§€, ì´ë²¤íŠ¸ í•¸ë“¤ëŸ¬ ì œê±°, ì™¸ë¶€ ë¦¬ì†ŒìŠ¤ ë°˜í™˜ ë“±
         /// </summary>
         protected virtual void OnReleaseResources()
         {
-            // ÆÄ»ı Å¬·¡½º¿¡¼­ ¿À¹ö¶óÀÌµåÇÏ¿© ¸®¼Ò½º ÇØÁ¦
-            // ¿¹: Å¸ÀÌ¸Ó ÁßÁö, ÀÌº¥Æ® ÇÚµé·¯ ÇØÁ¦, ¿ÜºÎ ¸®¼Ò½º ¹İÈ¯ µî
         }
 
         #endregion
@@ -329,7 +324,7 @@ namespace nU3.Core.UI
         #region Resource Registration
 
         /// <summary>
-        /// Disposable ¸®¼Ò½º¸¦ µî·ÏÇÕ´Ï´Ù.
+        /// Disposable ë¦¬ì†ŒìŠ¤ë¥¼ ë“±ë¡í•©ë‹ˆë‹¤.
         /// </summary>
         protected void RegisterDisposable(IDisposable disposable)
         {
@@ -340,7 +335,7 @@ namespace nU3.Core.UI
         }
 
         /// <summary>
-        /// Disposable ¸®¼Ò½º µî·ÏÀ» ÇØÁ¦ÇÕ´Ï´Ù.
+        /// Disposable ë¦¬ì†ŒìŠ¤ ë“±ë¡ì„ í•´ì œí•©ë‹ˆë‹¤.
         /// </summary>
         protected void UnregisterDisposable(IDisposable disposable)
         {
@@ -355,15 +350,15 @@ namespace nU3.Core.UI
         #region Helper Methods
 
         /// <summary>
-        /// ·¹ÀÌ¾Æ¿ô ÃÊ±âÈ­ (ÆÄ»ı Å¬·¡½º¿¡¼­ ¿À¹ö¶óÀÌµå)
+        /// ë ˆì´ì•„ì›ƒ ì´ˆê¸°í™” (í•˜ìœ„ í´ë˜ìŠ¤ì—ì„œ ì¬ì •ì˜)
         /// </summary>
         protected virtual void InitializeLayout()
         {
-            // DevExpress LayoutControl °ü·Ã ÃÊ±âÈ­
+            // DevExpress LayoutControl ë“± ì´ˆê¸°í™” ë¡œì§
         }
 
         /// <summary>
-        /// Á¤º¸ ·Î±× ±â·Ï
+        /// ì •ë³´ ë¡œê·¸ ê¸°ë¡
         /// </summary>
         protected void LogInfo(string message)
         {
@@ -375,7 +370,7 @@ namespace nU3.Core.UI
         }
 
         /// <summary>
-        /// °æ°í ·Î±× ±â·Ï
+        /// ê²½ê³  ë¡œê·¸ ê¸°ë¡
         /// </summary>
         protected void LogWarning(string message)
         {
@@ -387,7 +382,7 @@ namespace nU3.Core.UI
         }
 
         /// <summary>
-        /// ¿À·ù ·Î±× ±â·Ï
+        /// ì˜¤ë¥˜ ë¡œê·¸ ê¸°ë¡
         /// </summary>
         protected void LogError(string message, Exception exception = null)
         {
@@ -399,7 +394,7 @@ namespace nU3.Core.UI
         }
 
         /// <summary>
-        /// °¨»ç ·Î±× ±â·Ï
+        /// ê°ì‚¬ ë¡œê·¸ ê¸°ë¡
         /// </summary>
         protected void LogAudit(string action, string entityType = null, string entityId = null, string additionalInfo = null)
         {
@@ -411,7 +406,7 @@ namespace nU3.Core.UI
         }
 
         /// <summary>
-        /// ±ÇÇÑ °Ë»ç
+        /// ê¶Œí•œ ê²€ì‚¬
         /// </summary>
         protected bool HasPermission(Func<ModulePermissions, bool> permissionCheck)
         {
@@ -426,32 +421,32 @@ namespace nU3.Core.UI
         }
 
         /// <summary>
-        /// ÀĞ±â ±ÇÇÑ ¿©ºÎ
+        /// ì½ê¸° ê¶Œí•œ ì—¬ë¶€
         /// </summary>
         protected bool CanRead => HasPermission(p => p.CanRead);
 
         /// <summary>
-        /// »ı¼º ±ÇÇÑ ¿©ºÎ
+        /// ìƒì„± ê¶Œí•œ ì—¬ë¶€
         /// </summary>
         protected bool CanCreate => HasPermission(p => p.CanCreate);
 
         /// <summary>
-        /// ¼öÁ¤ ±ÇÇÑ ¿©ºÎ
+        /// ìˆ˜ì • ê¶Œí•œ ì—¬ë¶€
         /// </summary>
         protected bool CanUpdate => HasPermission(p => p.CanUpdate);
 
         /// <summary>
-        /// »èÁ¦ ±ÇÇÑ ¿©ºÎ
+        /// ì‚­ì œ ê¶Œí•œ ì—¬ë¶€
         /// </summary>
         protected bool CanDelete => HasPermission(p => p.CanDelete);
 
         /// <summary>
-        /// ÀÎ¼â ±ÇÇÑ ¿©ºÎ
+        /// ì¸ì‡„ ê¶Œí•œ ì—¬ë¶€
         /// </summary>
         protected bool CanPrint => HasPermission(p => p.CanPrint);
 
         /// <summary>
-        /// ³»º¸³»±â ±ÇÇÑ ¿©ºÎ
+        /// ì—‘ì…€ì €ì¥ ê¶Œí•œ ì—¬ë¶€
         /// </summary>
         protected bool CanExport => HasPermission(p => p.CanExport);
 
@@ -466,10 +461,10 @@ namespace nU3.Core.UI
 
             if (disposing)
             {
-                // ¸®¼Ò½º ÇØÁ¦
+                // ë¦¬ì†ŒìŠ¤ ì •ë¦¬
                 ReleaseResources();
 
-                // Ãë¼Ò ÅäÅ« ÇØÁ¦
+                // ì·¨ì†Œ í† í° ì •ë¦¬
                 _cancellationTokenSource?.Dispose();
 
                 LogInfo($"BaseWorkControl disposed: {ProgramTitle ?? this.GetType().Name}");

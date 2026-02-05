@@ -1,49 +1,49 @@
-# Swagger 404 ¿¡·¯ ÇØ°á °¡ÀÌµå
+# Swagger 404 ì—ëŸ¬ í•´ê²° ê°€ì´ë“œ
 
-## ?? ¹®Á¦ »óÈ²
+## ?? ë¬¸ì œ ìƒí™©
 
 ```
 Request: GET /swagger from ::1
 Response: 404 in 10.5025ms
 ```
 
-## ? ÇØ°á ¹æ¹ý
+## ? í•´ê²° ë°©ë²•
 
-### ¹æ¹ý 1: ·çÆ® URL·Î Á¢¼Ó (±ÇÀå)
+### ë°©ë²• 1: ë£¨íŠ¸ URLë¡œ ì ‘ì† (ê¶Œìž¥)
 
-Swagger UI°¡ ·çÆ® °æ·Î¿¡ ¼³Á¤µÇ¾î ÀÖ½À´Ï´Ù:
+Swagger UIê°€ ë£¨íŠ¸ ê²½ë¡œì— ì„¤ì •ë˜ì–´ ìžˆìŠµë‹ˆë‹¤:
 
 ```
-? https://localhost:64229/swagger  (404 ¿¡·¯)
+? https://localhost:64229/swagger  (404 ì—ëŸ¬)
 ? https://localhost:64229/          (Swagger UI)
 ? http://localhost:64228/           (Swagger UI)
 ```
 
-### ¹æ¹ý 2: ¼­¹ö Àç½ÃÀÛ
+### ë°©ë²• 2: ì„œë²„ ìž¬ì‹œìž‘
 
-µð¹ö±ë ÁßÀÌ¶ó¸é:
+ë””ë²„ê¹… ì¤‘ì´ë¼ë©´:
 
-1. **Visual Studio**: µð¹ö±ë ÁßÁö (Shift+F5)
-2. **Àç½ÃÀÛ**: F5 ¶Ç´Â Ctrl+F5
-3. **ÀÚµ¿À¸·Î ºê¶ó¿ìÀú ¿­¸²**: `http://localhost:64228` ¶Ç´Â `https://localhost:64229`
+1. **Visual Studio**: ë””ë²„ê¹… ì¤‘ì§€ (Shift+F5)
+2. **ìž¬ì‹œìž‘**: F5 ë˜ëŠ” Ctrl+F5
+3. **ìžë™ìœ¼ë¡œ ë¸Œë¼ìš°ì € ì—´ë¦¼**: `http://localhost:64228` ë˜ëŠ” `https://localhost:64229`
 
-### ¹æ¹ý 3: Hot Reload ½Ãµµ
+### ë°©ë²• 3: Hot Reload ì‹œë„
 
-ÄÚµå º¯°æ »çÇ×À» Àû¿ëÇÏ·Á¸é:
+ì½”ë“œ ë³€ê²½ ì‚¬í•­ì„ ì ìš©í•˜ë ¤ë©´:
 
-1. Visual Studio¿¡¼­ "Hot Reload" ¹öÆ° Å¬¸¯
-2. ¶Ç´Â ºê¶ó¿ìÀú »õ·Î°íÄ§ (Ctrl+F5)
+1. Visual Studioì—ì„œ "Hot Reload" ë²„íŠ¼ í´ë¦­
+2. ë˜ëŠ” ë¸Œë¼ìš°ì € ìƒˆë¡œê³ ì¹¨ (Ctrl+F5)
 
-## ?? Á¢¼Ó °¡´ÉÇÑ URL
+## ?? ì ‘ì† ê°€ëŠ¥í•œ URL
 
 ### Swagger UI
 ```
 ? http://localhost:64228/
 ? https://localhost:64229/
-? http://localhost:64228/swagger (¸®µð·º¼Ç Ãß°¡µÊ)
+? http://localhost:64228/swagger (ë¦¬ë””ë ‰ì…˜ ì¶”ê°€ë¨)
 ```
 
-### API ¿£µåÆ÷ÀÎÆ® Å×½ºÆ®
+### API ì—”ë“œí¬ì¸íŠ¸ í…ŒìŠ¤íŠ¸
 ```
 ? http://localhost:64228/health
 ? http://localhost:64228/api/v1/files/directory
@@ -55,37 +55,37 @@ Swagger UI°¡ ·çÆ® °æ·Î¿¡ ¼³Á¤µÇ¾î ÀÖ½À´Ï´Ù:
 ? http://localhost:64228/swagger/v1/swagger.json
 ```
 
-## ?? ÇöÀç ¼³Á¤ È®ÀÎ
+## ?? í˜„ìž¬ ì„¤ì • í™•ì¸
 
-Program.csÀÇ Swagger ¼³Á¤:
+Program.csì˜ Swagger ì„¤ì •:
 
 ```csharp
 app.UseSwaggerUI(options =>
 {
     options.SwaggerEndpoint("/swagger/v1/swagger.json", "nU3 Server API v1");
-    options.RoutePrefix = string.Empty; // ¡ç ·çÆ® °æ·Î¿¡ Swagger UI
+    options.RoutePrefix = string.Empty; // â† ë£¨íŠ¸ ê²½ë¡œì— Swagger UI
 });
 ```
 
-**`RoutePrefix = string.Empty`** ÀÇ¹Ì:
-- Swagger UI°¡ `/` (·çÆ®)¿¡ À§Ä¡
-- `/swagger`°¡ ¾Æ´Ñ `/`·Î Á¢¼ÓÇØ¾ß ÇÔ
+**`RoutePrefix = string.Empty`** ì˜ë¯¸:
+- Swagger UIê°€ `/` (ë£¨íŠ¸)ì— ìœ„ì¹˜
+- `/swagger`ê°€ ì•„ë‹Œ `/`ë¡œ ì ‘ì†í•´ì•¼ í•¨
 
-## ??? ¹®Á¦°¡ °è¼ÓµÇ¸é
+## ??? ë¬¸ì œê°€ ê³„ì†ë˜ë©´
 
-### 1. È¯°æ º¯¼ö È®ÀÎ
+### 1. í™˜ê²½ ë³€ìˆ˜ í™•ì¸
 
 ```powershell
-# ÇöÀç È¯°æ È®ÀÎ
+# í˜„ìž¬ í™˜ê²½ í™•ì¸
 $env:ASPNETCORE_ENVIRONMENT
 
-# Development·Î ¼³Á¤
+# Developmentë¡œ ì„¤ì •
 $env:ASPNETCORE_ENVIRONMENT = "Development"
 ```
 
-### 2. ·Î±× È®ÀÎ
+### 2. ë¡œê·¸ í™•ì¸
 
-½ÃÀÛ ·Î±×¸¦ È®ÀÎ:
+ì‹œìž‘ ë¡œê·¸ë¥¼ í™•ì¸:
 ```
 =================================================
 nU3 Server Host Starting...
@@ -95,11 +95,11 @@ Rate Limiting: Enabled
 =================================================
 ```
 
-**Environment°¡ ProductionÀÌ¸é** Swagger°¡ ºñÈ°¼ºÈ­µË´Ï´Ù!
+**Environmentê°€ Productionì´ë©´** Swaggerê°€ ë¹„í™œì„±í™”ë©ë‹ˆë‹¤!
 
-### 3. Program.cs ¼öÁ¤ (¼±ÅÃ»çÇ×)
+### 3. Program.cs ìˆ˜ì • (ì„ íƒì‚¬í•­)
 
-¸ðµç È¯°æ¿¡¼­ Swagger È°¼ºÈ­ (°³¹ß Àü¿ë):
+ëª¨ë“  í™˜ê²½ì—ì„œ Swagger í™œì„±í™” (ê°œë°œ ì „ìš©):
 
 ```csharp
 // Before
@@ -109,7 +109,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(...);
 }
 
-// After (¸ðµç È¯°æ¿¡¼­ È°¼ºÈ­)
+// After (ëª¨ë“  í™˜ê²½ì—ì„œ í™œì„±í™”)
 app.UseSwagger();
 app.UseSwaggerUI(options =>
 {
@@ -118,33 +118,33 @@ app.UseSwaggerUI(options =>
 });
 ```
 
-## ?? Ã¼Å©¸®½ºÆ®
+## ?? ì²´í¬ë¦¬ìŠ¤íŠ¸
 
-- [ ] ¼­¹ö Àç½ÃÀÛ
-- [ ] `http://localhost:64228/` (·çÆ®)·Î Á¢¼Ó
-- [ ] È¯°æÀÌ DevelopmentÀÎÁö È®ÀÎ
-- [ ] ºê¶ó¿ìÀú Ä³½Ã Å¬¸®¾î (Ctrl+Shift+Del)
-- [ ] ´Ù¸¥ ºê¶ó¿ìÀú·Î ½Ãµµ
+- [ ] ì„œë²„ ìž¬ì‹œìž‘
+- [ ] `http://localhost:64228/` (ë£¨íŠ¸)ë¡œ ì ‘ì†
+- [ ] í™˜ê²½ì´ Developmentì¸ì§€ í™•ì¸
+- [ ] ë¸Œë¼ìš°ì € ìºì‹œ í´ë¦¬ì–´ (Ctrl+Shift+Del)
+- [ ] ë‹¤ë¥¸ ë¸Œë¼ìš°ì €ë¡œ ì‹œë„
 
-## ?? ºü¸¥ ÇØ°á
+## ?? ë¹ ë¥¸ í•´ê²°
 
 ```bash
-# 1. µð¹ö±ë ÁßÁö
-# 2. ´Ù½Ã ½ÇÇà
+# 1. ë””ë²„ê¹… ì¤‘ì§€
+# 2. ë‹¤ì‹œ ì‹¤í–‰
 dotnet run
 
-# 3. ºê¶ó¿ìÀú ¿­±â
+# 3. ë¸Œë¼ìš°ì € ì—´ê¸°
 start http://localhost:64228/
 ```
 
-## ?? Ãß°¡ Áö¿ø
+## ?? ì¶”ê°€ ì§€ì›
 
-¿©ÀüÈ÷ ¹®Á¦°¡ ÀÖ´Ù¸é ´ÙÀ½À» È®ÀÎ:
+ì—¬ì „ížˆ ë¬¸ì œê°€ ìžˆë‹¤ë©´ ë‹¤ìŒì„ í™•ì¸:
 
-1. **Æ÷Æ® Ãæµ¹**: ´Ù¸¥ ¾ÖÇÃ¸®ÄÉÀÌ¼ÇÀÌ 64228/64229 Æ÷Æ® »ç¿ë Áß
-2. **¹æÈ­º®**: Windows ¹æÈ­º®ÀÌ ¿¬°á Â÷´Ü
-3. **IIS/IIS Express**: IIS°¡ ½ÇÇà ÁßÀÌ¸é Ãæµ¹ °¡´É
+1. **í¬íŠ¸ ì¶©ëŒ**: ë‹¤ë¥¸ ì• í”Œë¦¬ì¼€ì´ì…˜ì´ 64228/64229 í¬íŠ¸ ì‚¬ìš© ì¤‘
+2. **ë°©í™”ë²½**: Windows ë°©í™”ë²½ì´ ì—°ê²° ì°¨ë‹¨
+3. **IIS/IIS Express**: IISê°€ ì‹¤í–‰ ì¤‘ì´ë©´ ì¶©ëŒ ê°€ëŠ¥
 
 ---
 
-**¿ä¾à:** `/swagger` ´ë½Å `/` (·çÆ®)·Î Á¢¼ÓÇÏ°Å³ª, ¼­¹ö¸¦ Àç½ÃÀÛÇÏ¼¼¿ä! ?
+**ìš”ì•½:** `/swagger` ëŒ€ì‹  `/` (ë£¨íŠ¸)ë¡œ ì ‘ì†í•˜ê±°ë‚˜, ì„œë²„ë¥¼ ìž¬ì‹œìž‘í•˜ì„¸ìš”! ?

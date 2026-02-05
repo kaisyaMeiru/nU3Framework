@@ -1,4 +1,4 @@
-﻿# nU3.Server.Host appsettings.json 설정 가이드
+# nU3.Server.Host appsettings.json 설정 가이드
 
 ## 📋 전체 구조
 

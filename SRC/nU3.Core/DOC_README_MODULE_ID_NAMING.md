@@ -1,314 +1,314 @@
-# ModuleId ¸í¸í ±ÔÄ¢ º¯°æ °¡ÀÌµå
+  # ModuleId ëª…ëª… ê·œì¹™ ê°€ì´ë“œ
 
-## °³¿ä
+  ## ê°œìš”
 
-ModuleId »ı¼º ±ÔÄ¢ÀÌ DLL ÀüÃ¼ ÀÌ¸§¿¡¼­ **°£´ÜÇÑ DLL ÀÌ¸§**À¸·Î º¯°æµÇ¾ú½À´Ï´Ù.
+  ModuleId ëª…ëª… ê·œì¹™ì€ DLL ì „ì²´ ì´ë¦„ì—ì„œ **ë§ˆì§€ë§‰ ë¶€ë¶„ì˜ DLL ì´ë¦„**ì„ ì‚¬ìš©í•©ë‹ˆë‹¤.
 
-## º¯°æ »çÇ×
+  ## ëª…ëª… íŒ¨í„´
 
-### ±âÁ¸ ±ÔÄ¢ (º¯°æ Àü)
-```
-PROG_{SystemType}_{SubSystem}_{FullDllName}
-```
+  ### ë‹¨ìˆœ íŒ¨í„´ (ê°„ë‹¨)
+  ```
+  PROG_{SystemType}_{SubSystem}_{FullDllName}
+  ```
 
-**¿¹½Ã:**
-```
-DLL: nU3.Modules.EMR.IN.Worklist.dll
-ModuleId: PROG_EMR_IN_nU3.Modules.EMR.IN.Worklist  ? (³Ê¹« ±æ°í Áßº¹)
-```
+  **ì˜ˆì‹œ:**
+  ```
+  DLL: nU3.Modules.EMR.IN.Worklist.dll
+  ModuleId: PROG_EMR_IN_nU3.Modules.EMR.IN.Worklist  âš ï¸ (ë„ˆë¬´ ê¸¸ê³  ì¤‘ë³µ)
+  ```
 
-### »õ·Î¿î ±ÔÄ¢ (º¯°æ ÈÄ)
-```
-PROG_{SystemType}_{SubSystem}_{SimpleDllName}
-```
+  ### ê°œì„  íŒ¨í„´ (ê¶Œì¥)
+  ```
+  PROG_{SystemType}_{SubSystem}_{SimpleDllName}
+  ```
 
-**¿¹½Ã:**
-```
-DLL: nU3.Modules.EMR.IN.Worklist.dll
-ModuleId: PROG_EMR_IN_Worklist  ? (°£°áÇÏ°í ¸íÈ®)
-```
+  **ì˜ˆì‹œ:**
+  ```
+  DLL: nU3.Modules.EMR.IN.Worklist.dll
+  ModuleId: PROG_EMR_IN_Worklist  âœ… (ëª…í™•í•˜ê³  ê°„ê²°)
+  ```
 
-## ÀåÁ¡
+  ## ì¥ì  ë¹„êµ
 
-### 1. **°£°á¼º**
-```
-±âÁ¸: PROG_EMR_IN_nU3.Modules.EMR.IN.Worklist (43ÀÚ)
-»õ·Î¿î: PROG_EMR_IN_Worklist (21ÀÚ)
-```
+  ### 1. **ê°€ë…ì„±**
+  ```
+  ê¸°ì¡´: PROG_EMR_IN_nU3.Modules.EMR.IN.Worklist (43ì)
+  ê°œì„ : PROG_EMR_IN_Worklist (21ì)
+  ```
 
-### 2. **°¡µ¶¼º**
-```
-? PROG_EMR_IN_Worklist
-   ¦¦¦¡ ½Ã½ºÅÛ: EMR
-   ¦¦¦¡ ¼­ºê½Ã½ºÅÛ: IN
-   ¦¦¦¡ ¸ğµâ: Worklist
+  ### 2. **ëª…í™•ì„±**
+  ```
+  âœ… PROG_EMR_IN_Worklist
+     ì „ì²´ ì‹œìŠ¤í…œ: EMR
+     í•˜ìœ„ ì‹œìŠ¤í…œ: IN
+     ëª¨ë“ˆ ì´ë¦„: Worklist
 
-? PROG_EMR_IN_nU3.Modules.EMR.IN.Worklist
-   ¦¦¦¡ ½Ã½ºÅÛ: EMR (Áßº¹)
-   ¦¦¦¡ ¼­ºê½Ã½ºÅÛ: IN (Áßº¹)
-   ¦¦¦¡ ¸ğµâ: nU3.Modules.EMR.IN.Worklist (Áßº¹µÈ Á¤º¸)
-```
+  âŒ PROG_EMR_IN_nU3.Modules.EMR.IN.Worklist
+     ì „ì²´ ì‹œìŠ¤í…œ: EMR (ì¤‘ë³µ)
+     í•˜ìœ„ ì‹œìŠ¤í…œ: IN (ì¤‘ë³µ)
+     ëª¨ë“ˆ ì´ë¦„: nU3.Modules.EMR.IN.Worklist (ì¤‘ë³µ ë° ê¸¸ì´)
+  ```
 
-### 3. **¿¹Ãø °¡´É¼º**
-```
-DLL ÀÌ¸§ ±ÔÄ¢: nU3.Modules.{System}.{SubSystem}.{Module}.dll
-ModuleId ±ÔÄ¢: PROG_{System}_{SubSystem}_{Module}
+  ### 3. **ìœ ì—°ì„±**
+  ```
+  DLL ì´ë¦„ íŒ¨í„´: nU3.Modules.{System}.{SubSystem}.{Module}.dll
+  ModuleId íŒ¨í„´: PROG_{System}_{SubSystem}_{Module}
 
-? ¸¶Áö¸· ºÎºĞ(Module)¸¸ ModuleId¿¡ »ç¿ë
-? ÀÏÁ¤ÇÑ ÆĞÅÏÀ¸·Î DLL °æ·Î ¿¹Ãø °¡´É
-```
+  âœ… ëª¨ë“ˆ ì´ë¦„(Module) ë¶€ë¶„ì´ ModuleIdë¡œ ì‚¬ìš©
+  âœ… DLL íŒŒì¼ ì´ë¦„ê³¼ ë§¤í•‘ ê°€ëŠ¥
+  ```
 
-## ½ÇÁ¦ ¿¹½Ã
+  ## ì˜ˆì‹œ ì‹¤í˜„
 
-### ¿¹½Ã 1: EMR ¸ğµâ
+  ### ì˜ˆì‹œ 1: EMR ì‹œìŠ¤í…œ
 
-**DLL ÆÄÀÏ:**
-```
-nU3.Modules.EMR.IN.Worklist.dll
-```
+  **DLL í˜•ì‹:**
+  ```
+  nU3.Modules.EMR.IN.Worklist.dll
+  ```
 
-**ModuleId »ı¼º:**
-```csharp
-// SimpleDllName ÃßÃâ
-var dllName = "nU3.Modules.EMR.IN.Worklist";
-var parts = dllName.Split('.');
-var simpleName = parts[4];  // "Worklist"
+  **ModuleId ìƒì„±:**
+  ```csharp
+  // SimpleDllName í˜•ì‹
+  var dllName = "nU3.Modules.EMR.IN.Worklist";
+  var parts = dllName.Split('.');
+  var simpleName = parts[4];  // "Worklist"
 
-// ModuleId »ı¼º
-var moduleId = $"PROG_EMR_IN_{simpleName}";
-// ¡æ "PROG_EMR_IN_Worklist"
-```
+  // ModuleId ìƒì„±
+  var moduleId = $"PROG_EMR_IN_{simpleName}";
+  // ê²°ê³¼: "PROG_EMR_IN_Worklist"
+  ```
 
-### ¿¹½Ã 2: ADM ¸ğµâ
+  ### ì˜ˆì‹œ 2: ADM ì‹œìŠ¤í…œ
 
-**DLL ÆÄÀÏ:**
-```
-nU3.Modules.ADM.AD.Deployer.dll
-```
+  **DLL í˜•ì‹:**
+  ```
+  nU3.Modules.ADM.AD.Deployer.dll
+  ```
 
-**ModuleId:**
-```
-PROG_ADM_AD_Deployer
-```
+  **ModuleId:**
+  ```
+  PROG_ADM_AD_Deployer
+  ```
 
-### ¿¹½Ã 3: ´Ù¾çÇÑ ¸ğµâ
+  ### ì˜ˆì‹œ 3: ë‹¤ë¥¸ ì‹œìŠ¤í…œ
 
-| DLL ÆÄÀÏ | SystemType | SubSystem | SimpleName | ModuleId |
-|----------|------------|-----------|------------|----------|
-| nU3.Modules.EMR.IN.Worklist.dll | EMR | IN | Worklist | PROG_EMR_IN_Worklist |
-| nU3.Modules.EMR.OP.Clinic.dll | EMR | OP | Clinic | PROG_EMR_OP_Clinic |
-| nU3.Modules.ADM.AD.Deployer.dll | ADM | AD | Deployer | PROG_ADM_AD_Deployer |
-| nU3.Modules.NUR.IN.NursingStation.dll | NUR | IN | NursingStation | PROG_NUR_IN_NursingStation |
+  | DLL í˜•ì‹ | SystemType | SubSystem | SimpleName | ModuleId |
+  |----------|------------|-----------|------------|----------|
+  | nU3.Modules.EMR.IN.Worklist.dll | EMR | IN | Worklist | PROG_EMR_IN_Worklist |
+  | nU3.Modules.EMR.OP.Clinic.dll | EMR | OP | Clinic | PROG_EMR_OP_Clinic |
+  | nU3.Modules.ADM.AD.Deployer.dll | ADM | AD | Deployer | PROG_ADM_AD_Deployer |
+  | nU3.Modules.NUR.IN.NursingStation.dll | NUR | IN | NursingStation | PROG_NUR_IN_NursingStation |
 
-## ±¸Çö ¼¼ºÎ»çÇ×
+  ## ì†ì„± êµ¬í˜„
 
-### 1. nU3ProgramInfoAttribute
+  ### 1. nU3ProgramInfoAttribute
 
-```csharp
-public class nU3ProgramInfoAttribute : Attribute
-{
-    /// <summary>
-    /// DLL ÀüÃ¼ ÀÌ¸§
-    /// ¿¹: "nU3.Modules.EMR.IN.Worklist"
-    /// </summary>
-    public string DllName { get; }
-    
-    /// <summary>
-    /// °£´ÜÇÑ DLL ÀÌ¸§ (¸¶Áö¸· ºÎºĞ¸¸)
-    /// ¿¹: "Worklist"
-    /// </summary>
-    public string SimpleDllName { get; }
-    
-    public nU3ProgramInfoAttribute(Type declaringType, ...)
-    {
-        this.DllName = declaringType.Assembly.GetName().Name;
-        
-        // SimpleDllName ÃßÃâ
-        var dllParts = this.DllName.Split('.');
-        this.SimpleDllName = dllParts.Length >= 5 
-            ? dllParts[4]                    // 5¹øÂ° ºÎºĞ
-            : dllParts.LastOrDefault()       // ¸¶Áö¸· ºÎºĞ
-            ?? this.DllName;                 // fallback
-    }
-    
-    /// <summary>
-    /// ModuleId »ı¼º
-    /// Çü½Ä: PROG_{SystemType}_{SubSystem}_{SimpleDllName}
-    /// </summary>
-    public string GetModuleId()
-    {
-        return $"PROG_{SystemType}_{SubSystem}_{SimpleDllName}";
-    }
-}
-```
+  ```csharp
+  public class nU3ProgramInfoAttribute : Attribute
+  {
+      /// <summary>
+      /// DLL ì „ì²´ ì´ë¦„
+      /// ì˜ˆ: "nU3.Modules.EMR.IN.Worklist"
+      /// </summary>
+      public string DllName { get; }
 
-### 2. DllMetadataParser
+      /// <summary>
+      /// ë‹¨ìˆœ DLL ì´ë¦„ (ë§ˆì§€ë§‰ ë¶€ë¶„)
+      /// ì˜ˆ: "Worklist"
+      /// </summary>
+      public string SimpleDllName { get; }
 
-```csharp
-public ParsedModuleInfo Parse(string dllPath)
-{
-    // Naming Pattern: nU3.Modules.{System}.{SubSys}.{Name}.dll
-    var match = NamingPattern.Match(fileName);
-    
-    if (match.Success)
-    {
-        var systemType = match.Groups[1].Value;  // EMR
-        var subSystem = match.Groups[2].Value;   // IN
-        var moduleName = match.Groups[3].Value;  // Worklist
-        
-        // ModuleId = PROG_{System}_{SubSystem}_{ModuleName}
-        result.ModuleId = $"PROG_{systemType}_{subSystem}_{moduleName}";
-    }
-}
-```
+      public nU3ProgramInfoAttribute(Type declaringType, ...)
+      {
+          this.DllName = declaringType.Assembly.GetName().Name;
 
-## °æ·Î ¿¹Ãø
+          // SimpleDllName ì„¤ì •
+          var dllParts = this.DllName.Split('.');
+          this.SimpleDllName = dllParts.Length >= 5
+              ? dllParts[4]                    // 5ë²ˆì§¸ ë¶€ë¶„
+              : dllParts.LastOrDefault()       // ë§ˆì§€ë§‰ ë¶€ë¶„
+              ?? this.DllName;                 // fallback
+      }
 
-### DLL °æ·Î ÀÚµ¿ °è»ê
+      /// <summary>
+      /// ModuleId ìƒì„±
+      /// í˜•ì‹: PROG_{SystemType}_{SubSystem}_{SimpleDllName}
+      /// </summary>
+      public string GetModuleId()
+      {
+          return $"PROG_{SystemType}_{SubSystem}_{SimpleDllName}";
+      }
+  }
+  ```
 
-```csharp
-// ModuleId·Î DLL °æ·Î ¿¹Ãø
-var moduleId = "PROG_EMR_IN_Worklist";
+  ### 2. DllMetadataParser
 
-// ÆÄ½Ì
-var parts = moduleId.Split('_');
-var systemType = parts[1];      // EMR
-var subSystem = parts[2];       // IN
-var simpleName = parts[3];      // Worklist
+  ```csharp
+  public ParsedModuleInfo Parse(string dllPath)
+  {
+      // Naming Pattern: nU3.Modules.{System}.{SubSys}.{Name}.dll
+      var match = NamingPattern.Match(fileName);
 
-// DLL ÀÌ¸§ Àç±¸¼º
-var dllName = $"nU3.Modules.{systemType}.{subSystem}.{simpleName}.dll";
-// ¡æ "nU3.Modules.EMR.IN.Worklist.dll"
+      if (match.Success)
+      {
+          var systemType = match.Groups[1].Value;  // EMR
+          var subSystem = match.Groups[2].Value;   // IN
+          var moduleName = match.Groups[3].Value;  // Worklist
 
-// ÀüÃ¼ °æ·Î
-var dllPath = Path.Combine(_runtimePath, systemType, subSystem, dllName);
-// ¡æ "C:\...\Modules\EMR\IN\nU3.Modules.EMR.IN.Worklist.dll"
-```
+          // ModuleId = PROG_{System}_{SubSystem}_{ModuleName}
+          result.ModuleId = $"PROG_{systemType}_{subSystem}_{moduleName}";
+      }
+  }
+  ```
 
-### Attribute¿¡¼­ ÀÚµ¿ °è»ê
+  ## ì—­ì¶”ì  êµ¬í˜„
 
-```csharp
-var attr = moduleLoader.GetProgramAttribute(progId);
+  ### DLL ì´ë¦„ìœ¼ë¡œ ì—­ì¶”ì 
 
-// ? DLL °æ·Î ÀÚµ¿ »ı¼º
-var dllPath = attr.GetExpectedDllPath();
-// ¡æ "EMR/IN/nU3.Modules.EMR.IN.Worklist.dll"
+  ```csharp
+  // ModuleIdì—ì„œ DLL ì´ë¦„ ì—­ì¶”ì 
+  var moduleId = "PROG_EMR_IN_Worklist";
 
-// ? ModuleId ÀÚµ¿ »ı¼º
-var moduleId = attr.GetModuleId();
-// ¡æ "PROG_EMR_IN_Worklist"
-```
+  // ë¶„í•´
+  var parts = moduleId.Split('_');
+  var systemType = parts[1];      // EMR
+  var subSystem = parts[2];       // IN
+  var simpleName = parts[3];      // Worklist
 
-## ¸¶ÀÌ±×·¹ÀÌ¼Ç
+  // DLL ì´ë¦„ ë³µì›
+  var dllName = $"nU3.Modules.{systemType}.{subSystem}.{simpleName}.dll";
+  // ê²°ê³¼: "nU3.Modules.EMR.IN.Worklist.dll"
 
-### ±âÁ¸ µ¥ÀÌÅÍ ¸¶ÀÌ±×·¹ÀÌ¼Ç
+  // ì–´ì…ˆë¸”ë¦¬ ë¡œë“œ
+  var dllPath = Path.Combine(_runtimePath, systemType, subSystem, dllName);
+  // ê²°ê³¼: "C:\...\Modules\EMR\IN\nU3.Modules.EMR.IN.Worklist.dll"
+  ```
 
-```sql
--- ±âÁ¸ ModuleId È®ÀÎ
-SELECT MODULE_ID, FILE_NAME FROM SYS_MODULE_MST;
+  ### Attributeë¡œ ì—­ì¶”ì 
 
--- ¿¹½Ã °á°ú:
--- MODULE_ID: PROG_EMR_IN_nU3.Modules.EMR.IN.Worklist
--- FILE_NAME: nU3.Modules.EMR.IN.Worklist.dll
+  ```csharp
+  var attr = moduleLoader.GetProgramAttribute(progId);
 
--- »õ·Î¿î ModuleId·Î ¾÷µ¥ÀÌÆ®
-UPDATE SYS_MODULE_MST
-SET MODULE_ID = 'PROG_EMR_IN_Worklist'
-WHERE MODULE_ID = 'PROG_EMR_IN_nU3.Modules.EMR.IN.Worklist';
+  // DLL ì´ë¦„ìœ¼ë¡œ ì—­ì¶”ì 
+  var dllPath = attr.GetExpectedDllPath();
+  // ê²°ê³¼: "EMR/IN/nU3.Modules.EMR.IN.Worklist.dll"
 
--- SYS_MODULE_VERµµ µ¿ÀÏÇÏ°Ô ¾÷µ¥ÀÌÆ®
-UPDATE SYS_MODULE_VER
-SET MODULE_ID = 'PROG_EMR_IN_Worklist'
-WHERE MODULE_ID = 'PROG_EMR_IN_nU3.Modules.EMR.IN.Worklist';
+  // ModuleIdë¡œ ì—­ì¶”ì 
+  var moduleId = attr.GetModuleId();
+  // ê²°ê³¼: "PROG_EMR_IN_Worklist"
+  ```
 
--- SYS_PROGRAMµµ µ¿ÀÏÇÏ°Ô ¾÷µ¥ÀÌÆ®
-UPDATE SYS_PROGRAM
-SET MODULE_ID = 'PROG_EMR_IN_Worklist'
-WHERE MODULE_ID = 'PROG_EMR_IN_nU3.Modules.EMR.IN.Worklist';
-```
+  ## í”ŒëŸ¬ê·¸ì¸ í”„ë¡œê·¸ë˜ë° ì²´í¬ë¦¬ìŠ¤íŠ¸
 
-### ÀÚµ¿ ¸¶ÀÌ±×·¹ÀÌ¼Ç ½ºÅ©¸³Æ®
+  ### ê¸°ì¡´ ModuleId ì—…ë°ì´íŠ¸
 
-```sql
--- ¸ğµç ModuleId¸¦ »õ·Î¿î Çü½ÄÀ¸·Î º¯È¯
-UPDATE SYS_MODULE_MST
-SET MODULE_ID = 
-    CASE 
-        WHEN MODULE_ID LIKE 'PROG_%_%_nU3.Modules.%' THEN
-            'PROG_' + 
-            SUBSTRING(MODULE_ID, 6, CHARINDEX('_', MODULE_ID, 6) - 6) + '_' +  -- SystemType
-            SUBSTRING(MODULE_ID, CHARINDEX('_', MODULE_ID, 6) + 1, 
-                      CHARINDEX('_', MODULE_ID, CHARINDEX('_', MODULE_ID, 6) + 1) - 
-                      CHARINDEX('_', MODULE_ID, 6) - 1) + '_' +  -- SubSystem
-            REVERSE(SUBSTRING(REVERSE(MODULE_ID), 1, 
-                             CHARINDEX('.', REVERSE(MODULE_ID)) - 1))  -- SimpleName
-        ELSE MODULE_ID
-    END
-WHERE MODULE_ID LIKE 'PROG_%_%_nU3.Modules.%';
-```
+  ```sql
+  -- ê¸°ì¡´ ModuleId í™•ì¸
+  SELECT MODULE_ID, FILE_NAME FROM SYS_MODULE_MST;
 
-## °ËÁõ
+  -- ê¸°ì¡´ ë°ì´í„°:
+  -- MODULE_ID: PROG_EMR_IN_nU3.Modules.EMR.IN.Worklist
+  -- FILE_NAME: nU3.Modules.EMR.IN.Worklist.dll
 
-### ModuleId Çü½Ä °ËÁõ
+  -- ê°œì„ ëœ ModuleIdë¡œ ì—…ë°ì´íŠ¸
+  UPDATE SYS_MODULE_MST
+  SET MODULE_ID = 'PROG_EMR_IN_Worklist'
+  WHERE MODULE_ID = 'PROG_EMR_IN_nU3.Modules.EMR.IN.Worklist';
 
-```csharp
-public bool IsValidModuleId(string moduleId)
-{
-    // Çü½Ä: PROG_{SystemType}_{SubSystem}_{SimpleName}
-    var pattern = @"^PROG_[A-Z]+_[A-Z]+_[A-Za-z]+$";
-    return Regex.IsMatch(moduleId, pattern);
-}
+  -- SYS_MODULE_VERë„ ì—…ë°ì´íŠ¸í•˜ê³  ì—°ê²°
+  UPDATE SYS_MODULE_VER
+  SET MODULE_ID = 'PROG_EMR_IN_Worklist'
+  WHERE MODULE_ID = 'PROG_EMR_IN_nU3.Modules.EMR.IN.Worklist';
 
-// ¿¹½Ã
-IsValidModuleId("PROG_EMR_IN_Worklist");  // ? true
-IsValidModuleId("PROG_EMR_IN_nU3.Modules.EMR.IN.Worklist");  // ? false
-```
+  -- SYS_PROGRAMë„ ì—…ë°ì´íŠ¸í•˜ê³  ì—°ê²°
+  UPDATE SYS_PROGRAM
+  SET MODULE_ID = 'PROG_EMR_IN_Worklist'
+  WHERE MODULE_ID = 'PROG_EMR_IN_nU3.Modules.EMR.IN.Worklist';
+  ```
 
-### DLL ÀÌ¸§ Àç±¸¼º °ËÁõ
+  ### ìë™ ì—…ë°ì´íŠ¸ ìŠ¤í¬ë¦½íŠ¸
 
-```csharp
-public string ReconstructDllName(string moduleId)
-{
-    var parts = moduleId.Split('_');
-    if (parts.Length != 4 || parts[0] != "PROG")
-        throw new ArgumentException("Invalid ModuleId format");
-    
-    var systemType = parts[1];
-    var subSystem = parts[2];
-    var simpleName = parts[3];
-    
-    return $"nU3.Modules.{systemType}.{subSystem}.{simpleName}.dll";
-}
+  ```sql
+  -- ê¸°ì¡´ ModuleIdë¥¼ ê°œì„ ëœ í˜•ì‹ìœ¼ë¡œ êµì²´
+  UPDATE SYS_MODULE_MST
+  SET MODULE_ID =
+      CASE
+          WHEN MODULE_ID LIKE 'PROG_%_%_nU3.Modules.%' THEN
+              'PROG_' +
+              SUBSTRING(MODULE_ID, 6, CHARINDEX('_', MODULE_ID, 6) - 6) + '_' +  -- SystemType
+              SUBSTRING(MODULE_ID, CHARINDEX('_', MODULE_ID, 6) + 1,
+                        CHARINDEX('_', MODULE_ID, CHARINDEX('_', MODULE_ID, 6) + 1) -
+                        CHARINDEX('_', MODULE_ID, 6) - 1) + '_' +  -- SubSystem
+              REVERSE(SUBSTRING(REVERSE(MODULE_ID), 1,
+                               CHARINDEX('.', REVERSE(MODULE_ID)) - 1))  -- SimpleName
+          ELSE MODULE_ID
+      END
+  WHERE MODULE_ID LIKE 'PROG_%_%_nU3.Modules.%';
+  ```
 
-// ¿¹½Ã
-ReconstructDllName("PROG_EMR_IN_Worklist");
-// ¡æ "nU3.Modules.EMR.IN.Worklist.dll" ?
-```
+  ## ê²€ì¦
 
-## ÀåÁ¡ ¿ä¾à
+  ### ModuleId í˜•ì‹ ê²€ì¦
 
-| Ç×¸ñ | ±âÁ¸ (DLL ÀüÃ¼ ÀÌ¸§) | »õ·Î¿î (Simple DLL) |
-|------|---------------------|---------------------|
-| ±æÀÌ | 43ÀÚ | 21ÀÚ |
-| °¡µ¶¼º | ³·À½ (Áßº¹) | ³ôÀ½ (°£°á) |
-| ¿¹Ãø °¡´É¼º | º¸Åë | ³ôÀ½ |
-| DB ÀúÀå °ø°£ | ¸¹À½ | ÀûÀ½ |
-| UI Ç¥½Ã | ºÎÀûÇÕ | ÀûÇÕ |
-| ÀÏ°ü¼º | Áßº¹ Á¤º¸ | ÀÏ°üµÈ ÆĞÅÏ |
+  ```csharp
+  public bool IsValidModuleId(string moduleId)
+  {
+      // í˜•ì‹: PROG_{SystemType}_{SubSystem}_{SimpleName}
+      var pattern = @"^PROG_[A-Z]+_[A-Z]+_[A-Za-z]+$";
+      return Regex.IsMatch(moduleId, pattern);
+  }
 
-## °á·Ğ
+  // ì˜ˆì‹œ
+  IsValidModuleId("PROG_EMR_IN_Worklist");  // âœ… true
+  IsValidModuleId("PROG_EMR_IN_nU3.Modules.EMR.IN.Worklist");  // âŒ false
+  ```
 
-? **ModuleId´Â ÀÌÁ¦ °£°áÇÏ°í ¸íÈ®ÇÕ´Ï´Ù!**
+  ### DLL ì´ë¦„ ë³µì› ê²€ì¦
 
-```
-PROG_{SystemType}_{SubSystem}_{SimpleDllName}
-```
+  ```csharp
+  public string ReconstructDllName(string moduleId)
+  {
+      var parts = moduleId.Split('_');
+      if (parts.Length != 4 || parts[0] != "PROG")
+          throw new ArgumentException("Invalid ModuleId format");
 
-- **°£°á**: ºÒÇÊ¿äÇÑ Áßº¹ Á¦°Å
-- **¸íÈ®**: ½Ã½ºÅÛ/¼­ºê½Ã½ºÅÛ/¸ğµâ ±¸ºĞ
-- **¿¹Ãø °¡´É**: ÀÏÁ¤ÇÑ ÆĞÅÏÀ¸·Î DLL °æ·Î °è»ê °¡´É
-- **È¿À²Àû**: DB ÀúÀå °ø°£ Àı¾à
+      var systemType = parts[1];
+      var subSystem = parts[2];
+      var simpleName = parts[3];
 
-## ¶óÀÌ¼±½º
+      return $"nU3.Modules.{systemType}.{subSystem}.{simpleName}.dll";
+  }
 
-? 2024 nU3 Framework
+  // ì˜ˆì‹œ
+  ReconstructDllName("PROG_EMR_IN_Worklist");
+  // ê²°ê³¼: "nU3.Modules.EMR.IN.Worklist.dll" âœ…
+  ```
+
+  ## ë¹„êµ
+
+  | í•­ëª© | ê¸°ì¡´ (DLL ì „ì²´ ì´ë¦„) | ê°œì„  (Simple DLL) |
+  |------|---------------------|---------------------|
+  | ê¸¸ì´ | 43ì | 21ì |
+  | ê°€ë…ì„± | ì–´ë ¤ì›€ (ì¤‘ë³µ) | ìš©ì´ (ëª…í™•) |
+  | ìœ ì—°ì„± | ë‚®ìŒ | ë†’ìŒ |
+  | DB ê²€ìƒ‰ | ì–´ë ¤ì›€ | ìš©ì´ |
+  | UI í‘œì‹œ | ì–´ë ¤ì›€ | ìš©ì´ |
+  | í™•ì¥ì„± | ë³µì¡ | ê°„ë‹¨ |
+
+  ## ìš”ì•½
+
+  **ModuleIdëŠ” ê°„ê²°í•˜ê³  ëª…í™•í•˜ê²Œ ì‘ì„±í•©ë‹ˆë‹¤!**
+
+  ```
+  PROG_{SystemType}_{SubSystem}_{SimpleDllName}
+  ```
+
+  - **ê°„ê²°**: ì¤‘ë³µ ì œê±°ë¡œ ëª…í™•
+  - **ëª…í™•**: ì‹œìŠ¤í…œ/í•˜ìœ„ì‹œìŠ¤í…œ/ëª¨ë“ˆ ëª…ì‹œ
+  - **ëª…ëª… ìœ ì—°**: DLL ì´ë¦„ê³¼ ë§¤í•‘ ìš©ì´
+  - **í™œìš©ì„±**: DB ê²€ìƒ‰ ìš©ì´
+
+  ## ë¼ì´ì„ ìŠ¤ ì •ë³´
+
+  (c) 2024 nU3 Framework

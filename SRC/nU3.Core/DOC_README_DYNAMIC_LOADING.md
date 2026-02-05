@@ -1,366 +1,366 @@
-# nU3ProgramInfoAttribute ±â¹Ý µ¿Àû ·Îµù °¡ÀÌµå
+  # nU3ProgramInfoAttribute ìžë™ ë¡œë“œ ê°€ì´ë“œ
 
-## °³¿ä
+  ## ê°œìš”
 
-`nU3ProgramInfoAttribute`¸¸À¸·Î DB Á¶È¸ ¾øÀÌ µ¿Àû ·Îµù, ¸Þ´º ±¸¼º, °´Ã¼ »ý¼ºÀÌ °¡´ÉÇÕ´Ï´Ù.
+  `nU3ProgramInfoAttribute`ë¥¼ ì‚¬ìš©í•˜ë©´ DB ì¡°íšŒ ì—†ì´ ìžë™ ë¡œë“œ, ë©”ë‰´ ìžë™ ìƒì„±, ì¸ìŠ¤í„´ìŠ¤ ìžë™ ìƒì„±ì„ í•  ìˆ˜ ìžˆìŠµë‹ˆë‹¤.
 
-## ? ÀåÁ¡
+  ## ë‘ ê°€ì§€ ì ‘ê·¼ ë°©ì‹
 
-### 1. DB ÀÇÁ¸¼º ÃÖ¼ÒÈ­
-**±âÁ¸ ¹æ½Ä (DB ÀÇÁ¸):**
-```
-¸Þ´º Å¬¸¯ 
-¡æ DB¿¡¼­ ProgId·Î Program Á¶È¸ 
-¡æ ModuleId È¹µæ 
-¡æ DB¿¡¼­ ModuleId·Î Module Á¶È¸ 
-¡æ DLL °æ·Î Á¶ÇÕ 
-¡æ DLL ·Îµå 
-¡æ DB¿¡¼­ ClassName Á¶È¸ 
-¡æ Å¸ÀÔ Ã£±â 
-¡æ ÀÎ½ºÅÏ½º »ý¼º
-```
+  ### 1. DB ê¸°ë°˜ (DB ì¡°íšŒ)
+  **ê¸°ì¡´ ë°©ì‹ (DB ì¡°íšŒ):**
+  ```
+  ë©”ë‰´ í´ë¦­
+    â†“ DBë¡œë¶€í„° ProgIdë¡œ Program ì¡°íšŒ
+    â†“ ModuleId íšë“
+    â†“ DBë¡œë¶€í„° ModuleIdë¡œ Module ì¡°íšŒ
+    â†“ DLL ê²½ë¡œ ê³„ì‚°
+    â†“ DLL ë¡œë“œ
+    â†“ DBë¡œë¶€í„° ClassName ì¡°íšŒ
+    â†“ íƒ€ìž… ì°¾ìŒ
+    â†“ ì¸ìŠ¤í„´ìŠ¤ ìƒì„±
+  ```
 
-**»õ·Î¿î ¹æ½Ä (Attribute ±â¹Ý):**
-```
-¸Þ´º Å¬¸¯ 
-¡æ Attribute¿¡¼­ Á÷Á¢ Á¤º¸ È¹µæ 
-¡æ DLL ·Îµå 
-¡æ ÀÎ½ºÅÏ½º »ý¼º
-```
+  **ê°œì„  ë°©ì‹ (Attribute ê¸°ë°˜):**
+  ```
+  ë©”ë‰´ í´ë¦­
+    â†“ Attributeë¥¼ í†µí•´ í”„ë¡œê·¸ëž¨ ì†ì„± ì·¨ë“
+    â†“ DLL ë¡œë“œ
+    â†“ ì¸ìŠ¤í„´ìŠ¤ ìƒì„±
+  ```
 
-### 2. ÀÚµ¿È­µÈ Á¤º¸ ÃßÃâ
+  ### 2. ìžë™í™”ëœ ì ‘ê·¼ ë°©ì‹
 
-```csharp
-[nU3ProgramInfo(typeof(PatientListControl), "È¯ÀÚ ¸ñ·Ï", "EMR_PATIENT_LIST_001")]
-public class PatientListControl : BaseWorkControl
-{
-    // ÀÌ ¼Ó¼º ÇÏ³ª·Î ¸ðµç Á¤º¸ ÀÚµ¿ ÃßÃâ:
-    // - SystemType: "EMR"
-    // - SubSystem: "IN"
-    // - DllName: "nU3.Modules.EMR.IN.Worklist"
-    // - ClassName: "nU3.Modules.EMR.IN.Worklist.PatientListControl"
-    // - DLL Path: "EMR/IN/nU3.Modules.EMR.IN.Worklist.dll"
-    // - ModuleId: "PROG_EMR_IN_nU3.Modules.EMR.IN.Worklist"
-}
-```
+  ```csharp
+  [nU3ProgramInfo(typeof(PatientListControl), "í™˜ìž ëª©ë¡", "EMR_PATIENT_LIST_001")]
+  public class PatientListControl : BaseWorkControl
+  {
+      // ìžë™ ì„¤ì •ë˜ëŠ” ì†ì„±ë“¤:
+      // - SystemType: "EMR"
+      // - SubSystem: "IN"
+      // - DllName: "nU3.Modules.EMR.IN.Worklist"
+      // - ClassName: "nU3.Modules.EMR.IN.Worklist.PatientListControl"
+      // - DLL Path: "EMR/IN/nU3.Modules.EMR.IN.Worklist.dll"
+      // - ModuleId: "PROG_EMR_IN_nU3.Modules.EMR.IN.Worklist"
+  }
+  ```
 
-## »ç¿ë ¹æ¹ý
+  ## ì‚¬ìš© ì²˜ë¦¬
 
-### 1. ÇÁ·Î±×·¥ Á¤ÀÇ (°³¹ßÀÚ)
+  ### 1. í”„ë¡œê·¸ëž¨ ë¡œë“œ (ë‹¨ìˆœ)
 
-```csharp
-namespace nU3.Modules.EMR.IN.Worklist
-{
-    [nU3ProgramInfo(typeof(PatientListControl), "È¯ÀÚ ¸ñ·Ï", "EMR_PATIENT_LIST_001")]
-    public class PatientListControl : BaseWorkControl
-    {
-        public PatientListControl()
-        {
-            // ±¸Çö
-        }
-    }
-}
-```
+  ```csharp
+  namespace nU3.Modules.EMR.IN.Worklist
+  {
+      [nU3ProgramInfo(typeof(PatientListControl), "í™˜ìž ëª©ë¡", "EMR_PATIENT_LIST_001")]
+      public class PatientListControl : BaseWorkControl
+      {
+          public PatientListControl()
+          {
+              // ì´ˆê¸°í™”
+          }
+      }
+  }
+  ```
 
-### 2. ¸Þ´º ±¸¼º (DB ÃÖ¼Ò ÀÇÁ¸)
+  ### 2. ë©”ë‰´ ìƒì„± (DB ìµœì†Œí™”)
 
-```csharp
-// ModuleLoaderService¿¡¼­ ¸ðµç ÇÁ·Î±×·¥ ¼Ó¼º Ä³½Ã È¹µæ
-var programAttributes = moduleLoader.GetProgramAttributes();
+  ```csharp
+  // ModuleLoaderServiceì—ì„œ í”„ë¡œê·¸ëž¨ ì†ì„± ìºì‹œ íšë“
+  var programAttributes = moduleLoader.GetProgramAttributes();
 
-// DB Á¶È¸ ¾øÀÌ ¸Þ´º Æ®¸® ±¸¼º
-foreach (var menuItem in menuItems)
-{
-    if (programAttributes.TryGetValue(menuItem.ProgId, out var attr))
-    {
-        // ? DB Á¶È¸ ¾øÀÌ ¼Ó¼º Á¤º¸ »ç¿ë
-        Console.WriteLine($"Menu: {attr.ProgramName}");
-        Console.WriteLine($"System: {attr.SystemType}/{attr.SubSystem}");
-        Console.WriteLine($"Auth: {attr.AuthLevel}");
-        Console.WriteLine($"FormType: {attr.FormType}");
-    }
-}
-```
+  // DB ì¡°íšŒ í•„ìš” ë©”ë‰´ ëª©ë¡ ë°˜ë³µ
+  foreach (var menuItem in menuItems)
+  {
+      if (programAttributes.TryGetValue(menuItem.ProgId, out var attr))
+      {
+          // DB ì¡°íšŒ í•„ìš” ì†ì„±ë§Œ ë©”ë‰´ ìƒì„±
+          Console.WriteLine($"Menu: {attr.ProgramName}");
+          Console.WriteLine($"System: {attr.SystemType}/{attr.SubSystem}");
+          Console.WriteLine($"Auth: {attr.AuthLevel}");
+          Console.WriteLine($"FormType: {attr.FormType}");
+      }
+  }
+  ```
 
-### 3. ÇÁ·Î±×·¥ µ¿Àû ·Îµå
+  ### 3. í”„ë¡œê·¸ëž¨ ë¡œë“œ
 
-#### ¹æ¹ý A: ProgId¸¸À¸·Î ÀÎ½ºÅÏ½º »ý¼º
+  #### ë°©ë²• A: ProgIdë¡œ ì¸ìŠ¤í„´ìŠ¤ ìƒì„±
 
-```csharp
-// ? °¡Àå °£´ÜÇÑ ¹æ¹ý
-var instance = moduleLoader.CreateProgramInstance("EMR_PATIENT_LIST_001");
-if (instance is BaseWorkControl control)
-{
-    // »ç¿ë
-    panel.Controls.Add(control);
-}
-```
+  ```csharp
+  // ë©”ë‰´ IDë¡œ ì¸ìŠ¤í„´ìŠ¤ ìƒì„±
+  var instance = moduleLoader.CreateProgramInstance("EMR_PATIENT_LIST_001");
+  if (instance is BaseWorkControl control)
+  {
+      // ì¶”ê°€
+      panel.Controls.Add(control);
+  }
+  ```
 
-#### ¹æ¹ý B: Attribute Á¤º¸·Î ·Îµå
+  #### ë°©ë²• B: Attributeë¡œ ì¸ìŠ¤í„´ìŠ¤ ìƒì„±
 
-```csharp
-var attr = moduleLoader.GetProgramAttribute("EMR_PATIENT_LIST_001");
-if (attr != null)
-{
-    // DLL °æ·Î´Â ÀÚµ¿ °è»êµÊ
-    var type = moduleLoader.LoadProgramByAttribute(attr);
-    if (type != null)
-    {
-        var instance = Activator.CreateInstance(type);
-        // »ç¿ë
-    }
-}
-```
+  ```csharp
+  var attr = moduleLoader.GetProgramAttribute("EMR_PATIENT_LIST_001");
+  if (attr != null)
+  {
+      // DLL ê²½ë¡œë¡œ ì¸ìŠ¤í„´ìŠ¤ ìƒì„±
+      var type = moduleLoader.LoadProgramByAttribute(attr);
+      if (type != null)
+      {
+          var instance = Activator.CreateInstance(type);
+          // ì¶”ê°€
+      }
+  }
+  ```
 
-#### ¹æ¹ý C: ÇïÆÛ ¸Þ¼­µå È°¿ë
+  #### ë°©ë²• C: ë©”ì„œë“œ í™œìš©
 
-```csharp
-var attr = moduleLoader.GetProgramAttribute("EMR_PATIENT_LIST_001");
+  ```csharp
+  var attr = moduleLoader.GetProgramAttribute("EMR_PATIENT_LIST_001");
 
-// DLL °æ·Î ÀÚµ¿ »ý¼º
-string dllPath = attr.GetExpectedDllPath();
-// ¡æ "EMR/IN/nU3.Modules.EMR.IN.Worklist.dll"
+  // DLL ê²½ë¡œë¡œ ì¸ìŠ¤í„´ìŠ¤ ìƒì„±
+  string dllPath = attr.GetExpectedDllPath();
+  // ê²°ê³¼: "EMR/IN/nU3.Modules.EMR.IN.Worklist.dll"
 
-// ModuleId ÀÚµ¿ »ý¼º
-string moduleId = attr.GetModuleId();
-// ¡æ "PROG_EMR_IN_nU3.Modules.EMR.IN.Worklist"
-```
+  // ModuleIdë¡œ ì¸ìŠ¤í„´ìŠ¤ ìƒì„±
+  string moduleId = attr.GetModuleId();
+  // ê²°ê³¼: "PROG_EMR_IN_nU3.Modules.EMR.IN.Worklist"
+  ```
 
-## ½ÇÁ¦ È°¿ë ¿¹½Ã
+  ## ì‚¬ìš© ìƒì„¸ ì²˜ë¦¬
 
-### ¿¹½Ã 1: ¸Þ´º Å¬¸¯ Ã³¸®
+  ### ì²˜ë¦¬ 1: ë©”ë‰´ í´ë¦­ ì²˜ë¦¬
 
-```csharp
-private void OnMenuItemClick(string progId)
-{
-    // ? DB Á¶È¸ ¾øÀÌ ÇÁ·Î±×·¥ Á¤º¸ È®ÀÎ
-    var attr = _moduleLoader.GetProgramAttribute(progId);
-    if (attr == null)
-    {
-        MessageBox.Show("ÇÁ·Î±×·¥ Á¤º¸¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù.");
-        return;
-    }
-    
-    // ? ±ÇÇÑ Ã¼Å© (DB Á¶È¸ ¾øÀÌ)
-    if (attr.AuthLevel > _currentUser.AuthLevel)
-    {
-        MessageBox.Show("±ÇÇÑÀÌ ºÎÁ·ÇÕ´Ï´Ù.");
-        return;
-    }
-    
-    // ? FormType¿¡ µû¶ó Ã³¸® (DB Á¶È¸ ¾øÀÌ)
-    switch (attr.FormType)
-    {
-        case "POPUP":
-            OpenAsPopup(progId);
-            break;
-        case "SDI":
-            OpenAsSDI(progId);
-            break;
-        default: // CHILD
-            OpenAsChild(progId);
-            break;
-    }
-}
+  ```csharp
+  private void OnMenuItemClick(string progId)
+  {
+      // DB ì¡°íšŒ í•„ìš” í”„ë¡œê·¸ëž¨ ì†ì„± í™•ì¸
+      var attr = _moduleLoader.GetProgramAttribute(progId);
+      if (attr == null)
+      {
+          MessageBox.Show("í”„ë¡œê·¸ëž¨ ì†ì„±ì„ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
+          return;
+      }
 
-private void OpenAsChild(string progId)
-{
-    // ? DB Á¶È¸ ¾øÀÌ ÀÎ½ºÅÏ½º »ý¼º
-    var instance = _moduleLoader.CreateProgramInstance(progId);
-    if (instance is BaseWorkControl control)
-    {
-        var tabPage = new XtraTabPage(control.ProgramTitle);
-        tabPage.Controls.Add(control);
-        xtraTabControl.TabPages.Add(tabPage);
-        xtraTabControl.SelectedTabPage = tabPage;
-    }
-}
-```
+      // ê¶Œí•œ í™•ì¸ (DB ì¡°íšŒ í•„ìš”)
+      if (attr.AuthLevel > _currentUser.AuthLevel)
+      {
+          MessageBox.Show("ê¶Œí•œì´ ì—†ìŠµë‹ˆë‹¤.");
+          return;
+      }
 
-### ¿¹½Ã 2: ÇÁ·Î±×·¥ °Ë»ö
+      // FormTypeì— ë”°ë¼ ì²˜ë¦¬ (DB ì¡°íšŒ í•„ìš”)
+      switch (attr.FormType)
+      {
+          case "POPUP":
+              OpenAsPopup(progId);
+              break;
+          case "SDI":
+              OpenAsSDI(progId);
+              break;
+          default: // CHILD
+              OpenAsChild(progId);
+              break;
+      }
+  }
 
-```csharp
-// ? DB Á¶È¸ ¾øÀÌ ¸ðµç ÇÁ·Î±×·¥ Á¤º¸ °Ë»ö
-var allPrograms = _moduleLoader.GetProgramAttributes();
+  private void OpenAsChild(string progId)
+  {
+      // DB ì¡°íšŒ í•„ìš” ì¸ìŠ¤í„´ìŠ¤ ìƒì„±
+      var instance = _moduleLoader.CreateProgramInstance(progId);
+      if (instance is BaseWorkControl control)
+      {
+          var tabPage = new XtraTabPage(control.ProgramTitle);
+          tabPage.Controls.Add(control);
+          xtraTabControl.TabPages.Add(tabPage);
+          xtraTabControl.SelectedTabPage = tabPage;
+      }
+  }
+  ```
 
-var searchResults = allPrograms.Values
-    .Where(attr => attr.ProgramName.Contains(searchKeyword) || 
-                   attr.ProgramId.Contains(searchKeyword))
-    .Where(attr => attr.AuthLevel <= _currentUser.AuthLevel)
-    .OrderBy(attr => attr.SystemType)
-    .ThenBy(attr => attr.SubSystem)
-    .ToList();
+  ### ì²˜ë¦¬ 2: í”„ë¡œê·¸ëž¨ ê²€ìƒ‰
 
-foreach (var attr in searchResults)
-{
-    Console.WriteLine($"{attr.SystemType}/{attr.SubSystem} - {attr.ProgramName} ({attr.ProgramId})");
-}
-```
+  ```csharp
+  // DB ì¡°íšŒ í•„ìš” ë©”ë‰´ì— ëŒ€í•œ í”„ë¡œê·¸ëž¨ ì†ì„± ê²€ìƒ‰
+  var allPrograms = _moduleLoader.GetProgramAttributes();
 
-### ¿¹½Ã 3: ½Ã½ºÅÛº° ÇÁ·Î±×·¥ ¸ñ·Ï
+  var searchResults = allPrograms.Values
+      .Where(attr => attr.ProgramName.Contains(searchKeyword) ||
+                     attr.ProgramId.Contains(searchKeyword))
+      .Where(attr => attr.AuthLevel <= _currentUser.AuthLevel)
+      .OrderBy(attr => attr.SystemType)
+      .ThenBy(attr => attr.SubSystem)
+      .ToList();
 
-```csharp
-// ? DB Á¶È¸ ¾øÀÌ ½Ã½ºÅÛº° ±×·ìÈ­
-var programsBySystem = _moduleLoader.GetProgramAttributes()
-    .Values
-    .GroupBy(attr => attr.SystemType)
-    .ToDictionary(g => g.Key, g => g.ToList());
+  foreach (var attr in searchResults)
+  {
+      Console.WriteLine($"{attr.SystemType}/{attr.SubSystem} - {attr.ProgramName} ({attr.ProgramId})");
+  }
+  ```
 
-// EMR ½Ã½ºÅÛÀÇ ¸ðµç ÇÁ·Î±×·¥
-if (programsBySystem.TryGetValue("EMR", out var emrPrograms))
-{
-    foreach (var attr in emrPrograms)
-    {
-        Console.WriteLine($"  [{attr.SubSystem}] {attr.ProgramName}");
-    }
-}
-```
+  ### ì²˜ë¦¬ 3: ì‹œìŠ¤í…œë³„ í”„ë¡œê·¸ëž¨ ê·¸ë£¹í™”
 
-### ¿¹½Ã 4: ÃÖ±Ù »ç¿ë ÇÁ·Î±×·¥ (Quick Access)
+  ```csharp
+  // DB ì¡°íšŒ í•„ìš” ë©”ë‰´ë¥¼ ì‹œìŠ¤í…œë³„ë¡œ ê·¸ë£¹í™”
+  var programsBySystem = _moduleLoader.GetProgramAttributes()
+      .Values
+      .GroupBy(attr => attr.SystemType)
+      .ToDictionary(g => g.Key, g => g.ToList());
 
-```csharp
-// ? DB¿¡¼­ ProgId ¸ñ·Ï¸¸ Á¶È¸, »ó¼¼ Á¤º¸´Â Attribute¿¡¼­
-var recentProgIds = GetRecentPrograms(); // DB¿¡¼­ ProgId¸¸ Á¶È¸
+  // EMR ì‹œìŠ¤í…œì˜ í”„ë¡œê·¸ëž¨ ì¶œë ¥
+  if (programsBySystem.TryGetValue("EMR", out var emrPrograms))
+  {
+      foreach (var attr in emrPrograms)
+      {
+          Console.WriteLine($"  [{attr.SubSystem}] {attr.ProgramName}");
+      }
+  }
+  ```
 
-foreach (var progId in recentProgIds)
-{
-    var attr = _moduleLoader.GetProgramAttribute(progId);
-    if (attr != null)
-    {
-        var quickButton = new Button
-        {
-            Text = attr.ProgramName,
-            Tag = progId,
-            ToolTip = $"{attr.SystemType}/{attr.SubSystem}"
-        };
-        quickButton.Click += (s, e) => OpenProgram(progId);
-        quickAccessPanel.Controls.Add(quickButton);
-    }
-}
-```
+  ### ì²˜ë¦¬ 4: ìµœê·¼ í”„ë¡œê·¸ëž¨ (Quick Access)
 
-## DB ¿ªÇÒ º¯°æ
+  ```csharp
+  // DBë¡œë¶€í„° ProgId ëª©ë¡ ì¡°íšŒ, ì†ì„±ë§Œ Attribute ì¡°íšŒ
+  var recentProgIds = GetRecentPrograms(); // DBë¡œë¶€í„° ProgId ëª©ë¡ ì¡°íšŒ
 
-### ±âÁ¸ DB ¿ªÇÒ
-```sql
--- ±âÁ¸: ¸ðµç Á¤º¸¸¦ DB¿¡ ÀúÀå
-CREATE TABLE SYS_PROGRAM (
-    PROG_ID VARCHAR(50),
-    MODULE_ID VARCHAR(50),
-    PROG_NAME VARCHAR(100),
-    CLASS_NAME VARCHAR(200),     -- ? Áßº¹
-    AUTH_LEVEL INT,              -- ? Áßº¹
-    FORM_TYPE VARCHAR(10),       -- ? Áßº¹
-    SYSTEM_TYPE VARCHAR(10),     -- ? Áßº¹
-    SUB_SYSTEM VARCHAR(10)       -- ? Áßº¹
-);
-```
+  foreach (var progId in recentProgIds)
+  {
+      var attr = _moduleLoader.GetProgramAttribute(progId);
+      if (attr != null)
+      {
+          var quickButton = new Button
+          {
+              Text = attr.ProgramName,
+              Tag = progId,
+              ToolTip = $"{attr.SystemType}/{attr.SubSystem}"
+          };
+          quickButton.Click += (s, e) => OpenProgram(progId);
+          quickAccessPanel.Controls.Add(quickButton);
+      }
+  }
+  ```
 
-### »õ·Î¿î DB ¿ªÇÒ (ÃÖ¼ÒÈ­)
-```sql
--- »õ·Î¿î: ·±Å¸ÀÓ Á¤º¸¸¸ ÀúÀå
-CREATE TABLE SYS_PROGRAM (
-    PROG_ID VARCHAR(50) PRIMARY KEY,
-    MODULE_ID VARCHAR(50),       -- ? ÇÊ¿ä (¹öÀü °ü¸®)
-    IS_ACTIVE CHAR(1),           -- ? ÇÊ¿ä (È°¼ºÈ­ ¿©ºÎ)
-    PROG_TYPE INT                -- ? ÇÊ¿ä (Å¸ÀÔ ±¸ºÐ)
-);
+  ## DB ìµœì í™”
 
--- ³ª¸ÓÁö Á¤º¸´Â ¸ðµÎ nU3ProgramInfoAttribute¿¡¼­ °¡Á®¿È!
-```
+  ### ë³µìž¡í•œ DB êµ¬ì¡°
+  ```sql
+  -- ë³µìž¡: ëª¨ë“  ì •ë³´ê°€ DBì— ì €ìž¥
+  CREATE TABLE SYS_PROGRAM (
+      PROG_ID VARCHAR(50),
+      MODULE_ID VARCHAR(50),
+      PROG_NAME VARCHAR(100),
+      CLASS_NAME VARCHAR(200),     -- âŒ ì¤‘ë³µ
+      AUTH_LEVEL INT,              -- âŒ ì¤‘ë³µ
+      FORM_TYPE VARCHAR(10),       -- âŒ ì¤‘ë³µ
+      SYSTEM_TYPE VARCHAR(10),     -- âŒ ì¤‘ë³µ
+      SUB_SYSTEM VARCHAR(10)       -- âŒ ì¤‘ë³µ
+  );
+  ```
 
-## ÀåÁ¡ Á¤¸®
+  ### ê°œì„ ëœ DB êµ¬ì¡° (ìµœì†Œí™”)
+  ```sql
+  -- ê°œì„ : í•„ìš”í•œ í•„ë“œë§Œ ì €ìž¥
+  CREATE TABLE SYS_PROGRAM (
+      PROG_ID VARCHAR(50) PRIMARY KEY,
+      MODULE_ID VARCHAR(50),       -- âŒ í•„ìš” (Attributeë¡œ ëŒ€ì²´ ê°€ëŠ¥)
+      IS_ACTIVE CHAR(1),           -- âŒ í•„ìš” (í™œì„±í™” ì—¬ë¶€)
+      PROG_TYPE INT                -- âŒ í•„ìš” (íƒ€ìž… êµ¬ë¶„)
+  );
 
-| Ç×¸ñ | ±âÁ¸ ¹æ½Ä | »õ·Î¿î ¹æ½Ä |
-|------|----------|-------------|
-| DB Á¶È¸ È½¼ö | 3-4È¸ | 0-1È¸ |
-| Á¤º¸ Áßº¹ | DB + Code | Code¸¸ |
-| ¸Þ´º ±¸¼º ¼Óµµ | ´À¸² (DB Á¶È¸) | ºü¸§ (¸Þ¸ð¸® Ä³½Ã) |
-| À¯Áöº¸¼ö | DB + Code µ¿±âÈ­ | Code¸¸ °ü¸® |
-| ¹èÆ÷ | DB + DLL | DLL¸¸ |
-| ¿ÀÇÁ¶óÀÎ Áö¿ø | ºÒ°¡ | °¡´É (Attribute ±â¹Ý) |
+  -- í”„ë¡œê·¸ëž¨ ì†ì„±ì€ ëª¨ë‘ nU3ProgramInfoAttributeë¡œ ì €ìž¥!
+  ```
 
-## ÁÖÀÇ»çÇ×
+  ## ìž¥ì  ë¹„êµ
 
-### 1. ÃÊ±â ·Îµù ½Ã Ä³½Ã ±¸Ãà
-```csharp
-// ¾ÖÇÃ¸®ÄÉÀÌ¼Ç ½ÃÀÛ ½Ã ÇÑ ¹ø¸¸ ½ÇÇà
-moduleLoader.LoadAllModules();
-// ¡æ ¸ðµç DLL ½ºÄµÇÏ¿© _progAttributeCache ±¸Ãà
-```
+  | í•­ëª© | ê¸°ì¡´ | ê°œì„  ë°©ì‹ |
+  |------|----------|-------------|
+  | DB ì¡°íšŒ íšŸìˆ˜ | 3-4íšŒ | 0-1íšŒ |
+  | ê¶Œí•œ ì¤‘ë³µ | DB + Code | Codeë¡œ |
+  | ë©”ë‰´ ìƒì„± ì†ë„ | ëŠë¦¼ (DB ì¡°íšŒ) | ë¹ ë¦„ (ë©”ëª¨ë¦¬ ìºì‹œ) |
+  | í™•ìž¥ì„± | DB + Code ìµœì†Œí™” | Codeë¡œ í™•ìž¥ |
+  | ë©”íƒ€ë°ì´í„° | DB + DLL | DLLë¡œ |
+  | ì‚¬ìš©ìž ì •ì˜ | ë¶ˆê°€ | ê°€ëŠ¥ (Attributeë¡œ) |
 
-### 2. DLL ¾÷µ¥ÀÌÆ® ½Ã Ä³½Ã °»½Å
-```csharp
-// »õ DLL ¹èÆ÷ ÈÄ
-moduleLoader.CheckAndUpdateModules();
-// ¡æ º¯°æµÈ DLL¸¸ ´Ù½Ã ·ÎµåÇÏ¿© Ä³½Ã °»½Å
-```
+  ## êµ¬í˜„ íŒ
 
-### 3. DB´Â ¿©ÀüÈ÷ ÇÊ¿äÇÑ °æ¿ì
-```csharp
-// ? DB°¡ ÇÊ¿äÇÑ °æ¿ì:
-// - ¹öÀü °ü¸® (ModuleId, Version)
-// - È°¼ºÈ­ ¿©ºÎ (IsActive)
-// - ¸Þ´º ±¸Á¶ (MenuId, ParentId, SortOrd)
-// - »ç¿ëÀÚº° ±ÇÇÑ (User-Program mapping)
+  ### 1. ì´ˆê¸° ë¡œë“œ ì‹œ ìºì‹œ ìƒì„±
+  ```csharp
+  // í”„ë¡œê·¸ëž¨ ì‹œìž‘ ì‹œ ëª¨ë“  DLLì„ ë©”ëª¨ë¦¬ì— ë¡œë“œ
+  moduleLoader.LoadAllModules();
+  // ëª¨ë“  DLL ì •ë³´ë¥¼ _progAttributeCacheì— ì €ìž¥
+  ```
 
-// ? DB°¡ ºÒÇÊ¿äÇÑ °æ¿ì:
-// - ClassName (Attribute¿¡¼­)
-// - ProgramName (Attribute¿¡¼­)
-// - SystemType (Attribute¿¡¼­)
-// - SubSystem (Attribute¿¡¼­)
-// - AuthLevel (Attribute¿¡¼­)
-// - FormType (Attribute¿¡¼­)
-```
+  ### 2. DLL ë²„ì „ í™•ì¸ ì‹œ ìºì‹œ í™œìš©
+  ```csharp
+  // DLL ë²„ì „ í™•ì¸ ì‹œ
+  moduleLoader.CheckAndUpdateModules();
+  // ë³€ê²½ëœ DLLì„ ë‹¤ì‹œ ë¡œë“œí•˜ì—¬ ìºì‹œ ê°±ì‹ 
+  ```
 
-## ¸¶ÀÌ±×·¹ÀÌ¼Ç °¡ÀÌµå
+  ### 3. DB í•„ìš” ì •ë³´ vs Attribute í•„ìš” ì •ë³´
+  ```csharp
+  // DBë¡œë¶€í„° í•„ìš”í•œ ì •ë³´:
+  // - í”„ë¡œê·¸ëž¨ ë²„ì „ (ModuleId, Version)
+  // - í™œì„±í™” ì—¬ë¶€ (IsActive)
+  // - ë©”ë‰´ ì„¤ì • (MenuId, ParentId, SortOrd)
+  // - ì‚¬ìš©ìž-í”„ë¡œê·¸ëž¨ ë§¤í•‘
 
-### Step 1: Attribute Á¤º¸ È®Àå (¿Ï·á!)
-```csharp
-[nU3ProgramInfo(typeof(YourControl), "ÇÁ·Î±×·¥¸í", "PROG_ID")]
-// ¡æ ClassName ÀÚµ¿ ¼³Á¤µÊ
-```
+  // Attributeë¡œë¶€í„° í•„ìš”í•œ ì •ë³´:
+  // - ClassName (Attributeë¡œ)
+  // - ProgramName (Attributeë¡œ)
+  // - SystemType (Attributeë¡œ)
+  // - SubSystem (Attributeë¡œ)
+  // - AuthLevel (Attributeë¡œ)
+  // - FormType (Attributeë¡œ)
+  ```
 
-### Step 2: ModuleLoaderService ¾÷±×·¹ÀÌµå (¿Ï·á!)
-```csharp
-// GetProgramAttributes() ¸Þ¼­µå »ç¿ë °¡´É
-// CreateProgramInstance() ¸Þ¼­µå »ç¿ë °¡´É
-```
+  ## í”ŒëŸ¬ê·¸ì¸ í”„ë¡œê·¸ëž˜ë° ê°€ì´ë“œ
 
-### Step 3: ¸Þ´º/È­¸é ·Îµù ÄÚµå ¼öÁ¤
-```csharp
-// Before:
-var program = _programRepo.GetProgram(progId);
-var module = _moduleRepo.GetModule(program.ModuleId);
-var dllPath = CalculatePath(module);
-var type = LoadType(dllPath, program.ClassName);
+  ### Step 1: Attribute ì‚¬ìš© í™•ì¸ (ì™„ë£Œ!)
+  ```csharp
+  [nU3ProgramInfo(typeof(YourControl), "í”„ë¡œê·¸ëž¨ì´ë¦„", "PROG_ID")]
+  // ClassNameì€ ìžë™ìœ¼ë¡œ ì„¤ì •ë©ë‹ˆë‹¤
+  ```
 
-// After:
-var instance = _moduleLoader.CreateProgramInstance(progId);
-```
+  ### Step 2: ModuleLoaderService í™œìš© (ì™„ë£Œ!)
+  ```csharp
+  // GetProgramAttributes() ë©”ì„œë“œ í™œìš©
+  // CreateProgramInstance() ë©”ì„œë“œ í™œìš©
+  ```
 
-### Step 4: DB ½ºÅ°¸¶ °£¼ÒÈ­ (¼±ÅÃ)
-```sql
--- CLASS_NAME, SYSTEM_TYPE, SUB_SYSTEM µî ÄÃ·³ Á¦°Å
-ALTER TABLE SYS_PROGRAM DROP COLUMN CLASS_NAME;
-ALTER TABLE SYS_PROGRAM DROP COLUMN SYSTEM_TYPE;
--- ...
-```
+  ### Step 3: ë©”ë‰´/í™”ë©´ ë¡œë“œ ë¡œì§ ë³€ê²½
+  ```csharp
+  // Before:
+  var program = _programRepo.GetProgram(progId);
+  var module = _moduleRepo.GetModule(program.ModuleId);
+  var dllPath = CalculatePath(module);
+  var type = LoadType(dllPath, program.ClassName);
 
-## °á·Ð
+  // After:
+  var instance = _moduleLoader.CreateProgramInstance(progId);
+  ```
 
-? **´ç½ÅÀÇ »ý°¢ÀÌ ¿ÏÀüÈ÷ ¸Â½À´Ï´Ù!**
+  ### Step 4: DB ìµœì†Œí™” (ì¶”ì²œ)
+  ```sql
+  -- CLASS_NAME, SYSTEM_TYPE, SUB_SYSTEM ê°™ì€ ì»¬ëŸ¼ ì‚­ì œ
+  ALTER TABLE SYS_PROGRAM DROP COLUMN CLASS_NAME;
+  ALTER TABLE SYS_PROGRAM DROP COLUMN SYSTEM_TYPE;
+  -- ...
+  ```
 
-`nU3ProgramInfoAttribute`¸¸À¸·Î:
-1. DLL °æ·Î ÀÚµ¿ °è»ê
-2. Å¸ÀÔ µ¿Àû ·Îµå
-3. ÀÎ½ºÅÏ½º »ý¼º
-4. ¸Þ´º ±¸¼º (DB ÃÖ¼Ò ÀÇÁ¸)
-5. ±ÇÇÑ Ã¼Å©
-6. FormType Ã³¸®
+  ## ìš”ì•½
 
-¸ðµÎ °¡´ÉÇÕ´Ï´Ù! ??
+  **ì¶”ì²œ ë°©ì‹ìœ¼ë¡œ ë¡œë“œí•  ê²ƒ!**
 
-## ¶óÀÌ¼±½º
+  `nU3ProgramInfoAttribute`ë¥¼ ì‚¬ìš©í•˜ë©´:
+  1. DLL ê²½ë¡œ ì¸ì‹
+  2. íƒ€ìž… ìžë™ ë¡œë“œ
+  3. ì¸ìŠ¤í„´ìŠ¤ ìžë™ ìƒì„±
+  4. ë©”ë‰´ ìžë™ ìƒì„± (DB ìµœì†Œí™”)
+  5. ê¶Œí•œ í™•ì¸
+  6. FormType ì²˜ë¦¬
 
-? 2024 nU3 Framework
+  êµ¬í˜„í•˜ëŠ” ê²ƒì´ í›¨ì”¬ ê°„ë‹¨í•©ë‹ˆë‹¤! âœ…
+
+  ## ë¼ì´ì„ ìŠ¤ ì •ë³´
+
+  (c) 2024 nU3 Framework

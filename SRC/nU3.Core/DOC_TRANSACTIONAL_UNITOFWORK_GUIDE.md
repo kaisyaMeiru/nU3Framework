@@ -1,32 +1,32 @@
-# TransactionalUnitOfWork »ç¿ë °¡ÀÌµå
+# TransactionalUnitOfWork ì‚¬ìš© ê°€ì´ë“œ
 
-## °³¿ä
+## ê°œìš”
 
-`TransactionalUnitOfWork`´Â DB ÀÛ¾÷°ú ÆÄÀÏ ÀÛ¾÷À» ÇÏ³ªÀÇ Æ®·£Àè¼ÇÀ¸·Î ¹­¾î Ã³¸®ÇÕ´Ï´Ù.
-**Saga ÆĞÅÏ**À» Àû¿ëÇÏ¿© ºĞ»ê Æ®·£Àè¼ÇÀ» °ü¸®ÇÕ´Ï´Ù.
+`TransactionalUnitOfWork`ëŠ” DB ì‘ì—…ê³¼ íŒŒì¼ ì‘ì—…ì„ í•˜ë‚˜ì˜ íŠ¸ëœì­ì…˜ìœ¼ë¡œ ë¬¶ì–´ ì²˜ë¦¬í•©ë‹ˆë‹¤.
+**Saga íŒ¨í„´**ì„ ì ìš©í•˜ì—¬ ë¶„ì‚° íŠ¸ëœì­ì…˜ì„ ê´€ë¦¬í•©ë‹ˆë‹¤.
 
 ```
-¦£¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¤
-¦¢              TransactionalUnitOfWork                         ¦¢
-¦§¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦©
-¦¢  Operation 1: INSERT INTO ORDERS...                          ¦¢
-¦¢       ¡é ¼º°ø                                                 ¦¢
-¦¢  Operation 2: Upload invoice.pdf                             ¦¢
-¦¢       ¡é ¼º°ø                                                 ¦¢
-¦¢  Operation 3: UPDATE INVENTORY...                            ¦¢
-¦¢       ¡é ½ÇÆĞ ?                                              ¦¢
-¦§¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦©
-¦¢  ÀÚµ¿ ·Ñ¹é ½ÃÀÛ:                                              ¦¢
-¦¢       ¡ç Operation 2: Delete invoice.pdf from server          ¦¢
-¦¢       ¡ç Operation 1: DELETE FROM ORDERS WHERE...             ¦¢
-¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¥
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚              TransactionalUnitOfWork                         â”‚
+â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¤
+â”‚  Operation 1: INSERT INTO ORDERS...                          â”‚
+â”‚       â†“ ì„±ê³µ                                                 â”‚
+â”‚  Operation 2: Upload invoice.pdf                             â”‚
+â”‚       â†“ ì„±ê³µ                                                 â”‚
+â”‚  Operation 3: UPDATE INVENTORY...                            â”‚
+â”‚       â†“ ì‹¤íŒ¨ ?                                              â”‚
+â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¤
+â”‚  ìë™ ë¡¤ë°± ì‹œì‘:                                              â”‚
+â”‚       â† Operation 2: Delete invoice.pdf from server          â”‚
+â”‚       â† Operation 1: DELETE FROM ORDERS WHERE...             â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
 ```
 
 ---
 
-## ±âº» »ç¿ë¹ı
+## ê¸°ë³¸ ì‚¬ìš©ë²•
 
-### 1. ¼øÂ÷ ½ÇÇà (±ÇÀå)
+### 1. ìˆœì°¨ ì‹¤í–‰ (ê¶Œì¥)
 
 ```csharp
 using var unitOfWork = new TransactionalUnitOfWork();
@@ -41,12 +41,12 @@ unitOfWork.AddNonQuery(
         { "customerId", customerId },
         { "amount", 10000 }
     },
-    // ·Ñ¹é ½Ã ½ÇÇàÇÒ Äõ¸®
+    // ë¡¤ë°± ì‹œ ì‹¤í–‰í•  ì¿¼ë¦¬
     rollbackCommandText: "DELETE FROM ORDERS WHERE ORDER_ID = :orderId",
     rollbackParameters: new Dictionary<string, object> { { "orderId", orderId } }
 );
 
-// 2. ÆÄÀÏ ¾÷·Îµå
+// 2. íŒŒì¼ ì—…ë¡œë“œ
 unitOfWork.AddFileUpload(
     operationId: "UploadInvoice",
     localPath: @"C:\temp\invoice.pdf",
@@ -70,7 +70,7 @@ unitOfWork.AddNonQuery(
     }
 );
 
-// ½ÇÇà
+// ì‹¤í–‰
 var progress = new Progress<UnitOfWorkProgressEventArgs>(p =>
 {
     Console.WriteLine($"[{p.Phase}] {p.CurrentOperationId} ({p.PercentComplete}%)");
@@ -80,21 +80,21 @@ bool success = await unitOfWork.ExecuteAsync(progress);
 
 if (success)
 {
-    Console.WriteLine("¸ğµç ÀÛ¾÷ ¿Ï·á!");
+    Console.WriteLine("ëª¨ë“  ì‘ì—… ì™„ë£Œ!");
 }
 else
 {
-    Console.WriteLine($"½ÇÆĞ: {unitOfWork.ErrorMessage}");
-    // ·Ñ¹éÀº ÀÚµ¿À¸·Î ¼öÇàµÊ
+    Console.WriteLine($"ì‹¤íŒ¨: {unitOfWork.ErrorMessage}");
+    // ë¡¤ë°±ì€ ìë™ìœ¼ë¡œ ìˆ˜í–‰ë¨
 }
 ```
 
-### 2. º´·Ä ½ÇÇà (µ¶¸³ÀûÀÎ ÀÛ¾÷µé)
+### 2. ë³‘ë ¬ ì‹¤í–‰ (ë…ë¦½ì ì¸ ì‘ì—…ë“¤)
 
 ```csharp
 using var unitOfWork = new TransactionalUnitOfWork();
 
-// ¿©·¯ ÆÄÀÏ ¾÷·Îµå (º´·Ä Ã³¸® °¡´É)
+// ì—¬ëŸ¬ íŒŒì¼ ì—…ë¡œë“œ (ë³‘ë ¬ ì²˜ë¦¬ ê°€ëŠ¥)
 for (int i = 0; i < files.Length; i++)
 {
     unitOfWork.AddFileUpload(
@@ -104,13 +104,13 @@ for (int i = 0; i < files.Length; i++)
     );
 }
 
-// º´·Ä ½ÇÇà
+// ë³‘ë ¬ ì‹¤í–‰
 bool success = await unitOfWork.ExecuteParallelAsync(progress);
 ```
 
 ---
 
-## UI ¿¬µ¿ (WinForms)
+## UI ì—°ë™ (WinForms)
 
 ```csharp
 private async void btnSaveOrder_Click(object sender, EventArgs e)
@@ -119,16 +119,16 @@ private async void btnSaveOrder_Click(object sender, EventArgs e)
     {
         using var unitOfWork = new TransactionalUnitOfWork();
         
-        // ÀÛ¾÷ Ãß°¡
+        // ì‘ì—… ì¶”ê°€
         unitOfWork
             .AddNonQuery("InsertOrder", insertSql, insertParams, rollbackSql, rollbackParams)
             .AddFileUpload("UploadInvoice", localPath, serverPath)
             .AddNonQuery("UpdateStock", updateSql, updateParams, updateRollbackSql, updateRollbackParams);
 
-        // ÁøÇà·ü Ç¥½Ã¿Í ÇÔ²² ½ÇÇà
+        // ì§„í–‰ë¥  í‘œì‹œì™€ í•¨ê»˜ ì‹¤í–‰
         bool success = await AsyncOperationHelper.ExecuteWithProgressAsync(
             this,
-            "ÁÖ¹® Ã³¸® Áß...",
+            "ì£¼ë¬¸ ì²˜ë¦¬ ì¤‘...",
             async (cancellationToken, progress) =>
             {
                 var unitOfWorkProgress = new Progress<UnitOfWorkProgressEventArgs>(p =>
@@ -148,37 +148,37 @@ private async void btnSaveOrder_Click(object sender, EventArgs e)
 
         if (success)
         {
-            XtraMessageBox.Show("ÁÖ¹®ÀÌ ¿Ï·áµÇ¾ú½À´Ï´Ù.", "¼º°ø");
+            XtraMessageBox.Show("ì£¼ë¬¸ì´ ì™„ë£Œë˜ì—ˆìŠµë‹ˆë‹¤.", "ì„±ê³µ");
         }
         else
         {
-            XtraMessageBox.Show($"ÁÖ¹® ½ÇÆĞ: {unitOfWork.ErrorMessage}\n\n¸ğµç º¯°æ»çÇ×ÀÌ ·Ñ¹éµÇ¾ú½À´Ï´Ù.", "½ÇÆĞ");
+            XtraMessageBox.Show($"ì£¼ë¬¸ ì‹¤íŒ¨: {unitOfWork.ErrorMessage}\n\nëª¨ë“  ë³€ê²½ì‚¬í•­ì´ ë¡¤ë°±ë˜ì—ˆìŠµë‹ˆë‹¤.", "ì‹¤íŒ¨");
         }
     }
     catch (OperationCanceledException)
     {
-        XtraMessageBox.Show("»ç¿ëÀÚ°¡ ÀÛ¾÷À» Ãë¼ÒÇß½À´Ï´Ù.\n¸ğµç º¯°æ»çÇ×ÀÌ ·Ñ¹éµÇ¾ú½À´Ï´Ù.", "Ãë¼ÒµÊ");
+        XtraMessageBox.Show("ì‚¬ìš©ìê°€ ì‘ì—…ì„ ì·¨ì†Œí–ˆìŠµë‹ˆë‹¤.\nëª¨ë“  ë³€ê²½ì‚¬í•­ì´ ë¡¤ë°±ë˜ì—ˆìŠµë‹ˆë‹¤.", "ì·¨ì†Œë¨");
     }
 }
 ```
 
 ---
 
-## °í±Ş »ç¿ë¹ı
+## ê³ ê¸‰ ì‚¬ìš©ë²•
 
-### Á¶°ÇºÎ ÀÛ¾÷ Ãß°¡
+### ì¡°ê±´ë¶€ ì‘ì—… ì¶”ê°€
 
 ```csharp
 unitOfWork
     .AddNonQuery("InsertOrder", insertSql, insertParams, rollbackSql, rollbackParams)
     .AddConditional(
-        predicate: () => hasAttachment,  // Ã·ºÎÆÄÀÏÀÌ ÀÖÀ» ¶§¸¸
+        predicate: () => hasAttachment,  // ì²¨ë¶€íŒŒì¼ì´ ìˆì„ ë•Œë§Œ
         addOperations: uow => uow.AddFileUpload("UploadAttachment", localPath, serverPath)
     )
     .AddNonQuery("UpdateStatus", updateSql, updateParams, rollbackSql, rollbackParams);
 ```
 
-### Äõ¸® °á°ú »ç¿ë
+### ì¿¼ë¦¬ ê²°ê³¼ ì‚¬ìš©
 
 ```csharp
 System.Data.DataTable? orderData = null;
@@ -188,7 +188,7 @@ unitOfWork
         "SelectOrder",
         "SELECT * FROM ORDERS WHERE ORDER_ID = :orderId",
         new Dictionary<string, object> { { "orderId", orderId } },
-        onSuccess: data => orderData = data  // °á°ú ÀúÀå
+        onSuccess: data => orderData = data  // ê²°ê³¼ ì €ì¥
     )
     .AddNonQuery(
         "UpdateOrder",
@@ -200,14 +200,14 @@ unitOfWork
 
 await unitOfWork.ExecuteAsync();
 
-// orderData¿¡ Äõ¸® °á°ú°¡ ÀúÀåµÊ
+// orderDataì— ì¿¼ë¦¬ ê²°ê³¼ê°€ ì €ì¥ë¨
 if (orderData != null)
 {
-    Console.WriteLine($"ÁÖ¹® ¼ö: {orderData.Rows.Count}");
+    Console.WriteLine($"ì£¼ë¬¸ ìˆ˜: {orderData.Rows.Count}");
 }
 ```
 
-### Ä¿½ºÅÒ Operation ±¸Çö
+### ì»¤ìŠ¤í…€ Operation êµ¬í˜„
 
 ```csharp
 public class SendEmailOperation : ITransactionalOperation
@@ -224,7 +224,7 @@ public class SendEmailOperation : ITransactionalOperation
     {
         try
         {
-            // ÀÌ¸ŞÀÏ ¹ß¼Û
+            // ì´ë©”ì¼ ë°œì†¡
             _messageId = await EmailService.SendAsync(To, Subject, Body);
             _sent = true;
             
@@ -240,67 +240,67 @@ public class SendEmailOperation : ITransactionalOperation
     {
         if (_sent)
         {
-            // ¹ß¼Û Ãë¼Ò ¶Ç´Â Ãë¼Ò ¸ŞÀÏ ¹ß¼Û
+            // ë°œì†¡ ì·¨ì†Œ ë˜ëŠ” ì·¨ì†Œ ë©”ì¼ ë°œì†¡
             await EmailService.SendCancellationAsync(_messageId);
         }
     }
 }
 
-// »ç¿ë
+// ì‚¬ìš©
 unitOfWork.AddCustomOperation(new SendEmailOperation
 {
     OperationId = "SendConfirmation",
     To = customer.Email,
-    Subject = "ÁÖ¹® È®ÀÎ",
-    Body = "ÁÖ¹®ÀÌ Á¢¼öµÇ¾ú½À´Ï´Ù."
+    Subject = "ì£¼ë¬¸ í™•ì¸",
+    Body = "ì£¼ë¬¸ì´ ì ‘ìˆ˜ë˜ì—ˆìŠµë‹ˆë‹¤."
 });
 ```
 
 ---
 
-## ·Ñ¹é µ¿ÀÛ
+## ë¡¤ë°± ë™ì‘
 
-| ÀÛ¾÷ À¯Çü | ·Ñ¹é µ¿ÀÛ |
+| ì‘ì—… ìœ í˜• | ë¡¤ë°± ë™ì‘ |
 |----------|----------|
-| DB INSERT | rollbackCommandText ½ÇÇà (DELETE) |
-| DB UPDATE | rollbackCommandText ½ÇÇà (¿ø·¡ °ªÀ¸·Î º¹¿ø) |
-| DB DELETE | rollbackCommandText ½ÇÇà (INSERT) |
-| File Upload | ¼­¹ö¿¡¼­ ¾÷·ÎµåµÈ ÆÄÀÏ »èÁ¦ |
-| File Download | ·ÎÄÃ¿¡¼­ ´Ù¿î·ÎµåµÈ ÆÄÀÏ »èÁ¦ |
-| Custom | RollbackAsync() ¸Ş¼­µå È£Ãâ |
+| DB INSERT | rollbackCommandText ì‹¤í–‰ (DELETE) |
+| DB UPDATE | rollbackCommandText ì‹¤í–‰ (ì›ë˜ ê°’ìœ¼ë¡œ ë³µì›) |
+| DB DELETE | rollbackCommandText ì‹¤í–‰ (INSERT) |
+| File Upload | ì„œë²„ì—ì„œ ì—…ë¡œë“œëœ íŒŒì¼ ì‚­ì œ |
+| File Download | ë¡œì»¬ì—ì„œ ë‹¤ìš´ë¡œë“œëœ íŒŒì¼ ì‚­ì œ |
+| Custom | RollbackAsync() ë©”ì„œë“œ í˜¸ì¶œ |
 
 ---
 
-## »óÅÂ È®ÀÎ
+## ìƒíƒœ í™•ì¸
 
 ```csharp
-// ½ÇÇà ÈÄ »óÅÂ È®ÀÎ
-Console.WriteLine($"»óÅÂ: {unitOfWork.State}");
+// ì‹¤í–‰ í›„ ìƒíƒœ í™•ì¸
+Console.WriteLine($"ìƒíƒœ: {unitOfWork.State}");
 // Pending, Executing, Completed, RollingBack, RolledBack, Failed
 
-// °¢ ÀÛ¾÷ °á°ú È®ÀÎ
+// ê° ì‘ì—… ê²°ê³¼ í™•ì¸
 foreach (var result in unitOfWork.Results)
 {
-    Console.WriteLine($"  {result.OperationId}: {(result.Success ? "¼º°ø" : $"½ÇÆĞ - {result.Error}")}");
+    Console.WriteLine($"  {result.OperationId}: {(result.Success ? "ì„±ê³µ" : $"ì‹¤íŒ¨ - {result.Error}")}");
 }
 
-// ¿¡·¯ ¸Ş½ÃÁö
+// ì—ëŸ¬ ë©”ì‹œì§€
 if (!string.IsNullOrEmpty(unitOfWork.ErrorMessage))
 {
-    Console.WriteLine($"¿¡·¯: {unitOfWork.ErrorMessage}");
+    Console.WriteLine($"ì—ëŸ¬: {unitOfWork.ErrorMessage}");
 }
 ```
 
 ---
 
-## ÁÖÀÇ»çÇ×
+## ì£¼ì˜ì‚¬í•­
 
-1. **·Ñ¹é Äõ¸® ÇÊ¼ö**: DB º¯°æ ÀÛ¾÷(INSERT/UPDATE/DELETE)¿¡´Â ¹İµå½Ã rollbackCommandText¸¦ ÁöÁ¤ÇÏ¼¼¿ä.
+1. **ë¡¤ë°± ì¿¼ë¦¬ í•„ìˆ˜**: DB ë³€ê²½ ì‘ì—…(INSERT/UPDATE/DELETE)ì—ëŠ” ë°˜ë“œì‹œ rollbackCommandTextë¥¼ ì§€ì •í•˜ì„¸ìš”.
 
-2. **¸èµî¼º °í·Á**: ·Ñ¹é Äõ¸®´Â ¿©·¯ ¹ø ½ÇÇàµÇ¾îµµ ¾ÈÀüÇØ¾ß ÇÕ´Ï´Ù.
+2. **ë©±ë“±ì„± ê³ ë ¤**: ë¡¤ë°± ì¿¼ë¦¬ëŠ” ì—¬ëŸ¬ ë²ˆ ì‹¤í–‰ë˜ì–´ë„ ì•ˆì „í•´ì•¼ í•©ë‹ˆë‹¤.
 
-3. **¼ø¼­ Áß¿ä**: ExecuteAsync()´Â Ãß°¡ÇÑ ¼ø¼­´ë·Î ½ÇÇàµË´Ï´Ù. ÀÇÁ¸¼ºÀÌ ÀÖ´Â ÀÛ¾÷Àº ¼ø¼­¸¦ ÁöÄÑ¾ß ÇÕ´Ï´Ù.
+3. **ìˆœì„œ ì¤‘ìš”**: ExecuteAsync()ëŠ” ì¶”ê°€í•œ ìˆœì„œëŒ€ë¡œ ì‹¤í–‰ë©ë‹ˆë‹¤. ì˜ì¡´ì„±ì´ ìˆëŠ” ì‘ì—…ì€ ìˆœì„œë¥¼ ì§€ì¼œì•¼ í•©ë‹ˆë‹¤.
 
-4. **º´·Ä ½ÇÇà ÁÖÀÇ**: ExecuteParallelAsync()´Â ÀÛ¾÷ °£ ÀÇÁ¸¼ºÀÌ ¾øÀ» ¶§¸¸ »ç¿ëÇÏ¼¼¿ä.
+4. **ë³‘ë ¬ ì‹¤í–‰ ì£¼ì˜**: ExecuteParallelAsync()ëŠ” ì‘ì—… ê°„ ì˜ì¡´ì„±ì´ ì—†ì„ ë•Œë§Œ ì‚¬ìš©í•˜ì„¸ìš”.
 
-5. **¸®¼Ò½º ÇØÁ¦**: using ¹® ¶Ç´Â Dispose()¸¦ »ç¿ëÇÏ¿© ¸®¼Ò½º¸¦ ÇØÁ¦ÇÏ¼¼¿ä.
+5. **ë¦¬ì†ŒìŠ¤ í•´ì œ**: using ë¬¸ ë˜ëŠ” Dispose()ë¥¼ ì‚¬ìš©í•˜ì—¬ ë¦¬ì†ŒìŠ¤ë¥¼ í•´ì œí•˜ì„¸ìš”.

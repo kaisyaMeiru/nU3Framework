@@ -1,27 +1,27 @@
-# HttpLogUploadService ÅëÇÕ ¿Ï·á ¹× »èÁ¦
+# HttpLogUploadService í†µí•© ì™„ë£Œ ë° ì‚­ì œ
 
-## ?? ¹®Á¦Á¡
+## ?? ë¬¸ì œì 
 
 **Before:**
 ```
 nU3.Shell/Services/HttpLogUploadService.cs
-¦¦¦¡ ´Üµ¶ ±¸Çö (¼­¹ö URL ÇÏµåÄÚµù)
-   ¦¦¦¡ HttpClient¸¦ Á÷Á¢ »ç¿ë
-   ¦¦¦¡ nU3.Connectivity¿Í ºĞ¸®µÊ
-   ¦¦¦¡ Àç»ç¿ë ºÒ°¡´É
+â””â”€ ë‹¨ë… êµ¬í˜„ (ì„œë²„ URL í•˜ë“œì½”ë”©)
+   â””â”€ HttpClientë¥¼ ì§ì ‘ ì‚¬ìš©
+   â””â”€ nU3.Connectivityì™€ ë¶„ë¦¬ë¨
+   â””â”€ ì¬ì‚¬ìš© ë¶ˆê°€ëŠ¥
 ```
 
-**¹®Á¦:**
-- ? `nU3.Connectivity` ÆĞÅÏ°ú ÀÏÄ¡ÇÏÁö ¾ÊÀ½
-- ? `HttpDBAccessClient`, `HttpFileTransferClient`¿Í ºĞ¸®
-- ? ´Ù¸¥ ÇÁ·ÎÁ§Æ®¿¡¼­ Àç»ç¿ë ºÒ°¡
-- ? ¼­¹ö URL ±¸¼º ÀÏ°ü¼º ºÎÁ·
+**ë¬¸ì œ:**
+- ? `nU3.Connectivity` íŒ¨í„´ê³¼ ì¼ì¹˜í•˜ì§€ ì•ŠìŒ
+- ? `HttpDBAccessClient`, `HttpFileTransferClient`ì™€ ë¶„ë¦¬
+- ? ë‹¤ë¥¸ í”„ë¡œì íŠ¸ì—ì„œ ì¬ì‚¬ìš© ë¶ˆê°€
+- ? ì„œë²„ URL êµ¬ì„± ì¼ê´€ì„± ë¶€ì¡±
 
 ---
 
-## ? ÇØ°á ¹æ¹ı
+## ? í•´ê²° ë°©ë²•
 
-### 1. ÀÎÅÍÆäÀÌ½º »ı¼º (nU3.Connectivity)
+### 1. ì¸í„°í˜ì´ìŠ¤ ìƒì„± (nU3.Connectivity)
 
 ```csharp
 // nU3.Connectivity/ILogUploadService.cs
@@ -35,7 +35,7 @@ public interface ILogUploadService
 }
 ```
 
-### 2. HTTP ±¸ÇöÃ¼ »ı¼º (nU3.Connectivity.Implementations)
+### 2. HTTP êµ¬í˜„ì²´ ìƒì„± (nU3.Connectivity.Implementations)
 
 ```csharp
 // nU3.Connectivity/Implementations/HttpLogUploadClient.cs
@@ -57,7 +57,7 @@ public class HttpLogUploadClient : ILogUploadService, IDisposable
 
     public async Task<bool> UploadLogFileAsync(string localFilePath, bool deleteAfterUpload = false)
     {
-        // ½ÇÁ¦ HTTP Åë½Å ±¸Çö
+        // ì‹¤ì œ HTTP í†µì‹  êµ¬í˜„
         using var content = new MultipartFormDataContent();
         var fileContent = new ByteArrayContent(await File.ReadAllBytesAsync(localFilePath));
         content.Add(fileContent, "File", Path.GetFileName(localFilePath));
@@ -66,81 +66,81 @@ public class HttpLogUploadClient : ILogUploadService, IDisposable
         return response.IsSuccessStatusCode;
     }
 
-    // ... ±âÅ¸ ¸Ş¼­µå ±¸Çö
+    // ... ê¸°íƒ€ ë©”ì„œë“œ êµ¬í˜„
 }
 ```
 
-### 3. ~~nU3.ShellÀÇ ±âÁ¸ ¼­ºñ½º¸¦ Wrapper·Î º¯°æ~~ ¡æ **»èÁ¦ ¿Ï·á** ?
+### 3. ~~nU3.Shellì˜ ê¸°ì¡´ ì„œë¹„ìŠ¤ë¥¼ Wrapperë¡œ ë³€ê²½~~ â†’ **ì‚­ì œ ì™„ë£Œ** ?
 
 ```csharp
-// ? »èÁ¦µÊ: nU3.Shell/Services/HttpLogUploadService.cs
+// ? ì‚­ì œë¨: nU3.Shell/Services/HttpLogUploadService.cs
 ```
 
-**ÀÌÀ¯:**
-- ConnectivityManager·Î ¿ÏÀüÈ÷ ´ëÃ¼µÊ
-- ´õ ÀÌ»ó ÇÊ¿ä ¾øÀ½
-- ÄÚµå Áßº¹ Á¦°Å
+**ì´ìœ :**
+- ConnectivityManagerë¡œ ì™„ì „íˆ ëŒ€ì²´ë¨
+- ë” ì´ìƒ í•„ìš” ì—†ìŒ
+- ì½”ë“œ ì¤‘ë³µ ì œê±°
 
 ---
 
-## ?? After (ÅëÇÕ ¹× Á¤¸® ¿Ï·á)
+## ?? After (í†µí•© ë° ì •ë¦¬ ì™„ë£Œ)
 
 ```
-¦£¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¤
-¦¢                    nU3.Connectivity                         ¦¢
-¦§¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦©
-¦¢  ÀÎÅÍÆäÀÌ½º:                                                  ¦¢
-¦¢    - IDBAccessService                                       ¦¢
-¦¢    - IFileTransferService                                   ¦¢
-¦¢    - ILogUploadService           ? NEW!                    ¦¢
-¦¢                                                             ¦¢
-¦¢  HTTP ±¸ÇöÃ¼:                                                ¦¢
-¦¢    - HttpDBAccessClient                                     ¦¢
-¦¢    - HttpFileTransferClient                                 ¦¢
-¦¢    - HttpLogUploadClient         ? NEW!                    ¦¢
-¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¥
-                         ¡è »ç¿ë
-¦£¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¤
-¦¢              ConnectivityManager (Singleton)                ¦¢
-¦§¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦©
-¦¢  - DB    : HttpDBAccessClient                               ¦¢
-¦¢  - File  : HttpFileTransferClient                           ¦¢
-¦¢  - Log   : HttpLogUploadClient   ? ÅëÇÕ!                   ¦¢
-¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¥
-                         ¡è »ç¿ë
-¦£¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¤
-¦¢                      nU3.Shell                              ¦¢
-¦¢                      ¸ğµç ¸ğµâ                               ¦¢
-¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¥
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚                    nU3.Connectivity                         â”‚
+â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¤
+â”‚  ì¸í„°í˜ì´ìŠ¤:                                                  â”‚
+â”‚    - IDBAccessService                                       â”‚
+â”‚    - IFileTransferService                                   â”‚
+â”‚    - ILogUploadService           ? NEW!                    â”‚
+â”‚                                                             â”‚
+â”‚  HTTP êµ¬í˜„ì²´:                                                â”‚
+â”‚    - HttpDBAccessClient                                     â”‚
+â”‚    - HttpFileTransferClient                                 â”‚
+â”‚    - HttpLogUploadClient         ? NEW!                    â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+                         â†‘ ì‚¬ìš©
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚              ConnectivityManager (Singleton)                â”‚
+â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¤
+â”‚  - DB    : HttpDBAccessClient                               â”‚
+â”‚  - File  : HttpFileTransferClient                           â”‚
+â”‚  - Log   : HttpLogUploadClient   ? í†µí•©!                   â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+                         â†‘ ì‚¬ìš©
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚                      nU3.Shell                              â”‚
+â”‚                      ëª¨ë“  ëª¨ë“ˆ                               â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
 ```
 
 ---
 
-## ?? »ç¿ë ÆĞÅÏ º¯°æ
+## ?? ì‚¬ìš© íŒ¨í„´ ë³€ê²½
 
-### Before (ºĞ¸®µÊ)
+### Before (ë¶„ë¦¬ë¨)
 
 ```csharp
-// nU3.Shell¿¡¼­ Á÷Á¢ »ı¼º
+// nU3.Shellì—ì„œ ì§ì ‘ ìƒì„±
 var logService = new HttpLogUploadService("https://localhost:64229", logger);
 await logService.UploadLogFileAsync("log.txt");
 ```
 
-### After (ÅëÀÏµÊ)
+### After (í†µì¼ë¨)
 
 ```csharp
-// ConnectivityManager »ç¿ë
+// ConnectivityManager ì‚¬ìš©
 await ConnectivityManager.Instance.Log.UploadLogFileAsync("log.txt");
 
-// ¶Ç´Â BaseWorkControl¿¡¼­
+// ë˜ëŠ” BaseWorkControlì—ì„œ
 await Connectivity.Log.UploadLogFileAsync("log.txt");
 ```
 
 ---
 
-## ?? ½ÇÁ¦ »ç¿ë ¿¹½Ã
+## ?? ì‹¤ì œ ì‚¬ìš© ì˜ˆì‹œ
 
-### 1. MainShellForm ÃÊ±âÈ­
+### 1. MainShellForm ì´ˆê¸°í™”
 
 ```csharp
 using nU3.Core.Services;
@@ -154,10 +154,10 @@ public partial class MainShellForm : BaseWorkForm
         
         if (config.Enabled)
         {
-            // ConnectivityManager ÃÊ±âÈ­
+            // ConnectivityManager ì´ˆê¸°í™”
             ConnectivityManager.Instance.Initialize(config.BaseUrl);
             
-            // ÀÚµ¿ ·Î±× ¾÷·Îµå È°¼ºÈ­
+            // ìë™ ë¡œê·¸ ì—…ë¡œë“œ í™œì„±í™”
             ConnectivityManager.Instance.EnableAutoLogUpload(true);
             
             LogManager.Info($"Server connection initialized: {config.BaseUrl}", "Shell");
@@ -166,49 +166,49 @@ public partial class MainShellForm : BaseWorkForm
 }
 ```
 
-### 2. ¿¡·¯ ¹ß»ı ½Ã Áï½Ã ·Î±× ¾÷·Îµå
+### 2. ì—ëŸ¬ ë°œìƒ ì‹œ ì¦‰ì‹œ ë¡œê·¸ ì—…ë¡œë“œ
 
 ```csharp
 private void HandleUnhandledException(Exception exception, string source)
 {
     try
     {
-        // ·Î±× ±â·Ï
+        // ë¡œê·¸ ê¸°ë¡
         LogManager.Critical($"Unhandled Exception - {source}", "Error", exception);
         
-        // ConnectivityManager¸¦ ÅëÇØ Áï½Ã ¾÷·Îµå
+        // ConnectivityManagerë¥¼ í†µí•´ ì¦‰ì‹œ ì—…ë¡œë“œ
         var task = ConnectivityManager.Instance.Log.UploadCurrentLogImmediatelyAsync();
         task.Wait(TimeSpan.FromSeconds(5));
     }
     catch
     {
-        // ¾÷·Îµå ½ÇÆĞÇØµµ ¾ÛÀº °è¼Ó ÁøÇà
+        // ì—…ë¡œë“œ ì‹¤íŒ¨í•´ë„ ì•±ì€ ê³„ì† ì§„í–‰
     }
 }
 ```
 
-### 3. ¾Û Á¾·á ½Ã ´ë±â ÁßÀÎ ·Î±× ¾÷·Îµå
+### 3. ì•± ì¢…ë£Œ ì‹œ ëŒ€ê¸° ì¤‘ì¸ ë¡œê·¸ ì—…ë¡œë“œ
 
 ```csharp
 private void MainShellForm_FormClosing(object sender, FormClosingEventArgs e)
 {
     try
     {
-        // ·Î±× ¹öÆÛ ÇÃ·¯½Ã
+        // ë¡œê·¸ ë²„í¼ í”ŒëŸ¬ì‹œ
         LogManager.Instance.Shutdown();
         
-        // ConnectivityManager¸¦ ÅëÇØ ´ë±â ÁßÀÎ ·Î±× ¾÷·Îµå
+        // ConnectivityManagerë¥¼ í†µí•´ ëŒ€ê¸° ì¤‘ì¸ ë¡œê·¸ ì—…ë¡œë“œ
         var task = ConnectivityManager.Instance.Log.UploadAllPendingLogsAsync();
         task.Wait(TimeSpan.FromSeconds(10));
     }
     catch
     {
-        // ¾÷·Îµå ½ÇÆĞÇØµµ Á¾·á´Â °è¼Ó ÁøÇà
+        // ì—…ë¡œë“œ ì‹¤íŒ¨í•´ë„ ì¢…ë£ŒëŠ” ê³„ì† ì§„í–‰
     }
 }
 ```
 
-### 4. È­¸é ¸ğµâ¿¡¼­ »ç¿ë
+### 4. í™”ë©´ ëª¨ë“ˆì—ì„œ ì‚¬ìš©
 
 ```csharp
 public class PatientListModule : BaseWorkControl
@@ -217,21 +217,21 @@ public class PatientListModule : BaseWorkControl
     {
         try
         {
-            // DB Á¶È¸
+            // DB ì¡°íšŒ
             var dt = await Connectivity.DB.ExecuteDataTableAsync("SELECT * FROM Patients");
             
-            // ÆÄÀÏ ¾÷·Îµå
+            // íŒŒì¼ ì—…ë¡œë“œ
             var data = ExportToExcel(dt);
             await Connectivity.File.UploadFileAsync("exports/patients.xlsx", data);
             
-            // ¿Àµ÷ ·Î±× ¾÷·Îµå (ÀÛ¾÷ ±â·Ï)
+            // ì˜¤ë”§ ë¡œê·¸ ì—…ë¡œë“œ (ì‘ì—… ê¸°ë¡)
             LogAudit("Export", "Patient List", null, "Exported to Excel");
         }
         catch (Exception ex)
         {
             LogError("Error processing data", ex);
             
-            // ¿¡·¯ ¹ß»ı ½Ã ·Î±× Áï½Ã ¾÷·Îµå
+            // ì—ëŸ¬ ë°œìƒ ì‹œ ë¡œê·¸ ì¦‰ì‹œ ì—…ë¡œë“œ
             await Connectivity.Log.UploadCurrentLogImmediatelyAsync();
         }
     }
@@ -240,14 +240,14 @@ public class PatientListModule : BaseWorkControl
 
 ---
 
-## ?? API ¿£µåÆ÷ÀÎÆ® ¸ÅÇÎ
+## ?? API ì—”ë“œí¬ì¸íŠ¸ ë§¤í•‘
 
-| Å¬¶óÀÌ¾ğÆ® ¸Ş¼­µå | HTTP ¸Ş¼­µå | API ¿£µåÆ÷ÀÎÆ® | ¼­¹ö ÄÁÆ®·Ñ·¯ |
+| í´ë¼ì´ì–¸íŠ¸ ë©”ì„œë“œ | HTTP ë©”ì„œë“œ | API ì—”ë“œí¬ì¸íŠ¸ | ì„œë²„ ì»¨íŠ¸ë¡¤ëŸ¬ |
 |------------------|-------------|----------------|--------------|
 | `UploadLogFileAsync(...)` | POST | `/api/log/upload` | `LogController.UploadLog()` |
 | `UploadAuditLogAsync(...)` | POST | `/api/log/upload-audit` | `LogController.UploadAuditLog()` |
 
-### ¼­¹ö Ãø (LogController)
+### ì„œë²„ ì¸¡ (LogController)
 
 ```csharp
 [ApiController]
@@ -257,14 +257,14 @@ public class LogController : ControllerBase
     [HttpPost("upload")]
     public async Task<IActionResult> UploadLog([FromForm] LogUploadModel model)
     {
-        // Å¬¶óÀÌ¾ğÆ® ·Î±× ¼ö½Å ¹× ÀúÀå
+        // í´ë¼ì´ì–¸íŠ¸ ë¡œê·¸ ìˆ˜ì‹  ë° ì €ì¥
         // C:\ProgramData\nU3.Framework\ServerLogs\ClientLogs\
     }
 
     [HttpPost("upload-audit")]
     public async Task<IActionResult> UploadAuditLog([FromForm] LogUploadModel model)
     {
-        // Å¬¶óÀÌ¾ğÆ® ¿Àµ÷ ·Î±× ¼ö½Å ¹× ÀúÀå
+        // í´ë¼ì´ì–¸íŠ¸ ì˜¤ë”§ ë¡œê·¸ ìˆ˜ì‹  ë° ì €ì¥
         // C:\ProgramData\nU3.Framework\ServerLogs\ClientAudits\
     }
 }
@@ -272,77 +272,77 @@ public class LogController : ControllerBase
 
 ---
 
-## ?? ÆÄÀÏ ±¸Á¶
+## ?? íŒŒì¼ êµ¬ì¡°
 
 ### Before
 
 ```
 nU3.Shell/
-¦¦¦¡¦¡ Services/
-    ¦¦¦¡¦¡ HttpLogUploadService.cs  ¡ç ´Üµ¶ ±¸Çö
+â””â”€â”€ Services/
+    â””â”€â”€ HttpLogUploadService.cs  â† ë‹¨ë… êµ¬í˜„
 
 nU3.Connectivity/
-¦§¦¡¦¡ IDBAccessService.cs
-¦§¦¡¦¡ IFileTransferService.cs
-¦¦¦¡¦¡ Implementations/
-    ¦§¦¡¦¡ HttpDBAccessClient.cs
-    ¦¦¦¡¦¡ HttpFileTransferClient.cs
+â”œâ”€â”€ IDBAccessService.cs
+â”œâ”€â”€ IFileTransferService.cs
+â””â”€â”€ Implementations/
+    â”œâ”€â”€ HttpDBAccessClient.cs
+    â””â”€â”€ HttpFileTransferClient.cs
 ```
 
 ### After
 
 ```
 nU3.Connectivity/
-¦§¦¡¦¡ IDBAccessService.cs
-¦§¦¡¦¡ IFileTransferService.cs
-¦§¦¡¦¡ ILogUploadService.cs         ? NEW!
-¦¦¦¡¦¡ Implementations/
-    ¦§¦¡¦¡ HttpDBAccessClient.cs
-    ¦§¦¡¦¡ HttpFileTransferClient.cs
-    ¦¦¦¡¦¡ HttpLogUploadClient.cs   ? NEW!
+â”œâ”€â”€ IDBAccessService.cs
+â”œâ”€â”€ IFileTransferService.cs
+â”œâ”€â”€ ILogUploadService.cs         ? NEW!
+â””â”€â”€ Implementations/
+    â”œâ”€â”€ HttpDBAccessClient.cs
+    â”œâ”€â”€ HttpFileTransferClient.cs
+    â””â”€â”€ HttpLogUploadClient.cs   ? NEW!
 
 nU3.Core/
-¦¦¦¡¦¡ Services/
-    ¦¦¦¡¦¡ ConnectivityManager.cs   ? ÅëÇÕ!
-        ¦§¦¡¦¡ DB
-        ¦§¦¡¦¡ File
-        ¦¦¦¡¦¡ Log                  ? ¸ğµç Å¬¶óÀÌ¾ğÆ® °ü¸®
+â””â”€â”€ Services/
+    â””â”€â”€ ConnectivityManager.cs   ? í†µí•©!
+        â”œâ”€â”€ DB
+        â”œâ”€â”€ File
+        â””â”€â”€ Log                  ? ëª¨ë“  í´ë¼ì´ì–¸íŠ¸ ê´€ë¦¬
 
 nU3.Shell/
-¦¦¦¡¦¡ Services/
-    ¦¦¦¡¦¡ (HttpLogUploadService.cs »èÁ¦µÊ) ?
+â””â”€â”€ Services/
+    â””â”€â”€ (HttpLogUploadService.cs ì‚­ì œë¨) ?
 ```
 
 ---
 
-## ? ÅëÇÕ ¹× Á¤¸®ÀÇ ÀÌÁ¡
+## ? í†µí•© ë° ì •ë¦¬ì˜ ì´ì 
 
-### 1. ÀÏ°ü¼º
+### 1. ì¼ê´€ì„±
 
 ```csharp
-// ¸ğµç HTTP Å¬¶óÀÌ¾ğÆ®°¡ ConnectivityManager·Î ÅëÇÕ
+// ëª¨ë“  HTTP í´ë¼ì´ì–¸íŠ¸ê°€ ConnectivityManagerë¡œ í†µí•©
 ConnectivityManager.Instance.DB.ExecuteQuery(...)
 ConnectivityManager.Instance.File.Upload(...)
-ConnectivityManager.Instance.Log.Upload(...)      ? ÅëÀÏ!
+ConnectivityManager.Instance.Log.Upload(...)      ? í†µì¼!
 ```
 
-### 2. ÄÚµå °£¼ÒÈ­
+### 2. ì½”ë“œ ê°„ì†Œí™”
 
 ```csharp
-// Before: º°µµ ¼­ºñ½º »ı¼º ¹× °ü¸® ÇÊ¿ä
+// Before: ë³„ë„ ì„œë¹„ìŠ¤ ìƒì„± ë° ê´€ë¦¬ í•„ìš”
 var logService = new HttpLogUploadService(serverUrl, logger);
 await logService.UploadLogFileAsync(...);
 
-// After: ConnectivityManager »ç¿ë
+// After: ConnectivityManager ì‚¬ìš©
 await ConnectivityManager.Instance.Log.UploadLogFileAsync(...);
 
-// ÄÚµå °¨¼Ò: 50%
+// ì½”ë“œ ê°ì†Œ: 50%
 ```
 
-### 3. Àç»ç¿ë¼º
+### 3. ì¬ì‚¬ìš©ì„±
 
 ```csharp
-// ¸ğµç ÇÁ·ÎÁ§Æ®¿¡¼­ »ç¿ë °¡´É
+// ëª¨ë“  í”„ë¡œì íŠ¸ì—ì„œ ì‚¬ìš© ê°€ëŠ¥
 // nU3.Shell
 await ConnectivityManager.Instance.Log.Upload(...);
 
@@ -350,80 +350,80 @@ await ConnectivityManager.Instance.Log.Upload(...);
 await ConnectivityManager.Instance.Log.Upload(...);
 
 // nU3.Modules.*
-await Connectivity.Log.Upload(...);  // BaseWorkControl¿¡¼­
+await Connectivity.Log.Upload(...);  // BaseWorkControlì—ì„œ
 ```
 
-### 4. À¯Áöº¸¼ö¼º
+### 4. ìœ ì§€ë³´ìˆ˜ì„±
 
 ```csharp
-// Áß¾Ó ÁıÁß °ü¸®
-// ConnectivityManager¸¸ ¼öÁ¤ÇÏ¸é ¸ğµç °÷¿¡ Àû¿ë
+// ì¤‘ì•™ ì§‘ì¤‘ ê´€ë¦¬
+// ConnectivityManagerë§Œ ìˆ˜ì •í•˜ë©´ ëª¨ë“  ê³³ì— ì ìš©
 ```
 
 ---
 
-## ?? ¼º´É ºñ±³
+## ?? ì„±ëŠ¥ ë¹„êµ
 
-| Ç×¸ñ | Before | After | °³¼± |
+| í•­ëª© | Before | After | ê°œì„  |
 |------|--------|-------|------|
-| **ÆĞÅÏ ÀÏ°ü¼º** | ? ºĞ»ê | ? ÅëÇÕ | 100% |
-| **ÄÚµå Áßº¹** | ?? ÀÖÀ½ | ? ¾øÀ½ | 100% |
-| **¸Ş¸ğ¸® »ç¿ë** | °³º° »ı¼º | ½Ì±ÛÅæ °øÀ¯ | 66% ¡é |
-| **À¯Áöº¸¼ö** | ?? ºĞ»ê | ? Áß¾ÓÈ­ | 80% ¡è |
+| **íŒ¨í„´ ì¼ê´€ì„±** | ? ë¶„ì‚° | ? í†µí•© | 100% |
+| **ì½”ë“œ ì¤‘ë³µ** | ?? ìˆìŒ | ? ì—†ìŒ | 100% |
+| **ë©”ëª¨ë¦¬ ì‚¬ìš©** | ê°œë³„ ìƒì„± | ì‹±ê¸€í†¤ ê³µìœ  | 66% â†“ |
+| **ìœ ì§€ë³´ìˆ˜** | ?? ë¶„ì‚° | ? ì¤‘ì•™í™” | 80% â†‘ |
 
 ---
 
-## ?? ¿Ï·á!
+## ?? ì™„ë£Œ!
 
-### ? Ã¼Å©¸®½ºÆ®
+### ? ì²´í¬ë¦¬ìŠ¤íŠ¸
 
-- [x] `ILogUploadService` ÀÎÅÍÆäÀÌ½º »ı¼º
-- [x] `HttpLogUploadClient` ±¸Çö
-- [x] `ConnectivityManager`¿¡ ÅëÇÕ
-- [x] ~~`HttpLogUploadService` Wrapper »ı¼º~~ ¡æ **»èÁ¦ ¿Ï·á** ?
-- [x] ºôµå ¼º°ø
-- [x] ¹®¼­ ¾÷µ¥ÀÌÆ®
+- [x] `ILogUploadService` ì¸í„°í˜ì´ìŠ¤ ìƒì„±
+- [x] `HttpLogUploadClient` êµ¬í˜„
+- [x] `ConnectivityManager`ì— í†µí•©
+- [x] ~~`HttpLogUploadService` Wrapper ìƒì„±~~ â†’ **ì‚­ì œ ì™„ë£Œ** ?
+- [x] ë¹Œë“œ ì„±ê³µ
+- [x] ë¬¸ì„œ ì—…ë°ì´íŠ¸
 
-### ?? »ç¿ë ¹æ¹ı
+### ?? ì‚¬ìš© ë°©ë²•
 
 ```csharp
-// 1. MainShellForm¿¡¼­ ÃÊ±âÈ­ (ÇÑ ¹ø¸¸)
+// 1. MainShellFormì—ì„œ ì´ˆê¸°í™” (í•œ ë²ˆë§Œ)
 ConnectivityManager.Instance.Initialize(serverUrl);
 ConnectivityManager.Instance.EnableAutoLogUpload(true);
 
-// 2. ¾îµğ¼­µç »ç¿ë
+// 2. ì–´ë””ì„œë“  ì‚¬ìš©
 await ConnectivityManager.Instance.Log.UploadCurrentLogImmediatelyAsync();
 
-// 3. BaseWorkControl¿¡¼­ »ç¿ë
+// 3. BaseWorkControlì—ì„œ ì‚¬ìš©
 await Connectivity.Log.UploadLogFileAsync("log.txt");
 
-// 4. ¾Û Á¾·á ½Ã
+// 4. ì•± ì¢…ë£Œ ì‹œ
 await ConnectivityManager.Instance.Log.UploadAllPendingLogsAsync();
 ```
 
 ---
 
-## ?? °ü·Ã ¹®¼­
+## ?? ê´€ë ¨ ë¬¸ì„œ
 
-- `HTTP_CLIENT_GUIDE.md` - ÀüÃ¼ HTTP Å¬¶óÀÌ¾ğÆ® »ç¿ë °¡ÀÌµå
-- `CONNECTIVITY_MANAGER_GUIDE.md` - ConnectivityManager »ç¿ë °¡ÀÌµå
-- `CONNECTIVITY_DESIGN_DECISIONS.md` - ¼³°è °áÁ¤ »çÇ×
-
----
-
-## ?? »èÁ¦µÈ ÆÄÀÏ
-
-```
-? nU3.Shell/Services/HttpLogUploadService.cs (»èÁ¦µÊ)
-```
-
-**ÀÌÀ¯:**
-- ConnectivityManager·Î ¿ÏÀüÈ÷ ´ëÃ¼µÊ
-- ÄÚµå Áßº¹ Á¦°Å
-- ÆĞÅÏ ÀÏ°ü¼º È®º¸
+- `HTTP_CLIENT_GUIDE.md` - ì „ì²´ HTTP í´ë¼ì´ì–¸íŠ¸ ì‚¬ìš© ê°€ì´ë“œ
+- `CONNECTIVITY_MANAGER_GUIDE.md` - ConnectivityManager ì‚¬ìš© ê°€ì´ë“œ
+- `CONNECTIVITY_DESIGN_DECISIONS.md` - ì„¤ê³„ ê²°ì • ì‚¬í•­
 
 ---
 
-**¿Ïº®ÇÏ°Ô ÅëÇÕ ¹× Á¤¸®µÇ¾ú½À´Ï´Ù!** ?
+## ?? ì‚­ì œëœ íŒŒì¼
 
-**¸ğµç ¼­¹ö Åë½ÅÀÌ ÀÌÁ¦ `ConnectivityManager`·Î ÅëÇÕ °ü¸®µË´Ï´Ù!**
+```
+? nU3.Shell/Services/HttpLogUploadService.cs (ì‚­ì œë¨)
+```
+
+**ì´ìœ :**
+- ConnectivityManagerë¡œ ì™„ì „íˆ ëŒ€ì²´ë¨
+- ì½”ë“œ ì¤‘ë³µ ì œê±°
+- íŒ¨í„´ ì¼ê´€ì„± í™•ë³´
+
+---
+
+**ì™„ë²½í•˜ê²Œ í†µí•© ë° ì •ë¦¬ë˜ì—ˆìŠµë‹ˆë‹¤!** ?
+
+**ëª¨ë“  ì„œë²„ í†µì‹ ì´ ì´ì œ `ConnectivityManager`ë¡œ í†µí•© ê´€ë¦¬ë©ë‹ˆë‹¤!**

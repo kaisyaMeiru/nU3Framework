@@ -1,30 +1,30 @@
-# ConnectivityManager ¼³°è °áÁ¤ »çÇ×
+# ConnectivityManager ì„¤ê³„ ê²°ì • ì‚¬í•­
 
-## ?? Áú¹®µé
+## ?? ì§ˆë¬¸ë“¤
 
-1. **MainShell¿¡¼­ DI·Î µî·ÏÇÏ¿© »ç¿ëÇÒ±î?**
-2. **È­¸é¸ğµâ¿¡¼­ Á÷Á¢ »ç¿ëÇÑ´Ù¸é ¾î¶² ±¸Á¶·Î °¡Á®°¥±î?**
-3. **Å¬¶óÀÌ¾ğÆ®¿¡¼­ ¼­ºñ½º°¡ ½Ì±ÛÅÏÀÌ¶ó°í ÇÏ´õ¶óµµ httpClient¸¦ ¸Å¹ø »ı¼ºÇÏ´Â °ÍÀº ºñÈ¿À²ÀûÀÌÁö ¾ÊÀ»±î?**
-
----
-
-## ? ±ÇÀå ¼³°è: Hybrid ¹æ½Ä
-
-### ¿ä¾à
-```
-? ½Ì±ÛÅæ ÆĞÅÏ À¯Áö (DI ºÒÇÊ¿ä)
-? °øÀ¯ HttpClient Àç»ç¿ë
-? BaseWorkControl¿¡ ¼Ó¼º Ãß°¡
-```
+1. **MainShellì—ì„œ DIë¡œ ë“±ë¡í•˜ì—¬ ì‚¬ìš©í• ê¹Œ?**
+2. **í™”ë©´ëª¨ë“ˆì—ì„œ ì§ì ‘ ì‚¬ìš©í•œë‹¤ë©´ ì–´ë–¤ êµ¬ì¡°ë¡œ ê°€ì ¸ê°ˆê¹Œ?**
+3. **í´ë¼ì´ì–¸íŠ¸ì—ì„œ ì„œë¹„ìŠ¤ê°€ ì‹±ê¸€í„´ì´ë¼ê³  í•˜ë”ë¼ë„ httpClientë¥¼ ë§¤ë²ˆ ìƒì„±í•˜ëŠ” ê²ƒì€ ë¹„íš¨ìœ¨ì ì´ì§€ ì•Šì„ê¹Œ?**
 
 ---
 
-## ?? ¼³°è ºñ±³
+## ? ê¶Œì¥ ì„¤ê³„: Hybrid ë°©ì‹
 
-### Option 1: ¼ø¼ö DI ¹æ½Ä ?
+### ìš”ì•½
+```
+? ì‹±ê¸€í†¤ íŒ¨í„´ ìœ ì§€ (DI ë¶ˆí•„ìš”)
+? ê³µìœ  HttpClient ì¬ì‚¬ìš©
+? BaseWorkControlì— ì†ì„± ì¶”ê°€
+```
+
+---
+
+## ?? ì„¤ê³„ ë¹„êµ
+
+### Option 1: ìˆœìˆ˜ DI ë°©ì‹ ?
 
 ```csharp
-// Program.cs (¶Ç´Â Startup)
+// Program.cs (ë˜ëŠ” Startup)
 services.AddSingleton<ConnectivityManager>();
 services.AddTransient<MyModule>();
 
@@ -34,63 +34,63 @@ public MainShellForm(ConnectivityManager connectivity)
     _connectivity = connectivity;
 }
 
-// ¸ğµâ
+// ëª¨ë“ˆ
 public class MyModule : BaseWorkControl
 {
     private readonly ConnectivityManager _connectivity;
     
-    public MyModule(ConnectivityManager connectivity)  // ¡ç DI ÁÖÀÔ
+    public MyModule(ConnectivityManager connectivity)  // â† DI ì£¼ì…
     {
         _connectivity = connectivity;
     }
 }
 ```
 
-**¹®Á¦Á¡:**
-- ? WinForms´Â DI¸¦ ³×ÀÌÆ¼ºê·Î Áö¿øÇÏÁö ¾ÊÀ½
-- ? µ¿Àû ¸ğµâ ·Îµù ½Ã DI ÄÁÅ×ÀÌ³Ê ¼³Á¤ º¹Àâ
-- ? »ı¼ºÀÚ ÆÄ¶ó¹ÌÅÍ Áõ°¡
-- ? ¸ğµâ °£ ÀÏ°ü¼º À¯Áö ¾î·Á¿ò
+**ë¬¸ì œì :**
+- ? WinFormsëŠ” DIë¥¼ ë„¤ì´í‹°ë¸Œë¡œ ì§€ì›í•˜ì§€ ì•ŠìŒ
+- ? ë™ì  ëª¨ë“ˆ ë¡œë”© ì‹œ DI ì»¨í…Œì´ë„ˆ ì„¤ì • ë³µì¡
+- ? ìƒì„±ì íŒŒë¼ë¯¸í„° ì¦ê°€
+- ? ëª¨ë“ˆ ê°„ ì¼ê´€ì„± ìœ ì§€ ì–´ë ¤ì›€
 
 ---
 
-### Option 2: ¼ø¼ö ½Ì±ÛÅæ ¹æ½Ä ??
+### Option 2: ìˆœìˆ˜ ì‹±ê¸€í†¤ ë°©ì‹ ??
 
 ```csharp
-// ¾îµğ¼­µç »ç¿ë
+// ì–´ë””ì„œë“  ì‚¬ìš©
 ConnectivityManager.Instance.DB.ExecuteQuery(...);
 ```
 
-**ÀåÁ¡:**
-- ? °£´ÜÇÔ
-- ? WinForms¿Í È£È¯
+**ì¥ì :**
+- ? ê°„ë‹¨í•¨
+- ? WinFormsì™€ í˜¸í™˜
 
-**¹®Á¦Á¡:**
-- ?? HttpClient ¸Å¹ø »ı¼º (¼º´É ÀúÇÏ)
-- ?? Àü¿ª »óÅÂ (Å×½ºÆ® ¾î·Á¿ò)
+**ë¬¸ì œì :**
+- ?? HttpClient ë§¤ë²ˆ ìƒì„± (ì„±ëŠ¥ ì €í•˜)
+- ?? ì „ì—­ ìƒíƒœ (í…ŒìŠ¤íŠ¸ ì–´ë ¤ì›€)
 
 ---
 
-### Option 3: Hybrid (±ÇÀå) ?
+### Option 3: Hybrid (ê¶Œì¥) ?
 
 ```csharp
-// ConnectivityManager: ½Ì±ÛÅæ + °øÀ¯ HttpClient
-// BaseWorkControl: ¼Ó¼ºÀ¸·Î Á¢±Ù Á¦°ø
+// ConnectivityManager: ì‹±ê¸€í†¤ + ê³µìœ  HttpClient
+// BaseWorkControl: ì†ì„±ìœ¼ë¡œ ì ‘ê·¼ ì œê³µ
 ```
 
-**ÀåÁ¡:**
-- ? °£´ÜÇÔ (½Ì±ÛÅæ)
-- ? ¼º´É (HttpClient Àç»ç¿ë)
-- ? ÀÏ°ü¼º (¸ğµç ¸ğµâ¿¡¼­ µ¿ÀÏ ¹æ½Ä)
-- ? Å×½ºÆ® °¡´É (ResetInstance)
+**ì¥ì :**
+- ? ê°„ë‹¨í•¨ (ì‹±ê¸€í†¤)
+- ? ì„±ëŠ¥ (HttpClient ì¬ì‚¬ìš©)
+- ? ì¼ê´€ì„± (ëª¨ë“  ëª¨ë“ˆì—ì„œ ë™ì¼ ë°©ì‹)
+- ? í…ŒìŠ¤íŠ¸ ê°€ëŠ¥ (ResetInstance)
 
 ---
 
-## ?? ±¸Çö ¼¼ºÎ»çÇ×
+## ?? êµ¬í˜„ ì„¸ë¶€ì‚¬í•­
 
-### 1. °øÀ¯ HttpClient Àç»ç¿ë
+### 1. ê³µìœ  HttpClient ì¬ì‚¬ìš©
 
-#### Before (? ¹®Á¦)
+#### Before (? ë¬¸ì œ)
 
 ```csharp
 public class ConnectivityManager
@@ -101,24 +101,24 @@ public class ConnectivityManager
         {
             if (_dbClient == null)
             {
-                // ¸Å¹ø »õ HttpClient »ı¼º!
+                // ë§¤ë²ˆ ìƒˆ HttpClient ìƒì„±!
                 _dbClient = new HttpDBAccessClient(_serverUrl);
-                // ¡è ³»ºÎ¿¡¼­ new HttpClient() È£Ãâ
+                // â†‘ ë‚´ë¶€ì—ì„œ new HttpClient() í˜¸ì¶œ
             }
             return _dbClient;
         }
     }
 }
 
-// °á°ú: DB, File, Log °¢°¢ HttpClient »ı¼º = 3°³
+// ê²°ê³¼: DB, File, Log ê°ê° HttpClient ìƒì„± = 3ê°œ
 ```
 
-**¹®Á¦:**
-- ? ¼ÒÄÏ °í°¥ (Socket Exhaustion)
-- ? ¸Ş¸ğ¸® ³¶ºñ
-- ? DNS Á¶È¸ Áßº¹
+**ë¬¸ì œ:**
+- ? ì†Œì¼“ ê³ ê°ˆ (Socket Exhaustion)
+- ? ë©”ëª¨ë¦¬ ë‚­ë¹„
+- ? DNS ì¡°íšŒ ì¤‘ë³µ
 
-#### After (? ÇØ°á)
+#### After (? í•´ê²°)
 
 ```csharp
 public class ConnectivityManager
@@ -144,7 +144,7 @@ public class ConnectivityManager
         {
             if (_dbClient == null)
             {
-                // °øÀ¯ HttpClient »ç¿ë!
+                // ê³µìœ  HttpClient ì‚¬ìš©!
                 _dbClient = new HttpDBAccessClient(
                     GetOrCreateHttpClient(), 
                     _serverUrl
@@ -155,46 +155,46 @@ public class ConnectivityManager
     }
 }
 
-// °á°ú: 1°³ÀÇ HttpClient¸¦ DB, File, Log°¡ °øÀ¯
+// ê²°ê³¼: 1ê°œì˜ HttpClientë¥¼ DB, File, Logê°€ ê³µìœ 
 ```
 
-**°³¼±:**
-- ? ¼ÒÄÏ Àç»ç¿ë
-- ? ¸Ş¸ğ¸® Àı¾à (66% °¨¼Ò)
-- ? DNS Á¶È¸ 1È¸¸¸
+**ê°œì„ :**
+- ? ì†Œì¼“ ì¬ì‚¬ìš©
+- ? ë©”ëª¨ë¦¬ ì ˆì•½ (66% ê°ì†Œ)
+- ? DNS ì¡°íšŒ 1íšŒë§Œ
 
 ---
 
-### 2. BaseWorkControl ÅëÇÕ
+### 2. BaseWorkControl í†µí•©
 
-#### Before (? ºÒÆí)
+#### Before (? ë¶ˆí¸)
 
 ```csharp
 public class PatientListModule : BaseWorkControl
 {
     private async void LoadData()
     {
-        // ¸Å¹ø Å¸ÀÌÇÎ ÇÊ¿ä
+        // ë§¤ë²ˆ íƒ€ì´í•‘ í•„ìš”
         var dt = await ConnectivityManager.Instance.DB.ExecuteDataTableAsync(...);
     }
 }
 ```
 
-#### After (? °£Æí)
+#### After (? ê°„í¸)
 
 ```csharp
 public class PatientListModule : BaseWorkControl
 {
     private async void LoadData()
     {
-        // Âª°Ô!
+        // ì§§ê²Œ!
         var dt = await Connectivity.DB.ExecuteDataTableAsync(...);
-        //           ¡è protected ¼Ó¼º
+        //           â†‘ protected ì†ì„±
     }
 }
 ```
 
-**BaseWorkControl¿¡ Ãß°¡:**
+**BaseWorkControlì— ì¶”ê°€:**
 
 ```csharp
 public class BaseWorkControl : UserControl
@@ -208,39 +208,39 @@ public class BaseWorkControl : UserControl
 
 ---
 
-## ?? ¼º´É ºñ±³
+## ?? ì„±ëŠ¥ ë¹„êµ
 
-### HttpClient »ı¼º ºñ¿ë
+### HttpClient ìƒì„± ë¹„ìš©
 
-| ¹æ½Ä | HttpClient ¼ö | ¸Ş¸ğ¸® | ¼ÒÄÏ | ¼º´É |
+| ë°©ì‹ | HttpClient ìˆ˜ | ë©”ëª¨ë¦¬ | ì†Œì¼“ | ì„±ëŠ¥ |
 |------|--------------|--------|------|------|
-| **¸Å¹ø »ı¼º** | 3°³ (°¢°¢) | 15MB | 3°³ | ? ´À¸² |
-| **°øÀ¯ HttpClient** | 1°³ (°øÀ¯) | 5MB | 1°³ | ? ºü¸§ |
+| **ë§¤ë²ˆ ìƒì„±** | 3ê°œ (ê°ê°) | 15MB | 3ê°œ | ? ëŠë¦¼ |
+| **ê³µìœ  HttpClient** | 1ê°œ (ê³µìœ ) | 5MB | 1ê°œ | ? ë¹ ë¦„ |
 
-### ÃÊ±âÈ­ ½Ã°£
+### ì´ˆê¸°í™” ì‹œê°„
 
 ```
-Before: °¢ Å¬¶óÀÌ¾ğÆ®¸¶´Ù HttpClient »ı¼º
+Before: ê° í´ë¼ì´ì–¸íŠ¸ë§ˆë‹¤ HttpClient ìƒì„±
 - DB Client: 50ms
 - File Client: 50ms
 - Log Client: 50ms
-- ÃÑ: 150ms
+- ì´: 150ms
 
-After: °øÀ¯ HttpClient Àç»ç¿ë
+After: ê³µìœ  HttpClient ì¬ì‚¬ìš©
 - Shared HttpClient: 50ms
-- DB Client: 5ms (Àç»ç¿ë)
-- File Client: 5ms (Àç»ç¿ë)
-- Log Client: 5ms (Àç»ç¿ë)
-- ÃÑ: 65ms
+- DB Client: 5ms (ì¬ì‚¬ìš©)
+- File Client: 5ms (ì¬ì‚¬ìš©)
+- Log Client: 5ms (ì¬ì‚¬ìš©)
+- ì´: 65ms
 
-°³¼±: 57% ºü¸§
+ê°œì„ : 57% ë¹ ë¦„
 ```
 
 ---
 
-## ?? ÃÖÁ¾ »ç¿ë ÆĞÅÏ
+## ?? ìµœì¢… ì‚¬ìš© íŒ¨í„´
 
-### 1. MainShellForm ÃÊ±âÈ­
+### 1. MainShellForm ì´ˆê¸°í™”
 
 ```csharp
 using nU3.Core.Services;
@@ -260,11 +260,11 @@ public partial class MainShellForm : BaseWorkForm
         
         if (config.Enabled)
         {
-            // ½Ì±ÛÅæ ÃÊ±âÈ­ (DI ºÒÇÊ¿ä)
+            // ì‹±ê¸€í†¤ ì´ˆê¸°í™” (DI ë¶ˆí•„ìš”)
             ConnectivityManager.Instance.Initialize(config.BaseUrl);
             ConnectivityManager.Instance.EnableAutoLogUpload(true);
             
-            // ÀÌº¥Æ® ±¸µ¶ (¼±ÅÃ)
+            // ì´ë²¤íŠ¸ êµ¬ë… (ì„ íƒ)
             ConnectivityManager.Instance.LogMessage += OnConnectivityLogMessage;
             
             LogManager.Info($"ConnectivityManager initialized: {config.BaseUrl}", "Shell");
@@ -273,13 +273,13 @@ public partial class MainShellForm : BaseWorkForm
 
     private void OnConnectivityLogMessage(object? sender, LogMessageEventArgs e)
     {
-        // Connectivity ·Î±×¸¦ LogManager·Î Àü´Ş
+        // Connectivity ë¡œê·¸ë¥¼ LogManagerë¡œ ì „ë‹¬
         LogManager.Info($"[Connectivity] {e.Message}", "Shell");
     }
 }
 ```
 
-### 2. È­¸é ¸ğµâ »ç¿ë
+### 2. í™”ë©´ ëª¨ë“ˆ ì‚¬ìš©
 
 ```csharp
 using nU3.Core.UI;
@@ -290,7 +290,7 @@ public class PatientListModule : BaseWorkControl
     {
         try
         {
-            // Connectivity ¼Ó¼º »ç¿ë (°£´Ü!)
+            // Connectivity ì†ì„± ì‚¬ìš© (ê°„ë‹¨!)
             var dt = await Connectivity.DB.ExecuteDataTableAsync(
                 "SELECT * FROM Patients WHERE Status = @status",
                 new Dictionary<string, object> { { "@status", "Active" } }
@@ -303,7 +303,7 @@ public class PatientListModule : BaseWorkControl
         catch (Exception ex)
         {
             LogError("Failed to load patients", ex);
-            XtraMessageBox.Show($"¿À·ù: {ex.Message}");
+            XtraMessageBox.Show($"ì˜¤ë¥˜: {ex.Message}");
         }
     }
 
@@ -313,7 +313,7 @@ public class PatientListModule : BaseWorkControl
         {
             var data = ExportToExcel();
             
-            // File ¾÷·Îµå
+            // File ì—…ë¡œë“œ
             var success = await Connectivity.File.UploadFileAsync(
                 "exports/patients.xlsx", 
                 data
@@ -321,7 +321,7 @@ public class PatientListModule : BaseWorkControl
             
             if (success)
             {
-                XtraMessageBox.Show("¾÷·Îµå ¼º°ø!");
+                XtraMessageBox.Show("ì—…ë¡œë“œ ì„±ê³µ!");
                 LogAudit("File Upload", "Patient List", null, "Exported to Excel");
             }
         }
@@ -333,32 +333,32 @@ public class PatientListModule : BaseWorkControl
 }
 ```
 
-### 3. ¿¡·¯ Ã³¸®
+### 3. ì—ëŸ¬ ì²˜ë¦¬
 
 ```csharp
 private void HandleUnhandledException(Exception exception, string source)
 {
     try
     {
-        // ·Î±× ±â·Ï
+        // ë¡œê·¸ ê¸°ë¡
         LogManager.Critical($"Unhandled Exception - {source}", "Error", exception);
         
-        // Áï½Ã ·Î±× ¾÷·Îµå (Connectivity »ç¿ë)
+        // ì¦‰ì‹œ ë¡œê·¸ ì—…ë¡œë“œ (Connectivity ì‚¬ìš©)
         var task = ConnectivityManager.Instance.Log.UploadCurrentLogImmediatelyAsync();
         task.Wait(TimeSpan.FromSeconds(5));
     }
     catch
     {
-        // ¾÷·Îµå ½ÇÆĞÇØµµ ¾ÛÀº °è¼Ó
+        // ì—…ë¡œë“œ ì‹¤íŒ¨í•´ë„ ì•±ì€ ê³„ì†
     }
 }
 ```
 
 ---
 
-## ?? Å×½ºÆ®
+## ?? í…ŒìŠ¤íŠ¸
 
-### ´ÜÀ§ Å×½ºÆ®
+### ë‹¨ìœ„ í…ŒìŠ¤íŠ¸
 
 ```csharp
 [Fact]
@@ -372,7 +372,7 @@ public void Should_Reuse_HttpClient()
     var db2 = ConnectivityManager.Instance.DB;
 
     // Assert
-    Assert.Same(db1, db2); // °°Àº ÀÎ½ºÅÏ½º
+    Assert.Same(db1, db2); // ê°™ì€ ì¸ìŠ¤í„´ìŠ¤
     
     // Cleanup
     ConnectivityManager.ResetInstance();
@@ -392,7 +392,7 @@ public async Task Should_Share_HttpClient_Across_Clients()
     Assert.True(dbConnected);
     Assert.NotNull(files);
     
-    // HttpClient´Â 1°³¸¸ »ı¼ºµÊ (°øÀ¯)
+    // HttpClientëŠ” 1ê°œë§Œ ìƒì„±ë¨ (ê³µìœ )
     
     // Cleanup
     ConnectivityManager.ResetInstance();
@@ -401,87 +401,87 @@ public async Task Should_Share_HttpClient_Across_Clients()
 
 ---
 
-## ?? ÃÖÁ¾ ±ÇÀå »çÇ×
+## ?? ìµœì¢… ê¶Œì¥ ì‚¬í•­
 
-### ? Ã¤ÅÃ: Hybrid ¹æ½Ä
+### ? ì±„íƒ: Hybrid ë°©ì‹
 
 ```
-1. ½Ì±ÛÅæ ÆĞÅÏ À¯Áö (DI ºÒÇÊ¿ä)
-2. °øÀ¯ HttpClient Àç»ç¿ë
-3. BaseWorkControl¿¡ ¼Ó¼º Ãß°¡
-```
-
-### ÀÌÀ¯
-
-#### 1. °£´ÜÇÔ (vs DI)
-```
-DI:      Program.cs ¼³Á¤ + »ı¼ºÀÚ ÁÖÀÔ + º¹ÀâÇÑ ¼³Á¤
-Hybrid:  ÇÑ ÁÙ·Î ÃÊ±âÈ­
+1. ì‹±ê¸€í†¤ íŒ¨í„´ ìœ ì§€ (DI ë¶ˆí•„ìš”)
+2. ê³µìœ  HttpClient ì¬ì‚¬ìš©
+3. BaseWorkControlì— ì†ì„± ì¶”ê°€
 ```
 
-#### 2. ¼º´É (°øÀ¯ HttpClient)
+### ì´ìœ 
+
+#### 1. ê°„ë‹¨í•¨ (vs DI)
 ```
-Before:  3°³ HttpClient (DB, File, Log)
-After:   1°³ HttpClient (°øÀ¯)
-°³¼±:    ¸Ş¸ğ¸® 66% Àı¾à
+DI:      Program.cs ì„¤ì • + ìƒì„±ì ì£¼ì… + ë³µì¡í•œ ì„¤ì •
+Hybrid:  í•œ ì¤„ë¡œ ì´ˆê¸°í™”
 ```
 
-#### 3. ÀÏ°ü¼º (BaseWorkControl)
+#### 2. ì„±ëŠ¥ (ê³µìœ  HttpClient)
 ```
-¸ğµç ¸ğµâ: Connectivity.DB.ExecuteQuery(...)
+Before:  3ê°œ HttpClient (DB, File, Log)
+After:   1ê°œ HttpClient (ê³µìœ )
+ê°œì„ :    ë©”ëª¨ë¦¬ 66% ì ˆì•½
+```
+
+#### 3. ì¼ê´€ì„± (BaseWorkControl)
+```
+ëª¨ë“  ëª¨ë“ˆ: Connectivity.DB.ExecuteQuery(...)
           Connectivity.File.Upload(...)
           Connectivity.Log.Upload(...)
 ```
 
-#### 4. WinForms È£È¯
+#### 4. WinForms í˜¸í™˜
 ```
-- µ¿Àû ¸ğµâ ·Îµù Áö¿ø
-- »ı¼ºÀÚ ÆÄ¶ó¹ÌÅÍ ºÒÇÊ¿ä
-- ±âÁ¸ ÄÚµå º¯°æ ÃÖ¼ÒÈ­
+- ë™ì  ëª¨ë“ˆ ë¡œë”© ì§€ì›
+- ìƒì„±ì íŒŒë¼ë¯¸í„° ë¶ˆí•„ìš”
+- ê¸°ì¡´ ì½”ë“œ ë³€ê²½ ìµœì†Œí™”
 ```
 
 ---
 
-## ?? Ã¼Å©¸®½ºÆ®
+## ?? ì²´í¬ë¦¬ìŠ¤íŠ¸
 
-- [x] °øÀ¯ HttpClient ±¸Çö
-- [x] ConnectivityManager ÃÖÀûÈ­
-- [x] BaseWorkControl¿¡ Connectivity ¼Ó¼º Ãß°¡
-- [x] MainShellForm ÃÊ±âÈ­ ÆĞÅÏ
-- [x] È­¸é ¸ğµâ »ç¿ë ÆĞÅÏ
-- [x] ¹®¼­ ÀÛ¼º
-- [ ] ½ÇÁ¦ Àû¿ë (´ÙÀ½ ´Ü°è)
-
----
-
-## ?? °á·Ğ
-
-### Áú¹® 1: DI vs ½Ì±ÛÅæ?
-**´äº¯:** **½Ì±ÛÅæ À¯Áö** (WinForms Æ¯¼º»ó DI µµÀÔ ºÒÇÊ¿ä)
-
-### Áú¹® 2: È­¸é ¸ğµâ ±¸Á¶?
-**´äº¯:** **BaseWorkControl¿¡ ¼Ó¼º Ãß°¡** (`Connectivity` ¼Ó¼º)
-
-### Áú¹® 3: HttpClient Àç»ç¿ë?
-**´äº¯:** **°øÀ¯ HttpClient ±¸Çö** (1°³¸¦ ¸ğµç Å¬¶óÀÌ¾ğÆ®°¡ °øÀ¯)
+- [x] ê³µìœ  HttpClient êµ¬í˜„
+- [x] ConnectivityManager ìµœì í™”
+- [x] BaseWorkControlì— Connectivity ì†ì„± ì¶”ê°€
+- [x] MainShellForm ì´ˆê¸°í™” íŒ¨í„´
+- [x] í™”ë©´ ëª¨ë“ˆ ì‚¬ìš© íŒ¨í„´
+- [x] ë¬¸ì„œ ì‘ì„±
+- [ ] ì‹¤ì œ ì ìš© (ë‹¤ìŒ ë‹¨ê³„)
 
 ---
 
-## ?? ´ÙÀ½ ´Ü°è
+## ?? ê²°ë¡ 
+
+### ì§ˆë¬¸ 1: DI vs ì‹±ê¸€í†¤?
+**ë‹µë³€:** **ì‹±ê¸€í†¤ ìœ ì§€** (WinForms íŠ¹ì„±ìƒ DI ë„ì… ë¶ˆí•„ìš”)
+
+### ì§ˆë¬¸ 2: í™”ë©´ ëª¨ë“ˆ êµ¬ì¡°?
+**ë‹µë³€:** **BaseWorkControlì— ì†ì„± ì¶”ê°€** (`Connectivity` ì†ì„±)
+
+### ì§ˆë¬¸ 3: HttpClient ì¬ì‚¬ìš©?
+**ë‹µë³€:** **ê³µìœ  HttpClient êµ¬í˜„** (1ê°œë¥¼ ëª¨ë“  í´ë¼ì´ì–¸íŠ¸ê°€ ê³µìœ )
+
+---
+
+## ?? ë‹¤ìŒ ë‹¨ê³„
 
 ```csharp
-// 1. MainShellForm¿¡¼­ ÃÊ±âÈ­
+// 1. MainShellFormì—ì„œ ì´ˆê¸°í™”
 ConnectivityManager.Instance.Initialize(serverUrl);
 
-// 2. ¸ğµâ¿¡¼­ ¹Ù·Î »ç¿ë
+// 2. ëª¨ë“ˆì—ì„œ ë°”ë¡œ ì‚¬ìš©
 var dt = await Connectivity.DB.ExecuteDataTableAsync(...);
 
-// 3. HttpClient´Â ÀÚµ¿À¸·Î Àç»ç¿ëµÊ (¼º´É ÃÖÀûÈ­)
+// 3. HttpClientëŠ” ìë™ìœ¼ë¡œ ì¬ì‚¬ìš©ë¨ (ì„±ëŠ¥ ìµœì í™”)
 ```
 
-**¿Ïº®ÇÑ ¼³°èÀÔ´Ï´Ù!** ?
+**ì™„ë²½í•œ ì„¤ê³„ì…ë‹ˆë‹¤!** ?
 
-- ? °£´ÜÇÔ (½Ì±ÛÅæ)
-- ? ¼º´É (HttpClient Àç»ç¿ë)
-- ? ÀÏ°ü¼º (BaseWorkControl ÅëÇÕ)
-- ? WinForms È£È¯
+- ? ê°„ë‹¨í•¨ (ì‹±ê¸€í†¤)
+- ? ì„±ëŠ¥ (HttpClient ì¬ì‚¬ìš©)
+- ? ì¼ê´€ì„± (BaseWorkControl í†µí•©)
+- ? WinForms í˜¸í™˜

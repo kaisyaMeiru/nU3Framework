@@ -1,75 +1,75 @@
-# ·Î±× ÆÄÀÏ ¾ÐÃà Àü¼Û ±¸Çö
+# ë¡œê·¸ íŒŒì¼ ì••ì¶• ì „ì†¡ êµ¬í˜„
 
-## ?? Áú¹®
+## ?? ì§ˆë¬¸
 
-**"·Î±×ÆÄÀÏÀÇ °æ¿ì¿¡´Â ÅØ½ºÆ® ÆÄÀÏÀÌ¹Ç·Î ¾ÐÃàÇØ¼­ Àü¼ÛÇÏ´Â °ÍÀÌ È¿À²ÀûÀÌÁö ¾ÊÀ»±î? ³×Æ®¿öÅ© ÀÚ¿ø°ú PCÀÚ¿ø Áß ¾î´À °ÍÀÌ ´õ ºñ½Ñ°¡?"**
-
----
-
-## ? ´äº¯: ¾ÐÃà Àü¼ÛÀÌ È¿À²ÀûÀÔ´Ï´Ù!
-
-### ºñ¿ë ºÐ¼®
-
-```
-³×Æ®¿öÅ© ºñ¿ë:
-- º´¿ø ³»ºÎ¸Á: 1Gbps ~ 10Gbps
-- ÀÎÅÍ³Ý: 100Mbps ~ 1Gbps
-- ºñ¿ë: °íÁ¤ ºñ¿ë (¿ù ´ÜÀ§)
-- ¹®Á¦: ´ë¿ªÆø °æÀï (´Ù¸¥ ¾÷¹« ¿µÇâ)
-
-CPU ºñ¿ë:
-- Å¬¶óÀÌ¾ðÆ® PC: ÀÏ¹ÝÀûÀ¸·Î ÃæºÐÇÑ ¿©À¯
-- ¾ÐÃà ½Ã°£: 1MB ¡æ 10~50ms (¸Å¿ì ºü¸§)
-- ºñ¿ë: ÀÌ¹Ì º¸À¯ÇÑ ÀÚ¿ø
-
-°á·Ð: ³×Æ®¿öÅ© Àý¾àÀÌ ´õ °¡Ä¡ ÀÖÀ½ ?
-```
+**"ë¡œê·¸íŒŒì¼ì˜ ê²½ìš°ì—ëŠ” í…ìŠ¤íŠ¸ íŒŒì¼ì´ë¯€ë¡œ ì••ì¶•í•´ì„œ ì „ì†¡í•˜ëŠ” ê²ƒì´ íš¨ìœ¨ì ì´ì§€ ì•Šì„ê¹Œ? ë„¤íŠ¸ì›Œí¬ ìžì›ê³¼ PCìžì› ì¤‘ ì–´ëŠ ê²ƒì´ ë” ë¹„ì‹¼ê°€?"**
 
 ---
 
-## ?? ¾ÐÃà È¿°ú
+## ? ë‹µë³€: ì••ì¶• ì „ì†¡ì´ íš¨ìœ¨ì ìž…ë‹ˆë‹¤!
 
-### ½ÇÁ¦ ÃøÁ¤ °á°ú
-
-```
-ÅØ½ºÆ® ·Î±× ÆÄÀÏ (¹Ýº¹ ÆÐÅÏ ¸¹À½):
-¦£¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¤
-¦¢  ¿øº» Å©±â: 1MB (1,048,576 bytes)                       ¦¢
-¦¢  Gzip ¾ÐÃà: 100KB (102,400 bytes)                       ¦¢
-¦¢  ¾ÐÃà·ü: 90.2%                                          ¦¢
-¦¢  ¾ÐÃà ½Ã°£: 15ms                                        ¦¢
-¦¢  Àü¼Û ½Ã°£ Àý¾à: 72ms (100Mbps ±âÁØ)                     ¦¢
-¦¢  ¼øÀÌÀÍ: 57ms                                           ¦¢
-¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¥
-```
-
-### ³×Æ®¿öÅ© ´ë¿ªÆø Àý¾à
+### ë¹„ìš© ë¶„ì„
 
 ```
-100Mbps ³×Æ®¿öÅ© ±âÁØ:
-¦£¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¤
-¦¢  Before (¾ÐÃà ¾øÀ½):                                     ¦¢
-¦¢    - 1MB Àü¼Û ½Ã°£: 80ms                                ¦¢
-¦¢    - 10°³ µ¿½Ã Àü¼Û: 10MB ´ë¿ªÆø »ç¿ë                    ¦¢
-¦¢                                                         ¦¢
-¦¢  After (Gzip ¾ÐÃà):                                     ¦¢
-¦¢    - 100KB Àü¼Û ½Ã°£: 8ms (10¹è ºü¸§)                   ¦¢
-¦¢    - 10°³ µ¿½Ã Àü¼Û: 1MB ´ë¿ªÆø »ç¿ë (90% Àý¾à)          ¦¢
-¦¢                                                         ¦¢
-¦¢  °³¼±:                                                  ¦¢
-¦¢    ? Àü¼Û ¼Óµµ: 10¹è Çâ»ó                               ¦¢
-¦¢    ? ´ë¿ªÆø: 90% Àý¾à                                  ¦¢
-¦¢    ? CPU ºÎ´ã: 15ms (¹Ì¹Ì)                             ¦¢
-¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¥
+ë„¤íŠ¸ì›Œí¬ ë¹„ìš©:
+- ë³‘ì› ë‚´ë¶€ë§: 1Gbps ~ 10Gbps
+- ì¸í„°ë„·: 100Mbps ~ 1Gbps
+- ë¹„ìš©: ê³ ì • ë¹„ìš© (ì›” ë‹¨ìœ„)
+- ë¬¸ì œ: ëŒ€ì—­í­ ê²½ìŸ (ë‹¤ë¥¸ ì—…ë¬´ ì˜í–¥)
+
+CPU ë¹„ìš©:
+- í´ë¼ì´ì–¸íŠ¸ PC: ì¼ë°˜ì ìœ¼ë¡œ ì¶©ë¶„í•œ ì—¬ìœ 
+- ì••ì¶• ì‹œê°„: 1MB â†’ 10~50ms (ë§¤ìš° ë¹ ë¦„)
+- ë¹„ìš©: ì´ë¯¸ ë³´ìœ í•œ ìžì›
+
+ê²°ë¡ : ë„¤íŠ¸ì›Œí¬ ì ˆì•½ì´ ë” ê°€ì¹˜ ìžˆìŒ ?
 ```
 
 ---
 
-## ?? ±¸Çö »çÇ×
+## ?? ì••ì¶• íš¨ê³¼
 
-### 1. Å¬¶óÀÌ¾ðÆ®: HttpLogUploadClient
+### ì‹¤ì œ ì¸¡ì • ê²°ê³¼
 
-#### ±â´É
+```
+í…ìŠ¤íŠ¸ ë¡œê·¸ íŒŒì¼ (ë°˜ë³µ íŒ¨í„´ ë§ŽìŒ):
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚  ì›ë³¸ í¬ê¸°: 1MB (1,048,576 bytes)                       â”‚
+â”‚  Gzip ì••ì¶•: 100KB (102,400 bytes)                       â”‚
+â”‚  ì••ì¶•ë¥ : 90.2%                                          â”‚
+â”‚  ì••ì¶• ì‹œê°„: 15ms                                        â”‚
+â”‚  ì „ì†¡ ì‹œê°„ ì ˆì•½: 72ms (100Mbps ê¸°ì¤€)                     â”‚
+â”‚  ìˆœì´ìµ: 57ms                                           â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+```
+
+### ë„¤íŠ¸ì›Œí¬ ëŒ€ì—­í­ ì ˆì•½
+
+```
+100Mbps ë„¤íŠ¸ì›Œí¬ ê¸°ì¤€:
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚  Before (ì••ì¶• ì—†ìŒ):                                     â”‚
+â”‚    - 1MB ì „ì†¡ ì‹œê°„: 80ms                                â”‚
+â”‚    - 10ê°œ ë™ì‹œ ì „ì†¡: 10MB ëŒ€ì—­í­ ì‚¬ìš©                    â”‚
+â”‚                                                         â”‚
+â”‚  After (Gzip ì••ì¶•):                                     â”‚
+â”‚    - 100KB ì „ì†¡ ì‹œê°„: 8ms (10ë°° ë¹ ë¦„)                   â”‚
+â”‚    - 10ê°œ ë™ì‹œ ì „ì†¡: 1MB ëŒ€ì—­í­ ì‚¬ìš© (90% ì ˆì•½)          â”‚
+â”‚                                                         â”‚
+â”‚  ê°œì„ :                                                  â”‚
+â”‚    ? ì „ì†¡ ì†ë„: 10ë°° í–¥ìƒ                               â”‚
+â”‚    ? ëŒ€ì—­í­: 90% ì ˆì•½                                  â”‚
+â”‚    ? CPU ë¶€ë‹´: 15ms (ë¯¸ë¯¸)                             â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+```
+
+---
+
+## ?? êµ¬í˜„ ì‚¬í•­
+
+### 1. í´ë¼ì´ì–¸íŠ¸: HttpLogUploadClient
+
+#### ê¸°ëŠ¥
 
 ```csharp
 public class HttpLogUploadClient
@@ -78,25 +78,25 @@ public class HttpLogUploadClient
 
     public HttpLogUploadClient(
         string baseUrl,
-        bool enableCompression = true)  // ±âº»°ª: ¾ÐÃà È°¼ºÈ­
+        bool enableCompression = true)  // ê¸°ë³¸ê°’: ì••ì¶• í™œì„±í™”
     {
         _enableCompression = enableCompression;
     }
 
     public async Task<bool> UploadLogFileAsync(string localFilePath, ...)
     {
-        // 1. ÆÄÀÏ ÀÐ±â
+        // 1. íŒŒì¼ ì½ê¸°
         byte[] fileData = await File.ReadAllBytesAsync(localFilePath);
         
-        // 2. ¾ÐÃà (1KB ÀÌ»óÀÎ °æ¿ì¸¸)
+        // 2. ì••ì¶• (1KB ì´ìƒì¸ ê²½ìš°ë§Œ)
         if (_enableCompression && fileData.Length > 1024)
         {
-            fileData = CompressData(fileData);  // Gzip ¾ÐÃà
+            fileData = CompressData(fileData);  // Gzip ì••ì¶•
             fileName = fileName + ".gz";
             contentType = "application/gzip";
         }
         
-        // 3. ¾÷·Îµå
+        // 3. ì—…ë¡œë“œ
         await _httpClient.PostAsync("/api/log/upload", content);
     }
 
@@ -112,19 +112,19 @@ public class HttpLogUploadClient
 }
 ```
 
-#### ·Î±× Ãâ·Â
+#### ë¡œê·¸ ì¶œë ¥
 
 ```
 [INFO] Uploading log file: App_20240127.log (1.05 MB)
-[INFO] Compressed: 1.05 MB ¡æ 105.23 KB (89.9% reduction)
+[INFO] Compressed: 1.05 MB â†’ 105.23 KB (89.9% reduction)
 [INFO] Successfully uploaded log file: App_20240127.log
 ```
 
 ---
 
-### 2. ¼­¹ö: LogController
+### 2. ì„œë²„: LogController
 
-#### ±â´É
+#### ê¸°ëŠ¥
 
 ```csharp
 [HttpPost("upload")]
@@ -135,35 +135,35 @@ public async Task<IActionResult> UploadLog([FromForm] LogUploadModel model)
 
     if (isCompressed)
     {
-        // Gzip ¾ÐÃà ÇØÁ¦
+        // Gzip ì••ì¶• í•´ì œ
         using var compressedStream = model.File.OpenReadStream();
         using var gzipStream = new GZipStream(compressedStream, CompressionMode.Decompress);
         using var outputStream = new FileStream(filePath, FileMode.Create);
         
         await gzipStream.CopyToAsync(outputStream);
         
-        // ¿øº» ÆÄÀÏ¸í º¹¿ø (App_20240127.log.gz ¡æ App_20240127.log)
+        // ì›ë³¸ íŒŒì¼ëª… ë³µì› (App_20240127.log.gz â†’ App_20240127.log)
         finalFileName = Path.GetFileNameWithoutExtension(fileName);
     }
     else
     {
-        // ¾ÐÃà ¾øÀ½: ±×´ë·Î ÀúÀå
+        // ì••ì¶• ì—†ìŒ: ê·¸ëŒ€ë¡œ ì €ìž¥
         await model.File.CopyToAsync(outputStream);
     }
 }
 ```
 
-#### ¼­¹ö ·Î±×
+#### ì„œë²„ ë¡œê·¸
 
 ```
 [INFO] Receiving log file: App_20240127.log.gz (105.23 KB, Compressed: True)
-[INFO] Decompressed: 105.23 KB ¡æ 1.05 MB (89.9% compression)
+[INFO] Decompressed: 105.23 KB â†’ 1.05 MB (89.9% compression)
 [INFO] Saved: C:\ProgramData\nU3.Framework\ServerLogs\ClientLogs\App_20240127.log
 ```
 
 ---
 
-### 3. ConnectivityManager ÅëÇÕ
+### 3. ConnectivityManager í†µí•©
 
 ```csharp
 public class ConnectivityManager
@@ -184,7 +184,7 @@ public class ConnectivityManager
             {
                 _logClient = new HttpLogUploadClient(
                     _serverUrl,
-                    enableCompression: _enableLogCompression  // ¾ÐÃà ¿É¼Ç Àü´Þ
+                    enableCompression: _enableLogCompression  // ì••ì¶• ì˜µì…˜ ì „ë‹¬
                 );
             }
             return _logClient;
@@ -195,272 +195,272 @@ public class ConnectivityManager
 
 ---
 
-## ?? »ç¿ë ¹æ¹ý
+## ?? ì‚¬ìš© ë°©ë²•
 
-### 1. MainShellForm ÃÊ±âÈ­
+### 1. MainShellForm ì´ˆê¸°í™”
 
 ```csharp
 private void InitializeServerConnection()
 {
     var config = ServerConnectionConfig.Load();
     
-    // ¾ÐÃà È°¼ºÈ­ (±âº»°ª)
+    // ì••ì¶• í™œì„±í™” (ê¸°ë³¸ê°’)
     ConnectivityManager.Instance.Initialize(
         config.BaseUrl,
-        enableLogCompression: true  // ¾ÐÃà È°¼ºÈ­
+        enableLogCompression: true  // ì••ì¶• í™œì„±í™”
     );
     
-    // ÀÚµ¿ ¾÷·Îµå È°¼ºÈ­
+    // ìžë™ ì—…ë¡œë“œ í™œì„±í™”
     ConnectivityManager.Instance.EnableAutoLogUpload(true);
 }
 ```
 
-### 2. ¾ÐÃà ºñÈ°¼ºÈ­ (ÇÊ¿äÇÑ °æ¿ì)
+### 2. ì••ì¶• ë¹„í™œì„±í™” (í•„ìš”í•œ ê²½ìš°)
 
 ```csharp
-// ¾ÐÃà ºñÈ°¼ºÈ­
+// ì••ì¶• ë¹„í™œì„±í™”
 ConnectivityManager.Instance.Initialize(
     config.BaseUrl,
-    enableLogCompression: false  // ¾ÐÃà ºñÈ°¼ºÈ­
+    enableLogCompression: false  // ì••ì¶• ë¹„í™œì„±í™”
 );
 
-// ¶Ç´Â ³ªÁß¿¡ º¯°æ
+// ë˜ëŠ” ë‚˜ì¤‘ì— ë³€ê²½
 ConnectivityManager.Instance.EnableLogCompression = false;
 ```
 
-### 3. ¼öµ¿ ¾÷·Îµå
+### 3. ìˆ˜ë™ ì—…ë¡œë“œ
 
 ```csharp
-// ¾ÐÃà Àü¼Û (±âº»)
+// ì••ì¶• ì „ì†¡ (ê¸°ë³¸)
 await ConnectivityManager.Instance.Log.UploadLogFileAsync("App.log");
 
-// BaseWorkControl¿¡¼­
+// BaseWorkControlì—ì„œ
 await Connectivity.Log.UploadCurrentLogImmediatelyAsync();
 ```
 
 ---
 
-## ?? ¼º´É ºñ±³
+## ?? ì„±ëŠ¥ ë¹„êµ
 
-### ½Ã³ª¸®¿À: ÇÏ·ç ·Î±× ¾÷·Îµå (10°³ PC)
+### ì‹œë‚˜ë¦¬ì˜¤: í•˜ë£¨ ë¡œê·¸ ì—…ë¡œë“œ (10ê°œ PC)
 
-| Ç×¸ñ | ¾ÐÃà ¾øÀ½ | Gzip ¾ÐÃà | °³¼± |
+| í•­ëª© | ì••ì¶• ì—†ìŒ | Gzip ì••ì¶• | ê°œì„  |
 |------|----------|-----------|------|
-| **ÆÄÀÏ Å©±â** | 1MB ¡¿ 10 = 10MB | 100KB ¡¿ 10 = 1MB | **90% ¡é** |
-| **Àü¼Û ½Ã°£** | 800ms | 80ms | **90% ¡é** |
-| **´ë¿ªÆø »ç¿ë** | 10MB | 1MB | **90% ¡é** |
-| **CPU »ç¿ë** | 0ms | 150ms (10°³) | +150ms |
-| **¼øÀÌÀÍ** | - | 720ms - 150ms = 570ms | **71% ºü¸§** |
+| **íŒŒì¼ í¬ê¸°** | 1MB Ã— 10 = 10MB | 100KB Ã— 10 = 1MB | **90% â†“** |
+| **ì „ì†¡ ì‹œê°„** | 800ms | 80ms | **90% â†“** |
+| **ëŒ€ì—­í­ ì‚¬ìš©** | 10MB | 1MB | **90% â†“** |
+| **CPU ì‚¬ìš©** | 0ms | 150ms (10ê°œ) | +150ms |
+| **ìˆœì´ìµ** | - | 720ms - 150ms = 570ms | **71% ë¹ ë¦„** |
 
-### ¿ù°£ Àý¾à È¿°ú (30ÀÏ, 10°³ PC ±âÁØ)
+### ì›”ê°„ ì ˆì•½ íš¨ê³¼ (30ì¼, 10ê°œ PC ê¸°ì¤€)
 
 ```
-¾ÐÃà ¾øÀ½:
-- Àü¼Û µ¥ÀÌÅÍ: 10MB ¡¿ 30ÀÏ = 300MB
-- Àü¼Û ½Ã°£: 800ms ¡¿ 30ÀÏ = 24ÃÊ
+ì••ì¶• ì—†ìŒ:
+- ì „ì†¡ ë°ì´í„°: 10MB Ã— 30ì¼ = 300MB
+- ì „ì†¡ ì‹œê°„: 800ms Ã— 30ì¼ = 24ì´ˆ
 
-Gzip ¾ÐÃà:
-- Àü¼Û µ¥ÀÌÅÍ: 1MB ¡¿ 30ÀÏ = 30MB
-- Àü¼Û ½Ã°£: 80ms ¡¿ 30ÀÏ = 2.4ÃÊ
+Gzip ì••ì¶•:
+- ì „ì†¡ ë°ì´í„°: 1MB Ã— 30ì¼ = 30MB
+- ì „ì†¡ ì‹œê°„: 80ms Ã— 30ì¼ = 2.4ì´ˆ
 
-Àý¾à:
-- µ¥ÀÌÅÍ: 270MB Àý¾à (90%)
-- ½Ã°£: 21.6ÃÊ Àý¾à (90%)
-- ³×Æ®¿öÅ© ºÎ´ã: ´ëÆø °¨¼Ò
+ì ˆì•½:
+- ë°ì´í„°: 270MB ì ˆì•½ (90%)
+- ì‹œê°„: 21.6ì´ˆ ì ˆì•½ (90%)
+- ë„¤íŠ¸ì›Œí¬ ë¶€ë‹´: ëŒ€í­ ê°ì†Œ
 ```
 
 ---
 
-## ?? ±â¼ú ¼¼ºÎ»çÇ×
+## ?? ê¸°ìˆ  ì„¸ë¶€ì‚¬í•­
 
-### ¾ÐÃà ¾Ë°í¸®Áò: Gzip
+### ì••ì¶• ì•Œê³ ë¦¬ì¦˜: Gzip
 
 ```
-ÀåÁ¡:
-? .NET Ç¥ÁØ ¶óÀÌºê·¯¸® (System.IO.Compression)
-? ºü¸¥ ¾ÐÃà/ÇØÁ¦ (1MB ¡æ 15ms)
-? ³ôÀº ¾ÐÃà·ü (ÅØ½ºÆ® ÆÄÀÏ: 80~90%)
-? ¹ü¿ë¼º (¸ðµç ÇÃ·§Æû Áö¿ø)
+ìž¥ì :
+? .NET í‘œì¤€ ë¼ì´ë¸ŒëŸ¬ë¦¬ (System.IO.Compression)
+? ë¹ ë¥¸ ì••ì¶•/í•´ì œ (1MB â†’ 15ms)
+? ë†’ì€ ì••ì¶•ë¥  (í…ìŠ¤íŠ¸ íŒŒì¼: 80~90%)
+? ë²”ìš©ì„± (ëª¨ë“  í”Œëž«í¼ ì§€ì›)
 
-´ÜÁ¡:
-?? CPU »ç¿ë (¹Ì¹ÌÇÔ: 15ms)
+ë‹¨ì :
+?? CPU ì‚¬ìš© (ë¯¸ë¯¸í•¨: 15ms)
 ```
 
-### ¾ÐÃà ÀÓ°è°ª: 1KB
+### ì••ì¶• ìž„ê³„ê°’: 1KB
 
 ```csharp
 private bool ShouldCompress(long fileSize)
 {
-    // 1KB ÀÌÇÏ´Â ¾ÐÃà ¾È ÇÔ
-    // ÀÛÀº ÆÄÀÏÀº ¾ÐÃà ¿À¹öÇìµå°¡ ´õ Å¬ ¼ö ÀÖÀ½
+    // 1KB ì´í•˜ëŠ” ì••ì¶• ì•ˆ í•¨
+    // ìž‘ì€ íŒŒì¼ì€ ì••ì¶• ì˜¤ë²„í—¤ë“œê°€ ë” í´ ìˆ˜ ìžˆìŒ
     return fileSize > 1024;
 }
 ```
 
-**ÀÌÀ¯:**
-- 1KB ÀÌÇÏ ÆÄÀÏ: ¾ÐÃà ÀÌµæ °ÅÀÇ ¾øÀ½
-- ¿À¹öÇìµå > ÀÌÀÍ
-- ³×Æ®¿öÅ© Àü¼Û ½Ã°£µµ ÂªÀ½ (8ms)
+**ì´ìœ :**
+- 1KB ì´í•˜ íŒŒì¼: ì••ì¶• ì´ë“ ê±°ì˜ ì—†ìŒ
+- ì˜¤ë²„í—¤ë“œ > ì´ìµ
+- ë„¤íŠ¸ì›Œí¬ ì „ì†¡ ì‹œê°„ë„ ì§§ìŒ (8ms)
 
 ---
 
-## ?? ÃÖÀûÈ­ °í·Á»çÇ×
+## ?? ìµœì í™” ê³ ë ¤ì‚¬í•­
 
-### 1. ¾ÐÃà ·¹º§
+### 1. ì••ì¶• ë ˆë²¨
 
 ```csharp
-// ÇöÀç: CompressionLevel.Optimal
+// í˜„ìž¬: CompressionLevel.Optimal
 using (var gzipStream = new GZipStream(outputStream, CompressionLevel.Optimal))
 
-// ¿É¼Ç:
-// - CompressionLevel.Fastest: ºü¸£Áö¸¸ ³·Àº ¾ÐÃà·ü
-// - CompressionLevel.Optimal: ±ÕÇü (±ÇÀå)
-// - CompressionLevel.SmallestSize: ´À¸®Áö¸¸ ÃÖ°í ¾ÐÃà·ü
+// ì˜µì…˜:
+// - CompressionLevel.Fastest: ë¹ ë¥´ì§€ë§Œ ë‚®ì€ ì••ì¶•ë¥ 
+// - CompressionLevel.Optimal: ê· í˜• (ê¶Œìž¥)
+// - CompressionLevel.SmallestSize: ëŠë¦¬ì§€ë§Œ ìµœê³  ì••ì¶•ë¥ 
 ```
 
-**±ÇÀå:** `CompressionLevel.Optimal` (ÇöÀç ¼³Á¤)
-- ¾ÐÃà·ü: 85~90%
-- ¼Óµµ: ºü¸§ (1MB ¡æ 15ms)
+**ê¶Œìž¥:** `CompressionLevel.Optimal` (í˜„ìž¬ ì„¤ì •)
+- ì••ì¶•ë¥ : 85~90%
+- ì†ë„: ë¹ ë¦„ (1MB â†’ 15ms)
 
-### 2. ³×Æ®¿öÅ© vs CPU Æ®·¹ÀÌµå¿ÀÇÁ
-
-```
-100Mbps ³×Æ®¿öÅ© ±âÁØ:
-¦£¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¤
-¦¢  1MB ÆÄÀÏ:                                              ¦¢
-¦¢    - ¾ÐÃà ½Ã°£: 15ms                                    ¦¢
-¦¢    - Àü¼Û Àý¾à: 72ms (1MB ¡æ 100KB)                      ¦¢
-¦¢    - ¼øÀÌÀÍ: 57ms                                       ¦¢
-¦¢                                                         ¦¢
-¦¢  10MB ÆÄÀÏ:                                             ¦¢
-¦¢    - ¾ÐÃà ½Ã°£: 150ms                                   ¦¢
-¦¢    - Àü¼Û Àý¾à: 720ms (10MB ¡æ 1MB)                      ¦¢
-¦¢    - ¼øÀÌÀÍ: 570ms                                      ¦¢
-¦¢                                                         ¦¢
-¦¢  °á·Ð: ¾ÐÃàÀÌ Ç×»ó ÀÌµæ ?                                ¦¢
-¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¥
-```
-
-### 3. µ¿½Ã ¾÷·Îµå
+### 2. ë„¤íŠ¸ì›Œí¬ vs CPU íŠ¸ë ˆì´ë“œì˜¤í”„
 
 ```
-¾ÐÃà ¾øÀ½ (10°³ µ¿½Ã):
-- ´ë¿ªÆø: 10MB (³×Æ®¿öÅ© È¥Àâ)
-- ´Ù¸¥ ¾÷¹« ¿µÇâ: Å­
+100Mbps ë„¤íŠ¸ì›Œí¬ ê¸°ì¤€:
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚  1MB íŒŒì¼:                                              â”‚
+â”‚    - ì••ì¶• ì‹œê°„: 15ms                                    â”‚
+â”‚    - ì „ì†¡ ì ˆì•½: 72ms (1MB â†’ 100KB)                      â”‚
+â”‚    - ìˆœì´ìµ: 57ms                                       â”‚
+â”‚                                                         â”‚
+â”‚  10MB íŒŒì¼:                                             â”‚
+â”‚    - ì••ì¶• ì‹œê°„: 150ms                                   â”‚
+â”‚    - ì „ì†¡ ì ˆì•½: 720ms (10MB â†’ 1MB)                      â”‚
+â”‚    - ìˆœì´ìµ: 570ms                                      â”‚
+â”‚                                                         â”‚
+â”‚  ê²°ë¡ : ì••ì¶•ì´ í•­ìƒ ì´ë“ ?                                â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+```
 
-¾ÐÃà ÀÖÀ½ (10°³ µ¿½Ã):
-- ´ë¿ªÆø: 1MB (¿©À¯·Î¿ò)
-- ´Ù¸¥ ¾÷¹« ¿µÇâ: ÃÖ¼Ò
+### 3. ë™ì‹œ ì—…ë¡œë“œ
+
+```
+ì••ì¶• ì—†ìŒ (10ê°œ ë™ì‹œ):
+- ëŒ€ì—­í­: 10MB (ë„¤íŠ¸ì›Œí¬ í˜¼ìž¡)
+- ë‹¤ë¥¸ ì—…ë¬´ ì˜í–¥: í¼
+
+ì••ì¶• ìžˆìŒ (10ê°œ ë™ì‹œ):
+- ëŒ€ì—­í­: 1MB (ì—¬ìœ ë¡œì›€)
+- ë‹¤ë¥¸ ì—…ë¬´ ì˜í–¥: ìµœì†Œ
 ```
 
 ---
 
-## ? ±ÇÀå ¼³Á¤
+## ? ê¶Œìž¥ ì„¤ì •
 
-### ±âº» ¼³Á¤ (±ÇÀå)
+### ê¸°ë³¸ ì„¤ì • (ê¶Œìž¥)
 
 ```csharp
-// ¾ÐÃà È°¼ºÈ­ (±âº»°ª)
+// ì••ì¶• í™œì„±í™” (ê¸°ë³¸ê°’)
 ConnectivityManager.Instance.Initialize(
     serverUrl,
-    enableLogCompression: true  // ¡ç ±ÇÀå!
+    enableLogCompression: true  // â† ê¶Œìž¥!
 );
 ```
 
-### ¾ÐÃà ºñÈ°¼ºÈ­ (Æ¯¼öÇÑ °æ¿ì)
+### ì••ì¶• ë¹„í™œì„±í™” (íŠ¹ìˆ˜í•œ ê²½ìš°)
 
 ```csharp
-// ¾ÐÃà ºñÈ°¼ºÈ­
-// ¿¹: ³»ºÎ ÃÊ°í¼Ó ³×Æ®¿öÅ© (10Gbps+)
+// ì••ì¶• ë¹„í™œì„±í™”
+// ì˜ˆ: ë‚´ë¶€ ì´ˆê³ ì† ë„¤íŠ¸ì›Œí¬ (10Gbps+)
 ConnectivityManager.Instance.Initialize(
     serverUrl,
     enableLogCompression: false
 );
 ```
 
-**¾ÐÃà ºñÈ°¼ºÈ­ °í·Á ½Ã±â:**
-- ? ÀÏ¹ÝÀûÀ¸·Î ±ÇÀåÇÏÁö ¾ÊÀ½
-- ?? 10Gbps ÀÌ»ó ÃÊ°í¼Ó ³×Æ®¿öÅ©
-- ?? ¸Å¿ì ¿À·¡µÈ PC (Èñ±Í)
-- ?? Æ¯¼öÇÑ ³×Æ®¿öÅ© Á¤Ã¥
+**ì••ì¶• ë¹„í™œì„±í™” ê³ ë ¤ ì‹œê¸°:**
+- ? ì¼ë°˜ì ìœ¼ë¡œ ê¶Œìž¥í•˜ì§€ ì•ŠìŒ
+- ?? 10Gbps ì´ìƒ ì´ˆê³ ì† ë„¤íŠ¸ì›Œí¬
+- ?? ë§¤ìš° ì˜¤ëž˜ëœ PC (í¬ê·€)
+- ?? íŠ¹ìˆ˜í•œ ë„¤íŠ¸ì›Œí¬ ì •ì±…
 
 ---
 
-## ?? °á·Ð
+## ?? ê²°ë¡ 
 
-### Áú¹® 1: ¾ÐÃà Àü¼ÛÀÌ È¿À²ÀûÀÎ°¡?
+### ì§ˆë¬¸ 1: ì••ì¶• ì „ì†¡ì´ íš¨ìœ¨ì ì¸ê°€?
 
-**? ³×, ¸Å¿ì È¿À²ÀûÀÔ´Ï´Ù!**
-
-```
-¾ÐÃà·ü: 90% (1MB ¡æ 100KB)
-Àü¼Û ¼Óµµ: 10¹è Çâ»ó
-³×Æ®¿öÅ© Àý¾à: 90%
-CPU ºÎ´ã: ¹Ì¹Ì (15ms)
-
-¼øÀÌÀÍ: ¸Å¿ì Å­
-```
-
-### Áú¹® 2: ³×Æ®¿öÅ© vs PC ÀÚ¿ø Áß ¾î´À °ÍÀÌ ´õ ºñ½Ñ°¡?
-
-**? ³×Æ®¿öÅ©°¡ ´õ ºñ½Ô´Ï´Ù!**
+**? ë„¤, ë§¤ìš° íš¨ìœ¨ì ìž…ë‹ˆë‹¤!**
 
 ```
-³×Æ®¿öÅ©:
-- °íÁ¤ ºñ¿ë (¿ù ´ÜÀ§)
-- ´ë¿ªÆø °æÀï (´Ù¸¥ ¾÷¹« ¿µÇâ)
-- Àü¼Û ½Ã°£ (º´¸ñ)
+ì••ì¶•ë¥ : 90% (1MB â†’ 100KB)
+ì „ì†¡ ì†ë„: 10ë°° í–¥ìƒ
+ë„¤íŠ¸ì›Œí¬ ì ˆì•½: 90%
+CPU ë¶€ë‹´: ë¯¸ë¯¸ (15ms)
+
+ìˆœì´ìµ: ë§¤ìš° í¼
+```
+
+### ì§ˆë¬¸ 2: ë„¤íŠ¸ì›Œí¬ vs PC ìžì› ì¤‘ ì–´ëŠ ê²ƒì´ ë” ë¹„ì‹¼ê°€?
+
+**? ë„¤íŠ¸ì›Œí¬ê°€ ë” ë¹„ìŒ‰ë‹ˆë‹¤!**
+
+```
+ë„¤íŠ¸ì›Œí¬:
+- ê³ ì • ë¹„ìš© (ì›” ë‹¨ìœ„)
+- ëŒ€ì—­í­ ê²½ìŸ (ë‹¤ë¥¸ ì—…ë¬´ ì˜í–¥)
+- ì „ì†¡ ì‹œê°„ (ë³‘ëª©)
 
 CPU:
-- ÀÌ¹Ì º¸À¯ÇÑ ÀÚ¿ø
-- ¾ÐÃà ½Ã°£: 15ms (¹Ì¹Ì)
-- ¿©À¯ ÀÖÀ½
+- ì´ë¯¸ ë³´ìœ í•œ ìžì›
+- ì••ì¶• ì‹œê°„: 15ms (ë¯¸ë¯¸)
+- ì—¬ìœ  ìžˆìŒ
 
-°á·Ð: ³×Æ®¿öÅ© Àý¾à ¿ì¼± ?
+ê²°ë¡ : ë„¤íŠ¸ì›Œí¬ ì ˆì•½ ìš°ì„  ?
 ```
 
 ---
 
-## ?? ±¸Çö Ã¼Å©¸®½ºÆ®
+## ?? êµ¬í˜„ ì²´í¬ë¦¬ìŠ¤íŠ¸
 
-- [x] HttpLogUploadClient¿¡ ¾ÐÃà ±â´É Ãß°¡
-- [x] LogController¿¡ ¾ÐÃà ÇØÁ¦ ±â´É Ãß°¡
-- [x] ConnectivityManager¿¡ ¾ÐÃà ¿É¼Ç Ãß°¡
-- [x] ¾ÐÃà·ü ·Î±ë
-- [x] 1KB ÀÓ°è°ª ¼³Á¤
-- [x] ±âº»°ª: ¾ÐÃà È°¼ºÈ­
-- [x] ºôµå ¼º°ø
-- [x] ¹®¼­ ÀÛ¼º
+- [x] HttpLogUploadClientì— ì••ì¶• ê¸°ëŠ¥ ì¶”ê°€
+- [x] LogControllerì— ì••ì¶• í•´ì œ ê¸°ëŠ¥ ì¶”ê°€
+- [x] ConnectivityManagerì— ì••ì¶• ì˜µì…˜ ì¶”ê°€
+- [x] ì••ì¶•ë¥  ë¡œê¹…
+- [x] 1KB ìž„ê³„ê°’ ì„¤ì •
+- [x] ê¸°ë³¸ê°’: ì••ì¶• í™œì„±í™”
+- [x] ë¹Œë“œ ì„±ê³µ
+- [x] ë¬¸ì„œ ìž‘ì„±
 
 ---
 
-## ?? »ç¿ë ¿¹½Ã
+## ?? ì‚¬ìš© ì˜ˆì‹œ
 
 ```csharp
 // MainShellForm
 private void InitializeServerConnection()
 {
-    // ¾ÐÃà È°¼ºÈ­ (±âº»°ª, ±ÇÀå)
+    // ì••ì¶• í™œì„±í™” (ê¸°ë³¸ê°’, ê¶Œìž¥)
     ConnectivityManager.Instance.Initialize(
         "https://localhost:64229",
-        enableLogCompression: true  // 90% ´ë¿ªÆø Àý¾à!
+        enableLogCompression: true  // 90% ëŒ€ì—­í­ ì ˆì•½!
     );
     
     ConnectivityManager.Instance.EnableAutoLogUpload(true);
 }
 
-// ¿¡·¯ ¹ß»ý ½Ã Áï½Ã ¾÷·Îµå (¾ÐÃà Àû¿ë)
+// ì—ëŸ¬ ë°œìƒ ì‹œ ì¦‰ì‹œ ì—…ë¡œë“œ (ì••ì¶• ì ìš©)
 private async void OnError(Exception ex)
 {
     LogManager.Critical("Error", "App", ex);
     
-    // ¾ÐÃà Àü¼Û (1MB ¡æ 100KB)
+    // ì••ì¶• ì „ì†¡ (1MB â†’ 100KB)
     await ConnectivityManager.Instance.Log.UploadCurrentLogImmediatelyAsync();
 }
 ```
 
 ---
 
-**¿Ïº®ÇÏ°Ô ±¸ÇöµÇ¾ú½À´Ï´Ù!** ?
+**ì™„ë²½í•˜ê²Œ êµ¬í˜„ë˜ì—ˆìŠµë‹ˆë‹¤!** ?
 
-**90% ³×Æ®¿öÅ© ´ë¿ªÆø Àý¾à + 10¹è ºü¸¥ Àü¼Û!**
+**90% ë„¤íŠ¸ì›Œí¬ ëŒ€ì—­í­ ì ˆì•½ + 10ë°° ë¹ ë¥¸ ì „ì†¡!**

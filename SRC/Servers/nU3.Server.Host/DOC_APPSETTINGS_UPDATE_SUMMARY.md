@@ -1,33 +1,33 @@
-# appsettings.json ¼³Á¤ ¿Ï·á
+# appsettings.json ì„¤ì • ì™„ë£Œ
 
-## ?? ¼öÁ¤ ³»¿ë
+## ?? ìˆ˜ì • ë‚´ìš©
 
-¼­¹ö ¼³Á¤ ÆÄÀÏ¿¡ **·Î±× ¾÷·Îµå** ¹× **Swagger** ¼³Á¤À» Ãß°¡Çß½À´Ï´Ù.
+ì„œë²„ ì„¤ì • íŒŒì¼ì— **ë¡œê·¸ ì—…ë¡œë“œ** ë° **Swagger** ì„¤ì •ì„ ì¶”ê°€í–ˆìŠµë‹ˆë‹¤.
 
 ---
 
-## ?? ¼öÁ¤µÈ ÆÄÀÏ
+## ?? ìˆ˜ì •ëœ íŒŒì¼
 
 ```
 ?? Servers/nU3.Server.Host/appsettings.json
-   - ServerSettings.LogUpload Ãß°¡
-   - Swagger ¼³Á¤ Ãß°¡
-   - AllowedExtensions¿¡ .gz Ãß°¡
+   - ServerSettings.LogUpload ì¶”ê°€
+   - Swagger ì„¤ì • ì¶”ê°€
+   - AllowedExtensionsì— .gz ì¶”ê°€
 
 ?? Servers/nU3.Server.Host/appsettings.Development.json
-   - ServerSettings.LogUpload Ãß°¡ (°³¹ß¿ë)
-   - Swagger ¼³Á¤ Ãß°¡ (°³¹ß¿ë)
-   - ·Î±ë ·¹º§ »ó¼¼È­
+   - ServerSettings.LogUpload ì¶”ê°€ (ê°œë°œìš©)
+   - Swagger ì„¤ì • ì¶”ê°€ (ê°œë°œìš©)
+   - ë¡œê¹… ë ˆë²¨ ìƒì„¸í™”
 
 ? Servers/nU3.Server.Host/APPSETTINGS_GUIDE.md
-   - ÀüÃ¼ ¼³Á¤ °¡ÀÌµå ¹®¼­
+   - ì „ì²´ ì„¤ì • ê°€ì´ë“œ ë¬¸ì„œ
 
-? ºôµå ¼º°ø
+? ë¹Œë“œ ì„±ê³µ
 ```
 
 ---
 
-## ?? ÁÖ¿ä Ãß°¡ ¼³Á¤
+## ?? ì£¼ìš” ì¶”ê°€ ì„¤ì •
 
 ### 1. ServerSettings.LogUpload
 
@@ -45,14 +45,14 @@
 }
 ```
 
-**±â´É:**
-- Å¬¶óÀÌ¾ğÆ® ·Î±× ÀúÀå °æ·Î ¼³Á¤
-- Gzip ¾ĞÃà Áö¿ø
-- ÀÚµ¿ Á¤¸® (30ÀÏ)
+**ê¸°ëŠ¥:**
+- í´ë¼ì´ì–¸íŠ¸ ë¡œê·¸ ì €ì¥ ê²½ë¡œ ì„¤ì •
+- Gzip ì••ì¶• ì§€ì›
+- ìë™ ì •ë¦¬ (30ì¼)
 
 ---
 
-### 2. Swagger ¼³Á¤
+### 2. Swagger ì„¤ì •
 
 ```json
 {
@@ -68,13 +68,13 @@
 }
 ```
 
-**±â´É:**
-- API ¹®¼­ ÀÚµ¿ »ı¼º
-- Á¢±Ù URL: `https://localhost:64229/swagger`
+**ê¸°ëŠ¥:**
+- API ë¬¸ì„œ ìë™ ìƒì„±
+- ì ‘ê·¼ URL: `https://localhost:64229/swagger`
 
 ---
 
-### 3. AllowedExtensions ¾÷µ¥ÀÌÆ®
+### 3. AllowedExtensions ì—…ë°ì´íŠ¸
 
 ```json
 {
@@ -83,7 +83,7 @@
       "AllowedExtensions": [ 
         ".pdf", ".jpg", ".png", ".doc", ".docx", 
         ".xls", ".xlsx", ".txt", ".log", 
-        ".gz"  // ¡ç ¾ĞÃà ÆÄÀÏ Áö¿ø
+        ".gz"  // â† ì••ì¶• íŒŒì¼ ì§€ì›
       ]
     }
   }
@@ -92,7 +92,7 @@
 
 ---
 
-## ?? È¯°æº° ¼³Á¤
+## ?? í™˜ê²½ë³„ ì„¤ì •
 
 ### Production (appsettings.json)
 
@@ -101,11 +101,11 @@
   "ServerSettings": {
     "LogUpload": {
       "LogStoragePath": "C:\\ProgramData\\nU3.Framework\\ServerLogs\\ClientLogs",
-      "AutoCleanupDays": 30  // 30ÀÏ º¸°ü
+      "AutoCleanupDays": 30  // 30ì¼ ë³´ê´€
     }
   },
   "Swagger": {
-    "Enabled": true  // ÇÁ·Î´ö¼Ç¿¡¼­´Â false ±ÇÀå
+    "Enabled": true  // í”„ë¡œë•ì…˜ì—ì„œëŠ” false ê¶Œì¥
   }
 }
 ```
@@ -116,21 +116,21 @@
 {
   "Logging": {
     "LogLevel": {
-      "Default": "Debug",  // »ó¼¼ ·Î±ë
+      "Default": "Debug",  // ìƒì„¸ ë¡œê¹…
       "Microsoft.AspNetCore": "Debug"
     }
   },
   "ServerSettings": {
     "FileTransfer": {
-      "AllowedExtensions": [ "*" ]  // ¸ğµç È®ÀåÀÚ Çã¿ë
+      "AllowedExtensions": [ "*" ]  // ëª¨ë“  í™•ì¥ì í—ˆìš©
     },
     "LogUpload": {
       "LogStoragePath": "C:\\Temp\\nU3_Dev_Logs\\ClientLogs",
-      "AutoCleanupDays": 7  // 7ÀÏ º¸°ü
+      "AutoCleanupDays": 7  // 7ì¼ ë³´ê´€
     }
   },
   "Swagger": {
-    "Enabled": true,  // °³¹ß È¯°æ¿¡¼­ È°¼ºÈ­
+    "Enabled": true,  // ê°œë°œ í™˜ê²½ì—ì„œ í™œì„±í™”
     "Title": "nU3 Server API (Development)"
   }
 }
@@ -138,32 +138,32 @@
 
 ---
 
-## ?? ¼³Á¤ ºñ±³
+## ?? ì„¤ì • ë¹„êµ
 
-| Ç×¸ñ | Production | Development |
+| í•­ëª© | Production | Development |
 |------|-----------|-------------|
-| **·Î±× ·¹º§** | Information | Debug |
-| **·Î±× º¸°ü ±â°£** | 30ÀÏ | 7ÀÏ |
-| **ÃÖ´ë ¾÷·Îµå Å©±â** | 100MB | 500MB |
-| **Çã¿ë È®ÀåÀÚ** | Á¦ÇÑµÊ | ¸ğµÎ Çã¿ë (*) |
-| **Swagger** | false ±ÇÀå | true |
+| **ë¡œê·¸ ë ˆë²¨** | Information | Debug |
+| **ë¡œê·¸ ë³´ê´€ ê¸°ê°„** | 30ì¼ | 7ì¼ |
+| **ìµœëŒ€ ì—…ë¡œë“œ í¬ê¸°** | 100MB | 500MB |
+| **í—ˆìš© í™•ì¥ì** | ì œí•œë¨ | ëª¨ë‘ í—ˆìš© (*) |
+| **Swagger** | false ê¶Œì¥ | true |
 | **DetailedErrors** | false | true |
 
 ---
 
-## ?? Swagger 404 ¿À·ù ÇØ°á
+## ?? Swagger 404 ì˜¤ë¥˜ í•´ê²°
 
-### Before (¿À·ù ¹ß»ı)
+### Before (ì˜¤ë¥˜ ë°œìƒ)
 
 ```
-GET /swagger ¡æ 404 Not Found
+GET /swagger â†’ 404 Not Found
 ```
 
-**¿øÀÎ:**
-- Swagger ¼³Á¤ ¾øÀ½
-- `appsettings.json`¿¡ Swagger ¼½¼Ç ´©¶ô
+**ì›ì¸:**
+- Swagger ì„¤ì • ì—†ìŒ
+- `appsettings.json`ì— Swagger ì„¹ì…˜ ëˆ„ë½
 
-### After (ÇØ°á)
+### After (í•´ê²°)
 
 ```json
 {
@@ -175,43 +175,43 @@ GET /swagger ¡æ 404 Not Found
 ```
 
 ```
-GET /swagger ¡æ 200 OK (Swagger UI)
+GET /swagger â†’ 200 OK (Swagger UI)
 ```
 
 ---
 
-## ?? µğ·ºÅä¸® ±¸Á¶
+## ?? ë””ë ‰í† ë¦¬ êµ¬ì¡°
 
 ### Production
 
 ```
 C:\ProgramData\nU3.Framework\
-¦¦¦¡¦¡ ServerLogs\
-    ¦§¦¡¦¡ ClientLogs\
-    ¦¢   ¦§¦¡¦¡ PC001_192.168.1.10_20240127.log
-    ¦¢   ¦§¦¡¦¡ PC002_192.168.1.11_20240127.log
-    ¦¢   ¦¦¦¡¦¡ _UploadLog_20240127.log
-    ¦¦¦¡¦¡ ClientAudits\
-        ¦§¦¡¦¡ PC001_Audit_20240127.log
-        ¦¦¦¡¦¡ PC002_Audit_20240127.log
+â””â”€â”€ ServerLogs\
+    â”œâ”€â”€ ClientLogs\
+    â”‚   â”œâ”€â”€ PC001_192.168.1.10_20240127.log
+    â”‚   â”œâ”€â”€ PC002_192.168.1.11_20240127.log
+    â”‚   â””â”€â”€ _UploadLog_20240127.log
+    â””â”€â”€ ClientAudits\
+        â”œâ”€â”€ PC001_Audit_20240127.log
+        â””â”€â”€ PC002_Audit_20240127.log
 ```
 
 ### Development
 
 ```
 C:\Temp\
-¦¦¦¡¦¡ nU3_Dev_Logs\
-    ¦§¦¡¦¡ ClientLogs\
-    ¦¢   ¦¦¦¡¦¡ test.log
-    ¦¦¦¡¦¡ ClientAudits\
-        ¦¦¦¡¦¡ test_audit.log
+â””â”€â”€ nU3_Dev_Logs\
+    â”œâ”€â”€ ClientLogs\
+    â”‚   â””â”€â”€ test.log
+    â””â”€â”€ ClientAudits\
+        â””â”€â”€ test_audit.log
 ```
 
 ---
 
-## ?? »ç¿ë ¹æ¹ı
+## ?? ì‚¬ìš© ë°©ë²•
 
-### 1. µğ·ºÅä¸® »ı¼º
+### 1. ë””ë ‰í† ë¦¬ ìƒì„±
 
 ```powershell
 # Production
@@ -223,112 +223,112 @@ mkdir C:\Temp\nU3_Dev_Logs\ClientLogs
 mkdir C:\Temp\nU3_Dev_Logs\ClientAudits
 ```
 
-### 2. ¼­¹ö ½ÇÇà
+### 2. ì„œë²„ ì‹¤í–‰
 
 ```bash
 cd Servers\nU3.Server.Host
 dotnet run
 ```
 
-### 3. Swagger UI Á¢±Ù
+### 3. Swagger UI ì ‘ê·¼
 
 ```
-ºê¶ó¿ìÀú¿¡¼­:
+ë¸Œë¼ìš°ì €ì—ì„œ:
 https://localhost:64229/swagger
 ```
 
-### 4. API Å×½ºÆ®
+### 4. API í…ŒìŠ¤íŠ¸
 
 ```bash
-# ·Î±× ¾÷·Îµå
+# ë¡œê·¸ ì—…ë¡œë“œ
 curl -X POST https://localhost:64229/api/log/upload \
   -H "Content-Type: multipart/form-data" \
   -F "File=@test.log"
 
-# ¿¬°á Å×½ºÆ®
+# ì—°ê²° í…ŒìŠ¤íŠ¸
 curl -X POST https://localhost:64229/api/dbaccess/connect \
   -H "Content-Type: application/json"
 ```
 
 ---
 
-## ? °ËÁõ Ã¼Å©¸®½ºÆ®
+## ? ê²€ì¦ ì²´í¬ë¦¬ìŠ¤íŠ¸
 
 ```
-? appsettings.json ¾÷µ¥ÀÌÆ®
-? appsettings.Development.json ¾÷µ¥ÀÌÆ®
-? ServerSettings.LogUpload Ãß°¡
-? Swagger ¼³Á¤ Ãß°¡
-? AllowedExtensions¿¡ .gz Ãß°¡
-? È¯°æº° ¼³Á¤ ºĞ¸®
-? °¡ÀÌµå ¹®¼­ ÀÛ¼º
-? ºôµå ¼º°ø
+? appsettings.json ì—…ë°ì´íŠ¸
+? appsettings.Development.json ì—…ë°ì´íŠ¸
+? ServerSettings.LogUpload ì¶”ê°€
+? Swagger ì„¤ì • ì¶”ê°€
+? AllowedExtensionsì— .gz ì¶”ê°€
+? í™˜ê²½ë³„ ì„¤ì • ë¶„ë¦¬
+? ê°€ì´ë“œ ë¬¸ì„œ ì‘ì„±
+? ë¹Œë“œ ì„±ê³µ
 ```
 
 ---
 
-## ?? º¸¾È ±ÇÀå»çÇ×
+## ?? ë³´ì•ˆ ê¶Œì¥ì‚¬í•­
 
-### 1. ÇÁ·Î´ö¼Ç Swagger ºñÈ°¼ºÈ­
+### 1. í”„ë¡œë•ì…˜ Swagger ë¹„í™œì„±í™”
 
 ```json
 {
   "Swagger": {
-    "Enabled": false  // ¡ç ÇÁ·Î´ö¼Ç¿¡¼­´Â ºñÈ°¼ºÈ­
+    "Enabled": false  // â† í”„ë¡œë•ì…˜ì—ì„œëŠ” ë¹„í™œì„±í™”
   }
 }
 ```
 
-### 2. CORS Á¦ÇÑ
+### 2. CORS ì œí•œ
 
 ```json
 {
   "Cors": {
     "AllowedOrigins": [ 
-      "https://client.hospital.com"  // ¡ç Æ¯Á¤ µµ¸ŞÀÎ¸¸
+      "https://client.hospital.com"  // â† íŠ¹ì • ë„ë©”ì¸ë§Œ
     ]
   }
 }
 ```
 
-### 3. ConnectionStrings º¸¾È
+### 3. ConnectionStrings ë³´ì•ˆ
 
 ```bash
-# User Secrets »ç¿ë
+# User Secrets ì‚¬ìš©
 dotnet user-secrets set "ConnectionStrings:DefaultConnection" "..."
 ```
 
 ---
 
-## ?? °ü·Ã ¹®¼­
+## ?? ê´€ë ¨ ë¬¸ì„œ
 
-- `APPSETTINGS_GUIDE.md`: ÀüÃ¼ ¼³Á¤ °¡ÀÌµå
-- `README.md`: ¼­¹ö °³¿ä
-- `ENHANCEMENT_REPORT.md`: °³¼± »çÇ×
-- `SWAGGER_FIX_SUMMARY.md`: Swagger ¼³Á¤
-- `LOG_COMPRESSION_GUIDE.md`: ·Î±× ¾ĞÃà
+- `APPSETTINGS_GUIDE.md`: ì „ì²´ ì„¤ì • ê°€ì´ë“œ
+- `README.md`: ì„œë²„ ê°œìš”
+- `ENHANCEMENT_REPORT.md`: ê°œì„  ì‚¬í•­
+- `SWAGGER_FIX_SUMMARY.md`: Swagger ì„¤ì •
+- `LOG_COMPRESSION_GUIDE.md`: ë¡œê·¸ ì••ì¶•
 
 ---
 
-## ?? ¿Ï·á!
+## ?? ì™„ë£Œ!
 
-**appsettings.json ¼³Á¤ÀÌ ¿Ï·áµÇ¾ú½À´Ï´Ù!**
+**appsettings.json ì„¤ì •ì´ ì™„ë£Œë˜ì—ˆìŠµë‹ˆë‹¤!**
 
-### ÁÖ¿ä °³¼± »çÇ×
+### ì£¼ìš” ê°œì„  ì‚¬í•­
 
 ```
-? ·Î±× ¾÷·Îµå ¼³Á¤ Ãß°¡
-? Swagger UI ¼³Á¤ Ãß°¡
-? ¾ĞÃà ÆÄÀÏ Áö¿ø (.gz)
-? È¯°æº° ¼³Á¤ ºĞ¸®
-? »ó¼¼ °¡ÀÌµå ¹®¼­
+? ë¡œê·¸ ì—…ë¡œë“œ ì„¤ì • ì¶”ê°€
+? Swagger UI ì„¤ì • ì¶”ê°€
+? ì••ì¶• íŒŒì¼ ì§€ì› (.gz)
+? í™˜ê²½ë³„ ì„¤ì • ë¶„ë¦¬
+? ìƒì„¸ ê°€ì´ë“œ ë¬¸ì„œ
 ```
 
-### ´ÙÀ½ ´Ü°è
+### ë‹¤ìŒ ë‹¨ê³„
 
-1. **µğ·ºÅä¸® »ı¼º**: PowerShell ½ºÅ©¸³Æ® ½ÇÇà
-2. **¼­¹ö ½ÇÇà**: `dotnet run`
-3. **Swagger Á¢±Ù**: `https://localhost:64229/swagger`
-4. **API Å×½ºÆ®**: Swagger UI¿¡¼­ Á÷Á¢ Å×½ºÆ®
+1. **ë””ë ‰í† ë¦¬ ìƒì„±**: PowerShell ìŠ¤í¬ë¦½íŠ¸ ì‹¤í–‰
+2. **ì„œë²„ ì‹¤í–‰**: `dotnet run`
+3. **Swagger ì ‘ê·¼**: `https://localhost:64229/swagger`
+4. **API í…ŒìŠ¤íŠ¸**: Swagger UIì—ì„œ ì§ì ‘ í…ŒìŠ¤íŠ¸
 
-**¿Ïº®ÇÕ´Ï´Ù!** ??
+**ì™„ë²½í•©ë‹ˆë‹¤!** ??

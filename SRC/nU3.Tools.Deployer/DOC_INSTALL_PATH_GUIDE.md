@@ -1,176 +1,176 @@
-# InstallPath ¼³Á¤ °¡ÀÌµå
+# InstallPath ì„¤ì • ê°€ì´ë“œ
 
-## °³³ä
+## ê°œë…
 
-### °æ·Î ±¸¼º
+### ê²½ë¡œ êµ¬ì„±
 
 ```
-ÃÖÁ¾ ¼³Ä¡ °æ·Î = {BaseInstallPath} + {InstallPath} + {FileName}
-                 ¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¨¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡   ¦¡¦¡¦¡¦¡¦¡¦¨¦¡¦¡¦¡¦¡¦¡   ¦¡¦¡¦¡¦¡¦¨¦¡¦¡¦¡¦¡
-                        ¾Û ½ÇÇà À§Ä¡    »ó´ë °æ·Î    ÆÄÀÏ¸í
+ìµœì¢… ì„¤ì¹˜ ê²½ë¡œ = {BaseInstallPath} + {InstallPath} + {FileName}
+                 â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€   â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€   â”€â”€â”€â”€â”¬â”€â”€â”€â”€
+                        ì•± ì‹¤í–‰ ìœ„ì¹˜    ìƒëŒ€ ê²½ë¡œ    íŒŒì¼ëª…
 ```
 
-### BaseInstallPath (½ÇÇà °æ·Î - ÀÚµ¿)
+### BaseInstallPath (ì‹¤í–‰ ê²½ë¡œ - ìë™)
 
-Å¬¶óÀÌ¾ğÆ®°¡ ¼³Ä¡µÈ ·çÆ® µğ·ºÅä¸®:
+í´ë¼ì´ì–¸íŠ¸ê°€ ì„¤ì¹˜ëœ ë£¨íŠ¸ ë””ë ‰í† ë¦¬:
 
 ```csharp
 string baseInstallPath = AppDomain.CurrentDomain.BaseDirectory;
 ```
 
-**½ÇÁ¦ °æ·Î ¿¹½Ã:**
-- ÀÏ¹İ ¼³Ä¡: `C:\Program Files\nU3.Shell\`
-- °³¹ß È¯°æ: `D:\Projects\nU3.Framework\bin\Debug\`
-- Æ÷ÅÍºí: `D:\MyApps\nU3\`
+**ì‹¤ì œ ê²½ë¡œ ì˜ˆì‹œ:**
+- ì¼ë°˜ ì„¤ì¹˜: `C:\Program Files\nU3.Shell\`
+- ê°œë°œ í™˜ê²½: `D:\Projects\nU3.Framework\bin\Debug\`
+- í¬í„°ë¸”: `D:\MyApps\nU3\`
 
 ---
 
-## InstallPath ¼³Á¤ ¿¹½Ã
+## InstallPath ì„¤ì • ì˜ˆì‹œ
 
-### 1. ·çÆ® µğ·ºÅä¸® (ºó°ª ¶Ç´Â null)
+### 1. ë£¨íŠ¸ ë””ë ‰í† ë¦¬ (ë¹ˆê°’ ë˜ëŠ” null)
 
 ```
 InstallPath: ""
 FileName: "nU3.Core.dll"
 
-¡æ C:\Program Files\nU3.Shell\nU3.Core.dll
+â†’ C:\Program Files\nU3.Shell\nU3.Core.dll
 ```
 
-**»ç¿ë ´ë»ó:**
-- Framework ÇÙ½É DLL (nU3.Core.dll, nU3.Core.UI.dll)
-- ½ÇÇà ÆÄÀÏ (nU3.Shell.exe)
-- °ø¿ë ¶óÀÌºê·¯¸® (DevExpress.*.dll, Oracle.*.dll)
-- ¼³Á¤ ÆÄÀÏ (appsettings.json)
+**ì‚¬ìš© ëŒ€ìƒ:**
+- Framework í•µì‹¬ DLL (nU3.Core.dll, nU3.Core.UI.dll)
+- ì‹¤í–‰ íŒŒì¼ (nU3.Shell.exe)
+- ê³µìš© ë¼ì´ë¸ŒëŸ¬ë¦¬ (DevExpress.*.dll, Oracle.*.dll)
+- ì„¤ì • íŒŒì¼ (appsettings.json)
 
-### 2. ¼­ºê Æú´õ (´ÜÀÏ ±íÀÌ)
+### 2. ì„œë¸Œ í´ë” (ë‹¨ì¼ ê¹Šì´)
 
 ```
 InstallPath: "plugins"
 FileName: "MyPlugin.dll"
 
-¡æ C:\Program Files\nU3.Shell\plugins\MyPlugin.dll
+â†’ C:\Program Files\nU3.Shell\plugins\MyPlugin.dll
 ```
 
-**»ç¿ë ´ë»ó:**
-- ÇÃ·¯±×ÀÎ
-- È®Àå ¸ğµâ
+**ì‚¬ìš© ëŒ€ìƒ:**
+- í”ŒëŸ¬ê·¸ì¸
+- í™•ì¥ ëª¨ë“ˆ
 
-### 3. ÁßÃ¸ Æú´õ (¿©·¯ ±íÀÌ)
+### 3. ì¤‘ì²© í´ë” (ì—¬ëŸ¬ ê¹Šì´)
 
 ```
 InstallPath: "resources\\images"
 FileName: "logo.png"
 
-¡æ C:\Program Files\nU3.Shell\resources\images\logo.png
+â†’ C:\Program Files\nU3.Shell\resources\images\logo.png
 ```
 
-**»ç¿ë ´ë»ó:**
-- ¸®¼Ò½º ÆÄÀÏ
-- Å×¸¶/½ºÅ² ÆÄÀÏ
-- ¹®¼­ ÆÄÀÏ
+**ì‚¬ìš© ëŒ€ìƒ:**
+- ë¦¬ì†ŒìŠ¤ íŒŒì¼
+- í…Œë§ˆ/ìŠ¤í‚¨ íŒŒì¼
+- ë¬¸ì„œ íŒŒì¼
 
-### 4. È­¸é ¸ğµâ (±âÁ¸ ¹æ½Ä°ú ºĞ¸®)
+### 4. í™”ë©´ ëª¨ë“ˆ (ê¸°ì¡´ ë°©ì‹ê³¼ ë¶„ë¦¬)
 
-È­¸é ¸ğµâÀº **º°µµ ½Ã½ºÅÛ** (`SYS_MODULE_MST`)¿¡¼­ °ü¸®:
+í™”ë©´ ëª¨ë“ˆì€ **ë³„ë„ ì‹œìŠ¤í…œ** (`SYS_MODULE_MST`)ì—ì„œ ê´€ë¦¬:
 
 ```
-°æ·Î: {BaseInstallPath}\Modules\{Category}\{SubSystem}\{FileName}
+ê²½ë¡œ: {BaseInstallPath}\Modules\{Category}\{SubSystem}\{FileName}
 
-¿¹: C:\Program Files\nU3.Shell\Modules\EMR\IN\nU3.Modules.EMR.IN.Worklist.dll
+ì˜ˆ: C:\Program Files\nU3.Shell\Modules\EMR\IN\nU3.Modules.EMR.IN.Worklist.dll
 ```
 
 ---
 
-## ÄÄÆ÷³ÍÆ® À¯Çüº° InstallPath ±ÇÀå »çÇ×
+## ì»´í¬ë„ŒíŠ¸ ìœ í˜•ë³„ InstallPath ê¶Œì¥ ì‚¬í•­
 
-| ComponentType | InstallPath | ¿¹½Ã |
+| ComponentType | InstallPath | ì˜ˆì‹œ |
 |--------------|-------------|------|
-| **FrameworkCore** | `""` | nU3.Core.dll ¡æ ·çÆ® |
-| **SharedLibrary** | `""` | DevExpress.XtraEditors.dll ¡æ ·çÆ® |
-| **Executable** | `""` | nU3.Shell.exe ¡æ ·çÆ® |
-| **Configuration** | `""` ¶Ç´Â `"config"` | appsettings.json ¡æ ·çÆ® ¶Ç´Â config\ |
-| **Plugin** | `"plugins"` | MyPlugin.dll ¡æ plugins\ |
-| **Resource** | `"resources"` ¶Ç´Â `"resources\images"` | logo.png ¡æ resources\images\ |
+| **FrameworkCore** | `""` | nU3.Core.dll â†’ ë£¨íŠ¸ |
+| **SharedLibrary** | `""` | DevExpress.XtraEditors.dll â†’ ë£¨íŠ¸ |
+| **Executable** | `""` | nU3.Shell.exe â†’ ë£¨íŠ¸ |
+| **Configuration** | `""` ë˜ëŠ” `"config"` | appsettings.json â†’ ë£¨íŠ¸ ë˜ëŠ” config\ |
+| **Plugin** | `"plugins"` | MyPlugin.dll â†’ plugins\ |
+| **Resource** | `"resources"` ë˜ëŠ” `"resources\images"` | logo.png â†’ resources\images\ |
 
 ---
 
-## ½ÇÀü ½Ã³ª¸®¿À
+## ì‹¤ì „ ì‹œë‚˜ë¦¬ì˜¤
 
-### ½Ã³ª¸®¿À 1: Framework ÇÙ½É DLL ¹èÆ÷
+### ì‹œë‚˜ë¦¬ì˜¤ 1: Framework í•µì‹¬ DLL ë°°í¬
 
 ```csharp
-// Smart Deploy·Î nU3.Core.dll ¹èÆ÷
-// ÀÚµ¿ °¨Áö:
+// Smart Deployë¡œ nU3.Core.dll ë°°í¬
+// ìë™ ê°ì§€:
 ComponentId: "nU3.Core"
 ComponentName: "nU3 Core Library"
 FileName: "nU3.Core.dll"
 ComponentType: FrameworkCore
-InstallPath: ""              ¡ç ·çÆ® (ºó°ª)
+InstallPath: ""              â† ë£¨íŠ¸ (ë¹ˆê°’)
 GroupName: "Framework"
 Priority: 10
 IsRequired: true
 
-// Å¬¶óÀÌ¾ğÆ® ¼³Ä¡:
-¡æ C:\Program Files\nU3.Shell\nU3.Core.dll
+// í´ë¼ì´ì–¸íŠ¸ ì„¤ì¹˜:
+â†’ C:\Program Files\nU3.Shell\nU3.Core.dll
 ```
 
-### ½Ã³ª¸®¿À 2: DevExpress ¶óÀÌºê·¯¸®
+### ì‹œë‚˜ë¦¬ì˜¤ 2: DevExpress ë¼ì´ë¸ŒëŸ¬ë¦¬
 
 ```csharp
 ComponentId: "DevExpress.XtraEditors"
 FileName: "DevExpress.XtraEditors.dll"
 ComponentType: SharedLibrary
-InstallPath: ""              ¡ç ·çÆ® (ºó°ª)
+InstallPath: ""              â† ë£¨íŠ¸ (ë¹ˆê°’)
 GroupName: "DevExpress"
 Priority: 81
 
-// Å¬¶óÀÌ¾ğÆ® ¼³Ä¡:
-¡æ C:\Program Files\nU3.Shell\DevExpress.XtraEditors.dll
+// í´ë¼ì´ì–¸íŠ¸ ì„¤ì¹˜:
+â†’ C:\Program Files\nU3.Shell\DevExpress.XtraEditors.dll
 ```
 
-### ½Ã³ª¸®¿À 3: ÇÃ·¯±×ÀÎ
+### ì‹œë‚˜ë¦¬ì˜¤ 3: í”ŒëŸ¬ê·¸ì¸
 
 ```csharp
 ComponentId: "ReportPlugin"
 FileName: "nU3.Plugin.Report.dll"
 ComponentType: Plugin
-InstallPath: "plugins"       ¡ç ¼­ºê Æú´õ
+InstallPath: "plugins"       â† ì„œë¸Œ í´ë”
 GroupName: "Plugins"
 Priority: 200
 
-// Å¬¶óÀÌ¾ğÆ® ¼³Ä¡:
-¡æ C:\Program Files\nU3.Shell\plugins\nU3.Plugin.Report.dll
+// í´ë¼ì´ì–¸íŠ¸ ì„¤ì¹˜:
+â†’ C:\Program Files\nU3.Shell\plugins\nU3.Plugin.Report.dll
 ```
 
-### ½Ã³ª¸®¿À 4: ¸®¼Ò½º ÆÄÀÏ
+### ì‹œë‚˜ë¦¬ì˜¤ 4: ë¦¬ì†ŒìŠ¤ íŒŒì¼
 
 ```csharp
 ComponentId: "CompanyLogo"
 FileName: "logo.png"
 ComponentType: Resource
-InstallPath: "resources\\images"  ¡ç ÁßÃ¸ Æú´õ
+InstallPath: "resources\\images"  â† ì¤‘ì²© í´ë”
 GroupName: "Resources"
 Priority: 500
 
-// Å¬¶óÀÌ¾ğÆ® ¼³Ä¡:
-¡æ C:\Program Files\nU3.Shell\resources\images\logo.png
+// í´ë¼ì´ì–¸íŠ¸ ì„¤ì¹˜:
+â†’ C:\Program Files\nU3.Shell\resources\images\logo.png
 ```
 
 ---
 
-## Deployer UI¿¡¼­ ¼³Á¤ ¹æ¹ı
+## Deployer UIì—ì„œ ì„¤ì • ë°©ë²•
 
-### Smart Deploy ½Ã ÀÚµ¿ Ãß·Ğ
+### Smart Deploy ì‹œ ìë™ ì¶”ë¡ 
 
 ```csharp
-// ÆÄÀÏ ¼±ÅÃ: C:\Dev\nU3.Core.dll
+// íŒŒì¼ ì„ íƒ: C:\Dev\nU3.Core.dll
 
-ÀÚµ¿ ¼³Á¤:
-  ComponentId: "nU3.Core"         ¡ç ÆÄÀÏ¸í¿¡¼­ ÃßÃâ
-  FileName: "nU3.Core.dll"        ¡ç ÆÄÀÏ¸í
-  InstallPath: ""                 ¡ç ±âº»°ª (·çÆ®)
+ìë™ ì„¤ì •:
+  ComponentId: "nU3.Core"         â† íŒŒì¼ëª…ì—ì„œ ì¶”ì¶œ
+  FileName: "nU3.Core.dll"        â† íŒŒì¼ëª…
+  InstallPath: ""                 â† ê¸°ë³¸ê°’ (ë£¨íŠ¸)
   
-  // ±ÔÄ¢:
+  // ê·œì¹™:
   if (fileName.StartsWith("nU3.Core")) 
       ComponentType = FrameworkCore, Priority = 10-20
   else if (fileName.StartsWith("DevExpress")) 
@@ -179,139 +179,139 @@ Priority: 500
       ComponentType = Executable, Priority = 1-10
 ```
 
-### ¼öµ¿ Á¶Á¤
+### ìˆ˜ë™ ì¡°ì •
 
-UI¿¡¼­ InstallPath ÇÊµå¿¡ Á÷Á¢ ÀÔ·Â:
+UIì—ì„œ InstallPath í•„ë“œì— ì§ì ‘ ì…ë ¥:
 
 ```
-¦£¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¤
-¦¢ ¼³Ä¡ °æ·Î (»ó´ë): [                     ] ¦¢
-¦¢ ºó°ª=·çÆ®, plugins, resources\images µî   ¦¢ ¡ç µµ¿ò¸»
-¦¢ ÃÖÁ¾: {½ÇÇà°æ·Î}\{¼³Ä¡°æ·Î}\{ÆÄÀÏ¸í}      ¦¢ ¡ç ¿¹½Ã
-¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¥
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚ ì„¤ì¹˜ ê²½ë¡œ (ìƒëŒ€): [                     ] â”‚
+â”‚ ë¹ˆê°’=ë£¨íŠ¸, plugins, resources\images ë“±   â”‚ â† ë„ì›€ë§
+â”‚ ìµœì¢…: {ì‹¤í–‰ê²½ë¡œ}\{ì„¤ì¹˜ê²½ë¡œ}\{íŒŒì¼ëª…}      â”‚ â† ì˜ˆì‹œ
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
 
-ÀÔ·Â ¿¹½Ã:
-  "" ¡æ C:\Program Files\nU3.Shell\nU3.Core.dll
-  "plugins" ¡æ C:\Program Files\nU3.Shell\plugins\MyPlugin.dll
-  "resources\images" ¡æ C:\Program Files\nU3.Shell\resources\images\logo.png
+ì…ë ¥ ì˜ˆì‹œ:
+  "" â†’ C:\Program Files\nU3.Shell\nU3.Core.dll
+  "plugins" â†’ C:\Program Files\nU3.Shell\plugins\MyPlugin.dll
+  "resources\images" â†’ C:\Program Files\nU3.Shell\resources\images\logo.png
 ```
 
 ---
 
-## ÄÚµå¿¡¼­ °æ·Î °è»ê
+## ì½”ë“œì—ì„œ ê²½ë¡œ ê³„ì‚°
 
-### ComponentUpdateService ³»ºÎ
+### ComponentUpdateService ë‚´ë¶€
 
 ```csharp
 private string GetInstallPath(ComponentMstDto component)
 {
-    // »ó´ë °æ·Î Á¶ÇÕ
+    // ìƒëŒ€ ê²½ë¡œ ì¡°í•©
     var relativePath = string.IsNullOrEmpty(component.InstallPath) 
         ? component.FileName 
         : Path.Combine(component.InstallPath, component.FileName);
     
-    // BaseInstallPath¿Í °áÇÕ
+    // BaseInstallPathì™€ ê²°í•©
     return Path.Combine(_installBasePath, relativePath);
 }
 
-// ¿¹½Ã ½ÇÇà:
+// ì˜ˆì‹œ ì‹¤í–‰:
 // _installBasePath = "C:\Program Files\nU3.Shell\"
 // component.InstallPath = "plugins"
 // component.FileName = "MyPlugin.dll"
-// ¡æ "C:\Program Files\nU3.Shell\plugins\MyPlugin.dll"
+// â†’ "C:\Program Files\nU3.Shell\plugins\MyPlugin.dll"
 ```
 
 ---
 
-## ¼­¹ö ÀúÀå °æ·Î (StoragePath)
+## ì„œë²„ ì €ì¥ ê²½ë¡œ (StoragePath)
 
-¼­¹ö¿¡¼­´Â **Àı´ë °æ·Î**·Î ÀúÀå:
+ì„œë²„ì—ì„œëŠ” **ì ˆëŒ€ ê²½ë¡œ**ë¡œ ì €ì¥:
 
 ```csharp
-// Deployer¿¡¼­ ÆÄÀÏ ¾÷·Îµå ½Ã
+// Deployerì—ì„œ íŒŒì¼ ì—…ë¡œë“œ ì‹œ
 string serverBasePath = _getServerStoragePath();  // D:\ServerStorage
 string storagePath = Path.Combine(
     serverBasePath, 
-    "Components",      // °íÁ¤
-    component.GroupName,   // Framework, DevExpress µî
+    "Components",      // ê³ ì •
+    component.GroupName,   // Framework, DevExpress ë“±
     component.FileName
 );
 
-// ¿¹: D:\ServerStorage\Components\Framework\nU3.Core.dll
+// ì˜ˆ: D:\ServerStorage\Components\Framework\nU3.Core.dll
 ```
 
-Å¬¶óÀÌ¾ğÆ®´Â ÀÌ `StoragePath`¿¡¼­ ÆÄÀÏÀ» ´Ù¿î·ÎµåÇÕ´Ï´Ù.
+í´ë¼ì´ì–¸íŠ¸ëŠ” ì´ `StoragePath`ì—ì„œ íŒŒì¼ì„ ë‹¤ìš´ë¡œë“œí•©ë‹ˆë‹¤.
 
 ---
 
-## Æú´õ ±¸Á¶ ºñ±³
+## í´ë” êµ¬ì¡° ë¹„êµ
 
-### ¼­¹ö (Àı´ë °æ·Î)
+### ì„œë²„ (ì ˆëŒ€ ê²½ë¡œ)
 
 ```
 D:\ServerStorage\
-¦§¦¡¦¡ Components\              ¡ç Framework ÄÄÆ÷³ÍÆ®
-¦¢   ¦§¦¡¦¡ Framework\
-¦¢   ¦¢   ¦§¦¡¦¡ nU3.Core.dll
-¦¢   ¦¢   ¦§¦¡¦¡ nU3.Core.UI.dll
-¦¢   ¦¢   ¦¦¦¡¦¡ nU3.Shell.exe
-¦¢   ¦§¦¡¦¡ DevExpress\
-¦¢   ¦¢   ¦§¦¡¦¡ DevExpress.Data.dll
-¦¢   ¦¢   ¦¦¦¡¦¡ DevExpress.XtraEditors.dll
-¦¢   ¦¦¦¡¦¡ Plugins\
-¦¢       ¦¦¦¡¦¡ MyPlugin.dll
-¦¢
-¦¦¦¡¦¡ EMR\                     ¡ç È­¸é ¸ğµâ (±âÁ¸)
-    ¦¦¦¡¦¡ IN\
-        ¦¦¦¡¦¡ nU3.Modules.EMR.IN.Worklist.dll
+â”œâ”€â”€ Components\              â† Framework ì»´í¬ë„ŒíŠ¸
+â”‚   â”œâ”€â”€ Framework\
+â”‚   â”‚   â”œâ”€â”€ nU3.Core.dll
+â”‚   â”‚   â”œâ”€â”€ nU3.Core.UI.dll
+â”‚   â”‚   â””â”€â”€ nU3.Shell.exe
+â”‚   â”œâ”€â”€ DevExpress\
+â”‚   â”‚   â”œâ”€â”€ DevExpress.Data.dll
+â”‚   â”‚   â””â”€â”€ DevExpress.XtraEditors.dll
+â”‚   â””â”€â”€ Plugins\
+â”‚       â””â”€â”€ MyPlugin.dll
+â”‚
+â””â”€â”€ EMR\                     â† í™”ë©´ ëª¨ë“ˆ (ê¸°ì¡´)
+    â””â”€â”€ IN\
+        â””â”€â”€ nU3.Modules.EMR.IN.Worklist.dll
 ```
 
-### Å¬¶óÀÌ¾ğÆ® (»ó´ë °æ·Î)
+### í´ë¼ì´ì–¸íŠ¸ (ìƒëŒ€ ê²½ë¡œ)
 
 ```
-C:\Program Files\nU3.Shell\   ¡ç BaseInstallPath
-¦§¦¡¦¡ nU3.Shell.exe            ¡ç InstallPath: ""
-¦§¦¡¦¡ nU3.Core.dll             ¡ç InstallPath: ""
-¦§¦¡¦¡ nU3.Core.UI.dll          ¡ç InstallPath: ""
-¦§¦¡¦¡ DevExpress.Data.dll      ¡ç InstallPath: ""
-¦¢
-¦§¦¡¦¡ plugins\                 ¡ç InstallPath: "plugins"
-¦¢   ¦¦¦¡¦¡ MyPlugin.dll
-¦¢
-¦§¦¡¦¡ resources\               ¡ç InstallPath: "resources"
-¦¢   ¦¦¦¡¦¡ images\              ¡ç InstallPath: "resources\images"
-¦¢       ¦¦¦¡¦¡ logo.png
-¦¢
-¦¦¦¡¦¡ Modules\                 ¡ç È­¸é ¸ğµâ (º°µµ ½Ã½ºÅÛ)
-    ¦¦¦¡¦¡ EMR\
-        ¦¦¦¡¦¡ IN\
-            ¦¦¦¡¦¡ nU3.Modules.EMR.IN.Worklist.dll
+C:\Program Files\nU3.Shell\   â† BaseInstallPath
+â”œâ”€â”€ nU3.Shell.exe            â† InstallPath: ""
+â”œâ”€â”€ nU3.Core.dll             â† InstallPath: ""
+â”œâ”€â”€ nU3.Core.UI.dll          â† InstallPath: ""
+â”œâ”€â”€ DevExpress.Data.dll      â† InstallPath: ""
+â”‚
+â”œâ”€â”€ plugins\                 â† InstallPath: "plugins"
+â”‚   â””â”€â”€ MyPlugin.dll
+â”‚
+â”œâ”€â”€ resources\               â† InstallPath: "resources"
+â”‚   â””â”€â”€ images\              â† InstallPath: "resources\images"
+â”‚       â””â”€â”€ logo.png
+â”‚
+â””â”€â”€ Modules\                 â† í™”ë©´ ëª¨ë“ˆ (ë³„ë„ ì‹œìŠ¤í…œ)
+    â””â”€â”€ EMR\
+        â””â”€â”€ IN\
+            â””â”€â”€ nU3.Modules.EMR.IN.Worklist.dll
 ```
 
 ---
 
-## ¼³Á¤ Ã¼Å©¸®½ºÆ®
+## ì„¤ì • ì²´í¬ë¦¬ìŠ¤íŠ¸
 
-¹èÆ÷ Àü È®ÀÎ »çÇ×:
+ë°°í¬ ì „ í™•ì¸ ì‚¬í•­:
 
-- [ ] **InstallPath**: »ó´ë °æ·ÎÀÎ°¡? (Àı´ë °æ·Î X)
-- [ ] **½½·¡½Ã**: ¹é½½·¡½Ã(`\`) »ç¿ë (Windows)
-- [ ] **·çÆ® ¼³Ä¡**: InstallPath´Â ºó°ª(`""`)
-- [ ] **¼­ºê Æú´õ**: Æú´õ ±¸ºĞÀÚ »ç¿ë (`plugins`, `resources\images`)
-- [ ] **¿ì¼±¼øÀ§**: EXE(1-10) ¡æ Core DLL(11-20) ¡æ Shared DLL(81-100)
+- [ ] **InstallPath**: ìƒëŒ€ ê²½ë¡œì¸ê°€? (ì ˆëŒ€ ê²½ë¡œ X)
+- [ ] **ìŠ¬ë˜ì‹œ**: ë°±ìŠ¬ë˜ì‹œ(`\`) ì‚¬ìš© (Windows)
+- [ ] **ë£¨íŠ¸ ì„¤ì¹˜**: InstallPathëŠ” ë¹ˆê°’(`""`)
+- [ ] **ì„œë¸Œ í´ë”**: í´ë” êµ¬ë¶„ì ì‚¬ìš© (`plugins`, `resources\images`)
+- [ ] **ìš°ì„ ìˆœìœ„**: EXE(1-10) â†’ Core DLL(11-20) â†’ Shared DLL(81-100)
 
 ---
 
 ## FAQ
 
-**Q: InstallPath¸¦ `C:\Program Files\` °°Àº Àı´ë °æ·Î·Î ¼³Á¤ÇÒ ¼ö ÀÖ³ª¿ä?**  
-A: ¾È µË´Ï´Ù. ¹İµå½Ã **»ó´ë °æ·Î**¸¸ »ç¿ëÇØ¾ß ÇÕ´Ï´Ù. BaseInstallPath´Â ÀÚµ¿À¸·Î °áÁ¤µË´Ï´Ù.
+**Q: InstallPathë¥¼ `C:\Program Files\` ê°™ì€ ì ˆëŒ€ ê²½ë¡œë¡œ ì„¤ì •í•  ìˆ˜ ìˆë‚˜ìš”?**  
+A: ì•ˆ ë©ë‹ˆë‹¤. ë°˜ë“œì‹œ **ìƒëŒ€ ê²½ë¡œ**ë§Œ ì‚¬ìš©í•´ì•¼ í•©ë‹ˆë‹¤. BaseInstallPathëŠ” ìë™ìœ¼ë¡œ ê²°ì •ë©ë‹ˆë‹¤.
 
-**Q: È­¸é ¸ğµâµµ InstallPath·Î °ü¸®ÇÏ³ª¿ä?**  
-A: ¾Æ´Ï¿ä. È­¸é ¸ğµâÀº ±âÁ¸ `SYS_MODULE_MST` ½Ã½ºÅÛ (Category/SubSystem)À» »ç¿ëÇÕ´Ï´Ù.
+**Q: í™”ë©´ ëª¨ë“ˆë„ InstallPathë¡œ ê´€ë¦¬í•˜ë‚˜ìš”?**  
+A: ì•„ë‹ˆìš”. í™”ë©´ ëª¨ë“ˆì€ ê¸°ì¡´ `SYS_MODULE_MST` ì‹œìŠ¤í…œ (Category/SubSystem)ì„ ì‚¬ìš©í•©ë‹ˆë‹¤.
 
-**Q: InstallPath¿¡ `..` »óÀ§ °æ·Î¸¦ ¾µ ¼ö ÀÖ³ª¿ä?**  
-A: ±ÇÀåÇÏÁö ¾Ê½À´Ï´Ù. º¸¾È»ó BaseInstallPath ÇÏÀ§¿¡¸¸ ¼³Ä¡ÇØ¾ß ÇÕ´Ï´Ù.
+**Q: InstallPathì— `..` ìƒìœ„ ê²½ë¡œë¥¼ ì“¸ ìˆ˜ ìˆë‚˜ìš”?**  
+A: ê¶Œì¥í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤. ë³´ì•ˆìƒ BaseInstallPath í•˜ìœ„ì—ë§Œ ì„¤ì¹˜í•´ì•¼ í•©ë‹ˆë‹¤.
 
-**Q: ¿©·¯ ¹öÀüÀ» µ¿½Ã¿¡ ¼³Ä¡ÇÒ ¼ö ÀÖ³ª¿ä?**  
-A: ¾Æ´Ï¿ä. ÇÏ³ªÀÇ ÄÄÆ÷³ÍÆ®´Â ÇÏ³ªÀÇ È°¼º ¹öÀü¸¸ À¯ÁöÇÕ´Ï´Ù. ¾÷µ¥ÀÌÆ® ½Ã ±âÁ¸ ÆÄÀÏÀ» µ¤¾î¾¹´Ï´Ù.
+**Q: ì—¬ëŸ¬ ë²„ì „ì„ ë™ì‹œì— ì„¤ì¹˜í•  ìˆ˜ ìˆë‚˜ìš”?**  
+A: ì•„ë‹ˆìš”. í•˜ë‚˜ì˜ ì»´í¬ë„ŒíŠ¸ëŠ” í•˜ë‚˜ì˜ í™œì„± ë²„ì „ë§Œ ìœ ì§€í•©ë‹ˆë‹¤. ì—…ë°ì´íŠ¸ ì‹œ ê¸°ì¡´ íŒŒì¼ì„ ë®ì–´ì”ë‹ˆë‹¤.

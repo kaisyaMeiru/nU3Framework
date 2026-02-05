@@ -1,69 +1,69 @@
 # nU3 Framework - Interface Design Guide
 
-## °³¿ä
+## ê°œìš”
 
-nU3 Framework´Â SOLID ¿øÄ¢À» µû¸£¸ç, Æ¯È÷ ISP(Interface Segregation Principle)¸¦ ÁØ¼öÇÏ¿© ÀÎÅÍÆäÀÌ½º¸¦ ¼³°èÇß½À´Ï´Ù.
+nU3 FrameworkëŠ” SOLID ì›ì¹™ì„ ë”°ë¥´ë©°, íŠ¹íˆ ISP(Interface Segregation Principle)ë¥¼ ì¤€ìˆ˜í•˜ì—¬ ì¸í„°í˜ì´ìŠ¤ë¥¼ ì„¤ê³„í–ˆìŠµë‹ˆë‹¤.
 
-## ÀÎÅÍÆäÀÌ½º ±¸Á¶
+## ì¸í„°í˜ì´ìŠ¤ êµ¬ì¡°
 
-### °èÃş ±¸Á¶
+### ê³„ì¸µ êµ¬ì¡°
 
 ```
-IWorkForm (º¹ÇÕ ÀÎÅÍÆäÀÌ½º)
-¦§¦¡¦¡ IScreenIdentifier (È­¸é ½Äº°)
-¦§¦¡¦¡ ILifecycleAware (»ı¸íÁÖ±â °ü¸®)
-¦§¦¡¦¡ IWorkContextProvider (ÄÁÅØ½ºÆ® °ü¸®)
-¦¦¦¡¦¡ IResourceManager (¸®¼Ò½º Á¤¸®)
+IWorkForm (ë³µí•© ì¸í„°í˜ì´ìŠ¤)
+â”œâ”€â”€ IScreenIdentifier (í™”ë©´ ì‹ë³„)
+â”œâ”€â”€ ILifecycleAware (ìƒëª…ì£¼ê¸° ê´€ë¦¬)
+â”œâ”€â”€ IWorkContextProvider (ì»¨í…ìŠ¤íŠ¸ ê´€ë¦¬)
+â””â”€â”€ IResourceManager (ë¦¬ì†ŒìŠ¤ ì •ë¦¬)
 ```
 
-## ÀÎÅÍÆäÀÌ½º »ó¼¼
+## ì¸í„°í˜ì´ìŠ¤ ìƒì„¸
 
-### 1. IScreenIdentifier - È­¸é ½Äº°
+### 1. IScreenIdentifier - í™”ë©´ ì‹ë³„
 
 ```csharp
 public interface IScreenIdentifier
 {
-    string ScreenId { get; }      // È­¸é °íÀ¯ ID
-    string ScreenTitle { get; }   // È­¸é Ç¥½Ã Á¦¸ñ
+    string ScreenId { get; }      // í™”ë©´ ê³ ìœ  ID
+    string ScreenTitle { get; }   // í™”ë©´ í‘œì‹œ ì œëª©
 }
 ```
 
-**Ã¥ÀÓ**: È­¸éÀÇ ½Äº° Á¤º¸ Á¦°ø
+**ì±…ì„**: í™”ë©´ì˜ ì‹ë³„ ì •ë³´ ì œê³µ
 
-**»ç¿ë ½Ã³ª¸®¿À**:
-- ¸Ş´º ½Ã½ºÅÛ°ú È­¸é ¸ÅÇÎ
-- ÅÇ Á¦¸ñ Ç¥½Ã
-- ·Î±ë ¹× ¿Àµ÷
-- È­¸é °Ë»ö ¹× È°¼ºÈ­
+**ì‚¬ìš© ì‹œë‚˜ë¦¬ì˜¤**:
+- ë©”ë‰´ ì‹œìŠ¤í…œê³¼ í™”ë©´ ë§¤í•‘
+- íƒ­ ì œëª© í‘œì‹œ
+- ë¡œê¹… ë° ì˜¤ë”§
+- í™”ë©´ ê²€ìƒ‰ ë° í™œì„±í™”
 
-**±¸Çö ¿¹½Ã**:
+**êµ¬í˜„ ì˜ˆì‹œ**:
 ```csharp
 public class PatientRegistrationControl : BaseWorkControl
 {
     public override string ScreenId => "EMR_PATIENT_REG_001";
-    public override string ScreenTitle => "È¯ÀÚ µî·Ï";
+    public override string ScreenTitle => "í™˜ì ë“±ë¡";
 }
 ```
 
-### 2. ILifecycleAware - »ı¸íÁÖ±â °ü¸®
+### 2. ILifecycleAware - ìƒëª…ì£¼ê¸° ê´€ë¦¬
 
 ```csharp
 public interface ILifecycleAware
 {
-    void OnActivated();     // È°¼ºÈ­ ½Ã
-    void OnDeactivated();   // ºñÈ°¼ºÈ­ ½Ã
-    bool CanClose();        // ´İ±â Àü È®ÀÎ
+    void OnActivated();     // í™œì„±í™” ì‹œ
+    void OnDeactivated();   // ë¹„í™œì„±í™” ì‹œ
+    bool CanClose();        // ë‹«ê¸° ì „ í™•ì¸
 }
 ```
 
-**Ã¥ÀÓ**: È­¸éÀÇ È°¼ºÈ­/ºñÈ°¼ºÈ­ »óÅÂ °ü¸®
+**ì±…ì„**: í™”ë©´ì˜ í™œì„±í™”/ë¹„í™œì„±í™” ìƒíƒœ ê´€ë¦¬
 
-**»ç¿ë ½Ã³ª¸®¿À**:
-- È­¸é Æ÷Ä¿½º È¹µæ/»ó½Ç
-- ¸®¼Ò½º ÃÖÀûÈ­ (ºñÈ°¼ºÈ­ ½Ã Å¸ÀÌ¸Ó ÁßÁö µî)
-- ´İ±â Àü º¯°æ»çÇ× È®ÀÎ
+**ì‚¬ìš© ì‹œë‚˜ë¦¬ì˜¤**:
+- í™”ë©´ í¬ì»¤ìŠ¤ íšë“/ìƒì‹¤
+- ë¦¬ì†ŒìŠ¤ ìµœì í™” (ë¹„í™œì„±í™” ì‹œ íƒ€ì´ë¨¸ ì¤‘ì§€ ë“±)
+- ë‹«ê¸° ì „ ë³€ê²½ì‚¬í•­ í™•ì¸
 
-**±¸Çö ¿¹½Ã**:
+**êµ¬í˜„ ì˜ˆì‹œ**:
 ```csharp
 protected override void OnScreenActivated()
 {
@@ -81,50 +81,50 @@ protected override bool OnBeforeClose()
 {
     if (HasUnsavedChanges())
     {
-        var result = MessageBox.Show("ÀúÀåÇÏÁö ¾ÊÀº º¯°æ»çÇ×ÀÌ ÀÖ½À´Ï´Ù...");
+        var result = MessageBox.Show("ì €ì¥í•˜ì§€ ì•Šì€ ë³€ê²½ì‚¬í•­ì´ ìˆìŠµë‹ˆë‹¤...");
         return result == DialogResult.Yes;
     }
     return true;
 }
 ```
 
-### 3. IWorkContextProvider - ÄÁÅØ½ºÆ® °ü¸®
+### 3. IWorkContextProvider - ì»¨í…ìŠ¤íŠ¸ ê´€ë¦¬
 
 ```csharp
 public interface IWorkContextProvider
 {
-    void InitializeContext(WorkContext context);  // ÃÊ±âÈ­
-    void UpdateContext(WorkContext context);      // ¾÷µ¥ÀÌÆ®
-    WorkContext GetContext();                     // Á¶È¸
+    void InitializeContext(WorkContext context);  // ì´ˆê¸°í™”
+    void UpdateContext(WorkContext context);      // ì—…ë°ì´íŠ¸
+    WorkContext GetContext();                     // ì¡°íšŒ
 }
 ```
 
-**Ã¥ÀÓ**: ÀÛ¾÷ ÄÁÅØ½ºÆ® Àü´Ş ¹× °ü¸®
+**ì±…ì„**: ì‘ì—… ì»¨í…ìŠ¤íŠ¸ ì „ë‹¬ ë° ê´€ë¦¬
 
-**»ç¿ë ½Ã³ª¸®¿À**:
-- È¯ÀÚ Á¤º¸ Àü´Ş
-- °Ë»ç Á¤º¸ Àü´Ş
-- »ç¿ëÀÚ Á¤º¸ ¹× ±ÇÇÑ Àü´Ş
-- ¸ğµâ °£ µ¥ÀÌÅÍ °øÀ¯
+**ì‚¬ìš© ì‹œë‚˜ë¦¬ì˜¤**:
+- í™˜ì ì •ë³´ ì „ë‹¬
+- ê²€ì‚¬ ì •ë³´ ì „ë‹¬
+- ì‚¬ìš©ì ì •ë³´ ë° ê¶Œí•œ ì „ë‹¬
+- ëª¨ë“ˆ ê°„ ë°ì´í„° ê³µìœ 
 
-**±¸Çö ¿¹½Ã**:
+**êµ¬í˜„ ì˜ˆì‹œ**:
 ```csharp
 protected override void OnContextInitialized(WorkContext oldContext, WorkContext newContext)
 {
-    // È¯ÀÚ Á¤º¸ ¼ö½Å
+    // í™˜ì ì •ë³´ ìˆ˜ì‹ 
     if (newContext.CurrentPatient != null)
     {
         LoadPatientData(newContext.CurrentPatient.PatientId);
     }
 
-    // ±ÇÇÑ¿¡ µû¶ó UI ¼³Á¤
+    // ê¶Œí•œì— ë”°ë¼ UI ì„¤ì •
     btnSave.Enabled = newContext.Permissions.CanUpdate;
     btnDelete.Enabled = newContext.Permissions.CanDelete;
 }
 
 protected override void OnContextChanged(WorkContext oldContext, WorkContext newContext)
 {
-    // ÄÁÅØ½ºÆ® º¯°æ ½Ã UI ¾÷µ¥ÀÌÆ®
+    // ì»¨í…ìŠ¤íŠ¸ ë³€ê²½ ì‹œ UI ì—…ë°ì´íŠ¸
     if (oldContext.CurrentPatient?.PatientId != newContext.CurrentPatient?.PatientId)
     {
         ReloadData();
@@ -132,41 +132,41 @@ protected override void OnContextChanged(WorkContext oldContext, WorkContext new
 }
 ```
 
-### 4. IResourceManager - ¸®¼Ò½º Á¤¸®
+### 4. IResourceManager - ë¦¬ì†ŒìŠ¤ ì •ë¦¬
 
 ```csharp
 public interface IResourceManager
 {
-    void ReleaseResources();  // ¸®¼Ò½º Á¤¸®
+    void ReleaseResources();  // ë¦¬ì†ŒìŠ¤ ì •ë¦¬
 }
 ```
 
-**Ã¥ÀÓ**: ¸®¼Ò½º Á¤¸® ¹× ¸Ş¸ğ¸® °ü¸®
+**ì±…ì„**: ë¦¬ì†ŒìŠ¤ ì •ë¦¬ ë° ë©”ëª¨ë¦¬ ê´€ë¦¬
 
-**»ç¿ë ½Ã³ª¸®¿À**:
-- ¸ğµâ ¾ğ·Îµå
-- ¸Ş¸ğ¸® ÃÖÀûÈ­
-- ¸®¼Ò½º ´©¼ö ¹æÁö
+**ì‚¬ìš© ì‹œë‚˜ë¦¬ì˜¤**:
+- ëª¨ë“ˆ ì–¸ë¡œë“œ
+- ë©”ëª¨ë¦¬ ìµœì í™”
+- ë¦¬ì†ŒìŠ¤ ëˆ„ìˆ˜ ë°©ì§€
 
-**±¸Çö ¿¹½Ã**:
+**êµ¬í˜„ ì˜ˆì‹œ**:
 ```csharp
 protected override void OnReleaseResources()
 {
-    // Å¸ÀÌ¸Ó Á¤Áö
+    // íƒ€ì´ë¨¸ ì •ì§€
     _refreshTimer?.Stop();
     
-    // ÁøÇà ÁßÀÎ ÀÛ¾÷ Ãë¼Ò
+    // ì§„í–‰ ì¤‘ì¸ ì‘ì—… ì·¨ì†Œ
     _cancellationTokenSource?.Cancel();
     
-    // ÀÌº¥Æ® ±¸µ¶ ÇØÁ¦
+    // ì´ë²¤íŠ¸ êµ¬ë… í•´ì œ
     _eventAggregator?.Unsubscribe<PatientSelectedEvent>(OnPatientSelected);
     
-    // µ¥ÀÌÅÍº£ÀÌ½º ¿¬°á Á¾·á
+    // ë°ì´í„°ë² ì´ìŠ¤ ì—°ê²° ì¢…ë£Œ
     _connection?.Close();
 }
 ```
 
-### 5. IWorkForm - º¹ÇÕ ÀÎÅÍÆäÀÌ½º
+### 5. IWorkForm - ë³µí•© ì¸í„°í˜ì´ìŠ¤
 
 ```csharp
 public interface IWorkForm : 
@@ -175,30 +175,30 @@ public interface IWorkForm :
     IWorkContextProvider,
     IResourceManager
 {
-    // À§ 4°³ ÀÎÅÍÆäÀÌ½º¸¦ Á¶ÇÕ
+    // ìœ„ 4ê°œ ì¸í„°í˜ì´ìŠ¤ë¥¼ ì¡°í•©
 }
 ```
 
-**Ã¥ÀÓ**: ¿ÏÀüÇÑ ÀÛ¾÷ È­¸é °è¾à Á¤ÀÇ
+**ì±…ì„**: ì™„ì „í•œ ì‘ì—… í™”ë©´ ê³„ì•½ ì •ì˜
 
-**»ç¿ë ½Ã³ª¸®¿À**:
-- ¸ğµç ±â´ÉÀÌ ÇÊ¿äÇÑ Ç¥ÁØ ÀÛ¾÷ È­¸é
-- MDI ÀÚ½Ä Æû
-- µ¿Àû ·Îµå ¸ğµâ
+**ì‚¬ìš© ì‹œë‚˜ë¦¬ì˜¤**:
+- ëª¨ë“  ê¸°ëŠ¥ì´ í•„ìš”í•œ í‘œì¤€ ì‘ì—… í™”ë©´
+- MDI ìì‹ í¼
+- ë™ì  ë¡œë“œ ëª¨ë“ˆ
 
-## ¼±ÅÃÀû ±¸Çö
+## ì„ íƒì  êµ¬í˜„
 
-### ºÎºĞ ±¸Çö ¿¹½Ã
+### ë¶€ë¶„ êµ¬í˜„ ì˜ˆì‹œ
 
-ÀÏºÎ ±â´É¸¸ ÇÊ¿äÇÑ °æ¿ì Æ¯Á¤ ÀÎÅÍÆäÀÌ½º¸¸ ±¸ÇöÇÒ ¼ö ÀÖ½À´Ï´Ù:
+ì¼ë¶€ ê¸°ëŠ¥ë§Œ í•„ìš”í•œ ê²½ìš° íŠ¹ì • ì¸í„°í˜ì´ìŠ¤ë§Œ êµ¬í˜„í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤:
 
-#### 1. °£´ÜÇÑ ÀĞ±â Àü¿ë È­¸é
+#### 1. ê°„ë‹¨í•œ ì½ê¸° ì „ìš© í™”ë©´
 
 ```csharp
 public class SimpleReadOnlyControl : UserControl, IScreenIdentifier, ILifecycleAware
 {
     public string ScreenId => "SIMPLE_VIEW_001";
-    public string ScreenTitle => "°£´ÜÇÑ Á¶È¸ È­¸é";
+    public string ScreenTitle => "ê°„ë‹¨í•œ ì¡°íšŒ í™”ë©´";
 
     public void OnActivated()
     {
@@ -207,17 +207,17 @@ public class SimpleReadOnlyControl : UserControl, IScreenIdentifier, ILifecycleA
 
     public void OnDeactivated()
     {
-        // Æ¯º°ÇÑ Ã³¸® ¾øÀ½
+        // íŠ¹ë³„í•œ ì²˜ë¦¬ ì—†ìŒ
     }
 
     public bool CanClose()
     {
-        return true; // Ç×»ó ´İ±â Çã¿ë
+        return true; // í•­ìƒ ë‹«ê¸° í—ˆìš©
     }
 }
 ```
 
-#### 2. ÄÁÅØ½ºÆ®¸¸ ÇÊ¿äÇÑ È­¸é
+#### 2. ì»¨í…ìŠ¤íŠ¸ë§Œ í•„ìš”í•œ í™”ë©´
 
 ```csharp
 public class ContextAwareControl : UserControl, IWorkContextProvider
@@ -243,7 +243,7 @@ public class ContextAwareControl : UserControl, IWorkContextProvider
 }
 ```
 
-#### 3. ¸®¼Ò½º °ü¸®°¡ ÇÊ¿äÇÑ È­¸é
+#### 3. ë¦¬ì†ŒìŠ¤ ê´€ë¦¬ê°€ í•„ìš”í•œ í™”ë©´
 
 ```csharp
 public class ResourceIntensiveControl : UserControl, IResourceManager
@@ -265,56 +265,56 @@ public class ResourceIntensiveControl : UserControl, IResourceManager
 }
 ```
 
-## BaseWorkControl°úÀÇ °ü°è
+## BaseWorkControlê³¼ì˜ ê´€ê³„
 
-`BaseWorkControl`Àº `IWorkForm`À» ¿ÏÀüÈ÷ ±¸ÇöÇÑ ±âº» Å¬·¡½ºÀÔ´Ï´Ù:
+`BaseWorkControl`ì€ `IWorkForm`ì„ ì™„ì „íˆ êµ¬í˜„í•œ ê¸°ë³¸ í´ë˜ìŠ¤ì…ë‹ˆë‹¤:
 
 ```csharp
 public class BaseWorkControl : UserControl, IWorkForm
 {
-    // IScreenIdentifier ±¸Çö
+    // IScreenIdentifier êµ¬í˜„
     public virtual string ScreenId { get; protected set; }
     public virtual string ScreenTitle { get; protected set; }
 
-    // ILifecycleAware ±¸Çö
+    // ILifecycleAware êµ¬í˜„
     public virtual void OnActivated() { ... }
     public virtual void OnDeactivated() { ... }
     public virtual bool CanClose() { ... }
 
-    // IWorkContextProvider ±¸Çö
+    // IWorkContextProvider êµ¬í˜„
     public virtual void InitializeContext(WorkContext context) { ... }
     public virtual void UpdateContext(WorkContext context) { ... }
     public WorkContext GetContext() { ... }
 
-    // IResourceManager ±¸Çö
+    // IResourceManager êµ¬í˜„
     public virtual void ReleaseResources() { ... }
 }
 ```
 
-### ÆÄ»ı Å¬·¡½º´Â ÇÊ¿äÇÑ ¸Ş¼­µå¸¸ ¿À¹ö¶óÀÌµå
+### íŒŒìƒ í´ë˜ìŠ¤ëŠ” í•„ìš”í•œ ë©”ì„œë“œë§Œ ì˜¤ë²„ë¼ì´ë“œ
 
 ```csharp
 public class MyWorkControl : BaseWorkControl
 {
-    // IScreenIdentifier ±¸Çö
+    // IScreenIdentifier êµ¬í˜„
     public override string ScreenId => "MY_SCREEN_001";
-    public override string ScreenTitle => "³» È­¸é";
+    public override string ScreenTitle => "ë‚´ í™”ë©´";
 
-    // ÇÊ¿äÇÑ »ı¸íÁÖ±â ¸Ş¼­µå¸¸ ¿À¹ö¶óÀÌµå
+    // í•„ìš”í•œ ìƒëª…ì£¼ê¸° ë©”ì„œë“œë§Œ ì˜¤ë²„ë¼ì´ë“œ
     protected override void OnScreenActivated()
     {
         base.OnScreenActivated();
         RefreshData();
     }
 
-    // ÇÊ¿äÇÑ ÄÁÅØ½ºÆ® ¸Ş¼­µå¸¸ ¿À¹ö¶óÀÌµå
+    // í•„ìš”í•œ ì»¨í…ìŠ¤íŠ¸ ë©”ì„œë“œë§Œ ì˜¤ë²„ë¼ì´ë“œ
     protected override void OnContextInitialized(WorkContext oldContext, WorkContext newContext)
     {
         base.OnContextInitialized(oldContext, newContext);
         LoadPatientData(newContext.CurrentPatient);
     }
 
-    // ÇÊ¿äÇÑ ¸®¼Ò½º Á¤¸®¸¸ Ãß°¡
+    // í•„ìš”í•œ ë¦¬ì†ŒìŠ¤ ì •ë¦¬ë§Œ ì¶”ê°€
     protected override void OnReleaseResources()
     {
         base.OnReleaseResources();
@@ -323,27 +323,27 @@ public class MyWorkControl : BaseWorkControl
 }
 ```
 
-## SOLID ¿øÄ¢ ÁØ¼ö
+## SOLID ì›ì¹™ ì¤€ìˆ˜
 
 ### 1. Single Responsibility Principle (SRP)
 
-°¢ ÀÎÅÍÆäÀÌ½º´Â ÇÏ³ªÀÇ Ã¥ÀÓ¸¸ °¡Áü:
-- `IScreenIdentifier`: È­¸é ½Äº°¸¸
-- `ILifecycleAware`: »ı¸íÁÖ±â °ü¸®¸¸
-- `IWorkContextProvider`: ÄÁÅØ½ºÆ® °ü¸®¸¸
-- `IResourceManager`: ¸®¼Ò½º Á¤¸®¸¸
+ê° ì¸í„°í˜ì´ìŠ¤ëŠ” í•˜ë‚˜ì˜ ì±…ì„ë§Œ ê°€ì§:
+- `IScreenIdentifier`: í™”ë©´ ì‹ë³„ë§Œ
+- `ILifecycleAware`: ìƒëª…ì£¼ê¸° ê´€ë¦¬ë§Œ
+- `IWorkContextProvider`: ì»¨í…ìŠ¤íŠ¸ ê´€ë¦¬ë§Œ
+- `IResourceManager`: ë¦¬ì†ŒìŠ¤ ì •ë¦¬ë§Œ
 
 ### 2. Open/Closed Principle (OCP)
 
-»õ·Î¿î ±â´É Ãß°¡ ½Ã ±âÁ¸ ÄÚµå ¼öÁ¤ ¾øÀÌ È®Àå °¡´É:
+ìƒˆë¡œìš´ ê¸°ëŠ¥ ì¶”ê°€ ì‹œ ê¸°ì¡´ ì½”ë“œ ìˆ˜ì • ì—†ì´ í™•ì¥ ê°€ëŠ¥:
 ```csharp
-// »õ·Î¿î ÀÎÅÍÆäÀÌ½º Ãß°¡
+// ìƒˆë¡œìš´ ì¸í„°í˜ì´ìŠ¤ ì¶”ê°€
 public interface IDataValidator
 {
     bool ValidateData();
 }
 
-// ±âÁ¸ ÀÎÅÍÆäÀÌ½º´Â ¼öÁ¤ÇÏÁö ¾ÊÀ½
+// ê¸°ì¡´ ì¸í„°í˜ì´ìŠ¤ëŠ” ìˆ˜ì •í•˜ì§€ ì•ŠìŒ
 public interface IWorkFormEx : IWorkForm, IDataValidator
 {
 }
@@ -351,7 +351,7 @@ public interface IWorkFormEx : IWorkForm, IDataValidator
 
 ### 3. Liskov Substitution Principle (LSP)
 
-¸ğµç ÆÄ»ı Å¬·¡½º´Â ±âº» Å¬·¡½º·Î ´ëÃ¼ °¡´É:
+ëª¨ë“  íŒŒìƒ í´ë˜ìŠ¤ëŠ” ê¸°ë³¸ í´ë˜ìŠ¤ë¡œ ëŒ€ì²´ ê°€ëŠ¥:
 ```csharp
 IWorkForm workForm = new PatientRegistrationControl();
 ILifecycleAware lifecycle = new PatientRegistrationControl();
@@ -360,85 +360,85 @@ IWorkContextProvider contextProvider = new PatientRegistrationControl();
 
 ### 4. Interface Segregation Principle (ISP)
 
-Å¬¶óÀÌ¾ğÆ®´Â »ç¿ëÇÏÁö ¾Ê´Â ÀÎÅÍÆäÀÌ½º¿¡ ÀÇÁ¸ÇÏÁö ¾ÊÀ½:
+í´ë¼ì´ì–¸íŠ¸ëŠ” ì‚¬ìš©í•˜ì§€ ì•ŠëŠ” ì¸í„°í˜ì´ìŠ¤ì— ì˜ì¡´í•˜ì§€ ì•ŠìŒ:
 ```csharp
-// »ı¸íÁÖ±â¸¸ ÇÊ¿äÇÑ °æ¿ì
+// ìƒëª…ì£¼ê¸°ë§Œ í•„ìš”í•œ ê²½ìš°
 void ManageLifecycle(ILifecycleAware control)
 {
     control.OnActivated();
-    // IWorkContextProvider³ª IResourceManager´Â ºÒÇÊ¿ä
+    // IWorkContextProviderë‚˜ IResourceManagerëŠ” ë¶ˆí•„ìš”
 }
 
-// ÄÁÅØ½ºÆ®¸¸ ÇÊ¿äÇÑ °æ¿ì
+// ì»¨í…ìŠ¤íŠ¸ë§Œ í•„ìš”í•œ ê²½ìš°
 void SetContext(IWorkContextProvider control, WorkContext context)
 {
     control.InitializeContext(context);
-    // ILifecycleAware³ª IResourceManager´Â ºÒÇÊ¿ä
+    // ILifecycleAwareë‚˜ IResourceManagerëŠ” ë¶ˆí•„ìš”
 }
 ```
 
 ### 5. Dependency Inversion Principle (DIP)
 
-±¸Ã¼ÀûÀÎ ±¸ÇöÀÌ ¾Æ´Ñ Ãß»óÈ­¿¡ ÀÇÁ¸:
+êµ¬ì²´ì ì¸ êµ¬í˜„ì´ ì•„ë‹Œ ì¶”ìƒí™”ì— ì˜ì¡´:
 ```csharp
 public class TabManager
 {
     public void ActivateTab(ILifecycleAware control)
     {
         control.OnActivated();
-        // BaseWorkControlÀÌ ¾Æ´Ñ ILifecycleAware¿¡ ÀÇÁ¸
+        // BaseWorkControlì´ ì•„ë‹Œ ILifecycleAwareì— ì˜ì¡´
     }
 
     public void SetContext(IWorkContextProvider control, WorkContext context)
     {
         control.InitializeContext(context);
-        // BaseWorkControlÀÌ ¾Æ´Ñ IWorkContextProvider¿¡ ÀÇÁ¸
+        // BaseWorkControlì´ ì•„ë‹Œ IWorkContextProviderì— ì˜ì¡´
     }
 }
 ```
 
-## »ç¿ë °¡ÀÌµå¶óÀÎ
+## ì‚¬ìš© ê°€ì´ë“œë¼ì¸
 
-### 1. ÀüÃ¼ ±â´ÉÀÌ ÇÊ¿äÇÑ °æ¿ì
+### 1. ì „ì²´ ê¸°ëŠ¥ì´ í•„ìš”í•œ ê²½ìš°
 
 ```csharp
-// BaseWorkControl »ó¼Ó (±ÇÀå)
+// BaseWorkControl ìƒì† (ê¶Œì¥)
 public class MyControl : BaseWorkControl
 {
     public override string ScreenId => "MY_001";
-    public override string ScreenTitle => "³» È­¸é";
+    public override string ScreenTitle => "ë‚´ í™”ë©´";
 }
 ```
 
-### 2. ºÎºĞ ±â´É¸¸ ÇÊ¿äÇÑ °æ¿ì
+### 2. ë¶€ë¶„ ê¸°ëŠ¥ë§Œ í•„ìš”í•œ ê²½ìš°
 
 ```csharp
-// ÇÊ¿äÇÑ ÀÎÅÍÆäÀÌ½º¸¸ ±¸Çö
+// í•„ìš”í•œ ì¸í„°í˜ì´ìŠ¤ë§Œ êµ¬í˜„
 public class MyControl : UserControl, IScreenIdentifier, ILifecycleAware
 {
-    // ÇÊ¿äÇÑ ºÎºĞ¸¸ ±¸Çö
+    // í•„ìš”í•œ ë¶€ë¶„ë§Œ êµ¬í˜„
 }
 ```
 
-### 3. Ä¿½ºÅÒ ±âº» Å¬·¡½º°¡ ÇÊ¿äÇÑ °æ¿ì
+### 3. ì»¤ìŠ¤í…€ ê¸°ë³¸ í´ë˜ìŠ¤ê°€ í•„ìš”í•œ ê²½ìš°
 
 ```csharp
-// Ä¿½ºÅÒ ±âº» Å¬·¡½º »ı¼º
+// ì»¤ìŠ¤í…€ ê¸°ë³¸ í´ë˜ìŠ¤ ìƒì„±
 public class MyBaseControl : DevExpress.XtraEditors.XtraUserControl, IWorkForm
 {
-    // IWorkForm ¿ÏÀü ±¸Çö
+    // IWorkForm ì™„ì „ êµ¬í˜„
 }
 
-// Ä¿½ºÅÒ ±âº» Å¬·¡½º »ç¿ë
+// ì»¤ìŠ¤í…€ ê¸°ë³¸ í´ë˜ìŠ¤ ì‚¬ìš©
 public class MyControl : MyBaseControl
 {
-    // Ä¿½ºÅÒ ±â´É È°¿ë
+    // ì»¤ìŠ¤í…€ ê¸°ëŠ¥ í™œìš©
 }
 ```
 
-## ¸ğ¹ü »ç·Ê
+## ëª¨ë²” ì‚¬ë¡€
 
-### 1. ÀÎÅÍÆäÀÌ½º Å¸ÀÔÀ¸·Î ÀÇÁ¸¼º ¼±¾ğ
+### 1. ì¸í„°í˜ì´ìŠ¤ íƒ€ì…ìœ¼ë¡œ ì˜ì¡´ì„± ì„ ì–¸
 
 ```csharp
 // ? Good
@@ -454,74 +454,74 @@ public void ProcessScreen(BaseWorkControl screen)
 }
 ```
 
-### 2. ÇÊ¿äÇÑ ÀÎÅÍÆäÀÌ½º¸¸ ¿ä±¸
+### 2. í•„ìš”í•œ ì¸í„°í˜ì´ìŠ¤ë§Œ ìš”êµ¬
 
 ```csharp
-// ? Good - »ı¸íÁÖ±â¸¸ ÇÊ¿ä
+// ? Good - ìƒëª…ì£¼ê¸°ë§Œ í•„ìš”
 public void ActivateControl(ILifecycleAware control)
 {
     control.OnActivated();
 }
 
-// ? Bad - ºÒÇÊ¿äÇÑ ÀÎÅÍÆäÀÌ½º ¿ä±¸
+// ? Bad - ë¶ˆí•„ìš”í•œ ì¸í„°í˜ì´ìŠ¤ ìš”êµ¬
 public void ActivateControl(IWorkForm control)
 {
     control.OnActivated();
 }
 ```
 
-### 3. ÀÎÅÍÆäÀÌ½º Á¶ÇÕÀ¸·Î À¯¿¬¼º È®º¸
+### 3. ì¸í„°í˜ì´ìŠ¤ ì¡°í•©ìœ¼ë¡œ ìœ ì—°ì„± í™•ë³´
 
 ```csharp
-// ? Good - ÇÊ¿äÇÑ ±â´É Á¶ÇÕ
+// ? Good - í•„ìš”í•œ ê¸°ëŠ¥ ì¡°í•©
 public class LightweightControl : UserControl, 
     IScreenIdentifier, 
     ILifecycleAware
 {
-    // ¸®¼Ò½º °ü¸®³ª ÄÁÅØ½ºÆ®°¡ ºÒÇÊ¿äÇÑ °£´ÜÇÑ È­¸é
+    // ë¦¬ì†ŒìŠ¤ ê´€ë¦¬ë‚˜ ì»¨í…ìŠ¤íŠ¸ê°€ ë¶ˆí•„ìš”í•œ ê°„ë‹¨í•œ í™”ë©´
 }
 
-// ? Good - ÀüÃ¼ ±â´É
+// ? Good - ì „ì²´ ê¸°ëŠ¥
 public class FullFeaturedControl : BaseWorkControl
 {
-    // ¸ğµç ±â´ÉÀÌ ÇÊ¿äÇÑ º¹ÀâÇÑ È­¸é
+    // ëª¨ë“  ê¸°ëŠ¥ì´ í•„ìš”í•œ ë³µì¡í•œ í™”ë©´
 }
 ```
 
-## È®Àå ¿¹½Ã
+## í™•ì¥ ì˜ˆì‹œ
 
-### »õ·Î¿î ÀÎÅÍÆäÀÌ½º Ãß°¡
+### ìƒˆë¡œìš´ ì¸í„°í˜ì´ìŠ¤ ì¶”ê°€
 
 ```csharp
-// µ¥ÀÌÅÍ °ËÁõ ÀÎÅÍÆäÀÌ½º
+// ë°ì´í„° ê²€ì¦ ì¸í„°í˜ì´ìŠ¤
 public interface IDataValidator
 {
     bool ValidateData();
     List<string> GetValidationErrors();
 }
 
-// ÀÎ¼â ±â´É ÀÎÅÍÆäÀÌ½º
+// ì¸ì‡„ ê¸°ëŠ¥ ì¸í„°í˜ì´ìŠ¤
 public interface IPrintable
 {
     void Print();
     bool CanPrint();
 }
 
-// Á¶ÇÕÇÏ¿© »ç¿ë
+// ì¡°í•©í•˜ì—¬ ì‚¬ìš©
 public class AdvancedWorkControl : BaseWorkControl, IDataValidator, IPrintable
 {
     public bool ValidateData() { ... }
     public List<string> GetValidationErrors() { ... }
     public void Print() { ... }
-    public bool CanPrint() => CanPrint; // ±ÇÇÑ È°¿ë
+    public bool CanPrint() => CanPrint; // ê¶Œí•œ í™œìš©
 }
 ```
 
-## ¸¶ÀÌ±×·¹ÀÌ¼Ç °¡ÀÌµå
+## ë§ˆì´ê·¸ë ˆì´ì…˜ ê°€ì´ë“œ
 
-### ±âÁ¸ ÄÚµå¸¦ »õ ÀÎÅÍÆäÀÌ½º ±¸Á¶·Î ¸¶ÀÌ±×·¹ÀÌ¼Ç
+### ê¸°ì¡´ ì½”ë“œë¥¼ ìƒˆ ì¸í„°í˜ì´ìŠ¤ êµ¬ì¡°ë¡œ ë§ˆì´ê·¸ë ˆì´ì…˜
 
-#### Before (´ÜÀÏ ÀÎÅÍÆäÀÌ½º)
+#### Before (ë‹¨ì¼ ì¸í„°í˜ì´ìŠ¤)
 ```csharp
 public interface IWorkForm
 {
@@ -532,7 +532,7 @@ public interface IWorkForm
 }
 ```
 
-#### After (ºĞ¸®µÈ ÀÎÅÍÆäÀÌ½º)
+#### After (ë¶„ë¦¬ëœ ì¸í„°í˜ì´ìŠ¤)
 ```csharp
 public interface IWorkForm : 
     IScreenIdentifier,      // ScreenId
@@ -543,23 +543,23 @@ public interface IWorkForm :
 }
 ```
 
-### ±âÁ¸ ±¸ÇöÃ¼´Â º¯°æ ¾øÀÌ È£È¯
+### ê¸°ì¡´ êµ¬í˜„ì²´ëŠ” ë³€ê²½ ì—†ì´ í˜¸í™˜
 
 ```csharp
-// ±âÁ¸ ÄÚµå - º¯°æ ºÒÇÊ¿ä
+// ê¸°ì¡´ ì½”ë“œ - ë³€ê²½ ë¶ˆí•„ìš”
 public class MyControl : BaseWorkControl
 {
     public override string ScreenId => "MY_001";
-    // ... ±âÁ¸ ±¸Çö ±×´ë·Î »ç¿ë
+    // ... ê¸°ì¡´ êµ¬í˜„ ê·¸ëŒ€ë¡œ ì‚¬ìš©
 }
 
-// »õ ÄÚµå - ÀÎÅÍÆäÀÌ½º ºĞ¸® È°¿ë
+// ìƒˆ ì½”ë“œ - ì¸í„°í˜ì´ìŠ¤ ë¶„ë¦¬ í™œìš©
 public void ManageLifecycle(ILifecycleAware control)
 {
-    control.OnActivated(); // ±âÁ¸ MyControlµµ ÀÛµ¿
+    control.OnActivated(); // ê¸°ì¡´ MyControlë„ ì‘ë™
 }
 ```
 
-## ¶óÀÌ¼±½º
+## ë¼ì´ì„ ìŠ¤
 
 ? 2024 nU3 Framework

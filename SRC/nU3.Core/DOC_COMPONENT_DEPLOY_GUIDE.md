@@ -1,52 +1,52 @@
-# Framework Component ¹èÆ÷ ½Ã½ºÅÛ
+# Framework Component ë°°í¬ ì‹œìŠ¤í…œ
 
-## °³¿ä
+## ê°œìš”
 
-È­¸é ¸ðµâ(`SYS_MODULE_MST`)°ú º°µµ·Î, Framework DLL, °ø¿ë ¶óÀÌºê·¯¸®, ½ÇÇàÆÄÀÏ µîÀ» °ü¸®ÇÏ´Â ½Ã½ºÅÛÀÔ´Ï´Ù.
+í™”ë©´ ëª¨ë“ˆ(`SYS_MODULE_MST`)ê³¼ ë³„ë„ë¡œ, Framework DLL, ê³µìš© ë¼ì´ë¸ŒëŸ¬ë¦¬, ì‹¤í–‰íŒŒì¼ ë“±ì„ ê´€ë¦¬í•˜ëŠ” ì‹œìŠ¤í…œìž…ë‹ˆë‹¤.
 
-## ±âÁ¸ ½Ã½ºÅÛ vs È®Àå ½Ã½ºÅÛ
+## ê¸°ì¡´ ì‹œìŠ¤í…œ vs í™•ìž¥ ì‹œìŠ¤í…œ
 
-| ±¸ºÐ | È­¸é ¸ðµâ | Framework ÄÄÆ÷³ÍÆ® |
+| êµ¬ë¶„ | í™”ë©´ ëª¨ë“ˆ | Framework ì»´í¬ë„ŒíŠ¸ |
 |------|----------|-------------------|
-| Å×ÀÌºí | `SYS_MODULE_MST`, `SYS_MODULE_VER` | `SYS_COMPONENT_MST`, `SYS_COMPONENT_VER` |
-| ¼³Ä¡ °æ·Î | `Modules/{Category}/{SubSystem}/` | À¯¿¬ (`InstallPath` ÁöÁ¤) |
-| ¹èÆ÷ ´ÜÀ§ | DLL (È­¸é Æ÷ÇÔ) | DLL, EXE, ¼³Á¤ÆÄÀÏ µî |
-| ·Îµù ¹æ½Ä | ·±Å¸ÀÓ µ¿Àû ·Îµå | ¾Û ½ÃÀÛ Àü »çÀü ¹èÆ÷ |
+| í…Œì´ë¸” | `SYS_MODULE_MST`, `SYS_MODULE_VER` | `SYS_COMPONENT_MST`, `SYS_COMPONENT_VER` |
+| ì„¤ì¹˜ ê²½ë¡œ | `Modules/{Category}/{SubSystem}/` | ìœ ì—° (`InstallPath` ì§€ì •) |
+| ë°°í¬ ë‹¨ìœ„ | DLL (í™”ë©´ í¬í•¨) | DLL, EXE, ì„¤ì •íŒŒì¼ ë“± |
+| ë¡œë”© ë°©ì‹ | ëŸ°íƒ€ìž„ ë™ì  ë¡œë“œ | ì•± ì‹œìž‘ ì „ ì‚¬ì „ ë°°í¬ |
 
-## DB ½ºÅ°¸¶
+## DB ìŠ¤í‚¤ë§ˆ
 
-### SYS_COMPONENT_MST (ÄÄÆ÷³ÍÆ® ¸¶½ºÅÍ)
+### SYS_COMPONENT_MST (ì»´í¬ë„ŒíŠ¸ ë§ˆìŠ¤í„°)
 
 ```sql
 CREATE TABLE SYS_COMPONENT_MST (
-    COMPONENT_ID TEXT PRIMARY KEY,     -- ¿¹: "nU3.Core", "DevExpress.XtraEditors"
+    COMPONENT_ID TEXT PRIMARY KEY,     -- ì˜ˆ: "nU3.Core", "DevExpress.XtraEditors"
     COMPONENT_TYPE INTEGER NOT NULL,   -- 0:Screen, 1:Framework, 2:SharedLib, 3:Exe, ...
-    COMPONENT_NAME TEXT NOT NULL,      -- Ç¥½Ã¸í
-    FILE_NAME TEXT NOT NULL,           -- ÆÄÀÏ¸í (nU3.Core.dll)
-    INSTALL_PATH TEXT,                 -- ¼³Ä¡ °æ·Î (»ó´ë°æ·Î, ºó°ª=·çÆ®)
-    GROUP_NAME TEXT,                   -- ±×·ì (Framework, DevExpress, Oracle)
-    IS_REQUIRED INTEGER DEFAULT 0,     -- ÇÊ¼ö ¿©ºÎ
-    AUTO_UPDATE INTEGER DEFAULT 1,     -- ÀÚµ¿ ¾÷µ¥ÀÌÆ®
+    COMPONENT_NAME TEXT NOT NULL,      -- í‘œì‹œëª…
+    FILE_NAME TEXT NOT NULL,           -- íŒŒì¼ëª… (nU3.Core.dll)
+    INSTALL_PATH TEXT,                 -- ì„¤ì¹˜ ê²½ë¡œ (ìƒëŒ€ê²½ë¡œ, ë¹ˆê°’=ë£¨íŠ¸)
+    GROUP_NAME TEXT,                   -- ê·¸ë£¹ (Framework, DevExpress, Oracle)
+    IS_REQUIRED INTEGER DEFAULT 0,     -- í•„ìˆ˜ ì—¬ë¶€
+    AUTO_UPDATE INTEGER DEFAULT 1,     -- ìžë™ ì—…ë°ì´íŠ¸
     DESCRIPTION TEXT,
-    PRIORITY INTEGER DEFAULT 100,      -- ¼³Ä¡ ¿ì¼±¼øÀ§ (³·À»¼ö·Ï ¸ÕÀú)
-    DEPENDENCIES TEXT,                 -- ÀÇÁ¸¼º (½°Ç¥ ±¸ºÐ)
+    PRIORITY INTEGER DEFAULT 100,      -- ì„¤ì¹˜ ìš°ì„ ìˆœìœ„ (ë‚®ì„ìˆ˜ë¡ ë¨¼ì €)
+    DEPENDENCIES TEXT,                 -- ì˜ì¡´ì„± (ì‰¼í‘œ êµ¬ë¶„)
     REG_DATE TEXT,
     MOD_DATE TEXT,
     IS_ACTIVE TEXT DEFAULT 'Y'
 );
 ```
 
-### SYS_COMPONENT_VER (¹öÀü °ü¸®)
+### SYS_COMPONENT_VER (ë²„ì „ ê´€ë¦¬)
 
 ```sql
 CREATE TABLE SYS_COMPONENT_VER (
     COMPONENT_ID TEXT,
     VERSION TEXT,
-    FILE_HASH TEXT,                    -- SHA256 ÇØ½Ã
+    FILE_HASH TEXT,                    -- SHA256 í•´ì‹œ
     FILE_SIZE INTEGER,
-    STORAGE_PATH TEXT,                 -- ¼­¹ö ÀúÀå °æ·Î
-    MIN_FRAMEWORK_VER TEXT,            -- ÃÖ¼Ò Framework ¹öÀü
-    MAX_FRAMEWORK_VER TEXT,            -- ÃÖ´ë Framework ¹öÀü
+    STORAGE_PATH TEXT,                 -- ì„œë²„ ì €ìž¥ ê²½ë¡œ
+    MIN_FRAMEWORK_VER TEXT,            -- ìµœì†Œ Framework ë²„ì „
+    MAX_FRAMEWORK_VER TEXT,            -- ìµœëŒ€ Framework ë²„ì „
     DEPLOY_DESC TEXT,
     RELEASE_NOTE_URL TEXT,
     REG_DATE TEXT,
@@ -56,67 +56,67 @@ CREATE TABLE SYS_COMPONENT_VER (
 );
 ```
 
-### ComponentType ¿­°ÅÇü
+### ComponentType ì—´ê±°í˜•
 
 ```csharp
 public enum ComponentType
 {
-    ScreenModule = 0,     // È­¸é ¸ðµâ (±âÁ¸ ¹æ½Ä)
-    FrameworkCore = 1,    // nU3.Core.dll µî
-    SharedLibrary = 2,    // DevExpress, Oracle µî
-    Executable = 3,       // nU3.Shell.exe µî
-    Configuration = 4,    // appsettings.json µî
-    Resource = 5,         // ÀÌ¹ÌÁö, ¾ÆÀÌÄÜ µî
-    Plugin = 6,           // ÇÃ·¯±×ÀÎ
+    ScreenModule = 0,     // í™”ë©´ ëª¨ë“ˆ (ê¸°ì¡´ ë°©ì‹)
+    FrameworkCore = 1,    // nU3.Core.dll ë“±
+    SharedLibrary = 2,    // DevExpress, Oracle ë“±
+    Executable = 3,       // nU3.Shell.exe ë“±
+    Configuration = 4,    // appsettings.json ë“±
+    Resource = 5,         // ì´ë¯¸ì§€, ì•„ì´ì½˜ ë“±
+    Plugin = 6,           // í”ŒëŸ¬ê·¸ì¸
     Other = 99
 }
 ```
 
 ---
 
-## ¹èÆ÷ Èå¸§
+## ë°°í¬ íë¦„
 
 ```
-¦£¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¤
-¦¢                    ¼­¹ö (Deployer Tool)                         ¦¢
-¦§¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦©
-¦¢  1. DLL/EXE ÆÄÀÏ ¼±ÅÃ                                          ¦¢
-¦¢  2. ¸ÞÅ¸µ¥ÀÌÅÍ ÃßÃâ (¹öÀü, ÇØ½Ã)                                ¦¢
-¦¢  3. DB µî·Ï (SYS_COMPONENT_MST, SYS_COMPONENT_VER)             ¦¢
-¦¢  4. ¼­¹ö ÀúÀå¼Ò¿¡ ÆÄÀÏ º¹»ç                                     ¦¢
-¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¥
-                              ¦¢
-                              ¡å
-¦£¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¤
-¦¢                   Å¬¶óÀÌ¾ðÆ® (Bootstrapper)                     ¦¢
-¦§¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦©
-¦¢  1. DB¿¡¼­ È°¼º ¹öÀü ¸ñ·Ï Á¶È¸                                  ¦¢
-¦¢  2. ·ÎÄÃ ¼³Ä¡ ÇöÈ² È®ÀÎ                                         ¦¢
-¦¢  3. ¾÷µ¥ÀÌÆ® ÇÊ¿ä ÄÄÆ÷³ÍÆ® ÆÇº°                                 ¦¢
-¦¢  4. ¼­¹ö¿¡¼­ ´Ù¿î·Îµå ¡æ Ä³½Ã                                    ¦¢
-¦¢  5. ÇØ½Ã °ËÁõ                                                  ¦¢
-¦¢  6. ¼³Ä¡ °æ·Î¿¡ º¹»ç                                            ¦¢
-¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¥
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚                    ì„œë²„ (Deployer Tool)                         â”‚
+â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¤
+â”‚  1. DLL/EXE íŒŒì¼ ì„ íƒ                                          â”‚
+â”‚  2. ë©”íƒ€ë°ì´í„° ì¶”ì¶œ (ë²„ì „, í•´ì‹œ)                                â”‚
+â”‚  3. DB ë“±ë¡ (SYS_COMPONENT_MST, SYS_COMPONENT_VER)             â”‚
+â”‚  4. ì„œë²„ ì €ìž¥ì†Œì— íŒŒì¼ ë³µì‚¬                                     â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+                              â”‚
+                              â–¼
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚                   í´ë¼ì´ì–¸íŠ¸ (Bootstrapper)                     â”‚
+â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¤
+â”‚  1. DBì—ì„œ í™œì„± ë²„ì „ ëª©ë¡ ì¡°íšŒ                                  â”‚
+â”‚  2. ë¡œì»¬ ì„¤ì¹˜ í˜„í™© í™•ì¸                                         â”‚
+â”‚  3. ì—…ë°ì´íŠ¸ í•„ìš” ì»´í¬ë„ŒíŠ¸ íŒë³„                                 â”‚
+â”‚  4. ì„œë²„ì—ì„œ ë‹¤ìš´ë¡œë“œ â†’ ìºì‹œ                                    â”‚
+â”‚  5. í•´ì‹œ ê²€ì¦                                                  â”‚
+â”‚  6. ì„¤ì¹˜ ê²½ë¡œì— ë³µì‚¬                                            â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
 ```
 
 ---
 
-## »ç¿ë ¿¹½Ã
+## ì‚¬ìš© ì˜ˆì‹œ
 
-### 1. Deployer¿¡¼­ ÄÄÆ÷³ÍÆ® ¹èÆ÷
+### 1. Deployerì—ì„œ ì»´í¬ë„ŒíŠ¸ ë°°í¬
 
 ```csharp
-// ComponentDeployControl¿¡¼­ Smart Deploy
+// ComponentDeployControlì—ì„œ Smart Deploy
 var componentRepo = Program.ServiceProvider.GetRequiredService<IComponentRepository>();
 
-// ´ÜÀÏ ÆÄÀÏ ¹èÆ÷
+// ë‹¨ì¼ íŒŒì¼ ë°°í¬
 componentRepo.SaveComponent(new ComponentMstDto
 {
     ComponentId = "nU3.Core",
     ComponentName = "nU3 Core Library",
     FileName = "nU3.Core.dll",
     ComponentType = ComponentType.FrameworkCore,
-    InstallPath = "",  // ·çÆ®
+    InstallPath = "",  // ë£¨íŠ¸
     GroupName = "Framework",
     IsRequired = true,
     AutoUpdate = true,
@@ -134,18 +134,18 @@ componentRepo.AddVersion(new ComponentVerDto
 });
 ```
 
-### 2. Bootstrapper¿¡¼­ ¾÷µ¥ÀÌÆ® Ã¼Å©
+### 2. Bootstrapperì—ì„œ ì—…ë°ì´íŠ¸ ì²´í¬
 
 ```csharp
 var updateService = new ComponentUpdateService(componentRepo, installPath);
 
-// ¾÷µ¥ÀÌÆ® È®ÀÎ
+// ì—…ë°ì´íŠ¸ í™•ì¸
 var updates = updateService.CheckForUpdates();
 if (updates.Any())
 {
-    Console.WriteLine($"{updates.Count}°³ ¾÷µ¥ÀÌÆ® °¡´É");
+    Console.WriteLine($"{updates.Count}ê°œ ì—…ë°ì´íŠ¸ ê°€ëŠ¥");
     
-    // ¾÷µ¥ÀÌÆ® ½ÇÇà
+    // ì—…ë°ì´íŠ¸ ì‹¤í–‰
     var progress = new Progress<ComponentUpdateProgressEventArgs>(p =>
     {
         Console.WriteLine($"[{p.Phase}] {p.CurrentComponentName} ({p.PercentComplete}%)");
@@ -154,13 +154,13 @@ if (updates.Any())
     var result = await updateService.UpdateAllAsync(progress, cancellationToken);
     
     if (result.Success)
-        Console.WriteLine("¸ðµç ¾÷µ¥ÀÌÆ® ¿Ï·á!");
+        Console.WriteLine("ëª¨ë“  ì—…ë°ì´íŠ¸ ì™„ë£Œ!");
     else
-        Console.WriteLine($"ÀÏºÎ ½ÇÆÐ: {string.Join(", ", result.FailedComponents.Select(f => f.ComponentId))}");
+        Console.WriteLine($"ì¼ë¶€ ì‹¤íŒ¨: {string.Join(", ", result.FailedComponents.Select(f => f.ComponentId))}");
 }
 ```
 
-### 3. WinForms¿¡¼­ ¾÷µ¥ÀÌÆ® UI
+### 3. WinFormsì—ì„œ ì—…ë°ì´íŠ¸ UI
 
 ```csharp
 private async void CheckAndUpdateComponents()
@@ -170,19 +170,19 @@ private async void CheckAndUpdateComponents()
     
     if (!updates.Any())
     {
-        toolStripStatus.Text = "ÃÖ½Å ¹öÀüÀÔ´Ï´Ù.";
+        toolStripStatus.Text = "ìµœì‹  ë²„ì „ìž…ë‹ˆë‹¤.";
         return;
     }
     
-    if (MessageBox.Show($"{updates.Count}°³ ¾÷µ¥ÀÌÆ®°¡ ÀÖ½À´Ï´Ù. Áö±Ý ¾÷µ¥ÀÌÆ®ÇÏ½Ã°Ú½À´Ï±î?",
-        "¾÷µ¥ÀÌÆ® È®ÀÎ", MessageBoxButtons.YesNo) != DialogResult.Yes)
+    if (MessageBox.Show($"{updates.Count}ê°œ ì—…ë°ì´íŠ¸ê°€ ìžˆìŠµë‹ˆë‹¤. ì§€ê¸ˆ ì—…ë°ì´íŠ¸í•˜ì‹œê² ìŠµë‹ˆê¹Œ?",
+        "ì—…ë°ì´íŠ¸ í™•ì¸", MessageBoxButtons.YesNo) != DialogResult.Yes)
         return;
     
     try
     {
         var result = await AsyncOperationHelper.ExecuteWithProgressAsync(
             this,
-            "ÄÄÆ÷³ÍÆ® ¾÷µ¥ÀÌÆ® Áß...",
+            "ì»´í¬ë„ŒíŠ¸ ì—…ë°ì´íŠ¸ ì¤‘...",
             async (ct, progress) =>
             {
                 var updateProgress = new Progress<ComponentUpdateProgressEventArgs>(p =>
@@ -201,68 +201,68 @@ private async void CheckAndUpdateComponents()
         
         if (result.Success)
         {
-            MessageBox.Show("¾÷µ¥ÀÌÆ®°¡ ¿Ï·áµÇ¾ú½À´Ï´Ù.\nº¯°æ»çÇ× Àû¿ëÀ» À§ÇØ ÇÁ·Î±×·¥À» Àç½ÃÀÛÇØÁÖ¼¼¿ä.",
-                "¿Ï·á", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show("ì—…ë°ì´íŠ¸ê°€ ì™„ë£Œë˜ì—ˆìŠµë‹ˆë‹¤.\në³€ê²½ì‚¬í•­ ì ìš©ì„ ìœ„í•´ í”„ë¡œê·¸ëž¨ì„ ìž¬ì‹œìž‘í•´ì£¼ì„¸ìš”.",
+                "ì™„ë£Œ", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
     catch (OperationCanceledException)
     {
-        MessageBox.Show("¾÷µ¥ÀÌÆ®°¡ Ãë¼ÒµÇ¾ú½À´Ï´Ù.", "Ãë¼Ò");
+        MessageBox.Show("ì—…ë°ì´íŠ¸ê°€ ì·¨ì†Œë˜ì—ˆìŠµë‹ˆë‹¤.", "ì·¨ì†Œ");
     }
 }
 ```
 
 ---
 
-## ¼³Ä¡ °æ·Î ¿¹½Ã
+## ì„¤ì¹˜ ê²½ë¡œ ì˜ˆì‹œ
 
 ```
-¼³Ä¡ ·çÆ® (¿¹: C:\Program Files\nU3.Shell\)
-¦¢
-¦§¦¡¦¡ nU3.Shell.exe                 ¡ç InstallPath: ""
-¦§¦¡¦¡ nU3.Core.dll                  ¡ç InstallPath: ""
-¦§¦¡¦¡ nU3.Core.UI.dll               ¡ç InstallPath: ""
-¦§¦¡¦¡ nU3.Connectivity.dll          ¡ç InstallPath: ""
-¦§¦¡¦¡ appsettings.json              ¡ç InstallPath: ""
-¦¢
-¦§¦¡¦¡ DevExpress.Data.dll           ¡ç InstallPath: ""
-¦§¦¡¦¡ DevExpress.XtraEditors.dll    ¡ç InstallPath: ""
-¦¢
-¦§¦¡¦¡ plugins\                      ¡ç InstallPath: "plugins"
-¦¢   ¦¦¦¡¦¡ MyPlugin.dll
-¦¢
-¦§¦¡¦¡ resources\                    ¡ç InstallPath: "resources"
-¦¢   ¦¦¦¡¦¡ images\
-¦¢       ¦¦¦¡¦¡ logo.png
-¦¢
-¦¦¦¡¦¡ Modules\                      ¡ç ±âÁ¸ È­¸é ¸ðµâ (º°µµ ½Ã½ºÅÛ)
-    ¦¦¦¡¦¡ EMR\
-        ¦¦¦¡¦¡ IN\
-            ¦¦¦¡¦¡ nU3.Modules.EMR.IN.Worklist.dll
+ì„¤ì¹˜ ë£¨íŠ¸ (ì˜ˆ: C:\Program Files\nU3.Shell\)
+â”‚
+â”œâ”€â”€ nU3.Shell.exe                 â† InstallPath: ""
+â”œâ”€â”€ nU3.Core.dll                  â† InstallPath: ""
+â”œâ”€â”€ nU3.Core.UI.dll               â† InstallPath: ""
+â”œâ”€â”€ nU3.Connectivity.dll          â† InstallPath: ""
+â”œâ”€â”€ appsettings.json              â† InstallPath: ""
+â”‚
+â”œâ”€â”€ DevExpress.Data.dll           â† InstallPath: ""
+â”œâ”€â”€ DevExpress.XtraEditors.dll    â† InstallPath: ""
+â”‚
+â”œâ”€â”€ plugins\                      â† InstallPath: "plugins"
+â”‚   â””â”€â”€ MyPlugin.dll
+â”‚
+â”œâ”€â”€ resources\                    â† InstallPath: "resources"
+â”‚   â””â”€â”€ images\
+â”‚       â””â”€â”€ logo.png
+â”‚
+â””â”€â”€ Modules\                      â† ê¸°ì¡´ í™”ë©´ ëª¨ë“ˆ (ë³„ë„ ì‹œìŠ¤í…œ)
+    â””â”€â”€ EMR\
+        â””â”€â”€ IN\
+            â””â”€â”€ nU3.Modules.EMR.IN.Worklist.dll
 ```
 
 ---
 
-## ¿ì¼±¼øÀ§ °¡ÀÌµå
+## ìš°ì„ ìˆœìœ„ ê°€ì´ë“œ
 
-| Priority | À¯Çü | ¿¹½Ã |
+| Priority | ìœ í˜• | ì˜ˆì‹œ |
 |----------|------|------|
-| 1-10 | ½ÇÇàÆÄÀÏ | nU3.Shell.exe, nU3.Bootstrapper.exe |
-| 11-20 | Framework ÇÙ½É | nU3.Core.dll, nU3.Core.UI.dll |
-| 21-50 | Framework È®Àå | nU3.Data.dll, nU3.Connectivity.dll |
-| 51-80 | ÇÊ¼ö ¶óÀÌºê·¯¸® | Oracle.ManagedDataAccess.dll |
-| 81-100 | UI ¶óÀÌºê·¯¸® | DevExpress.*.dll |
-| 100+ | ±âÅ¸ | ÇÃ·¯±×ÀÎ, ¸®¼Ò½º |
+| 1-10 | ì‹¤í–‰íŒŒì¼ | nU3.Shell.exe, nU3.Bootstrapper.exe |
+| 11-20 | Framework í•µì‹¬ | nU3.Core.dll, nU3.Core.UI.dll |
+| 21-50 | Framework í™•ìž¥ | nU3.Data.dll, nU3.Connectivity.dll |
+| 51-80 | í•„ìˆ˜ ë¼ì´ë¸ŒëŸ¬ë¦¬ | Oracle.ManagedDataAccess.dll |
+| 81-100 | UI ë¼ì´ë¸ŒëŸ¬ë¦¬ | DevExpress.*.dll |
+| 100+ | ê¸°íƒ€ | í”ŒëŸ¬ê·¸ì¸, ë¦¬ì†ŒìŠ¤ |
 
 ---
 
-## °ü·Ã ÆÄÀÏ
+## ê´€ë ¨ íŒŒì¼
 
-| ÆÄÀÏ | ¼³¸í |
+| íŒŒì¼ | ì„¤ëª… |
 |------|------|
-| `nU3.Models\ModuleModels.cs` | DTO (ComponentMstDto, ComponentVerDto µî) |
-| `nU3.Core\Repositories\IComponentRepository.cs` | Repository ÀÎÅÍÆäÀÌ½º |
-| `nU3.Data\Repositories\SQLiteComponentRepository.cs` | SQLite ±¸Çö |
-| `nU3.Data\LocalDatabaseManager.cs` | DB ½ºÅ°¸¶ (Å×ÀÌºí »ý¼º) |
-| `nU3.Core\Services\ComponentUpdateService.cs` | Å¬¶óÀÌ¾ðÆ® ¾÷µ¥ÀÌÆ® ¼­ºñ½º |
+| `nU3.Models\ModuleModels.cs` | DTO (ComponentMstDto, ComponentVerDto ë“±) |
+| `nU3.Core\Repositories\IComponentRepository.cs` | Repository ì¸í„°íŽ˜ì´ìŠ¤ |
+| `nU3.Data\Repositories\SQLiteComponentRepository.cs` | SQLite êµ¬í˜„ |
+| `nU3.Data\LocalDatabaseManager.cs` | DB ìŠ¤í‚¤ë§ˆ (í…Œì´ë¸” ìƒì„±) |
+| `nU3.Core\Services\ComponentUpdateService.cs` | í´ë¼ì´ì–¸íŠ¸ ì—…ë°ì´íŠ¸ ì„œë¹„ìŠ¤ |
 | `nU3.Tools.Deployer\Views\ComponentDeployControl.cs` | Deployer UI |

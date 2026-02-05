@@ -1,85 +1,85 @@
-# nU3 Framework - ÆÄÀÏ ·Î±ë ¹× ¼­¹ö ¿Àµ÷ ½Ã½ºÅÛ
+# nU3 Framework - íŒŒì¼ ë¡œê¹… ë° ì„œë²„ ì˜¤ë”§ ì‹œìŠ¤í…œ
 
-## °³¿ä
+## ê°œìš”
 
-nU3 Framework¿¡ ÇÁ·Î´ö¼Ç±Ş ÆÄÀÏ ·Î±ë ¹× ¼­¹ö ¿Àµ÷ ±â´ÉÀÌ Ãß°¡µÇ¾ú½À´Ï´Ù.
-LOG µğ·ºÅä¸®¿¡ PC¸í_IP_³¯Â¥º°·Î ·Î±× ÆÄÀÏÀÌ ÀÚµ¿ »ı¼ºµÇ¸ç, ¿¡·¯ ¹ß»ı ½Ã ÀÚµ¿À¸·Î ¼­¹ö¿¡ ¾÷·ÎµåµË´Ï´Ù.
+nU3 Frameworkì— í”„ë¡œë•ì…˜ê¸‰ íŒŒì¼ ë¡œê¹… ë° ì„œë²„ ì˜¤ë”§ ê¸°ëŠ¥ì´ ì¶”ê°€ë˜ì—ˆìŠµë‹ˆë‹¤.
+LOG ë””ë ‰í† ë¦¬ì— PCëª…_IP_ë‚ ì§œë³„ë¡œ ë¡œê·¸ íŒŒì¼ì´ ìë™ ìƒì„±ë˜ë©°, ì—ëŸ¬ ë°œìƒ ì‹œ ìë™ìœ¼ë¡œ ì„œë²„ì— ì—…ë¡œë“œë©ë‹ˆë‹¤.
 
-## ÁÖ¿ä ±â´É
+## ì£¼ìš” ê¸°ëŠ¥
 
-### 1. ÆÄÀÏ ·Î±ë ½Ã½ºÅÛ
+### 1. íŒŒì¼ ë¡œê¹… ì‹œìŠ¤í…œ
 
-#### ·Î±× ÆÄÀÏ »ı¼º ±ÔÄ¢
-- **ÆÄÀÏ¸í Çü½Ä**: `{PC¸í}_{IPÁÖ¼Ò}_{³¯Â¥}.log`
-- **¿¹½Ã**: `DESKTOP-ABC123_192.168.1.100_20241231.log`
-- **ÀúÀå À§Ä¡**: `%AppData%\nU3.Framework\LOG\`
-- **ÀÚµ¿ ³¯Â¥ ·Ñ¿À¹ö**: ³¯Â¥°¡ ¹Ù²î¸é »õ ÆÄÀÏ ÀÚµ¿ »ı¼º
+#### ë¡œê·¸ íŒŒì¼ ìƒì„± ê·œì¹™
+- **íŒŒì¼ëª… í˜•ì‹**: `{PCëª…}_{IPì£¼ì†Œ}_{ë‚ ì§œ}.log`
+- **ì˜ˆì‹œ**: `DESKTOP-ABC123_192.168.1.100_20241231.log`
+- **ì €ì¥ ìœ„ì¹˜**: `%AppData%\nU3.Framework\LOG\`
+- **ìë™ ë‚ ì§œ ë¡¤ì˜¤ë²„**: ë‚ ì§œê°€ ë°”ë€Œë©´ ìƒˆ íŒŒì¼ ìë™ ìƒì„±
 
-#### ·Î±× ·¹º§
+#### ë¡œê·¸ ë ˆë²¨
 ```csharp
-LogLevel.Trace        // »ó¼¼ÇÑ µğ¹ö±× Á¤º¸
-LogLevel.Debug        // µğ¹ö±× Á¤º¸
-LogLevel.Information  // ÀÏ¹İ Á¤º¸
-LogLevel.Warning      // °æ°í
-LogLevel.Error        // ¿¡·¯
-LogLevel.Critical     // Ä¡¸íÀû ¿¡·¯
+LogLevel.Trace        // ìƒì„¸í•œ ë””ë²„ê·¸ ì •ë³´
+LogLevel.Debug        // ë””ë²„ê·¸ ì •ë³´
+LogLevel.Information  // ì¼ë°˜ ì •ë³´
+LogLevel.Warning      // ê²½ê³ 
+LogLevel.Error        // ì—ëŸ¬
+LogLevel.Critical     // ì¹˜ëª…ì  ì—ëŸ¬
 ```
 
-#### ÀÚµ¿ ±â´É
-- **ÀÚµ¿ Flush**: 5ÃÊ¸¶´Ù ÀÚµ¿À¸·Î ¹öÆÛ flush
-- **Áï½Ã Flush**: Error/Critical ·¹º§Àº Áï½Ã flush
-- **ÀÚµ¿ Á¤¸®**: 30ÀÏ ÀÌ»ó µÈ ·Î±× ÀÚµ¿ »èÁ¦
+#### ìë™ ê¸°ëŠ¥
+- **ìë™ Flush**: 5ì´ˆë§ˆë‹¤ ìë™ìœ¼ë¡œ ë²„í¼ flush
+- **ì¦‰ì‹œ Flush**: Error/Critical ë ˆë²¨ì€ ì¦‰ì‹œ flush
+- **ìë™ ì •ë¦¬**: 30ì¼ ì´ìƒ ëœ ë¡œê·¸ ìë™ ì‚­ì œ
 
-### 2. ¼­¹ö ¿Àµ÷ ·Î±ë
+### 2. ì„œë²„ ì˜¤ë”§ ë¡œê¹…
 
-#### ¿Àµ÷ ÆÄÀÏ »ı¼º ±ÔÄ¢
-- **ÆÄÀÏ¸í Çü½Ä**: `{PC¸í}_{IPÁÖ¼Ò}_AUDIT_{³¯Â¥}.json`
-- **¿¹½Ã**: `DESKTOP-ABC123_192.168.1.100_AUDIT_20241231.json`
-- **ÀúÀå À§Ä¡**: `%AppData%\nU3.Framework\AUDIT\`
-- **Çü½Ä**: JSON Lines (°¢ ÁÙÀÌ ÇÏ³ªÀÇ JSON °´Ã¼)
+#### ì˜¤ë”§ íŒŒì¼ ìƒì„± ê·œì¹™
+- **íŒŒì¼ëª… í˜•ì‹**: `{PCëª…}_{IPì£¼ì†Œ}_AUDIT_{ë‚ ì§œ}.json`
+- **ì˜ˆì‹œ**: `DESKTOP-ABC123_192.168.1.100_AUDIT_20241231.json`
+- **ì €ì¥ ìœ„ì¹˜**: `%AppData%\nU3.Framework\AUDIT\`
+- **í˜•ì‹**: JSON Lines (ê° ì¤„ì´ í•˜ë‚˜ì˜ JSON ê°ì²´)
 
-#### ¿Àµ÷ ¾×¼Ç Å¸ÀÔ
+#### ì˜¤ë”§ ì•¡ì…˜ íƒ€ì…
 ```csharp
-AuditAction.Create    // »ı¼º
-AuditAction.Read      // Á¶È¸
-AuditAction.Update    // ¼öÁ¤
-AuditAction.Delete    // »èÁ¦
-AuditAction.Login     // ·Î±×ÀÎ
-AuditAction.Logout    // ·Î±×¾Æ¿ô
-AuditAction.Print     // ÀÎ¼â
-AuditAction.Export    // ³»º¸³»±â
-AuditAction.Import    // °¡Á®¿À±â
-AuditAction.Execute   // ½ÇÇà
-AuditAction.Search    // °Ë»ö
+AuditAction.Create    // ìƒì„±
+AuditAction.Read      // ì¡°íšŒ
+AuditAction.Update    // ìˆ˜ì •
+AuditAction.Delete    // ì‚­ì œ
+AuditAction.Login     // ë¡œê·¸ì¸
+AuditAction.Logout    // ë¡œê·¸ì•„ì›ƒ
+AuditAction.Print     // ì¸ì‡„
+AuditAction.Export    // ë‚´ë³´ë‚´ê¸°
+AuditAction.Import    // ê°€ì ¸ì˜¤ê¸°
+AuditAction.Execute   // ì‹¤í–‰
+AuditAction.Search    // ê²€ìƒ‰
 ```
 
-#### ±â·ÏµÇ´Â Á¤º¸
-- »ç¿ëÀÚ ID ¹× ÀÌ¸§
-- ¾×¼Ç Å¸ÀÔ
-- ¸ğµâ ¹× È­¸é Á¤º¸
-- ¿£Æ¼Æ¼ Å¸ÀÔ ¹× ID
-- ÀÌÀü °ª / »õ·Î¿î °ª
-- IP ÁÖ¼Ò ¹× PC¸í
-- Å¸ÀÓ½ºÅÆÇÁ
-- ¼º°ø/½ÇÆĞ ¿©ºÎ
+#### ê¸°ë¡ë˜ëŠ” ì •ë³´
+- ì‚¬ìš©ì ID ë° ì´ë¦„
+- ì•¡ì…˜ íƒ€ì…
+- ëª¨ë“ˆ ë° í™”ë©´ ì •ë³´
+- ì—”í‹°í‹° íƒ€ì… ë° ID
+- ì´ì „ ê°’ / ìƒˆë¡œìš´ ê°’
+- IP ì£¼ì†Œ ë° PCëª…
+- íƒ€ì„ìŠ¤íƒ¬í”„
+- ì„±ê³µ/ì‹¤íŒ¨ ì—¬ë¶€
 
-### 3. ¼­¹ö ÀÚµ¿ ¾÷·Îµå
+### 3. ì„œë²„ ìë™ ì—…ë¡œë“œ
 
-#### HTTP ±â¹İ ¾÷·Îµå
-- **¿¡·¯ ¹ß»ı ½Ã**: Áï½Ã ÇöÀç ·Î±× ¾÷·Îµå
-- **ÀÚµ¿ ¾÷·Îµå**: ¸ÅÀÏ »õº® 2½Ã ÀÚµ¿ ¾÷·Îµå
-- **¼öµ¿ ¾÷·Îµå**: API¸¦ ÅëÇÑ ¼öµ¿ ¾÷·Îµå Áö¿ø
+#### HTTP ê¸°ë°˜ ì—…ë¡œë“œ
+- **ì—ëŸ¬ ë°œìƒ ì‹œ**: ì¦‰ì‹œ í˜„ì¬ ë¡œê·¸ ì—…ë¡œë“œ
+- **ìë™ ì—…ë¡œë“œ**: ë§¤ì¼ ìƒˆë²½ 2ì‹œ ìë™ ì—…ë¡œë“œ
+- **ìˆ˜ë™ ì—…ë¡œë“œ**: APIë¥¼ í†µí•œ ìˆ˜ë™ ì—…ë¡œë“œ ì§€ì›
 
-#### ¼­¹ö API ¿£µåÆ÷ÀÎÆ®
+#### ì„œë²„ API ì—”ë“œí¬ì¸íŠ¸
 ```
-POST /api/log/upload         // ·Î±× ÆÄÀÏ ¾÷·Îµå
-POST /api/log/upload-audit   // ¿Àµ÷ ·Î±× ¾÷·Îµå
-GET  /api/log/info           // ¼­¹ö ·Î±× Á¤º¸
+POST /api/log/upload         // ë¡œê·¸ íŒŒì¼ ì—…ë¡œë“œ
+POST /api/log/upload-audit   // ì˜¤ë”§ ë¡œê·¸ ì—…ë¡œë“œ
+GET  /api/log/info           // ì„œë²„ ë¡œê·¸ ì •ë³´
 ```
 
-## ¼³Á¤ ¹æ¹ı
+## ì„¤ì • ë°©ë²•
 
-### 1. appsettings.json ¼³Á¤
+### 1. appsettings.json ì„¤ì •
 
 ```json
 {
@@ -107,99 +107,99 @@ GET  /api/log/info           // ¼­¹ö ·Î±× Á¤º¸
 }
 ```
 
-### 2. ÇÁ·Î±×·¥ ½ÃÀÛ ½Ã ÃÊ±âÈ­
+### 2. í”„ë¡œê·¸ë¨ ì‹œì‘ ì‹œ ì´ˆê¸°í™”
 
 ```csharp
-// MainShellForm ¶Ç´Â Program.cs¿¡¼­
+// MainShellForm ë˜ëŠ” Program.csì—ì„œ
 LogManager.Instance.Initialize(
-    logDirectory: null,              // nullÀÌ¸é ±âº» °æ·Î »ç¿ë
+    logDirectory: null,              // nullì´ë©´ ê¸°ë³¸ ê²½ë¡œ ì‚¬ìš©
     auditDirectory: null,
-    fileTransferService: null,       // HTTP ¾÷·Îµå »ç¿ë ½Ã null
+    fileTransferService: null,       // HTTP ì—…ë¡œë“œ ì‚¬ìš© ì‹œ null
     enableAutoUpload: true
 );
 ```
 
-## »ç¿ë ¹æ¹ı
+## ì‚¬ìš© ë°©ë²•
 
-### 1. ÀÏ¹İ ·Î±ë
+### 1. ì¼ë°˜ ë¡œê¹…
 
-#### Á¤Àû ¸Ş¼­µå »ç¿ë (°£Æí)
+#### ì •ì  ë©”ì„œë“œ ì‚¬ìš© (ê°„í¸)
 ```csharp
-LogManager.Trace("»ó¼¼ÇÑ µğ¹ö±× Á¤º¸", "Category");
-LogManager.Debug("µğ¹ö±× Á¤º¸", "Category");
-LogManager.Info("ÀÏ¹İ Á¤º¸", "Category");
-LogManager.Warning("°æ°í ¸Ş½ÃÁö", "Category");
-LogManager.Error("¿¡·¯ ¸Ş½ÃÁö", "Category", exception);
-LogManager.Critical("Ä¡¸íÀû ¿¡·¯", "Category", exception);
+LogManager.Trace("ìƒì„¸í•œ ë””ë²„ê·¸ ì •ë³´", "Category");
+LogManager.Debug("ë””ë²„ê·¸ ì •ë³´", "Category");
+LogManager.Info("ì¼ë°˜ ì •ë³´", "Category");
+LogManager.Warning("ê²½ê³  ë©”ì‹œì§€", "Category");
+LogManager.Error("ì—ëŸ¬ ë©”ì‹œì§€", "Category", exception);
+LogManager.Critical("ì¹˜ëª…ì  ì—ëŸ¬", "Category", exception);
 ```
 
-#### ÀÎ½ºÅÏ½º »ç¿ë
+#### ì¸ìŠ¤í„´ìŠ¤ ì‚¬ìš©
 ```csharp
 var logger = LogManager.Instance.Logger;
-logger.Information("¸Ş½ÃÁö", "Category");
-logger.Error("¿¡·¯ ¸Ş½ÃÁö", "Category", exception);
+logger.Information("ë©”ì‹œì§€", "Category");
+logger.Error("ì—ëŸ¬ ë©”ì‹œì§€", "Category", exception);
 ```
 
-#### BaseWorkControl¿¡¼­ »ç¿ë
+#### BaseWorkControlì—ì„œ ì‚¬ìš©
 ```csharp
 public class MyControl : BaseWorkControl
 {
     private void DoSomething()
     {
-        LogInfo("ÀÛ¾÷ ½ÃÀÛ");
+        LogInfo("ì‘ì—… ì‹œì‘");
         
         try
         {
-            // ÀÛ¾÷ ¼öÇà
-            LogInfo("ÀÛ¾÷ ¿Ï·á");
+            // ì‘ì—… ìˆ˜í–‰
+            LogInfo("ì‘ì—… ì™„ë£Œ");
         }
         catch (Exception ex)
         {
-            LogError("ÀÛ¾÷ ½ÇÆĞ", ex);
+            LogError("ì‘ì—… ì‹¤íŒ¨", ex);
         }
     }
 }
 ```
 
-### 2. ¿Àµ÷ ·Î±ë
+### 2. ì˜¤ë”§ ë¡œê¹…
 
-#### CRUD ¿Àµ÷
+#### CRUD ì˜¤ë”§
 ```csharp
-// »ı¼º
+// ìƒì„±
 LogManager.LogCreate("Patient", "P12345", 
     newValue: JsonSerializer.Serialize(patient),
     module: "EMR",
     screen: "PatientRegistration");
 
-// ¼öÁ¤
+// ìˆ˜ì •
 LogManager.LogUpdate("Patient", "P12345",
     oldValue: JsonSerializer.Serialize(oldPatient),
     newValue: JsonSerializer.Serialize(newPatient),
     module: "EMR",
     screen: "PatientEdit");
 
-// »èÁ¦
+// ì‚­ì œ
 LogManager.LogDelete("Patient", "P12345",
     oldValue: JsonSerializer.Serialize(patient),
     module: "EMR",
     screen: "PatientManagement");
 
-// Á¶È¸
+// ì¡°íšŒ
 LogManager.LogRead("Patient", "P12345",
     module: "EMR",
     screen: "PatientView");
 ```
 
-#### ¾×¼Ç ¿Àµ÷
+#### ì•¡ì…˜ ì˜¤ë”§
 ```csharp
-// ÀÏ¹İ ¾×¼Ç
+// ì¼ë°˜ ì•¡ì…˜
 LogManager.LogAction(
     action: AuditAction.Print,
     module: "EMR",
     screen: "PatientChart",
     additionalInfo: "Printed 5 pages");
 
-// »ç¿ëÀÚ Á¤ÀÇ ¾×¼Ç
+// ì‚¬ìš©ì ì •ì˜ ì•¡ì…˜
 LogManager.LogAction(
     action: "CUSTOM_ACTION",
     module: "MyModule",
@@ -207,7 +207,7 @@ LogManager.LogAction(
     additionalInfo: "Additional info");
 ```
 
-#### BaseWorkControl¿¡¼­ »ç¿ë
+#### BaseWorkControlì—ì„œ ì‚¬ìš©
 ```csharp
 public class PatientEditControl : BaseWorkControl
 {
@@ -217,10 +217,10 @@ public class PatientEditControl : BaseWorkControl
         {
             var oldPatient = LoadPatient(patient.Id);
             
-            // µ¥ÀÌÅÍ ÀúÀå
+            // ë°ì´í„° ì €ì¥
             SaveToDatabase(patient);
             
-            // ¿Àµ÷ ·Î±×
+            // ì˜¤ë”§ ë¡œê·¸
             LogAudit(AuditAction.Update, "Patient", patient.Id,
                 $"Updated patient: {patient.Name}");
             
@@ -234,31 +234,31 @@ public class PatientEditControl : BaseWorkControl
 }
 ```
 
-### 3. ¼­¹ö ¾÷·Îµå
+### 3. ì„œë²„ ì—…ë¡œë“œ
 
-#### ¼öµ¿ ¾÷·Îµå
+#### ìˆ˜ë™ ì—…ë¡œë“œ
 ```csharp
-// ÇöÀç ·Î±× Áï½Ã ¾÷·Îµå
+// í˜„ì¬ ë¡œê·¸ ì¦‰ì‹œ ì—…ë¡œë“œ
 var uploadService = LogManager.Instance.UploadService;
 if (uploadService != null)
 {
     await uploadService.UploadCurrentLogImmediatelyAsync();
 }
 
-// ¸ğµç ´ë±â ÁßÀÎ ·Î±× ¾÷·Îµå
+// ëª¨ë“  ëŒ€ê¸° ì¤‘ì¸ ë¡œê·¸ ì—…ë¡œë“œ
 await uploadService.UploadAllPendingLogsAsync();
 ```
 
-#### ÀÚµ¿ ¾÷·Îµå È°¼ºÈ­/ºñÈ°¼ºÈ­
+#### ìë™ ì—…ë¡œë“œ í™œì„±í™”/ë¹„í™œì„±í™”
 ```csharp
 var uploadService = LogManager.Instance.UploadService;
-uploadService?.EnableAutoUpload(true);   // ¸ÅÀÏ »õº® 2½Ã ÀÚµ¿ ¾÷·Îµå
-uploadService?.EnableAutoUpload(false);  // ÀÚµ¿ ¾÷·Îµå ºñÈ°¼ºÈ­
+uploadService?.EnableAutoUpload(true);   // ë§¤ì¼ ìƒˆë²½ 2ì‹œ ìë™ ì—…ë¡œë“œ
+uploadService?.EnableAutoUpload(false);  // ìë™ ì—…ë¡œë“œ ë¹„í™œì„±í™”
 ```
 
-## ·Î±× ÆÄÀÏ Çü½Ä
+## ë¡œê·¸ íŒŒì¼ í˜•ì‹
 
-### ÀÏ¹İ ·Î±× ÆÄÀÏ ¿¹½Ã
+### ì¼ë°˜ ë¡œê·¸ íŒŒì¼ ì˜ˆì‹œ
 ```
 [2024-12-31 14:30:25.123] [INFORMATION] [Shell] [User:admin] Program opened: PatientRegistration
 [2024-12-31 14:30:26.456] [INFORMATION] [EMR] [User:admin] [Prog:EMR.IN.WORKLIST] Patient search started
@@ -269,146 +269,146 @@ uploadService?.EnableAutoUpload(false);  // ÀÚµ¿ ¾÷·Îµå ºñÈ°¼ºÈ­
     at MyApp.Database.Connect()
 ```
 
-### ¿Àµ÷ ·Î±× ÆÄÀÏ ¿¹½Ã (JSON Lines)
+### ì˜¤ë”§ ë¡œê·¸ íŒŒì¼ ì˜ˆì‹œ (JSON Lines)
 ```json
-{"Timestamp":"2024-12-31T14:30:25.123","UserId":"admin","UserName":"°ü¸®ÀÚ","Action":"LOGIN","Module":"Shell","Screen":"MainShellForm","IpAddress":"192.168.1.100","MachineName":"DESKTOP-ABC123","IsSuccess":true}
-{"Timestamp":"2024-12-31T14:30:30.456","UserId":"admin","UserName":"°ü¸®ÀÚ","Action":"CREATE","Module":"EMR","Screen":"PatientRegistration","EntityType":"Patient","EntityId":"P12345","NewValue":"{\"Name\":\"È«±æµ¿\",\"Age\":30}","IpAddress":"192.168.1.100","MachineName":"DESKTOP-ABC123","IsSuccess":true}
-{"Timestamp":"2024-12-31T14:30:35.789","UserId":"admin","UserName":"°ü¸®ÀÚ","Action":"UPDATE","Module":"EMR","Screen":"PatientEdit","EntityType":"Patient","EntityId":"P12345","OldValue":"{\"Name\":\"È«±æµ¿\",\"Age\":30}","NewValue":"{\"Name\":\"È«±æµ¿\",\"Age\":31}","IpAddress":"192.168.1.100","MachineName":"DESKTOP-ABC123","IsSuccess":true}
+{"Timestamp":"2024-12-31T14:30:25.123","UserId":"admin","UserName":"ê´€ë¦¬ì","Action":"LOGIN","Module":"Shell","Screen":"MainShellForm","IpAddress":"192.168.1.100","MachineName":"DESKTOP-ABC123","IsSuccess":true}
+{"Timestamp":"2024-12-31T14:30:30.456","UserId":"admin","UserName":"ê´€ë¦¬ì","Action":"CREATE","Module":"EMR","Screen":"PatientRegistration","EntityType":"Patient","EntityId":"P12345","NewValue":"{\"Name\":\"í™ê¸¸ë™\",\"Age\":30}","IpAddress":"192.168.1.100","MachineName":"DESKTOP-ABC123","IsSuccess":true}
+{"Timestamp":"2024-12-31T14:30:35.789","UserId":"admin","UserName":"ê´€ë¦¬ì","Action":"UPDATE","Module":"EMR","Screen":"PatientEdit","EntityType":"Patient","EntityId":"P12345","OldValue":"{\"Name\":\"í™ê¸¸ë™\",\"Age\":30}","NewValue":"{\"Name\":\"í™ê¸¸ë™\",\"Age\":31}","IpAddress":"192.168.1.100","MachineName":"DESKTOP-ABC123","IsSuccess":true}
 ```
 
-## ¼­¹ö ·Î±× ÀúÀå
+## ì„œë²„ ë¡œê·¸ ì €ì¥
 
-### ¼­¹öÃø ÀúÀå À§Ä¡
+### ì„œë²„ì¸¡ ì €ì¥ ìœ„ì¹˜
 ```
 C:\ProgramData\nU3.Framework\ServerLogs\
-¦§¦¡¦¡ ClientLogs\                          # Å¬¶óÀÌ¾ğÆ® ·Î±×
-¦¢   ¦§¦¡¦¡ DESKTOP-ABC123_192.168.1.100_20241231.log
-¦¢   ¦§¦¡¦¡ DESKTOP-XYZ456_192.168.1.101_20241231.log
-¦¢   ¦¦¦¡¦¡ _UploadLog_20241231.log         # ¾÷·Îµå ±â·Ï
-¦¦¦¡¦¡ ClientAudits\                        # Å¬¶óÀÌ¾ğÆ® ¿Àµ÷
-    ¦§¦¡¦¡ DESKTOP-ABC123_192.168.1.100_AUDIT_20241231.json
-    ¦¦¦¡¦¡ DESKTOP-XYZ456_192.168.1.101_AUDIT_20241231.json
+â”œâ”€â”€ ClientLogs\                          # í´ë¼ì´ì–¸íŠ¸ ë¡œê·¸
+â”‚   â”œâ”€â”€ DESKTOP-ABC123_192.168.1.100_20241231.log
+â”‚   â”œâ”€â”€ DESKTOP-XYZ456_192.168.1.101_20241231.log
+â”‚   â””â”€â”€ _UploadLog_20241231.log         # ì—…ë¡œë“œ ê¸°ë¡
+â””â”€â”€ ClientAudits\                        # í´ë¼ì´ì–¸íŠ¸ ì˜¤ë”§
+    â”œâ”€â”€ DESKTOP-ABC123_192.168.1.100_AUDIT_20241231.json
+    â””â”€â”€ DESKTOP-XYZ456_192.168.1.101_AUDIT_20241231.json
 ```
 
-## ¼º´É °í·Á»çÇ×
+## ì„±ëŠ¥ ê³ ë ¤ì‚¬í•­
 
-### ºñµ¿±â ·Î±ë
-- ·Î±×´Â Å¥¿¡ ÀúÀåµÇ°í ºñµ¿±â·Î ÆÄÀÏ¿¡ ±â·Ï
-- ¾ÖÇÃ¸®ÄÉÀÌ¼Ç ¼º´É¿¡ ¿µÇâ ÃÖ¼ÒÈ­
+### ë¹„ë™ê¸° ë¡œê¹…
+- ë¡œê·¸ëŠ” íì— ì €ì¥ë˜ê³  ë¹„ë™ê¸°ë¡œ íŒŒì¼ì— ê¸°ë¡
+- ì• í”Œë¦¬ì¼€ì´ì…˜ ì„±ëŠ¥ì— ì˜í–¥ ìµœì†Œí™”
 
-### ÀÚµ¿ Á¤¸®
-- ¿À·¡µÈ ·Î±× ÀÚµ¿ »èÁ¦·Î µğ½ºÅ© °ø°£ °ü¸®
-- ·Î±×: 30ÀÏ (±âº»°ª)
-- ¿Àµ÷: 90ÀÏ (±âº»°ª)
+### ìë™ ì •ë¦¬
+- ì˜¤ë˜ëœ ë¡œê·¸ ìë™ ì‚­ì œë¡œ ë””ìŠ¤í¬ ê³µê°„ ê´€ë¦¬
+- ë¡œê·¸: 30ì¼ (ê¸°ë³¸ê°’)
+- ì˜¤ë”§: 90ì¼ (ê¸°ë³¸ê°’)
 
-### ¹öÆÛ¸µ
-- ÀÏ¹İ ·Î±×: 5ÃÊ¸¶´Ù flush
-- Error/Critical: Áï½Ã flush
-- ¾ÖÇÃ¸®ÄÉÀÌ¼Ç Á¾·á ½Ã: ¸ğµç ·Î±× flush
+### ë²„í¼ë§
+- ì¼ë°˜ ë¡œê·¸: 5ì´ˆë§ˆë‹¤ flush
+- Error/Critical: ì¦‰ì‹œ flush
+- ì• í”Œë¦¬ì¼€ì´ì…˜ ì¢…ë£Œ ì‹œ: ëª¨ë“  ë¡œê·¸ flush
 
-## º¸¾È °í·Á»çÇ×
+## ë³´ì•ˆ ê³ ë ¤ì‚¬í•­
 
-### ¹Î°¨ Á¤º¸ º¸È£
-- ºñ¹Ğ¹øÈ£, °³ÀÎÁ¤º¸´Â ·Î±×¿¡ ±â·ÏÇÏÁö ¾Êµµ·Ï ÁÖÀÇ
-- ÇÊ¿ä½Ã ¸¶½ºÅ· Ã³¸®
+### ë¯¼ê° ì •ë³´ ë³´í˜¸
+- ë¹„ë°€ë²ˆí˜¸, ê°œì¸ì •ë³´ëŠ” ë¡œê·¸ì— ê¸°ë¡í•˜ì§€ ì•Šë„ë¡ ì£¼ì˜
+- í•„ìš”ì‹œ ë§ˆìŠ¤í‚¹ ì²˜ë¦¬
 
 ```csharp
-// ³ª»Û ¿¹
+// ë‚˜ìœ ì˜ˆ
 LogManager.Info($"User login: {userId}, Password: {password}");
 
-// ÁÁÀº ¿¹
+// ì¢‹ì€ ì˜ˆ
 LogManager.Info($"User login: {userId}");
 ```
 
-### ¿Àµ÷ ·Î±× ¹«°á¼º
-- JSON Çü½ÄÀ¸·Î ÀúÀåµÇ¾î ÆÄ½Ì ¹× ºĞ¼® ¿ëÀÌ
-- Å¸ÀÓ½ºÅÆÇÁ, »ç¿ëÀÚ Á¤º¸ ÀÚµ¿ ±â·Ï
-- º¯Á¶ ¹æÁö¸¦ À§ÇØ ¼­¹ö¿¡ Áï½Ã ¾÷·Îµå ±ÇÀå
+### ì˜¤ë”§ ë¡œê·¸ ë¬´ê²°ì„±
+- JSON í˜•ì‹ìœ¼ë¡œ ì €ì¥ë˜ì–´ íŒŒì‹± ë° ë¶„ì„ ìš©ì´
+- íƒ€ì„ìŠ¤íƒ¬í”„, ì‚¬ìš©ì ì •ë³´ ìë™ ê¸°ë¡
+- ë³€ì¡° ë°©ì§€ë¥¼ ìœ„í•´ ì„œë²„ì— ì¦‰ì‹œ ì—…ë¡œë“œ ê¶Œì¥
 
-## ¹®Á¦ ÇØ°á
+## ë¬¸ì œ í•´ê²°
 
-### ·Î±× ÆÄÀÏÀÌ »ı¼ºµÇÁö ¾Ê´Â °æ¿ì
-1. ·Î±ë ½Ã½ºÅÛÀÌ ÃÊ±âÈ­µÇ¾ú´ÂÁö È®ÀÎ
-2. appsettings.jsonÀÇ Logging.Enabled°¡ trueÀÎÁö È®ÀÎ
-3. µğ·ºÅä¸® ±ÇÇÑ È®ÀÎ
+### ë¡œê·¸ íŒŒì¼ì´ ìƒì„±ë˜ì§€ ì•ŠëŠ” ê²½ìš°
+1. ë¡œê¹… ì‹œìŠ¤í…œì´ ì´ˆê¸°í™”ë˜ì—ˆëŠ”ì§€ í™•ì¸
+2. appsettings.jsonì˜ Logging.Enabledê°€ trueì¸ì§€ í™•ì¸
+3. ë””ë ‰í† ë¦¬ ê¶Œí•œ í™•ì¸
 
-### ¼­¹ö ¾÷·Îµå ½ÇÆĞ
-1. ¼­¹ö URL È®ÀÎ
-2. ³×Æ®¿öÅ© ¿¬°á È®ÀÎ
-3. ¼­¹ö API°¡ ½ÇÇà ÁßÀÎÁö È®ÀÎ
-4. ¹æÈ­º® ¼³Á¤ È®ÀÎ
+### ì„œë²„ ì—…ë¡œë“œ ì‹¤íŒ¨
+1. ì„œë²„ URL í™•ì¸
+2. ë„¤íŠ¸ì›Œí¬ ì—°ê²° í™•ì¸
+3. ì„œë²„ APIê°€ ì‹¤í–‰ ì¤‘ì¸ì§€ í™•ì¸
+4. ë°©í™”ë²½ ì„¤ì • í™•ì¸
 
-### ·Î±× ÆÄÀÏ Å©±â°¡ ³Ê¹« Å« °æ¿ì
-1. ·Î±× ·¹º§À» Information ÀÌ»óÀ¸·Î ¼³Á¤
-2. Debug/Trace ·Î±× ÃÖ¼ÒÈ­
-3. CleanupOldLogsAfterDays °ª Á¶Á¤
+### ë¡œê·¸ íŒŒì¼ í¬ê¸°ê°€ ë„ˆë¬´ í° ê²½ìš°
+1. ë¡œê·¸ ë ˆë²¨ì„ Information ì´ìƒìœ¼ë¡œ ì„¤ì •
+2. Debug/Trace ë¡œê·¸ ìµœì†Œí™”
+3. CleanupOldLogsAfterDays ê°’ ì¡°ì •
 
-## ¸ğ¹ü »ç·Ê
+## ëª¨ë²” ì‚¬ë¡€
 
-### 1. ÀûÀıÇÑ ·Î±× ·¹º§ »ç¿ë
+### 1. ì ì ˆí•œ ë¡œê·¸ ë ˆë²¨ ì‚¬ìš©
 ```csharp
-// µğ¹ö±ë Áß¿¡¸¸ ÇÊ¿äÇÑ Á¤º¸
+// ë””ë²„ê¹… ì¤‘ì—ë§Œ í•„ìš”í•œ ì •ë³´
 LogManager.Debug("Loop iteration: {i}");
 
-// Áß¿äÇÑ ºñÁî´Ï½º ÀÌº¥Æ®
+// ì¤‘ìš”í•œ ë¹„ì¦ˆë‹ˆìŠ¤ ì´ë²¤íŠ¸
 LogManager.Info("Patient registered: {patientId}");
 
-// º¹±¸ °¡´ÉÇÑ ¹®Á¦
+// ë³µêµ¬ ê°€ëŠ¥í•œ ë¬¸ì œ
 LogManager.Warning("Retry attempt 3/5");
 
-// ¿¹¿Ü »óÈ²
+// ì˜ˆì™¸ ìƒí™©
 LogManager.Error("Failed to save patient", ex);
 
-// ½Ã½ºÅÛ Àå¾Ö
+// ì‹œìŠ¤í…œ ì¥ì• 
 LogManager.Critical("Database connection lost", ex);
 ```
 
-### 2. ÀÇ¹ÌÀÖ´Â Ä«Å×°í¸® »ç¿ë
+### 2. ì˜ë¯¸ìˆëŠ” ì¹´í…Œê³ ë¦¬ ì‚¬ìš©
 ```csharp
 LogManager.Info("Processing started", "PaymentProcess");
 LogManager.Info("Payment validated", "PaymentProcess");
 LogManager.Info("Payment completed", "PaymentProcess");
 ```
 
-### 3. ±¸Á¶È­µÈ ·Î±ë
+### 3. êµ¬ì¡°í™”ëœ ë¡œê¹…
 ```csharp
-// °Ë»ö ¹× ºĞ¼®ÀÌ ½±µµ·Ï ±¸Á¶È­
+// ê²€ìƒ‰ ë° ë¶„ì„ì´ ì‰½ë„ë¡ êµ¬ì¡°í™”
 LogManager.Info(
     $"Order processed: OrderId={orderId}, Amount={amount}, Status={status}",
     "OrderManagement");
 ```
 
-### 4. Áß¿äÇÑ ¾×¼ÇÀº ¹İµå½Ã ¿Àµ÷
+### 4. ì¤‘ìš”í•œ ì•¡ì…˜ì€ ë°˜ë“œì‹œ ì˜¤ë”§
 ```csharp
-// µ¥ÀÌÅÍ º¯°æ
+// ë°ì´í„° ë³€ê²½
 LogManager.LogUpdate("Patient", patientId, oldValue, newValue, "EMR", "PatientEdit");
 
-// ¹Î°¨ÇÑ Á¶È¸
+// ë¯¼ê°í•œ ì¡°íšŒ
 LogManager.LogRead("PatientChart", patientId, "EMR", "ChartView");
 
-// Áß¿äÇÑ ÀÛ¾÷
+// ì¤‘ìš”í•œ ì‘ì—…
 LogManager.LogAction(AuditAction.Print, "EMR", "Prescription", $"Printed prescription for {patientId}");
 ```
 
-## API ·¹ÆÛ·±½º
+## API ë ˆí¼ëŸ°ìŠ¤
 
 ### LogManager
 ```csharp
-// ÃÊ±âÈ­
+// ì´ˆê¸°í™”
 LogManager.Instance.Initialize(logDirectory, auditDirectory, fileTransferService, enableAutoUpload);
 
-// ·Î°Å Á¢±Ù
+// ë¡œê±° ì ‘ê·¼
 ILogger logger = LogManager.Instance.Logger;
 IAuditLogger auditLogger = LogManager.Instance.AuditLogger;
 ILogUploadService uploadService = LogManager.Instance.UploadService;
 
-// ÆíÀÇ ¸Ş¼­µå
+// í¸ì˜ ë©”ì„œë“œ
 LogManager.Info(message, category);
 LogManager.Error(message, category, exception);
 LogManager.LogAudit(auditDto);
 LogManager.LogAction(action, module, screen, additionalInfo);
 
-// Á¾·á
+// ì¢…ë£Œ
 LogManager.Instance.Shutdown();
 ```
 
@@ -434,6 +434,6 @@ void LogAction(string action, string module, string screen, string additionalInf
 Task FlushAsync();
 ```
 
-## ¶óÀÌ¼±½º
+## ë¼ì´ì„ ìŠ¤
 
 ? 2024 nU3 Framework

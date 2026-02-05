@@ -1,296 +1,296 @@
-# FullClassName vs ClassName »ç¿ë °¡ÀÌµå
+  # FullClassName vs ClassName ì‚¬ìš© ê°€ì´ë“œ
 
-## °³¿ä
+  ## ê°œìš”
 
-`nU3ProgramInfoAttribute`´Â µÎ °¡Áö Å¬·¡½º¸í ¼Ó¼ºÀ» Á¦°øÇÕ´Ï´Ù:
-- `FullClassName`: Namespace Æ÷ÇÔ ÀüÃ¼ °æ·Î (Å¸ÀÔ ÇØ»óµµ¿ë)
-- `ClassName`: Å¬·¡½º¸í¸¸ (Ç¥½Ã¿ë)
+  `nU3ProgramInfoAttribute`ì—ëŠ” ë‘ ê°€ì§€ ì†ì„±ì´ í¬í•¨ë©ë‹ˆë‹¤:
+  - `FullClassName`: Namespace í¬í•¨ ì „ì²´ í´ë˜ìŠ¤ ì´ë¦„ (íƒ€ì… í•´ê²°)
+  - `ClassName`: í´ë˜ìŠ¤ ì´ë¦„ (í‘œì¤€)
 
-## ¼Ó¼º Á¤ÀÇ
+  ## ì†ì„± êµ¬í˜„
 
-```csharp
-public class nU3ProgramInfoAttribute : Attribute
-{
-    /// <summary>
-    /// Full class name including namespace for type resolution.
-    /// Example: "nU3.Modules.EMR.IN.Worklist.PatientListControl"
-    /// </summary>
-    public string FullClassName { get; }
-    
-    /// <summary>
-    /// Simple class name without namespace.
-    /// Example: "PatientListControl"
-    /// </summary>
-    public string ClassName => FullClassName?.Split('.').LastOrDefault() ?? string.Empty;
-}
-```
+  ```csharp
+  public class nU3ProgramInfoAttribute : Attribute
+  {
+      /// <summary>
+      /// Full class name including namespace for type resolution.
+      /// Example: "nU3.Modules.EMR.IN.Worklist.PatientListControl"
+      /// </summary>
+      public string FullClassName { get; }
 
-## ÀÚµ¿ ¼³Á¤
+      /// <summary>
+      /// Simple class name without namespace.
+      /// Example: "PatientListControl"
+      /// </summary>
+      public string ClassName => FullClassName?.Split('.').LastOrDefault() ?? string.Empty;
+  }
+  ```
 
-```csharp
-namespace nU3.Modules.EMR.IN.Worklist
-{
-    [nU3ProgramInfo(typeof(PatientListControl), "È¯ÀÚ ¸ñ·Ï", "EMR_PATIENT_LIST_001")]
-    public class PatientListControl : BaseWorkControl
-    {
-        // ÀÚµ¿À¸·Î ¼³Á¤µÊ:
-        // FullClassName = "nU3.Modules.EMR.IN.Worklist.PatientListControl"
-        // ClassName = "PatientListControl" (°è»ê ¼Ó¼º)
-    }
-}
-```
+  ## ì‚¬ìš© ì˜ˆì‹œ
 
-## »ç¿ë ½Ã³ª¸®¿À
+  ```csharp
+  namespace nU3.Modules.EMR.IN.Worklist
+  {
+      [nU3ProgramInfo(typeof(PatientListControl), "í™˜ì ëª©ë¡", "EMR_PATIENT_LIST_001")]
+      public class PatientListControl : BaseWorkControl
+      {
+          // ìë™ ì„¤ì •ë¨:
+          // FullClassName = "nU3.Modules.EMR.IN.Worklist.PatientListControl"
+          // ClassName = "PatientListControl" (ê°€ì¥ ë§ˆì§€ë§‰ ë¶€ë¶„)
+      }
+  }
+  ```
 
-### 1. ? FullClassName »ç¿ë (Å¸ÀÔ ·Îµù)
+  ## ì‚¬ìš© ì²˜ë¦¬
 
-```csharp
-// DLL¿¡¼­ Å¸ÀÔÀ» Ã£À» ¶§
-var assembly = Assembly.LoadFile(dllPath);
-var type = assembly.GetType(attr.FullClassName);
-// ? Á¤È®ÇÏ°Ô Å¸ÀÔÀ» Ã£À½
+  ### 1. FullClassName ì‚¬ìš© (íƒ€ì… ë¡œë“œ)
 
-// ·Î±×¿¡ »ó¼¼ Á¤º¸ ±â·Ï
-Console.WriteLine($"Loading: {attr.FullClassName}");
-// ¡æ "Loading: nU3.Modules.EMR.IN.Worklist.PatientListControl"
-```
+  ```csharp
+  // DLLì—ì„œ íƒ€ì…ì„ ì°¾ê³  ë¡œë“œ
+  var assembly = Assembly.LoadFile(dllPath);
+  var type = assembly.GetType(attr.FullClassName);
+  // âœ… í™•ì‹¤íˆê³  íƒ€ì…ì„ ì°¾ìŒ
 
-### 2. ? ClassName »ç¿ë (UI Ç¥½Ã)
+  // ë¡œê·¸ì— ì¶œë ¥
+  Console.WriteLine($"Loading: {attr.FullClassName}");
+  // ê²°ê³¼: "Loading: nU3.Modules.EMR.IN.Worklist.PatientListControl"
+  ```
 
-```csharp
-// ±×¸®µå¿¡ Å¬·¡½º¸í Ç¥½Ã
-dataGridView.Rows.Add(new[] 
-{
-    attr.ProgramId,
-    attr.ProgramName,
-    attr.ClassName,  // ? °£°áÇÑ Ç¥½Ã
-    attr.SystemType
-});
+  ### 2. ClassName ì‚¬ìš© (UI í‘œì‹œ)
 
-// ÅøÆÁ¿¡ °£´ÜÇÑ Á¤º¸ Ç¥½Ã
-toolTip.SetToolTip(button, $"Å¬·¡½º: {attr.ClassName}");
-// ¡æ "Å¬·¡½º: PatientListControl"
+  ```csharp
+  // ëª©ë¡ì— í´ë˜ìŠ¤ ì´ë¦„ í‘œì‹œ
+  dataGridView.Rows.Add(new[]
+  {
+      attr.ProgramId,
+      attr.ProgramName,
+      attr.ClassName,  // âœ… UI: ê°„ë‹¨
+      attr.SystemType
+  });
 
-// ·Î±×¿¡ ¿ä¾à Á¤º¸
-Console.WriteLine($"Opening {attr.ClassName}...");
-// ¡æ "Opening PatientListControl..."
-```
+  // íŒì—… ë©”ì‹œì§€ì—ì„œ í‘œì‹œ
+  toolTip.SetToolTip(button, $"í´ë˜ìŠ¤: {attr.ClassName}");
+  // ê²°ê³¼: "í´ë˜ìŠ¤: PatientListControl"
 
-### 3. ? °ËÁõ/µğ¹ö±ë (FullClassName)
+  // ë¡œê·¸ì— ì¶œë ¥
+  Console.WriteLine($"Opening {attr.ClassName}...");
+  // ê²°ê³¼: "Opening PatientListControl..."
+  ```
 
-```csharp
-// °ËÁõ ¿À·ù ¸Ş½ÃÁö
-var errors = new List<string>();
-if (!IsValidNamespace(attr.FullClassName))
-{
-    errors.Add($"Invalid class: {attr.FullClassName}");
-    // ¡æ "Invalid class: nU3.Modules.EMR.IN.Worklist.PatientListControl"
-}
+  ### 3. ê²€ì¦/ì˜ˆì™¸ (FullClassName)
 
-// »ó¼¼ ·Î±ë
-_logger.Debug($"Resolving type: {attr.FullClassName} from {attr.DllName}");
-```
+  ```csharp
+  // ì˜¬ë°”ë¥¸ ì˜ˆì™¸ ë©”ì‹œì§€
+  var errors = new List<string>();
+  if (!IsValidNamespace(attr.FullClassName))
+  {
+      errors.Add($"Invalid class: {attr.FullClassName}");
+      // ê²°ê³¼: "Invalid class: nU3.Modules.EMR.IN.Worklist.PatientListControl"
+  }
 
-### 4. ? °Ë»ö (ClassName)
+  // ë””ë²„ê·¸ ë¡œê·¸
+  _logger.Debug($"Resolving type: {attr.FullClassName} from {attr.DllName}");
+  ```
 
-```csharp
-// »ç¿ëÀÚ°¡ Å¬·¡½º¸íÀ¸·Î °Ë»ö
-var searchResults = _moduleLoader.GetProgramAttributes()
-    .Values
-    .Where(attr => attr.ClassName.Contains(searchKeyword, StringComparison.OrdinalIgnoreCase))
-    .ToList();
+  ### 4. ê²€ìƒ‰ (ClassName)
 
-// ¿¹: "Patient" °Ë»ö
-// ¡æ PatientListControl, PatientDetailControl µî ¹ß°ß
-```
+  ```csharp
+  // ì‚¬ìš©ìê°€ í´ë˜ìŠ¤ ì´ë¦„ìœ¼ë¡œ ê²€ìƒ‰
+  var searchResults = _moduleLoader.GetProgramAttributes()
+      .Values
+      .Where(attr => attr.ClassName.Contains(searchKeyword, StringComparison.OrdinalIgnoreCase))
+      .ToList();
 
-## ºñ±³Ç¥
+  // ì˜ˆ: "Patient" ê²€ìƒ‰
+  // ì˜ˆê²°ê³¼: PatientListControl, PatientDetailControl í¬í•¨
+  ```
 
-| ¿ëµµ | FullClassName | ClassName |
-|------|---------------|-----------|
-| Å¸ÀÔ ·Îµù | ? ÇÊ¼ö | ? ºÒ°¡ |
-| UI Ç¥½Ã | ?? ³Ê¹« ±æÀ½ | ? ±ÇÀå |
-| ·Î±× (»ó¼¼) | ? ±ÇÀå | ?? Á¤º¸ ºÎÁ· |
-| ·Î±× (¿ä¾à) | ?? ³Ê¹« ±æÀ½ | ? ±ÇÀå |
-| °Ë»ö | ?? º¹ÀâÇÔ | ? ±ÇÀå |
-| µğ¹ö±ë | ? ±ÇÀå | ?? Á¤º¸ ºÎÁ· |
-| DB ÀúÀå | ? ±ÇÀå | ? ºÎÁ· |
+  ## í‘œì¤€
 
-## ½ÇÁ¦ ¿¹½Ã
+  | ìš©ë„ | FullClassName | ClassName |
+  |------|---------------|-----------|
+  | íƒ€ì… í•´ê²° | âœ… í•„ìˆ˜ | âŒ ë¶ˆê°€ |
+  | UI í‘œì‹œ | âŒ ë„ˆë¬´ ê¸¸ | âœ… ê°„ë‹¨ |
+  | ë¡œê·¸ (ê°„ë‹¨) | âœ… í•„ìš” | âŒ ìƒëµ ê°€ëŠ¥ |
+  | ë¡œê·¸ (ìƒì„¸) | âŒ ë„ˆë¬´ ê¸¸ | âœ… í•„ìš” |
+  | ê²€ìƒ‰ | âŒ ì–´ë ¤ì›€ | âœ… ìš©ì´ |
+  | íƒœê¹… | âœ… í•„ìš” | âŒ ë¶ˆê°€ |
+  | DB ì €ì¥ | âœ… í•„ìš” | âŒ ë¶ˆê°€ |
 
-### ¿¹½Ã 1: ÇÁ·Î±×·¥ ·Îµù
+  ## ì‚¬ìš© ì˜ˆì‹œ
 
-```csharp
-public Type LoadProgram(nU3ProgramInfoAttribute attr)
-{
-    // ? FullClassNameÀ¸·Î Å¸ÀÔ ·Îµå
-    var type = assembly.GetType(attr.FullClassName);
-    
-    if (type != null)
-    {
-        // ? ClassNameÀ¸·Î °£´ÜÇÑ ·Î±×
-        Console.WriteLine($"? Loaded {attr.ClassName}");
-    }
-    else
-    {
-        // ? FullClassNameÀ¸·Î »ó¼¼ÇÑ ¿À·ù ¸Ş½ÃÁö
-        Console.WriteLine($"? Failed to load {attr.FullClassName}");
-    }
-    
-    return type;
-}
-```
+  ### ì˜ˆì‹œ 1: í”„ë¡œê·¸ë¨ ë¡œë“œ
 
-### ¿¹½Ã 2: ±×¸®µå Ç¥½Ã
+  ```csharp
+  public Type LoadProgram(nU3ProgramInfoAttribute attr)
+  {
+      // FullClassNameìœ¼ë¡œ íƒ€ì… ë¡œë“œ
+      var type = assembly.GetType(attr.FullClassName);
 
-```csharp
-// DeployManagementControl.cs
-private void DisplayProgramList()
-{
-    foreach (var attr in programAttributes)
-    {
-        dgvPrograms.Rows.Add(new[]
-        {
-            attr.ProgramId,
-            attr.ProgramName,
-            attr.ClassName,        // ? UI: °£°á
-            attr.SystemType,
-            attr.SubSystem,
-            attr.FullClassName     // ? »ó¼¼ Á¤º¸ (¼û±è °¡´É)
-        });
-    }
-}
-```
+      if (type != null)
+      {
+          // ClassNameìœ¼ë¡œ ë¡œê·¸ ì¶œë ¥
+          Console.WriteLine($"âœ… Loaded {attr.ClassName}");
+      }
+      else
+      {
+          // FullClassNameìœ¼ë¡œ ì‹¤íŒ¨ ë©”ì‹œì§€
+          Console.WriteLine($"âŒ Failed to load {attr.FullClassName}");
+      }
 
-### ¿¹½Ã 3: °ËÁõ ¸Ş½ÃÁö
+      return type;
+  }
+  ```
 
-```csharp
-private List<string> ValidateProgram(nU3ProgramInfoAttribute attr)
-{
-    var errors = new List<string>();
-    
-    // ? FullClassNameÀ¸·Î Á¤È®ÇÑ °ËÁõ
-    if (!attr.FullClassName.StartsWith("nU3.Modules"))
-    {
-        errors.Add($"[{attr.ClassName}] Invalid namespace: {attr.FullClassName}");
-        // ¡æ "[PatientListControl] Invalid namespace: nU3.Modules.EMR.IN.Worklist.PatientListControl"
-    }
-    
-    return errors;
-}
-```
+  ### ì˜ˆì‹œ 2: ëª©ë¡ í‘œì‹œ
 
-### ¿¹½Ã 4: ¸Ş´º ±¸¼º
+  ```csharp
+  // DeployManagementControl.cs
+  private void DisplayProgramList()
+  {
+      foreach (var attr in programAttributes)
+      {
+          dgvPrograms.Rows.Add(new[]
+          {
+              attr.ProgramId,
+              attr.ProgramName,
+              attr.ClassName,        // âœ… UI: ê°„ë‹¨
+              attr.SystemType,
+              attr.SubSystem,
+              attr.FullClassName     // âœ… ìƒì„¸ ì •ë³´ (ì¶”ê°€)
+          });
+      }
+  }
+  ```
 
-```csharp
-private TreeNode CreateMenuNode(nU3ProgramInfoAttribute attr)
-{
-    var node = new TreeNode
-    {
-        // ? ClassNameÀ¸·Î °£°áÇÑ Ç¥½Ã
-        Text = $"{attr.ClassName} ({attr.ProgramId})",
-        // ¡æ "PatientListControl (EMR_PATIENT_LIST_001)"
-        
-        // ? FullClassNameÀ» Tag¿¡ ÀúÀå (³ªÁß¿¡ »ç¿ë)
-        Tag = new { attr.FullClassName, attr.ProgramId },
-        
-        // ? ClassNameÀ¸·Î °£´ÜÇÑ ÅøÆÁ
-        ToolTipText = $"Å¬·¡½º: {attr.ClassName}\n½Ã½ºÅÛ: {attr.SystemType}/{attr.SubSystem}"
-    };
-    
-    return node;
-}
-```
+  ### ì˜ˆì‹œ 3: ê²€ì¦
 
-### ¿¹½Ã 5: ·Î±ë Àü·«
+  ```csharp
+  private List<string> ValidateProgram(nU3ProgramInfoAttribute attr)
+  {
+      var errors = new List<string>();
 
-```csharp
-// ¿ä¾à ·Î±× (ClassName)
-Console.WriteLine($"[INFO] Opening {attr.ClassName}...");
-// ¡æ "[INFO] Opening PatientListControl..."
+      // FullClassNameìœ¼ë¡œ ê²€ì¦ ìˆ˜í–‰
+      if (!attr.FullClassName.StartsWith("nU3.Modules"))
+      {
+          errors.Add($"[{attr.ClassName}] Invalid namespace: {attr.FullClassName}");
+          // ê²°ê³¼ "[PatientListControl] Invalid namespace: nU3.Modules.EMR.IN.Worklist.PatientListControl"
+      }
 
-// »ó¼¼ ·Î±× (FullClassName)
-_logger.Debug($"Loading type: {attr.FullClassName} from {attr.DllName}.dll");
-// ¡æ "Loading type: nU3.Modules.EMR.IN.Worklist.PatientListControl from nU3.Modules.EMR.IN.Worklist.dll"
+      return errors;
+  }
+  ```
 
-// ¿À·ù ·Î±× (FullClassName)
-_logger.Error($"Failed to instantiate {attr.FullClassName}: {ex.Message}");
-```
+  ### ì˜ˆì‹œ 4: ë©”ë‰´ ìƒì„±
 
-## ¼º´É °í·Á»çÇ×
+  ```csharp
+  private TreeNode CreateMenuNode(nU3ProgramInfoAttribute attr)
+  {
+      var node = new TreeNode
+      {
+          // ClassNameìœ¼ë¡œ ë©”ë‰´ í…ìŠ¤íŠ¸ í‘œì‹œ
+          Text = $"{attr.ClassName} ({attr.ProgramId})",
+          // ê²°ê³¼: "PatientListControl (EMR_PATIENT_LIST_001)"
 
-### ClassNameÀº °è»ê ¼Ó¼º
+          // FullClassNameìœ¼ë¡œ Tag ì„¤ì • (ì¶”í›„ ì‚¬ìš©)
+          Tag = new { attr.FullClassName, attr.ProgramId },
 
-```csharp
-// ClassNameÀº ¸Å¹ø °è»êµÊ
-public string ClassName => FullClassName?.Split('.').LastOrDefault() ?? string.Empty;
+          // ClassNameìœ¼ë¡œ íˆ´íŒ í…ìŠ¤íŠ¸
+          ToolTipText = $"í´ë˜ìŠ¤: {attr.ClassName}\nì‹œìŠ¤í…œ: {attr.SystemType}/{attr.SubSystem}"
+      };
 
-// ¹İº¹ È£Ãâ ½Ã Ä³½Ã °í·Á
-private string _cachedClassName;
-public string GetClassName()
-{
-    if (_cachedClassName == null)
-        _cachedClassName = FullClassName?.Split('.').LastOrDefault() ?? string.Empty;
-    return _cachedClassName;
-}
-```
+      return node;
+  }
+  ```
 
-**ÇÏÁö¸¸ ¼º´É ¿µÇâÀº ¹Ì¹ÌÇÔ:**
-- String.SplitÀº ¸Å¿ì ºü¸§ (~0.001ms)
-- UI Ç¥½Ã³ª ·Î±×´Â ÀÚÁÖ È£ÃâµÇÁö ¾ÊÀ½
-- ¸Ş¸ğ¸® Àı¾àÀÌ ´õ Áß¿ä
+  ### ì˜ˆì‹œ 5: ë¡œê·¸ ì¶œë ¥
 
-## ±ÇÀå »çÇ×
+  ```csharp
+  // ê°„ë‹¨ ë¡œê·¸ (ClassName)
+  Console.WriteLine($"[INFO] Opening {attr.ClassName}...");
+  // ê²°ê³¼ "[INFO] Opening PatientListControl..."
 
-### ? DO
+  // ìƒì„¸ ë¡œê·¸ (FullClassName)
+  _logger.Debug($"Loading type: {attr.FullClassName} from {attr.DllName}.dll");
+  // ê²°ê³¼ "Loading type: nU3.Modules.EMR.IN.Worklist.PatientListControl from nU3.Modules.EMR.IN.Worklist.dll"
 
-```csharp
-// ? Å¸ÀÔ ·Îµù¿¡´Â FullClassName
-var type = assembly.GetType(attr.FullClassName);
+  // ì—ëŸ¬ ë¡œê·¸ (FullClassName)
+  _logger.Error($"Failed to instantiate {attr.FullClassName}: {ex.Message}");
+  ```
 
-// ? UI Ç¥½Ã¿¡´Â ClassName
-label.Text = attr.ClassName;
+  ## ì„±ëŠ¥ ìµœì í™”
 
-// ? DB¿¡´Â FullClassName ÀúÀå
-INSERT INTO SYS_PROGRAM (CLASS_NAME) VALUES (@FullClassName);
+  ### ClassName ìºì‹±
 
-// ? °Ë»ö¿¡´Â ClassName
-where attr.ClassName.Contains(keyword)
+  ```csharp
+  // ClassName ë‹¨ì¶• ê³„ì‚°
+  public string ClassName => FullClassName?.Split('.').LastOrDefault() ?? string.Empty;
 
-// ? »ó¼¼ ·Î±×¿¡´Â FullClassName
-_logger.Debug($"Type: {attr.FullClassName}");
+  // ë°˜ë³µ í˜¸ì¶œ ë°©ì§€ë¥¼ ìœ„í•œ ìºì‹±
+  private string _cachedClassName;
+  public string GetClassName()
+  {
+      if (_cachedClassName == null)
+          _cachedClassName = FullClassName?.Split('.').LastOrDefault() ?? string.Empty;
+      return _cachedClassName;
+  }
+  ```
 
-// ? ¿ä¾à ·Î±×¿¡´Â ClassName
-Console.WriteLine($"Loaded {attr.ClassName}");
-```
+  **ìºì‹±ì„ ì‚¬ìš©í•˜ëŠ” ì´ìœ :**
+  - String.Splitì´ ìƒëŒ€ì ìœ¼ë¡œ ëŠë¦¼ (~0.001ms)
+  - UI í‘œì‹œ ë¡œì§ì—ì„œ ë°˜ë³µ í˜¸ì¶œì´ ì¦ìŒ
+  - ë©”ëª¨ë¦¬ì— ë¹„ìš©ì´ ìˆì§€ë§Œ ì„±ëŠ¥ ì´ì ì´ í¼
 
-### ? DON'T
+  ## ê¶Œì¥ ì‚¬í•­
 
-```csharp
-// ? Å¸ÀÔ ·Îµù¿¡ ClassName »ç¿ë
-var type = assembly.GetType(attr.ClassName);  // null ¹İÈ¯!
+  ### DO
 
-// ? UI¿¡ FullClassName Ç¥½Ã (³Ê¹« ±æÀ½)
-label.Text = attr.FullClassName;  // "nU3.Modules.EMR.IN.Worklist.PatientListControl"
+  ```csharp
+  // íƒ€ì… í•´ê²°ì—ëŠ” FullClassName
+  var type = assembly.GetType(attr.FullClassName);
 
-// ? DB¿¡ ClassName¸¸ ÀúÀå (Á¤º¸ ¼Õ½Ç)
-INSERT INTO SYS_PROGRAM (CLASS_NAME) VALUES (@ClassName);  // "PatientListControl"¸¸
-```
+  // UIì—ëŠ” ClassName
+  label.Text = attr.ClassName;
 
-## °á·Ğ
+  // DBì—ëŠ” FullClassName ì €ì¥
+  INSERT INTO SYS_PROGRAM (CLASS_NAME) VALUES (@FullClassName);
 
-### FullClassName
-- **¿ëµµ**: Å¸ÀÔ ÇØ»óµµ, »ó¼¼ ·Î±ë, DB ÀúÀå
-- **Æ¯Â¡**: Á¤È®ÇÏ°í ¿ÏÀüÇÑ Á¤º¸
-- **¿¹½Ã**: "nU3.Modules.EMR.IN.Worklist.PatientListControl"
+  // ê²€ìƒ‰ì—ëŠ” ClassName
+  where attr.ClassName.Contains(keyword)
 
-### ClassName
-- **¿ëµµ**: UI Ç¥½Ã, ¿ä¾à ·Î±×, »ç¿ëÀÚ °Ë»ö
-- **Æ¯Â¡**: °£°áÇÏ°í ÀĞ±â ½¬¿ò
-- **¿¹½Ã**: "PatientListControl"
+  // ìƒì„¸ ë¡œê·¸ì—ëŠ” FullClassName
+  _logger.Debug($"Type: {attr.FullClassName}");
 
-### µÎ ¼Ó¼ºÀ» ÇÔ²² »ç¿ëÇÏ¿© ÃÖÀûÀÇ °æÇè Á¦°ø! ??
+  // ê°„ë‹¨ ë¡œê·¸ì—ëŠ” ClassName
+  Console.WriteLine($"Loaded {attr.ClassName}");
+  ```
 
-## ¶óÀÌ¼±½º
+  ### DON'T
 
-? 2024 nU3 Framework
+  ```csharp
+  // íƒ€ì… í•´ê²°ì—ëŠ” ClassName ê¸ˆì§€
+  var type = assembly.GetType(attr.ClassName);  // null ë°˜í™˜!
+
+  // UIì—ëŠ” FullClassName í‘œì‹œ (ë„ˆë¬´ ê¸¸)
+  label.Text = attr.FullClassName;  // "nU3.Modules.EMR.IN.Worklist.PatientListControl"
+
+  // DBì—ëŠ” ClassName ì €ì¥ (ë¶ˆí•„ìš”í•œ ìƒëµ)
+  INSERT INTO SYS_PROGRAM (CLASS_NAME) VALUES (@ClassName);  // "PatientListControl"ë§Œ ì €ì¥
+  ```
+
+  ## ìš”ì•½
+
+  ### FullClassName
+  - **ìš©ë„**: íƒ€ì… í•´ê²°, ìƒì„¸ ë¡œê·¸, DB ì €ì¥
+  - **ì¥ì **: ëª…í™•í•˜ê³  ì™„ì „í•œ ì •ë³´
+  - **ì˜ˆì‹œ**: "nU3.Modules.EMR.IN.Worklist.PatientListControl"
+
+  ### ClassName
+  - **ìš©ë„**: UI í‘œì‹œ, ê°„ë‹¨ ë¡œê·¸, ê²€ìƒ‰
+  - **ì¥ì **: ê°„ê²°í•˜ê³  ê°€ë…ì„± ì¢‹ìŒ
+  - **ì˜ˆì‹œ**: "PatientListControl"
+
+  ### ë‘ ì†ì„±ì„ ëª¨ë‘ ì‚¬ìš©í•˜ì—¬ ì ì ˆí•œ ìƒí™©ì— ë”°ë¼ ì„ íƒí•˜ì„¸ìš”! âœ…
+
+  ## ë¼ì´ì„ ìŠ¤ ì •ë³´
+
+  (c) 2024 nU3 Framework

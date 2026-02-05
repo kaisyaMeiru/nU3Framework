@@ -1,61 +1,61 @@
-# Swagger 404 ¿À·ù ÇØ°á ¿Ï·á
+# Swagger 404 ì˜¤ë¥˜ í•´ê²° ì™„ë£Œ
 
-## ?? ¹®Á¦ Áø´Ü
+## ?? ë¬¸ì œ ì§„ë‹¨
 
-### ·Î±× ºĞ¼®
+### ë¡œê·¸ ë¶„ì„
 ```
 info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
       Request starting HTTP/2 GET https://localhost:64229/swagger - - -
 dbug: Microsoft.AspNetCore.Routing.Matching.DfaMatcher[1000]
-      No candidates found for the request path '/swagger'  ¡ç ¶ó¿ìÆ® ¾øÀ½!
+      No candidates found for the request path '/swagger'  â† ë¼ìš°íŠ¸ ì—†ìŒ!
 dbug: Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware[2]
-      Request did not match any endpoints                  ¡ç ¿£µåÆ÷ÀÎÆ® ¾øÀ½!
+      Request did not match any endpoints                  â† ì—”ë“œí¬ì¸íŠ¸ ì—†ìŒ!
 info: Program[0]
       Response: 404 in 0.871ms
 ```
 
-### ±Ùº» ¿øÀÎ
+### ê·¼ë³¸ ì›ì¸
 
 **Before (`Program.cs`):**
 ```csharp
 app.UseSwaggerUI(options =>
 {
-    options.RoutePrefix = string.Empty; // ¡ç ¹®Á¦: Swagger UI°¡ ·çÆ®(/)¿¡ ÀÖÀ½
+    options.RoutePrefix = string.Empty; // â† ë¬¸ì œ: Swagger UIê°€ ë£¨íŠ¸(/)ì— ìˆìŒ
 });
 ```
 
-**°á°ú:**
-- `https://localhost:64229/` ¡æ Swagger UI (?)
-- `https://localhost:64229/swagger` ¡æ 404 (?)
+**ê²°ê³¼:**
+- `https://localhost:64229/` â†’ Swagger UI (?)
+- `https://localhost:64229/swagger` â†’ 404 (?)
 
 ---
 
-## ? ÇØ°á ¹æ¹ı
+## ? í•´ê²° ë°©ë²•
 
-### 1. RoutePrefix ¼öÁ¤
+### 1. RoutePrefix ìˆ˜ì •
 
 **After:**
 ```csharp
 app.UseSwaggerUI(options =>
 {
     options.SwaggerEndpoint("/swagger/v1/swagger.json", "nU3 Server API v1");
-    options.RoutePrefix = "swagger"; // ¡ç ¼öÁ¤: /swagger °æ·Î·Î º¯°æ
+    options.RoutePrefix = "swagger"; // â† ìˆ˜ì •: /swagger ê²½ë¡œë¡œ ë³€ê²½
     options.DocumentTitle = "nU3 Server API Documentation";
     options.DisplayRequestDuration();
 });
 ```
 
-**°á°ú:**
-- `https://localhost:64229/swagger` ¡æ Swagger UI (?)
-- `https://localhost:64229/` ¡æ ¾ÖÇÃ¸®ÄÉÀÌ¼Ç ·çÆ® (?)
+**ê²°ê³¼:**
+- `https://localhost:64229/swagger` â†’ Swagger UI (?)
+- `https://localhost:64229/` â†’ ì• í”Œë¦¬ì¼€ì´ì…˜ ë£¨íŠ¸ (?)
 
 ---
 
-### 2. appsettings.json ÅëÇÕ
+### 2. appsettings.json í†µí•©
 
 **Program.cs:**
 ```csharp
-// appsettings.json¿¡¼­ ÀĞ±â
+// appsettings.jsonì—ì„œ ì½ê¸°
 var swaggerTitle = builder.Configuration.GetValue<string>("Swagger:Title", "nU3 Server API");
 var swaggerVersion = builder.Configuration.GetValue<string>("Swagger:Version", "v1");
 var swaggerDescription = builder.Configuration.GetValue<string>("Swagger:Description", 
@@ -71,7 +71,7 @@ options.SwaggerDoc("v1", new()
 
 ---
 
-### 3. ÇÁ·Î´ö¼Ç È¯°æ Áö¿ø
+### 3. í”„ë¡œë•ì…˜ í™˜ê²½ ì§€ì›
 
 ```csharp
 if (app.Environment.IsDevelopment())
@@ -81,7 +81,7 @@ if (app.Environment.IsDevelopment())
 }
 else
 {
-    // ÇÁ·Î´ö¼Ç: appsettings.jsonÀÇ Swagger.Enabled·Î Á¦¾î
+    // í”„ë¡œë•ì…˜: appsettings.jsonì˜ Swagger.Enabledë¡œ ì œì–´
     var swaggerEnabled = builder.Configuration.GetValue<bool>("Swagger:Enabled", false);
     if (swaggerEnabled)
     {
@@ -96,20 +96,20 @@ else
 
 ---
 
-## ?? ¼öÁ¤µÈ ÆÄÀÏ
+## ?? ìˆ˜ì •ëœ íŒŒì¼
 
 ```
 ?? Servers/nU3.Server.Host/Program.cs
-   - RoutePrefix: string.Empty ¡æ "swagger"
-   - appsettings.json ÅëÇÕ
-   - ÇÁ·Î´ö¼Ç È¯°æ Áö¿ø
-   - XML ÁÖ¼® ¹× Annotations
+   - RoutePrefix: string.Empty â†’ "swagger"
+   - appsettings.json í†µí•©
+   - í”„ë¡œë•ì…˜ í™˜ê²½ ì§€ì›
+   - XML ì£¼ì„ ë° Annotations
 
 ?? Servers/nU3.Server.Host/nU3.Server.Host.csproj
-   - GenerateDocumentationFile È°¼ºÈ­
-   - Swashbuckle.AspNetCore.Annotations Ãß°¡
+   - GenerateDocumentationFile í™œì„±í™”
+   - Swashbuckle.AspNetCore.Annotations ì¶”ê°€
 
-? ºôµå ¼º°ø
+? ë¹Œë“œ ì„±ê³µ
 ```
 
 ---
@@ -118,46 +118,46 @@ else
 
 | URL | Before | After |
 |-----|--------|-------|
-| `/` | Swagger UI | ¾ÖÇÃ¸®ÄÉÀÌ¼Ç ·çÆ® |
+| `/` | Swagger UI | ì• í”Œë¦¬ì¼€ì´ì…˜ ë£¨íŠ¸ |
 | `/swagger` | 404 ? | Swagger UI ? |
 
 ---
 
-## ?? »ç¿ë ¹æ¹ı
+## ?? ì‚¬ìš© ë°©ë²•
 
-### 1. ¼­¹ö Àç½ÃÀÛ
+### 1. ì„œë²„ ì¬ì‹œì‘
 
 ```bash
 cd Servers\nU3.Server.Host
 dotnet run
 ```
 
-### 2. Swagger UI Á¢±Ù
+### 2. Swagger UI ì ‘ê·¼
 
 ```
 https://localhost:64229/swagger
 ```
 
-### 3. ¿¹»ó ·Î±×
+### 3. ì˜ˆìƒ ë¡œê·¸
 
 ```
 info: Request starting GET https://localhost:64229/swagger
-dbug: Candidate found for '/swagger'  ¡ç ?
-dbug: Request matched endpoint 'Swagger UI'  ¡ç ?
-info: Response: 200 in 15.2ms  ¡ç ?
+dbug: Candidate found for '/swagger'  â† ?
+dbug: Request matched endpoint 'Swagger UI'  â† ?
+info: Response: 200 in 15.2ms  â† ?
 ```
 
 ---
 
-## ?? ¿Ï·á!
+## ?? ì™„ë£Œ!
 
-**Swagger 404 ¿À·ù°¡ ÇØ°áµÇ¾ú½À´Ï´Ù!**
+**Swagger 404 ì˜¤ë¥˜ê°€ í•´ê²°ë˜ì—ˆìŠµë‹ˆë‹¤!**
 
 ```
 ? Swagger UI: /swagger
-? appsettings.json ÅëÇÕ
-? ÇÁ·Î´ö¼Ç Áö¿ø
-? XML ÁÖ¼® È°¼ºÈ­
+? appsettings.json í†µí•©
+? í”„ë¡œë•ì…˜ ì§€ì›
+? XML ì£¼ì„ í™œì„±í™”
 ```
 
-**ÀÌÁ¦ `https://localhost:64229/swagger`¿¡ Á¢±ÙÇÏ¸é Swagger UI°¡ Ç¥½ÃµË´Ï´Ù!** ??
+**ì´ì œ `https://localhost:64229/swagger`ì— ì ‘ê·¼í•˜ë©´ Swagger UIê°€ í‘œì‹œë©ë‹ˆë‹¤!** ??

@@ -1,375 +1,364 @@
-# nU3ProgramInfoAttribute »ç¿ë °¡ÀÌµå
-
-## °³¿ä
-
-`nU3ProgramInfoAttribute`´Â ÇÁ·Î±×·¥ ¸ğµâÀÇ ¸ŞÅ¸µ¥ÀÌÅÍ¸¦ Á¤ÀÇÇÏ´Â ¼Ó¼ºÀÔ´Ï´Ù. 
-- ³×ÀÓ½ºÆäÀÌ½º¿¡¼­ ÀÚµ¿À¸·Î ½Ã½ºÅÛ Å¸ÀÔ°ú ¼­ºê½Ã½ºÅÛÀ» ÃßÃâ
-- `BaseWorkControl`ÀÇ `ProgramID`¿Í `ProgramTitle`À» ÀÚµ¿À¸·Î ¼³Á¤
-
-## ? ÁÖ¿ä ±â´É
-
-### 1. ³×ÀÓ½ºÆäÀÌ½º ÀÚµ¿ ÆÄ½Ì
-`typeof(Å¬·¡½º¸í)`À» »ç¿ëÇÏ¸é ³×ÀÓ½ºÆäÀÌ½º¿¡¼­ ÀÚµ¿À¸·Î `SystemType`°ú `SubSystem`À» ÃßÃâÇÕ´Ï´Ù.
-
-### 2. ÀÚµ¿ ¼Ó¼º ÁÖÀÔ
-`BaseWorkControl`ÀÇ `ProgramID`¿Í `ProgramTitle`ÀÌ ÀÚµ¿À¸·Î `nU3ProgramInfo` ¼Ó¼º¿¡¼­ °¡Á®¿É´Ï´Ù.
-
-## »ç¿ë ¹æ¹ı
-
-### ? ±ÇÀå ¹æ¹ı (ÀÚµ¿ ÃßÃâ)
-
-```csharp
-namespace nU3.Modules.ADM.AD.Deployer
-{
-    // typeof »ç¿ë - SystemType°ú SubSystem ÀÚµ¿ ÃßÃâ
-    // ProgramID¿Í ProgramTitleµµ ÀÚµ¿ ¼³Á¤
-    [nU3ProgramInfo(typeof(DeployerWorkControl), "ADM AD Deployer", "ADM_AD_00001")]
-    public class DeployerWorkControl : BaseWorkControl
-    {
-        public DeployerWorkControl()
-        {
-            // ProgramID¿Í ProgramTitleÀ» ¼öµ¿À¸·Î ¼³Á¤ÇÒ ÇÊ¿ä ¾øÀ½!
-            // ÀÚµ¿À¸·Î nU3ProgramInfo¿¡¼­ °¡Á®¿È
-            
-            var label = new Label
-            {
-                Dock = DockStyle.Fill,
-                Text = "ADM AD Deployer module"
-            };
-            Controls.Add(label);
-        }
-    }
-}
-```
-
-**ÀÚµ¿ ¼³Á¤ °á°ú:**
-- `SystemType`: `"ADM"` (³×ÀÓ½ºÆäÀÌ½º¿¡¼­ ÀÚµ¿ ÃßÃâ)
-- `SubSystem`: `"AD"` (³×ÀÓ½ºÆäÀÌ½º¿¡¼­ ÀÚµ¿ ÃßÃâ)
-- `ProgramID`: `"ADM_AD_00001"` (BaseWorkControl¿¡¼­ ÀÚµ¿ »ç¿ë)
-- `ProgramTitle`: `"ADM AD Deployer"` (BaseWorkControl¿¡¼­ ÀÚµ¿ »ç¿ë)
-
-### ? ÀÌÀü ¹æ¹ı (ºñ±ÇÀå)
-
-```csharp
-namespace nU3.Modules.ADM.AD.Deployer
-{
-    [nU3ProgramInfo("ADM", "ADM AD Deployer", "ADM_AD_00001")]
-    public class DeployerWorkControl : BaseWorkControl
-    {
-        public DeployerWorkControl()
-        {
-            // ºÒÇÊ¿äÇÑ Áßº¹ ÄÚµå!
-            ProgramID = "ADM_AD_DEPLOYER";
-            ProgramTitle = "ADM Deployer";
-            
-            // ...
-        }
-    }
-}
-```
-
-## ³×ÀÓ½ºÆäÀÌ½º ÆÄ½Ì ±ÔÄ¢
-
-³×ÀÓ½ºÆäÀÌ½º´Â ´ÙÀ½ Çü½ÄÀ» µû¶ó¾ß ÇÕ´Ï´Ù:
-
-```
-nU3.Modules.{SystemType}.{SubSystem}.{ModuleName}
-```
-
-### ÆÄ½Ì °á°ú
-
-| Namespace | SystemType | SubSystem |
-|-----------|------------|-----------|
-| `nU3.Modules.EMR.IN.Worklist` | EMR | IN |
-| `nU3.Modules.ADM.AD.Deployer` | ADM | AD |
-| `nU3.Modules.NUR.OP.Schedule` | NUR | OP |
-| `nU3.Modules.EMR.Worklist` | EMR | null |
-| `nU3.Modules.LAB.Analysis` | LAB | null |
-
-## »ó¼¼ ¿¹½Ã
-
-### ¿¹½Ã 1: °ü¸®ÀÚ ¸ğµâ
-
-```csharp
-namespace nU3.Modules.ADM.AD.Deployer
-{
-    /// <summary>
-    /// ¹èÆ÷ °ü¸® È­¸é
-    /// - SystemType: "ADM" (ÀÚµ¿)
-    /// - SubSystem: "AD" (ÀÚµ¿)
-    /// - ProgramID: "ADM_AD_00001" (ÀÚµ¿)
-    /// - ProgramTitle: "¹èÆ÷ °ü¸®" (ÀÚµ¿)
-    /// </summary>
-    [nU3ProgramInfo(typeof(DeployerWorkControl), "¹èÆ÷ °ü¸®", "ADM_AD_00001")]
-    public class DeployerWorkControl : BaseWorkControl
-    {
-        public DeployerWorkControl()
-        {
-            // ProgramID, ProgramTitle ¼³Á¤ ºÒÇÊ¿ä!
-            InitializeLayout();
-        }
-    }
-}
-```
-
-### ¿¹½Ã 2: EMR ÀÔ¿ø ¸ğµâ
-
-```csharp
-namespace nU3.Modules.EMR.IN.Worklist
-{
-    /// <summary>
-    /// ÀÔ¿ø È¯ÀÚ ¸ñ·Ï
-    /// - SystemType: "EMR" (ÀÚµ¿)
-    /// - SubSystem: "IN" (ÀÚµ¿)
-    /// - ProgramID: "EMR_PATIENT_LIST_001" (ÀÚµ¿)
-    /// - ProgramTitle: "È¯ÀÚ ¸ñ·Ï" (ÀÚµ¿)
-    /// </summary>
-    [nU3ProgramInfo(typeof(PatientListControl), "È¯ÀÚ ¸ñ·Ï", "EMR_PATIENT_LIST_001")]
-    public class PatientListControl : BaseWorkControl
-    {
-        public PatientListControl()
-        {
-            // ¸ğµç ¼Ó¼ºÀÌ ÀÚµ¿À¸·Î ¼³Á¤µÊ
-            InitializeLayout();
-            LoadSampleData();
-        }
-    }
-}
-```
-
-### ¿¹½Ã 3: ÆË¾÷ Æû
-
-```csharp
-namespace nU3.Modules.EMR.OP.Registration
-{
-    /// <summary>
-    /// ¿Ü·¡ È¯ÀÚ µî·Ï ÆË¾÷
-    /// FormTypeÀ» "POPUP"À¸·Î ÁöÁ¤
-    /// </summary>
-    [nU3ProgramInfo(typeof(PatientRegisterPopup), "È¯ÀÚ µî·Ï", "EMR_OP_REG_POPUP", "POPUP")]
-    public class PatientRegisterPopup : BaseWorkControl
-    {
-        // FormType = "POPUP"
-        // SystemType = "EMR"
-        // SubSystem = "OP"
-    }
-}
-```
-
-### ¿¹½Ã 4: ±ÇÇÑ ·¹º§ ÁöÁ¤
-
-```csharp
-namespace nU3.Modules.ADM.AD.UserManagement
-{
-    /// <summary>
-    /// »ç¿ëÀÚ °ü¸® (°ü¸®ÀÚ Àü¿ë)
-    /// AuthLevel = 0 (°ü¸®ÀÚ¸¸ Á¢±Ù)
-    /// </summary>
-    [nU3ProgramInfo(typeof(UserManagementControl), "»ç¿ëÀÚ °ü¸®", "ADM_AD_USER_001", AuthLevel = 0)]
-    public class UserManagementControl : BaseWorkControl
-    {
-        // AuthLevel = 0 (°ü¸®ÀÚ Àü¿ë)
-    }
-}
-```
-
-## BaseWorkControl ÀÚµ¿ ¼Ó¼º
-
-`BaseWorkControl`À» »ó¼Ó¹ŞÀ¸¸é ´ÙÀ½ ¼Ó¼ºÀÌ ÀÚµ¿À¸·Î ¼³Á¤µË´Ï´Ù:
-
-```csharp
-public class YourControl : BaseWorkControl
-{
-    // ? ÀÚµ¿À¸·Î nU3ProgramInfo¿¡¼­ °¡Á®¿È
-    public override string ProgramID { get; }
-    
-    // ? ÀÚµ¿À¸·Î nU3ProgramInfo¿¡¼­ °¡Á®¿È
-    public override string ProgramTitle { get; }
-    
-    public YourControl()
-    {
-        // ? ¼öµ¿ ¼³Á¤ ºÒÇÊ¿ä!
-        // ProgramID = "...";     // ºÒÇÊ¿ä
-        // ProgramTitle = "...";  // ºÒÇÊ¿ä
-        
-        // ¹Ù·Î ·ÎÁ÷ ±¸Çö
-        InitializeLayout();
-    }
-}
-```
-
-## »ı¼ºÀÚ ½Ã±×´ÏÃ³
-
-### ÀÚµ¿ ÆÄ½Ì »ı¼ºÀÚ (±ÇÀå)
-
-```csharp
-public nU3ProgramInfoAttribute(
-    Type declaringType,        // typeof(Å¬·¡½º¸í)
-    string programName,        // ÇÁ·Î±×·¥ Ç¥½Ã ÀÌ¸§
-    string programId,          // °íÀ¯ ÇÁ·Î±×·¥ ID
-    string formType = "CHILD"  // CHILD, POPUP, SDI
-)
-```
-
-### ¸í½ÃÀû »ı¼ºÀÚ (ÇÏÀ§ È£È¯)
-
-```csharp
-public nU3ProgramInfoAttribute(
-    string systemType,         // ½Ã½ºÅÛ Å¸ÀÔ (¿¹: "EMR", "ADM")
-    string programName,        // ÇÁ·Î±×·¥ Ç¥½Ã ÀÌ¸§
-    string programId,          // °íÀ¯ ÇÁ·Î±×·¥ ID
-    string formType = "CHILD"  // CHILD, POPUP, SDI
-)
-```
-
-## ¼Ó¼º Á¤º¸
-
-### ÀÚµ¿ ¼³Á¤ ¼Ó¼º
-
-| ¼Ó¼º | ÃâÃ³ | ¼³¸í |
-|------|------|------|
-| `ProgramID` | nU3ProgramInfo | BaseWorkControl¿¡¼­ ÀÚµ¿ »ç¿ë |
-| `ProgramTitle` | nU3ProgramInfo | BaseWorkControl¿¡¼­ ÀÚµ¿ »ç¿ë |
-| `SystemType` | Namespace | ³×ÀÓ½ºÆäÀÌ½º¿¡¼­ ÀÚµ¿ ÃßÃâ |
-| `SubSystem` | Namespace | ³×ÀÓ½ºÆäÀÌ½º¿¡¼­ ÀÚµ¿ ÃßÃâ |
-
-### ¼öµ¿ ¼³Á¤ ¼Ó¼º
-
-| ¼Ó¼º | Å¸ÀÔ | ±âº»°ª | ¼³¸í |
-|------|------|--------|------|
-| `FormType` | string | "CHILD" | Æû Å¸ÀÔ: CHILD, POPUP, SDI |
-| `AuthLevel` | int | 1 | ±ÇÇÑ ·¹º§ (0=°ü¸®ÀÚ, 1~99=ÀÏ¹İ) |
-| `IsUse` | bool | true | È°¼ºÈ­ ¿©ºÎ |
-
-## ³×ÀÓ½ºÆäÀÌ½º ±ÔÄ¢ ±ÇÀå»çÇ×
-
-### ½Ã½ºÅÛ Å¸ÀÔ (SystemType)
-
-- **EMR**: Electronic Medical Record (ÀüÀÚÀÇ¹«±â·Ï)
-- **ADM**: Administration (°ü¸®)
-- **NUR**: Nursing (°£È£)
-- **LAB**: Laboratory (°Ë»ç)
-- **RAD**: Radiology (¿µ»óÀÇÇĞ)
-- **PHA**: Pharmacy (¾à±¹)
-- **BIL**: Billing (Ã»±¸)
-
-### ¼­ºê½Ã½ºÅÛ (SubSystem)
-
-- **IN**: Inpatient (ÀÔ¿ø)
-- **OP**: Outpatient (¿Ü·¡)
-- **ER**: Emergency Room (ÀÀ±Ş½Ç)
-- **AD**: Administration (°ü¸®)
-- **SCH**: Schedule (½ºÄÉÁÙ)
-- **WL**: Worklist (¿öÅ©¸®½ºÆ®)
-
-### ³×ÀÓ½ºÆäÀÌ½º ±¸Á¶ ¿¹½Ã
-
-```
-nU3.Modules.{System}.{SubSystem}.{Module}
-
-¿¹½Ã:
-nU3.Modules.EMR.IN.Worklist          ¡æ ÀÔ¿ø ¿öÅ©¸®½ºÆ®
-nU3.Modules.EMR.OP.Registration      ¡æ ¿Ü·¡ Á¢¼ö
-nU3.Modules.ADM.AD.UserManagement    ¡æ °ü¸®ÀÚ - »ç¿ëÀÚ °ü¸®
-nU3.Modules.NUR.IN.VitalSigns        ¡æ °£È£ - ÀÔ¿ø ¹ÙÀÌÅ» »çÀÎ
-nU3.Modules.LAB.OP.OrderEntry        ¡æ °Ë»ç½Ç - ¿Ü·¡ Ã³¹æ ÀÔ·Â
-```
-
-## ¸¶ÀÌ±×·¹ÀÌ¼Ç °¡ÀÌµå
-
-### Before (ÀÌÀü ¹æ½Ä)
-
-```csharp
-namespace nU3.Modules.ADM.AD.Deployer
-{
-    [nU3ProgramInfo("ADM", "ADM AD Deployer", "ADM_AD_DEPLOYER")]
-    public class DeployerWorkControl : BaseWorkControl
-    {
-        public DeployerWorkControl()
-        {
-            ProgramID = "ADM_AD_DEPLOYER";      // ? Áßº¹
-            ProgramTitle = "ADM Deployer";       // ? Áßº¹
-            // ...
-        }
-    }
-}
-```
-
-### After (»õ ¹æ½Ä)
-
-```csharp
-namespace nU3.Modules.ADM.AD.Deployer
-{
-    [nU3ProgramInfo(typeof(DeployerWorkControl), "ADM AD Deployer", "ADM_AD_DEPLOYER")]
-    public class DeployerWorkControl : BaseWorkControl
-    {
-        public DeployerWorkControl()
-        {
-            // ? ProgramID, ProgramTitle ¼³Á¤ ºÒÇÊ¿ä!
-            // ? SystemType, SubSystem ÀÚµ¿ ÃßÃâ!
-            // ...
-        }
-    }
-}
-```
-
-### ÀåÁ¡
-
-1. **ÄÚµå °£¼ÒÈ­**: ProgramID¿Í ProgramTitleÀ» Áßº¹À¸·Î ¼³Á¤ÇÒ ÇÊ¿ä ¾øÀ½
-2. **Å¸ÀÌÇÎ °¨¼Ò**: SystemType°ú SubSystemÀ» ¸Å¹ø ÀÔ·ÂÇÒ ÇÊ¿ä ¾øÀ½
-3. **¿ÀÅ¸ ¹æÁö**: ³×ÀÓ½ºÆäÀÌ½º¿Í ¼Ó¼º °ªÀÇ ºÒÀÏÄ¡ ¹æÁö
-4. **À¯Áöº¸¼ö¼º**: ÇÑ °÷(nU3ProgramInfo)¿¡¼­¸¸ °ü¸®
-5. **ÀÏ°ü¼º**: ³×ÀÓ½ºÆäÀÌ½º ±ÔÄ¢À» µû¸£¸é ÀÚµ¿À¸·Î ¿Ã¹Ù¸¥ °ª ¼³Á¤
-
-## ·±Å¸ÀÓ ¼Ó¼º È®ÀÎ
-
-```csharp
-var attr = typeof(DeployerWorkControl).GetCustomAttribute<nU3ProgramInfoAttribute>();
-if (attr != null)
-{
-    Console.WriteLine($"SystemType: {attr.SystemType}");      // "ADM"
-    Console.WriteLine($"SubSystem: {attr.SubSystem}");        // "AD"
-    Console.WriteLine($"ProgramName: {attr.ProgramName}");    // "ADM AD Deployer"
-    Console.WriteLine($"ProgramId: {attr.ProgramId}");        // "ADM_AD_00001"
-    Console.WriteLine($"FormType: {attr.FormType}");          // "CHILD"
-}
-
-// BaseWorkControl ÀÎ½ºÅÏ½º¿¡¼­ Á÷Á¢ Á¢±Ù
-var control = new DeployerWorkControl();
-Console.WriteLine($"ProgramID: {control.ProgramID}");        // "ADM_AD_00001"
-Console.WriteLine($"ProgramTitle: {control.ProgramTitle}");  // "ADM AD Deployer"
-```
-
-## ÁÖÀÇ»çÇ×
-
-1. **³×ÀÓ½ºÆäÀÌ½º ±ÔÄ¢ ÁØ¼ö**: `nU3.Modules.{SystemType}.{SubSystem}` Çü½ÄÀ» µû¶ó¾ß ÀÚµ¿ ÃßÃâÀÌ ÀÛµ¿ÇÕ´Ï´Ù.
-2. **typeof »ç¿ë**: ÀÚµ¿ ÃßÃâÀ» »ç¿ëÇÏ·Á¸é Ã¹ ¹øÂ° ÀÎÀÚ·Î `typeof(Å¬·¡½º¸í)`À» Àü´ŞÇØ¾ß ÇÕ´Ï´Ù.
-3. **BaseWorkControl »ó¼Ó**: `ProgramID`¿Í `ProgramTitle` ÀÚµ¿ ¼³Á¤Àº `BaseWorkControl`À» »ó¼ÓÇÑ °æ¿ì¿¡¸¸ ÀÛµ¿ÇÕ´Ï´Ù.
-4. **¼öµ¿ ¿À¹ö¶óÀÌµå °¡´É**: ÇÊ¿äÇÑ °æ¿ì `ProgramID`³ª `ProgramTitle`À» ¼öµ¿À¸·Î ¿À¹ö¶óÀÌµåÇÒ ¼ö ÀÖ½À´Ï´Ù.
-
-## FAQ
-
-### Q: ProgramID¸¦ ¼öµ¿À¸·Î º¯°æÇÒ ¼ö ÀÖ³ª¿ä?
-A: ³×, ÇÊ¿äÇÑ °æ¿ì ¿À¹ö¶óÀÌµåÇÒ ¼ö ÀÖ½À´Ï´Ù:
-
-```csharp
-[nU3ProgramInfo(typeof(MyControl), "³» ÄÁÆ®·Ñ", "MY_CTRL_001")]
-public class MyControl : BaseWorkControl
-{
-    public MyControl()
-    {
-        // Æ¯º°ÇÑ °æ¿ì ¼öµ¿ ¼³Á¤ °¡´É
-        ProgramID = "CUSTOM_ID";
-    }
-}
-```
-
-### Q: ³×ÀÓ½ºÆäÀÌ½º°¡ ±ÔÄ¢°ú ´Ù¸£¸é ¾î¶»°Ô µÇ³ª¿ä?
-A: `SystemType`ÀÌ "COMMON"À¸·Î ¼³Á¤µÇ°í `SubSystem`Àº nullÀÌ µË´Ï´Ù.
-
-### Q: ÇÏÀ§ È£È¯¼ºÀº º¸ÀåµÇ³ª¿ä?
-A: ³×, ±âÁ¸ ¸í½ÃÀû »ı¼ºÀÚµµ ¿©ÀüÈ÷ »ç¿ë °¡´ÉÇÕ´Ï´Ù.
-
-## ¶óÀÌ¼±½º
-
-? 2024 nU3 Framework
+  # nU3ProgramInfoAttribute ì‚¬ìš© ê°€ì´ë“œ
+
+  ## ê°œìš”
+
+  `nU3ProgramInfoAttribute`ëŠ” í”„ë¡œê·¸ë¨ì— ëŒ€í•œ ê¸°ë³¸ ì •ë³´ë¥¼ ì €ì¥í•˜ëŠ” ì†ì„±ì…ë‹ˆë‹¤.
+  - ë„¤ì„ìŠ¤í˜ì´ìŠ¤ ì •ë³´ë¥¼ ìë™ìœ¼ë¡œ ë¶„ì„í•˜ì—¬ ì‹œìŠ¤í…œ íƒ€ì…ê³¼ í•˜ìœ„ ì‹œìŠ¤í…œì„ ì¶”ì¶œ
+  - `BaseWorkControl`ì˜ `ProgramID`ì™€ `ProgramTitle`ì„ ìë™ìœ¼ë¡œ ì„¤ì •
+
+  ## ì£¼ìš” ì†ì„±
+
+  ### 1. ë„¤ì„ìŠ¤í˜ì´ìŠ¤ ìë™ ë¶„ì„
+  `typeof(í´ë˜ìŠ¤ì´ë¦„)`ë¥¼ ì§€ì •í•˜ë©´ ë„¤ì„ìŠ¤í˜ì´ìŠ¤ì—ì„œ `SystemType`ê³¼ `SubSystem`ì„ ìë™ìœ¼ë¡œ ë¶„ì„í•©ë‹ˆë‹¤.
+
+  ### 2. ì†ì„± ìë™ ì„¤ì •
+  `BaseWorkControl`ì˜ `ProgramID`ì™€ `ProgramTitle`ì„ ìë™ìœ¼ë¡œ `nU3ProgramInfo` ì†ì„±ìœ¼ë¡œ ì„¤ì •í•©ë‹ˆë‹¤.
+
+  ## ì‚¬ìš© ì˜ˆì‹œ
+
+  ### ì •í™•í•œ ì‚¬ìš© ë°©ì‹ (ìë™ ì„¤ì •)
+
+  ```csharp
+  namespace nU3.Modules.ADM.AD.Deployer
+  {
+      // typeof ì§€ì • - SystemTypeê³¼ SubSystem ìë™ ë¶„ì„
+      // ProgramIDì™€ ProgramTitle ìë™ ì„¤ì •
+      [nU3ProgramInfo(typeof(DeployerWorkControl), "ADM AD Deployer", "ADM_AD_00001")]
+      public class DeployerWorkControl : BaseWorkControl
+      {
+          public DeployerWorkControl()
+          {
+              // ProgramIDì™€ ProgramTitleì€ í”„ë¡œê·¸ë¨ì—ì„œ ì§ì ‘ ì„¤ì •í•´ì•¼ í•©ë‹ˆë‹¤!
+              // ìë™ìœ¼ë¡œ nU3ProgramInfo ì†ì„±ì´ ì„¤ì •ë©ë‹ˆë‹¤
+
+              var label = new Label
+              {
+                  Dock = DockStyle.Fill,
+                  Text = "ADM AD Deployer module"
+              };
+              Controls.Add(label);
+          }
+      }
+  }
+  ```
+
+  **ìë™ ì„¤ì • ë‚´ìš©:**
+  - `SystemType`: `"ADM"` (ë„¤ì„ìŠ¤í˜ì´ìŠ¤ ìë™ ë¶„ì„)
+  - `SubSystem`: `"AD"` (ë„¤ì„ìŠ¤í˜ì´ìŠ¤ ìë™ ë¶„ì„)
+  - `ProgramID`: `"ADM_AD_00001"` (BaseWorkControlì—ì„œ ìë™ ì„¤ì •)
+  - `ProgramTitle`: `"ADM AD Deployer"` (BaseWorkControlì—ì„œ ìë™ ì„¤ì •)
+
+  ### í¸ë¦¬í•œ ì‚¬ìš© ë°©ì‹ (ê²€ì¦)
+
+  ```csharp
+  namespace nU3.Modules.ADM.AD.Deployer
+  {
+      [nU3ProgramInfo("ADM", "ADM AD Deployer", "ADM_AD_00001")]
+      public class DeployerWorkControl : BaseWorkControl
+      {
+          public DeployerWorkControl()
+          {
+              // ìˆ˜ë™ìœ¼ë¡œ ì¤‘ë³µ ì„¤ì •!
+              ProgramID = "ADM_AD_DEPLOYER";
+              ProgramTitle = "ADM Deployer";
+
+              // ...
+          }
+      }
+  }
+  ```
+
+  ## ë„¤ì„ìŠ¤í˜ì´ìŠ¤ ê·œì¹™
+
+  ë„¤ì„ìŠ¤í˜ì´ìŠ¤ êµ¬ì¡°ëŠ” ë‹¤ìŒê³¼ ê°™ìŠµë‹ˆë‹¤:
+
+  ```
+  nU3.Modules.{SystemType}.{SubSystem}.{ModuleName}
+  ```
+
+  ## ì˜ˆì‹œ ë¶„ì„
+
+  ### ì˜ˆì‹œ 1: ë°°í¬ í”„ë¡œê·¸ë¨
+
+  ```csharp
+  namespace nU3.Modules.ADM.AD.Deployer
+  {
+      /// <summary>
+      /// ë°°í¬ í”„ë¡œê·¸ë¨ í™”ë©´
+      /// - SystemType: "ADM" (ìë™)
+      /// - SubSystem: "AD" (ìë™)
+      /// - ProgramID: "ADM_AD_00001" (ìë™)
+      /// - ProgramTitle: "ë°°í¬ í”„ë¡œê·¸ë¨" (ìë™)
+      /// </summary>
+      [nU3ProgramInfo(typeof(DeployerWorkControl), "ë°°í¬ í”„ë¡œê·¸ë¨", "ADM_AD_00001")]
+      public class DeployerWorkControl : BaseWorkControl
+      {
+          public DeployerWorkControl()
+          {
+              // ProgramID, ProgramTitle ì§ì ‘ ì„¤ì • ê°€ëŠ¥!
+              InitializeLayout();
+          }
+      }
+  }
+  ```
+
+  ### ì˜ˆì‹œ 2: EMR í™”ë©´
+
+  ```csharp
+  namespace nU3.Modules.EMR.IN.Worklist
+  {
+      /// <summary>
+      /// ì…ì› í™˜ì ëª©ë¡
+      /// - SystemType: "EMR" (ìë™)
+      /// - SubSystem: "IN" (ìë™)
+      /// - ProgramID: "EMR_PATIENT_LIST_001" (ìë™)
+      /// - ProgramTitle: "í™˜ì ëª©ë¡" (ìë™)
+      /// </summary>
+      [nU3ProgramInfo(typeof(PatientListControl), "í™˜ì ëª©ë¡", "EMR_PATIENT_LIST_001")]
+      public class PatientListControl : BaseWorkControl
+      {
+          public PatientListControl()
+          {
+              // ì†ì„±ì— ì˜í•´ ìë™ìœ¼ë¡œ ì„¤ì •ë©ë‹ˆë‹¤
+              InitializeLayout();
+              LoadSampleData();
+          }
+      }
+  }
+  ```
+
+  ### ì˜ˆì‹œ 3: íŒì—…
+
+  ```csharp
+  namespace nU3.Modules.EMR.OP.Registration
+  {
+      /// <summary>
+      /// ì™¸ë˜ í™˜ì ëª©ë¡ íŒì—…
+      /// FormTypeì€ "POPUP"ìœ¼ë¡œ ì„¤ì •
+      /// </summary>
+      [nU3ProgramInfo(typeof(PatientRegisterPopup), "í™˜ì ëª©ë¡", "EMR_OP_REG_POPUP", "POPUP")]
+      public class PatientRegisterPopup : BaseWorkControl
+      {
+          // FormType = "POPUP"
+          // SystemType = "EMR"
+          // SubSystem = "OP"
+      }
+  }
+  ```
+
+  ### ì˜ˆì‹œ 4: ì¸ì¦ ìˆ˜ì¤€ ë‹¤ë¦„
+
+  ```csharp
+  namespace nU3.Modules.ADM.AD.UserManagement
+  {
+      /// <summary>
+      /// ê´€ë¦¬ì í™”ë©´ (ê´€ë¦¬ìë§Œ ì‚¬ìš©)
+      /// AuthLevel = 0 (ê´€ë¦¬ì ê¶Œí•œ)
+      /// </summary>
+      [nU3ProgramInfo(typeof(UserManagementControl), "ê´€ë¦¬ì í™”ë©´", "ADM_AD_USER_001", AuthLevel = 0)]
+      public class UserManagementControl : BaseWorkControl
+      {
+          // AuthLevel = 0 (ê´€ë¦¬ì ê¶Œí•œ)
+      }
+  }
+  ```
+
+  ## BaseWorkControl ì†ì„±
+
+  `BaseWorkControl`ì— ìƒì†ë˜ì–´ ìˆëŠ” ì†ì„±ì„ ìë™ìœ¼ë¡œ ì„¤ì •í•©ë‹ˆë‹¤:
+
+  ```csharp
+  public class YourControl : BaseWorkControl
+  {
+      // ìë™ìœ¼ë¡œ nU3ProgramInfo ì†ì„±ì„ ë”°ë¦„
+      public override string ProgramID { get; }
+
+      // ìë™ìœ¼ë¡œ nU3ProgramInfo ì†ì„±ì„ ë”°ë¦„
+      public override string ProgramTitle { get; }
+
+      public YourControl()
+      {
+          // ProgramID = "...";     // ì§ì ‘ ì„¤ì •
+          // ProgramTitle = "...";  // ì§ì ‘ ì„¤ì •
+
+          // ì§ì ‘ ì„¤ì •í•  í•„ìš” ì—†ìŒ
+          InitializeLayout();
+      }
+  }
+  ```
+
+  ## ì†ì„± ìƒì„±ì
+
+  ### ì •í™•í•œ ìƒì„±ì (í´ë˜ìŠ¤ íƒ€ì… ì§€ì •)
+
+  ```csharp
+  public nU3ProgramInfoAttribute(
+      Type declaringType,        // typeof(í´ë˜ìŠ¤ì´ë¦„)
+      string programName,        // í”„ë¡œê·¸ë¨ í‘œì‹œ ì´ë¦„
+      string programId,          // ì‹ë³„ í”„ë¡œê·¸ë¨ ID
+      string formType = "CHILD"  // CHILD, POPUP, SDI
+  )
+  ```
+
+  ### í¸ë¦¬í•œ ìƒì„±ì (ë¬¸ìì—´ ì§€ì •)
+
+  ```csharp
+  public nU3ProgramInfoAttribute(
+      string systemType,         // ì‹œìŠ¤í…œ íƒ€ì… (ì˜ˆ: "EMR", "ADM")
+      string programName,        // í”„ë¡œê·¸ë¨ í‘œì‹œ ì´ë¦„
+      string programId,          // ì‹ë³„ í”„ë¡œê·¸ë¨ ID
+      string formType = "CHILD"  // CHILD, POPUP, SDI
+  )
+  ```
+
+  ## ì†ì„± ê°’
+
+  ### ìë™ ì„¤ì • ì†ì„±
+
+  | ì†ì„± | ì†ŒìŠ¤ | ì„¤ëª… |
+  |------|------|------|
+  | `ProgramID` | nU3ProgramInfo | BaseWorkControlì—ì„œ ìë™ ì„¤ì • |
+  | `ProgramTitle` | nU3ProgramInfo | BaseWorkControlì—ì„œ ìë™ ì„¤ì • |
+  | `SystemType` | Namespace | ë„¤ì„ìŠ¤í˜ì´ìŠ¤ì—ì„œ ìë™ ë¶„ì„ |
+  | `SubSystem` | Namespace | ë„¤ì„ìŠ¤í˜ì´ìŠ¤ì—ì„œ ìë™ ë¶„ì„ |
+
+  ### ì˜µì…˜ ì†ì„±
+
+  | ì†ì„± | íƒ€ì… | ê¸°ë³¸ê°’ | ì„¤ëª… |
+  |------|------|--------|------|
+  | `FormType` | string | "CHILD" | í¼ íƒ€ì…: CHILD, POPUP, SDI |
+  | `AuthLevel` | int | 1 | ê¶Œí•œ ìˆ˜ì¤€ (0=ê´€ë¦¬ì, 1~99=ì¼ë°˜) |
+  | `IsUse` | bool | true | í™œì„±í™” ì—¬ë¶€ |
+
+  ## ë„¤ì„ìŠ¤í˜ì´ìŠ¤ ê·œì¹™ ìƒì„¸
+
+  ### ì‹œìŠ¤í…œ íƒ€ì… (SystemType)
+
+  - **EMR**: Electronic Medical Record (ì „ì ì˜ë¬´ ê¸°ë¡)
+  - **ADM**: Administration (í–‰ì •)
+  - **NUR**: Nursing (ê°„í˜¸)
+  - **LAB**: Laboratory (ê²€ì‚¬)
+  - **RAD**: Radiology (ë°©ì‚¬ì„  ì˜ìƒ)
+  - **PHA**: Pharmacy (ì•½êµ­)
+  - **BIL**: Billing (ì²­êµ¬)
+
+  ### í•˜ìœ„ ì‹œìŠ¤í…œ (SubSystem)
+
+  - **IN**: Inpatient (ì…ì›)
+  - **OP**: Outpatient (ì™¸ë˜)
+  - **ER**: Emergency Room (ì‘ê¸‰ì‹¤)
+  - **AD**: Administration (í–‰ì •)
+  - **SCH**: Schedule (ì¼ì • ìŠ¤ì¼€ì¤„)
+  - **WL**: Worklist (ì›Œí¬ë¦¬ìŠ¤íŠ¸)
+
+  ### ë„¤ì„ìŠ¤í˜ì´ìŠ¤ êµ¬ì¡° ì˜ˆì‹œ
+
+  ```
+  nU3.Modules.{System}.{SubSystem}.{Module}
+
+  ì˜ˆì‹œ:
+  nU3.Modules.EMR.IN.Worklist          â†’ ì…ì› ì›Œí¬ë¦¬ìŠ¤íŠ¸
+  nU3.Modules.EMR.OP.Registration      â†’ ì™¸ë˜ ë“±ë¡
+  nU3.Modules.ADM.AD.UserManagement    â†’ ê´€ë¦¬ì ê´€ë¦¬ - ì‚¬ìš©ì ê´€ë¦¬
+  nU3.Modules.NUR.IN.VitalSigns        â†’ ê°„í˜¸ - ì…ì› ìƒì²´ ì‹ í˜¸ ê´€ë¦¬
+  nU3.Modules.LAB.OP.OrderEntry        â†’ ê²€ì‚¬ - ì™¸ë˜ ê²€ì‚¬ ì§€ì‹œ ì…ë ¥
+  ```
+
+  ## í”ŒëŸ¬ê·¸ì¸ í”„ë¡œê·¸ë˜ë° ê°€ì´ë“œ
+
+  ### Before (ê¸°ì¡´ ë°©ì‹)
+
+  ```csharp
+  namespace nU3.Modules.ADM.AD.Deployer
+  {
+      [nU3ProgramInfo("ADM", "ADM AD Deployer", "ADM_AD_DEPLOYER")]
+      public class DeployerWorkControl : BaseWorkControl
+      {
+          public DeployerWorkControl()
+          {
+              ProgramID = "ADM_AD_DEPLOYER";      // ì¤‘ë³µ
+              ProgramTitle = "ADM Deployer";       // ì¤‘ë³µ
+              // ...
+          }
+      }
+  }
+  ```
+
+  ### After (ê°œì„  ë°©ì‹)
+
+  ```csharp
+  namespace nU3.Modules.ADM.AD.Deployer
+  {
+      [nU3ProgramInfo(typeof(DeployerWorkControl), "ADM AD Deployer", "ADM_AD_DEPLOYER")]
+      public class DeployerWorkControl : BaseWorkControl
+      {
+          public DeployerWorkControl()
+          {
+              // ProgramID, ProgramTitleì€ ì§ì ‘ ì„¤ì • ê°€ëŠ¥!
+              // SystemType, SubSystemì€ ìë™ ì„¤ì •!
+              // ...
+          }
+      }
+  }
+  ```
+
+  ### ê°œì„ ì 
+
+  1. **ìë™ ì„¤ì •**: ProgramIDì™€ ProgramTitle ì¤‘ë³µ ë°©ì§€
+  2. **íƒ€ì… ì•ˆì „**: SystemTypeê³¼ SubSystemì„ ì…ë ¥í•˜ì—¬ ì•ˆì „
+  3. **ê·œì¹™ ì¤€ìˆ˜**: ë„¤ì„ìŠ¤í˜ì´ìŠ¤ ì†ì„±ì—ì„œ ê·œì¹™ ì¤€ìˆ˜
+  4. **ê²€ì¦ ìš©ì´**: ëª¨ë“  ì •ë³´ê°€ í•œ ì†ì„±(nU3ProgramInfo)ì— ì €ì¥
+  5. **ìœ ì§€ë³´ìˆ˜ì„±**: ë„¤ì„ìŠ¤í˜ì´ìŠ¤ ê·œì¹™ì„ ì¤€ìˆ˜í•˜ë©´ ì•ˆì „
+
+  ## ì†ì„± í™•ì¸
+
+  ```csharp
+  var attr = typeof(DeployerWorkControl).GetCustomAttribute<nU3ProgramInfoAttribute>();
+  if (attr != null)
+  {
+      Console.WriteLine($"SystemType: {attr.SystemType}");      // "ADM"
+      Console.WriteLine($"SubSystem: {attr.SubSystem}");        // "AD"
+      Console.WriteLine($"ProgramName: {attr.ProgramName}");    // "ADM AD Deployer"
+      Console.WriteLine($"ProgramId: {attr.ProgramId}");        // "ADM_AD_00001"
+      Console.WriteLine($"FormType: {attr.FormType}");          // "CHILD"
+  }
+
+  // BaseWorkControl ì¸ìŠ¤í„´ìŠ¤ì—ì„œë„ ì†ì„± í™•ì¸
+  var control = new DeployerWorkControl();
+  Console.WriteLine($"ProgramID: {control.ProgramID}");        // "ADM_AD_00001"
+  Console.WriteLine($"ProgramTitle: {control.ProgramTitle}");  // "ADM AD Deployer"
+  ```
+
+  ## íŒ
+
+  1. **ë„¤ì„ìŠ¤í˜ì´ìŠ¤ ê·œì¹™ ì¤€ìˆ˜**: `nU3.Modules.{SystemType}.{SubSystem}` í˜•ì‹ì„ ì‚¬ìš©í•˜ì—¬ ìë™ ë¶„ì„ì„ í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤.
+  2. **typeof ì§€ì •**: ìë™ ì„¤ì •ì„ í•˜ë ¤ë©´ ì²« ë²ˆì§¸ ë§¤ê°œë³€ìˆ˜ë¡œ `typeof(í´ë˜ìŠ¤ì´ë¦„)`ë¥¼ ì§€ì •í•´ì•¼ í•©ë‹ˆë‹¤.
+  3. **BaseWorkControl ìƒì†**: `ProgramID`ì™€ `ProgramTitle`ì€ `BaseWorkControl`ì—ì„œ ì¬ì •ì˜í•˜ì—¬ ì‚¬ìš©í•©ë‹ˆë‹¤.
+  4. **ìˆ˜ë™ ì„¤ì • í—ˆìš©**: í•„ìš”í•œ ê²½ìš° `ProgramID`ì™€ `ProgramTitle`ì„ ì§ì ‘ ì„¤ì •í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤.
+
+  ## FAQ
+
+  ### Q: ProgramIDë¥¼ ì§ì ‘ ì„¤ì •í•  ìˆ˜ ìˆë‚˜ìš”?
+  A: ë„¤, í”„ë¡œê·¸ë¨ ê°œë°œ ì‹œ ì§ì ‘ ì„¤ì •í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤:
+
+  ```csharp
+  [nU3ProgramInfo(typeof(MyControl), "ë‚´ ì»¨íŠ¸ë¡¤", "MY_CTRL_001")]
+  public class MyControl : BaseWorkControl
+  {
+      public MyControl()
+      {
+          // íŠ¹ë³„í•œ ì„¤ì •ì´ í•„ìš”í•  ë•Œ ì§ì ‘ ì„¤ì •
+          ProgramID = "CUSTOM_ID";
+      }
+  }
+  ```
+
+  ### Q: ë„¤ì„ìŠ¤í˜ì´ìŠ¤ ê·œì¹™ì´ ë‹¤ë¥´ë‹¤ë©´ ì–´ë–»ê²Œ í•˜ë‚˜ìš”?
+  A: `SystemType`ì€ "COMMON"ìœ¼ë¡œ ì„¤ì •í•˜ê³  `SubSystem`ì€ nullë¡œ ì„¤ì •í•©ë‹ˆë‹¤.
+
+  ### Q: ìƒì„±ìë¡œ ì§ì ‘ ì„¤ì •í•  ìˆ˜ ìˆë‚˜ìš”?
+  A: ë„¤, ì†ì„±ì˜ í•„ìˆ˜ ë§¤ê°œë³€ìˆ˜ëŠ” ë¬¸ìì—´ë¡œ ì§ì ‘ ì„¤ì •í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤.
+
+  ## ë¼ì´ì„ ìŠ¤ ì •ë³´
+
+  (c) 2024 nU3 Framework
