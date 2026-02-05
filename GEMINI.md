@@ -104,7 +104,8 @@ The framework uses a rigorous deployment strategy:
 - 프로젝트 내에 문서 파일은 프로젝트 파일(.csproj)과 동일한 곳에 생성하며, DOC_{Category}_{Function}_{Detail}.md 로 형식으로 작성한다.
 - 코드가 수정이 되면 DOC_ 내용에 맞게 갱신한다.
 - 모든 코드 및 문서는 UTF8로 인코딩하여 저장할것.
-
-
+- DevExpress API, Help문서는 Reference 폴더 밑에 있으므로 참조할 것.
+- DevExpress Winform Demo 프로젝트 및 파일 : c:\Project2_OPERATION\05.Framework\nU3.Framework\Reference\Example_CS\
+- DevExpress Winform Document : c:\Project2_OPERATION\05.Framework\nU3.Framework\Reference\DevExpress.WindowsForms.v23.2\
 
 

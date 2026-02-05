@@ -425,6 +425,10 @@ SRC/
 - 프로젝트 내에 문서 파일은 프로젝트 파일(.csproj)과 동일한 곳에 생성하며, DOC_{Category}_{Function}_{Detail}.md 로 형식으로 작성한다.
 - 코드가 수정이 되면 DOC_ 내용에 맞게 갱신한다.
 - 모든 코드 및 문서는 UTF8로 인코딩하여 저장할것.
+- DevExpress Winform Demo : c:\Project2_OPERATION\05.Framework\Reference\Example_CS\
+- DevExpress Winform Document : c:\Project2_OPERATION\05.Framework\Reference\DevExpress.WindowsForms.v23.2\
+-
+
 
 ---
 
