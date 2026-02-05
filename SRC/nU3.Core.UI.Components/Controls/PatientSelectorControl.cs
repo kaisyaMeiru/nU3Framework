@@ -42,6 +42,20 @@ namespace nU3.Core.UI.Components.Controls
         {
             InitializeComponent();
             AttachEventHandlers();
+
+            // 바인딩리스트를 그리드에 연결해야 데이터가 표시됩니다.
+            if (_gridControl != null)
+            {
+                _gridControl.DataSource = _patients;
+            }
+
+            // 그리드가 이미 생성된 경우 컬럼과 바인딩을 동기화
+            if (_gridView != null)
+            {
+                // 기존에 디자인 타임 컬럼을 사용하고 있으므로 PopulateColumns를 호출하면
+                // 자동 생성 컬럼과 충돌할 수 있으니 필요시만 사용합니다.
+                // _gridView.PopulateColumns();
+            }
         }
 
         private void AttachEventHandlers()
@@ -116,6 +130,12 @@ namespace nU3.Core.UI.Components.Controls
             {
                 _patients.Add(patient);
             }
+
+            // 바인딩을 새로고침하여 그리드가 즉시 업데이트되도록 함
+            if (_gridControl != null)
+            {
+                _gridControl.RefreshDataSource();
+            }
         }
 
         public PatientInfoDto? GetSelectedPatient()
@@ -147,6 +167,11 @@ namespace nU3.Core.UI.Components.Controls
             }
             _patients.Clear();
             ClearSelection();
+
+            if (_gridControl != null)
+            {
+                _gridControl.RefreshDataSource();
+            }
         }
 
         private void OnSelect(object? sender, EventArgs e)

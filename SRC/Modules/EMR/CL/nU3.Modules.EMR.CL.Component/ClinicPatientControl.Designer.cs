@@ -30,158 +30,151 @@ namespace nU3.Modules.EMR.CL.Component
 
         private void InitializeComponent()
         {
-            this._components = new System.ComponentModel.Container();
-            this._layoutControl = new DevExpress.XtraLayout.LayoutControl();
-            this._patientSelector = new nU3.Core.UI.Components.Controls.PatientSelectorControl();
-            this._btnClear = new DevExpress.XtraEditors.SimpleButton();
-            this._lblSelectedPatient = new DevExpress.XtraEditors.LabelControl();
-            this._rootGroup = new DevExpress.XtraLayout.LayoutControlGroup();
-            this._patientGroup = new DevExpress.XtraLayout.LayoutControlGroup();
-            this._patientControlItem = new DevExpress.XtraLayout.LayoutControlItem();
-            this._infoGroup = new DevExpress.XtraLayout.LayoutControlGroup();
-            this._infoItem = new DevExpress.XtraLayout.LayoutControlItem();
-            this._buttonGroup = new DevExpress.XtraLayout.LayoutControlGroup();
-            this._buttonItem = new DevExpress.XtraLayout.LayoutControlItem();
-            ((System.ComponentModel.ISupportInitialize)(this._layoutControl)).BeginInit();
-            this._layoutControl.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this._rootGroup)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this._patientGroup)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this._patientControlItem)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this._infoGroup)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this._infoItem)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this._buttonGroup)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this._buttonItem)).BeginInit();
-            this.SuspendLayout();
+            _layoutControl = new DevExpress.XtraLayout.LayoutControl();
+            _patientSelector = new nU3.Core.UI.Components.Controls.PatientSelectorControl();
+            _lblSelectedPatient = new DevExpress.XtraEditors.LabelControl();
+            _btnClear = new DevExpress.XtraEditors.SimpleButton();
+            _rootGroup = new DevExpress.XtraLayout.LayoutControlGroup();
+            _patientGroup = new DevExpress.XtraLayout.LayoutControlGroup();
+            _patientControlItem = new DevExpress.XtraLayout.LayoutControlItem();
+            _infoGroup = new DevExpress.XtraLayout.LayoutControlGroup();
+            _infoItem = new DevExpress.XtraLayout.LayoutControlItem();
+            _buttonGroup = new DevExpress.XtraLayout.LayoutControlGroup();
+            _buttonItem = new DevExpress.XtraLayout.LayoutControlItem();
+            ((System.ComponentModel.ISupportInitialize)_layoutControl).BeginInit();
+            _layoutControl.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)_rootGroup).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)_patientGroup).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)_patientControlItem).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)_infoGroup).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)_infoItem).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)_buttonGroup).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)_buttonItem).BeginInit();
+            SuspendLayout();
             // 
             // _layoutControl
             // 
-            this._layoutControl.Controls.Add(this._patientSelector);
-            this._layoutControl.Controls.Add(this._lblSelectedPatient);
-            this._layoutControl.Controls.Add(this._btnClear);
-            this._layoutControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this._layoutControl.Location = new System.Drawing.Point(0, 0);
-            this._layoutControl.Name = "_layoutControl";
-            this._layoutControl.Root = this._rootGroup;
-            this._layoutControl.Size = new System.Drawing.Size(1528, 850);
-            this._layoutControl.TabIndex = 0;
-            this._layoutControl.Text = "layoutControl1";
+            _layoutControl.Controls.Add(_patientSelector);
+            _layoutControl.Controls.Add(_lblSelectedPatient);
+            _layoutControl.Controls.Add(_btnClear);
+            _layoutControl.Dock = DockStyle.Fill;
+            _layoutControl.Location = new Point(0, 0);
+            _layoutControl.Name = "_layoutControl";
+            _layoutControl.Root = _rootGroup;
+            _layoutControl.Size = new Size(1528, 793);
+            _layoutControl.TabIndex = 0;
+            _layoutControl.Text = "layoutControl1";
             // 
             // _patientSelector
             // 
-            this._patientSelector.AutoSearch = true;
-            this._patientSelector.Location = new System.Drawing.Point(24, 45);
-            this._patientSelector.Name = "_patientSelector";
-            this._patientSelector.SearchLimit = 100;
-            this._patientSelector.Size = new System.Drawing.Size(1480, 300);
-            this._patientSelector.TabIndex = 4;
-            this._patientSelector.PatientSelected += new System.EventHandler<nU3.Core.UI.Components.Events.PatientSelectedEventArgs>(this.OnPatientSelected);
-            // 
-            // _btnClear
-            // 
-            this._btnClear.Location = new System.Drawing.Point(24, 429);
-            this._btnClear.Name = "_btnClear";
-            this._btnClear.Size = new System.Drawing.Size(120, 22);
-            this._btnClear.StyleController = this._layoutControl;
-            this._btnClear.TabIndex = 6;
-            this._btnClear.Text = "선택 초기화";
-            this._btnClear.Click += new System.EventHandler(this.OnClear);
+            _patientSelector.AutoSearch = true;
+            _patientSelector.Location = new Point(24, 43);
+            _patientSelector.Name = "_patientSelector";
+            _patientSelector.SearchLimit = 100;
+            _patientSelector.Size = new Size(1480, 594);
+            _patientSelector.TabIndex = 4;
+            _patientSelector.PatientSelected += OnPatientSelected;
             // 
             // _lblSelectedPatient
             // 
-            this._lblSelectedPatient.Appearance.FontSizeDelta = 2;
-            this._lblSelectedPatient.Appearance.ForeColor = System.Drawing.Color.Gray;
-            this._lblSelectedPatient.Appearance.Options.UseFont = true;
-            this._lblSelectedPatient.Appearance.Options.UseForeColor = true;
-            this._lblSelectedPatient.Location = new System.Drawing.Point(24, 371);
-            this._lblSelectedPatient.Name = "_lblSelectedPatient";
-            this._lblSelectedPatient.Size = new System.Drawing.Size(126, 16);
-            this._lblSelectedPatient.StyleController = this._layoutControl;
-            this._lblSelectedPatient.TabIndex = 5;
-            this._lblSelectedPatient.Text = "선택된 환자: 없음";
+            _lblSelectedPatient.Appearance.FontSizeDelta = 2;
+            _lblSelectedPatient.Appearance.ForeColor = Color.Gray;
+            _lblSelectedPatient.Appearance.Options.UseFont = true;
+            _lblSelectedPatient.Appearance.Options.UseForeColor = true;
+            _lblSelectedPatient.Location = new Point(24, 684);
+            _lblSelectedPatient.Name = "_lblSelectedPatient";
+            _lblSelectedPatient.Size = new Size(106, 18);
+            _lblSelectedPatient.StyleController = _layoutControl;
+            _lblSelectedPatient.TabIndex = 5;
+            _lblSelectedPatient.Text = "선택된 환자: 없음";
+            // 
+            // _btnClear
+            // 
+            _btnClear.Location = new Point(24, 749);
+            _btnClear.Name = "_btnClear";
+            _btnClear.Size = new Size(1480, 22);
+            _btnClear.StyleController = _layoutControl;
+            _btnClear.TabIndex = 6;
+            _btnClear.Text = "선택 초기화";
+            _btnClear.Click += OnClear;
             // 
             // _rootGroup
             // 
-            this._rootGroup.EnableIndentsWithoutBorders = DevExpress.Utils.DefaultBoolean.True;
-            this._rootGroup.GroupBordersVisible = false;
-            this._rootGroup.Items.AddRange(new DevExpress.XtraLayout.BaseLayoutItem[] {
-            this._patientGroup,
-            this._infoGroup,
-            this._buttonGroup});
-            this._rootGroup.Name = "_rootGroup";
-            this._rootGroup.Size = new System.Drawing.Size(1528, 850);
-            this._rootGroup.TextVisible = false;
+            _rootGroup.EnableIndentsWithoutBorders = DevExpress.Utils.DefaultBoolean.True;
+            _rootGroup.GroupBordersVisible = false;
+            _rootGroup.Items.AddRange(new DevExpress.XtraLayout.BaseLayoutItem[] { _patientGroup, _infoGroup, _buttonGroup });
+            _rootGroup.Name = "_rootGroup";
+            _rootGroup.Size = new Size(1528, 793);
+            _rootGroup.TextVisible = false;
             // 
             // _patientGroup
             // 
-            this._patientGroup.Items.AddRange(new DevExpress.XtraLayout.BaseLayoutItem[] {
-            this._patientControlItem});
-            this._patientGroup.Location = new System.Drawing.Point(0, 0);
-            this._patientGroup.Name = "_patientGroup";
-            this._patientGroup.Size = new System.Drawing.Size(1508, 349);
-            this._patientGroup.Text = "환자 검색";
+            _patientGroup.Items.AddRange(new DevExpress.XtraLayout.BaseLayoutItem[] { _patientControlItem });
+            _patientGroup.Location = new Point(0, 0);
+            _patientGroup.Name = "_patientGroup";
+            _patientGroup.Size = new Size(1508, 641);
+            _patientGroup.Text = "환자 검색";
             // 
             // _patientControlItem
             // 
-            this._patientControlItem.Control = this._patientSelector;
-            this._patientControlItem.Location = new System.Drawing.Point(0, 0);
-            this._patientControlItem.Name = "_patientControlItem";
-            this._patientControlItem.Size = new System.Drawing.Size(1484, 304);
-            this._patientControlItem.TextSize = new System.Drawing.Size(0, 0);
-            this._patientControlItem.TextVisible = false;
+            _patientControlItem.Control = _patientSelector;
+            _patientControlItem.Location = new Point(0, 0);
+            _patientControlItem.Name = "_patientControlItem";
+            _patientControlItem.Size = new Size(1484, 598);
+            _patientControlItem.TextSize = new Size(0, 0);
+            _patientControlItem.TextVisible = false;
             // 
             // _infoGroup
             // 
-            this._infoGroup.Items.AddRange(new DevExpress.XtraLayout.BaseLayoutItem[] {
-            this._infoItem});
-            this._infoGroup.Location = new System.Drawing.Point(0, 349);
-            this._infoGroup.Name = "_infoGroup";
-            this._infoGroup.Size = new System.Drawing.Size(1508, 64);
-            this._infoGroup.Text = "선택된 환자 정보";
+            _infoGroup.Items.AddRange(new DevExpress.XtraLayout.BaseLayoutItem[] { _infoItem });
+            _infoGroup.Location = new Point(0, 641);
+            _infoGroup.Name = "_infoGroup";
+            _infoGroup.Size = new Size(1508, 65);
+            _infoGroup.Text = "선택된 환자 정보";
             // 
             // _infoItem
             // 
-            this._infoItem.Control = this._lblSelectedPatient;
-            this._infoItem.Location = new System.Drawing.Point(0, 0);
-            this._infoItem.Name = "_infoItem";
-            this._infoItem.Size = new System.Drawing.Size(1484, 20);
-            this._infoItem.TextSize = new System.Drawing.Size(0, 0);
-            this._infoItem.TextVisible = false;
+            _infoItem.Control = _lblSelectedPatient;
+            _infoItem.Location = new Point(0, 0);
+            _infoItem.Name = "_infoItem";
+            _infoItem.Size = new Size(1484, 22);
+            _infoItem.TextSize = new Size(0, 0);
+            _infoItem.TextVisible = false;
             // 
             // _buttonGroup
             // 
-            this._buttonGroup.Items.AddRange(new DevExpress.XtraLayout.BaseLayoutItem[] {
-            this._buttonItem});
-            this._buttonGroup.Location = new System.Drawing.Point(0, 413);
-            this._buttonGroup.Name = "_buttonGroup";
-            this._buttonGroup.Size = new System.Drawing.Size(1508, 66);
-            this._buttonGroup.Text = "동작";
+            _buttonGroup.Items.AddRange(new DevExpress.XtraLayout.BaseLayoutItem[] { _buttonItem });
+            _buttonGroup.Location = new Point(0, 706);
+            _buttonGroup.Name = "_buttonGroup";
+            _buttonGroup.Size = new Size(1508, 69);
+            _buttonGroup.Text = "동작";
             // 
             // _buttonItem
             // 
-            this._buttonItem.Control = this._btnClear;
-            this._buttonItem.Location = new System.Drawing.Point(0, 0);
-            this._buttonItem.Name = "_buttonItem";
-            this._buttonItem.Size = new System.Drawing.Size(1484, 26);
-            this._buttonItem.TextSize = new System.Drawing.Size(0, 0);
-            this._buttonItem.TextVisible = false;
+            _buttonItem.Control = _btnClear;
+            _buttonItem.Location = new Point(0, 0);
+            _buttonItem.Name = "_buttonItem";
+            _buttonItem.Size = new Size(1484, 26);
+            _buttonItem.TextSize = new Size(0, 0);
+            _buttonItem.TextVisible = false;
             // 
             // ClinicPatientControl
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this._layoutControl);
-            this.Name = "ClinicPatientControl";
-            this.Size = new System.Drawing.Size(1528, 850);
-            ((System.ComponentModel.ISupportInitialize)(this._layoutControl)).EndInit();
-            this._layoutControl.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this._rootGroup)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this._patientGroup)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this._patientControlItem)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this._infoGroup)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this._infoItem)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this._buttonGroup)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this._buttonItem)).EndInit();
-            this.ResumeLayout(false);
+            AutoScaleDimensions = new SizeF(7F, 14F);
+            AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(_layoutControl);
+            Name = "ClinicPatientControl";
+            Size = new Size(1528, 793);
+            ((System.ComponentModel.ISupportInitialize)_layoutControl).EndInit();
+            _layoutControl.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)_rootGroup).EndInit();
+            ((System.ComponentModel.ISupportInitialize)_patientGroup).EndInit();
+            ((System.ComponentModel.ISupportInitialize)_patientControlItem).EndInit();
+            ((System.ComponentModel.ISupportInitialize)_infoGroup).EndInit();
+            ((System.ComponentModel.ISupportInitialize)_infoItem).EndInit();
+            ((System.ComponentModel.ISupportInitialize)_buttonGroup).EndInit();
+            ((System.ComponentModel.ISupportInitialize)_buttonItem).EndInit();
+            ResumeLayout(false);
 
         }
 

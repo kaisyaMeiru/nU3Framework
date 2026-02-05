@@ -53,8 +53,6 @@ namespace nU3.Modules.EMR.CL.Component
             // 
             // _tabPatient
             // 
-            _tabPatient.Controls.Add(clinicStatsControl1);
-            _tabPatient.Controls.Add(clinicPatientControl1);
             _tabPatient.Controls.Add(_patientControl);
             _tabPatient.Name = "_tabPatient";
             _tabPatient.Size = new Size(1339, 697);
@@ -73,7 +71,7 @@ namespace nU3.Modules.EMR.CL.Component
             // 
             _tabVisit.Controls.Add(_visitControl);
             _tabVisit.Name = "_tabVisit";
-            _tabVisit.Size = new Size(1500, 761);
+            _tabVisit.Size = new Size(1339, 697);
             _tabVisit.Text = "진료 기록";
             // 
             // _visitControl
@@ -81,7 +79,7 @@ namespace nU3.Modules.EMR.CL.Component
             _visitControl.Dock = DockStyle.Fill;
             _visitControl.Location = new Point(0, 0);
             _visitControl.Name = "_visitControl";
-            _visitControl.Size = new Size(1500, 761);
+            _visitControl.Size = new Size(1339, 697);
             _visitControl.TabIndex = 0;
             _visitControl.VisitRecorded += OnVisitRecordedFromControl;
             // 
@@ -89,7 +87,7 @@ namespace nU3.Modules.EMR.CL.Component
             // 
             _tabStats.Controls.Add(_statsControl);
             _tabStats.Name = "_tabStats";
-            _tabStats.Size = new Size(1500, 761);
+            _tabStats.Size = new Size(1339, 697);
             _tabStats.Text = "진료 통계";
             // 
             // _statsControl
@@ -97,7 +95,7 @@ namespace nU3.Modules.EMR.CL.Component
             _statsControl.Dock = DockStyle.Fill;
             _statsControl.Location = new Point(0, 0);
             _statsControl.Name = "_statsControl";
-            _statsControl.Size = new Size(1500, 761);
+            _statsControl.Size = new Size(1339, 697);
             _statsControl.TabIndex = 0;
             // 
             // clinicPatientControl1
