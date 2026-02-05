@@ -527,13 +527,15 @@ namespace nU3.Core.Services
 
         /// <summary>
         /// 파일 전송 서비스 연결 테스트를 수행합니다.
+        /// 실제 서버에 홈 디렉토리를 요청하여 응답을 확인합니다.
         /// </summary>
         public async Task<bool> TestFileConnectionAsync(CancellationToken cancellationToken = default)
         {
             try
             {
                 EnsureInitialized();
-                _ = File;
+                // 실제 서버에 요청을 보내 응답이 오는지 확인 (예: 홈 디렉토리 조회)
+                var homeDir = await File.GetHomeDirectoryAsync();
                 return true;
             }
             catch
