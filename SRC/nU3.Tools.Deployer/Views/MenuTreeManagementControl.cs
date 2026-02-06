@@ -178,14 +178,45 @@ namespace nU3.Tools.Deployer.Views
 
         private void LbPrograms_DoubleClick(object? sender, EventArgs e)
         {
-            if (lbPrograms.SelectedItem is ProgramItem item && tvMenu.SelectedNode != null)
+            if (lbPrograms.SelectedItem is ProgramItem item)
             {
-                var data = tvMenu.SelectedNode.Tag as MenuNodeData;
-                if (data != null)
+                // 선택된 노드가 있는지 확인
+                if (tvMenu.SelectedNode != null)
                 {
-                    data.ProgId = item.ProgId;
-                    tvMenu.SelectedNode.Text = item.ProgName;
-                    tvMenu.SelectedNode.ForeColor = Color.Blue;
+                    var selectedData = tvMenu.SelectedNode.Tag as MenuNodeData;
+                    
+                    // ★ 중요: 선택된 항목이 이미 '프로그램'일 경우 하위에 추가하는 것을 차단
+                    if (selectedData != null && !string.IsNullOrEmpty(selectedData.ProgId))
+                    {
+                        return; // 아무 동작도 하지 않음
+                    }
+                }
+
+                // 프로그램 정보를 담은 새 메뉴 노드 데이터 생성
+                var data = new MenuNodeData 
+                { 
+                    MenuId = Guid.NewGuid().ToString().Substring(0, 8), 
+                    ProgId = item.ProgId, 
+                    AuthLevel = 1 
+                };
+                
+                // 트리 노드 생성 (프로그램 연결 노드는 파란색으로 표시)
+                var newNode = new TreeNode(item.ProgName) 
+                { 
+                    Tag = data, 
+                    ForeColor = Color.Blue 
+                };
+
+                if (tvMenu.SelectedNode != null)
+                {
+                    // 폴더 노드일 경우 자식으로 추가
+                    tvMenu.SelectedNode.Nodes.Add(newNode);
+                    tvMenu.SelectedNode.Expand();
+                }
+                else
+                {
+                    // 선택된 노드가 없으면 최상위 루트로 추가
+                    tvMenu.Nodes.Add(newNode);
                 }
             }
         }
@@ -243,6 +274,8 @@ namespace nU3.Tools.Deployer.Views
             public string? IsActive { get; set; }
             public int ProgType { get; set; }
             public string DisplayInfo => $"[{ModuleId}] {ProgName} ({ProgId})";
+            
+            public override string ToString() => DisplayInfo;
         }
 
         class MenuNodeData

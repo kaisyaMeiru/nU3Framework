@@ -75,7 +75,7 @@ namespace nU3.Tools.Deployer.Views
             // 
             split.Panel2.Controls.Add(grpProg);
             split.Panel2.Text = "Panel2";
-            split.Size = new System.Drawing.Size(2214, 1061);
+            split.Size = new System.Drawing.Size(1406, 607);
             split.SplitterPosition = 700;
             split.TabIndex = 1;
             // 
@@ -85,7 +85,7 @@ namespace nU3.Tools.Deployer.Views
             grpTree.Dock = System.Windows.Forms.DockStyle.Fill;
             grpTree.Location = new System.Drawing.Point(0, 0);
             grpTree.Name = "grpTree";
-            grpTree.Size = new System.Drawing.Size(700, 1061);
+            grpTree.Size = new System.Drawing.Size(700, 607);
             grpTree.TabIndex = 0;
             grpTree.Text = "메뉴 트리";
             // 
@@ -95,9 +95,9 @@ namespace nU3.Tools.Deployer.Views
             tvMenu.ContextMenuStrip = cmsTree;
             tvMenu.Dock = System.Windows.Forms.DockStyle.Fill;
             tvMenu.HideSelection = false;
-            tvMenu.Location = new System.Drawing.Point(2, 34);
+            tvMenu.Location = new System.Drawing.Point(2, 23);
             tvMenu.Name = "tvMenu";
-            tvMenu.Size = new System.Drawing.Size(696, 1025);
+            tvMenu.Size = new System.Drawing.Size(696, 582);
             tvMenu.TabIndex = 0;
             tvMenu.AfterSelect += TvMenu_AfterSelect;
             // 
@@ -113,16 +113,16 @@ namespace nU3.Tools.Deployer.Views
             grpProg.Dock = System.Windows.Forms.DockStyle.Fill;
             grpProg.Location = new System.Drawing.Point(0, 0);
             grpProg.Name = "grpProg";
-            grpProg.Size = new System.Drawing.Size(1499, 1061);
+            grpProg.Size = new System.Drawing.Size(696, 607);
             grpProg.TabIndex = 0;
             grpProg.Text = "등록 프로그램 목록";
             // 
             // lbPrograms
             // 
             lbPrograms.Dock = System.Windows.Forms.DockStyle.Fill;
-            lbPrograms.Location = new System.Drawing.Point(2, 34);
+            lbPrograms.Location = new System.Drawing.Point(2, 23);
             lbPrograms.Name = "lbPrograms";
-            lbPrograms.Size = new System.Drawing.Size(1495, 1025);
+            lbPrograms.Size = new System.Drawing.Size(692, 582);
             lbPrograms.TabIndex = 0;
             // 
             // pnlBottom
@@ -134,9 +134,9 @@ namespace nU3.Tools.Deployer.Views
             pnlBottom.Controls.Add(numAuthLevel);
             pnlBottom.Controls.Add(btnSave);
             pnlBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            pnlBottom.Location = new System.Drawing.Point(0, 1061);
+            pnlBottom.Location = new System.Drawing.Point(0, 607);
             pnlBottom.Name = "pnlBottom";
-            pnlBottom.Size = new System.Drawing.Size(2214, 56);
+            pnlBottom.Size = new System.Drawing.Size(1406, 56);
             pnlBottom.TabIndex = 2;
             // 
             // btnAddRoot
@@ -173,9 +173,10 @@ namespace nU3.Tools.Deployer.Views
             // 
             // lblAuthLevel
             // 
+            lblAuthLevel.IsRequiredMarker = false;
             lblAuthLevel.Location = new System.Drawing.Point(400, 21);
             lblAuthLevel.Name = "lblAuthLevel";
-            lblAuthLevel.Size = new System.Drawing.Size(64, 22);
+            lblAuthLevel.Size = new System.Drawing.Size(48, 14);
             lblAuthLevel.TabIndex = 3;
             lblAuthLevel.Text = "권한 레벨:";
             // 
@@ -183,6 +184,7 @@ namespace nU3.Tools.Deployer.Views
             // 
             numAuthLevel.EditValue = new decimal(new int[] { 1, 0, 0, 0 });
             numAuthLevel.Enabled = false;
+            numAuthLevel.IsRequired = false;
             numAuthLevel.Location = new System.Drawing.Point(465, 18);
             numAuthLevel.Name = "numAuthLevel";
             numAuthLevel.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] { new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo) });
@@ -190,7 +192,7 @@ namespace nU3.Tools.Deployer.Views
             numAuthLevel.Properties.MaskSettings.Set("mask", "N00");
             numAuthLevel.Properties.MaxValue = new decimal(new int[] { 9, 0, 0, 0 });
             numAuthLevel.Properties.MinValue = new decimal(new int[] { 1, 0, 0, 0 });
-            numAuthLevel.Size = new System.Drawing.Size(80, 28);
+            numAuthLevel.Size = new System.Drawing.Size(80, 20);
             numAuthLevel.TabIndex = 4;
             numAuthLevel.ValueChanged += NumAuthLevel_ValueChanged;
             // 
@@ -211,7 +213,7 @@ namespace nU3.Tools.Deployer.Views
             Controls.Add(split);
             Controls.Add(pnlBottom);
             Name = "MenuTreeManagementControl";
-            Size = new System.Drawing.Size(2214, 1117);
+            Size = new System.Drawing.Size(1406, 663);
             ((System.ComponentModel.ISupportInitialize)split.Panel1).EndInit();
             split.Panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)split.Panel2).EndInit();
