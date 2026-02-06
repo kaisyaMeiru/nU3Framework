@@ -17,7 +17,7 @@ namespace nU3.Bootstrapper
     /// </summary>
     public class ModuleLoader : IDisposable
     {
-        private readonly LocalDatabaseManager _dbManager;
+        private readonly IDBAccessService _db;
         private readonly SQLiteModuleRepository _moduleRepo;
         private readonly string _stagingPath;
         private string _installPath;
@@ -28,10 +28,10 @@ namespace nU3.Bootstrapper
         private readonly string _serverModulePath;
         private readonly bool _useServerTransfer;
 
-        public ModuleLoader(IConfiguration configuration)
+        public ModuleLoader(IDBAccessService dbService, IConfiguration configuration)
         {
-            _dbManager = new LocalDatabaseManager();
-            _moduleRepo = new SQLiteModuleRepository(_dbManager);
+            _db = dbService;
+            _moduleRepo = new SQLiteModuleRepository(_db);
 
             // 스테이징 경로 초기화 (ApplicationData 폴더)
             _stagingPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "nU3.Framework", "Cache", "Modules");
@@ -76,7 +76,8 @@ namespace nU3.Bootstrapper
 
         public void EnsureDatabaseInitialized()
         {
-            _dbManager.InitializeSchema();
+            // 초기화는 서버에서 수행되므로 연결 확인 정도로 대체 가능
+            _db.Connect();
         }
 
         public void CheckAndLoadModules(string aShellFilePath)

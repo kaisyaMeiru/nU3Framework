@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using nU3.Core.Repositories;
 using nU3.Data;
 using nU3.Data.Repositories;
+using nU3.Connectivity;
 
 namespace nU3.Tools.Deployer
 {
@@ -20,22 +21,49 @@ namespace nU3.Tools.Deployer
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            // Configuration 로드
+            // Configuration Load
             var configuration = LoadConfiguration();
 
             var services = new ServiceCollection();
             
-            // Configuration 등록
+            // Configuration Reg
             services.AddSingleton<IConfiguration>(configuration);
             
-            // DB Manager
-            services.AddSingleton<LocalDatabaseManager>();
+            // Network & Server Connection
+            string baseUrl = configuration.GetValue<string>("ServerConnection:BaseUrl") ?? "http://localhost:5000";
             
-            // Repositories
+            // Register shared HttpClient
+            services.AddSingleton(sp => new System.Net.Http.HttpClient 
+            { 
+                BaseAddress = new Uri(baseUrl),
+                Timeout = TimeSpan.FromMinutes(10)
+            });
+
+            // Register HTTP Clients for Connectivity Services
+            services.AddScoped<IDBAccessService>(sp => 
+                new nU3.Connectivity.Implementations.HttpDBAccessClient(
+                    sp.GetRequiredService<System.Net.Http.HttpClient>(), 
+                    baseUrl
+                ));
+            
+            services.AddScoped<IFileTransferService>(sp => 
+                new nU3.Connectivity.Implementations.HttpFileTransferClient(
+                    sp.GetRequiredService<System.Net.Http.HttpClient>(), 
+                    baseUrl
+                ));
+
+            services.AddScoped<ILogUploadService>(sp => 
+                new nU3.Connectivity.Implementations.HttpLogUploadClient(
+                    sp.GetRequiredService<System.Net.Http.HttpClient>(), 
+                    baseUrl
+                ));
+            
+            // Repositories (They now use the injected IDBAccessService which is HttpDBAccessClient)
             services.AddScoped<IModuleRepository, SQLiteModuleRepository>();
             services.AddScoped<IMenuRepository, SQLiteMenuRepository>();
             services.AddScoped<IProgramRepository, SQLiteProgramRepository>();
             services.AddScoped<IComponentRepository, SQLiteComponentRepository>();
+            services.AddScoped<IUserRepository, SQLiteUserRepository>();
             
             // Form
             services.AddTransient<DeployerForm>();
@@ -47,7 +75,7 @@ namespace nU3.Tools.Deployer
         }
 
         /// <summary>
-        /// Configuration 로드
+        /// Configuration Load
         /// </summary>
         private static IConfiguration LoadConfiguration()
         {

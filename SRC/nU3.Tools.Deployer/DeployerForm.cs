@@ -7,6 +7,8 @@ using Microsoft.Extensions.DependencyInjection;
 using nU3.Core.Repositories;
 using nU3.Core.Services;
 using nU3.Core.UI;
+using DevExpress.XtraTab;
+using DevExpress.XtraBars;
 
 namespace nU3.Tools.Deployer
 {
@@ -19,7 +21,15 @@ namespace nU3.Tools.Deployer
         private string? _serverBaseUrl;
         private bool _serverEnabled;
 
-        private TabControl tabMain;
+        private XtraTabControl tabMain;
+
+        /// <summary>
+        /// Designer 전용 생성자입니다.
+        /// </summary>
+        public DeployerForm()
+        {
+            InitializeComponent();
+        }
 
         public DeployerForm(IModuleRepository moduleRepo, IComponentRepository componentRepo, IConfiguration configuration)
         {
@@ -36,7 +46,8 @@ namespace nU3.Tools.Deployer
             _serverStoragePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "nU3.Framework", "ServerStorage");
             if (!Directory.Exists(_serverStoragePath)) Directory.CreateDirectory(_serverStoragePath);
 
-            toolStripButtonTestServer.Click += ToolStripButtonTestServer_Click;
+            // Updated to use BarButtonItem
+            bbiTestServer.ItemClick += ToolStripButtonTestServer_Click;
             this.Load += DeployerForm_Load;
 
             InitializeServerConnectionStatus();
@@ -55,7 +66,7 @@ namespace nU3.Tools.Deployer
             }
         }
 
-        private void ToolStripButtonTestServer_Click(object? sender, EventArgs e)
+        private void ToolStripButtonTestServer_Click(object? sender, ItemClickEventArgs e)
         {
             _ = StartServerConnectionTestAsync();
         }
@@ -65,26 +76,26 @@ namespace nU3.Tools.Deployer
             _serverEnabled = _configuration.GetValue<bool>("ServerConnection:Enabled", false);
             _serverBaseUrl = _configuration.GetValue<string>("ServerConnection:BaseUrl") ?? "https://localhost:64229";
 
-            toolStripButtonTestServer.Enabled = _serverEnabled;
+            bbiTestServer.Enabled = _serverEnabled;
 
             if (!_serverEnabled)
             {
-                toolStripStatusLabel1.Text = "🟡 서버 비활성";
+                bsiStatus.Caption = "🟡 서버 비활성";
                 return;
             }
 
-            toolStripStatusLabel1.Text = $"🟡 {_serverBaseUrl} (테스트 대기)";
+            bsiStatus.Caption = $"🟡 {_serverBaseUrl} (테스트 대기)";
         }
 
         private async Task StartServerConnectionTestAsync()
         {
             if (!_serverEnabled || string.IsNullOrWhiteSpace(_serverBaseUrl))
             {
-                toolStripStatusLabel1.Text = "🔴 서버 URL이 설정되지 않았습니다.";
+                bsiStatus.Caption = "🔴 서버 URL이 설정되지 않았습니다.";
                 return;
             }
 
-            toolStripStatusLabel1.Text = $"🟡 {_serverBaseUrl} (테스트 중...)";
+            bsiStatus.Caption = $"🟡 {_serverBaseUrl} (테스트 중...)";
 
             var progressForm = new Form
             {
@@ -119,7 +130,7 @@ namespace nU3.Tools.Deployer
 
                 if (result.AllConnected)
                 {
-                    toolStripStatusLabel1.Text = $"🟢 {_serverBaseUrl}";
+                    bsiStatus.Caption = $"🟢 {_serverBaseUrl}";
                     MessageBox.Show(
                         $"서버 연결 성공!\n\n" +
                         $"서버: {_serverBaseUrl}\n\n" +
@@ -132,7 +143,7 @@ namespace nU3.Tools.Deployer
                 }
                 else
                 {
-                    toolStripStatusLabel1.Text = $"🟡 {_serverBaseUrl} (일부 실패)";
+                    bsiStatus.Caption = $"🟡 {_serverBaseUrl} (일부 실패)";
 
                     var statusMessage = new System.Text.StringBuilder();
                     statusMessage.AppendLine($"서버: {_serverBaseUrl}");
@@ -159,7 +170,7 @@ namespace nU3.Tools.Deployer
                 progressForm?.Close();
                 progressForm?.Dispose();
 
-                toolStripStatusLabel1.Text = $"🔴 {_serverBaseUrl} (오류)";
+                bsiStatus.Caption = $"🔴 {_serverBaseUrl} (오류)";
 
                 MessageBox.Show(
                     $"연결 테스트 중 오류 발생!\n\n{ex.Message}",
@@ -176,29 +187,29 @@ namespace nU3.Tools.Deployer
 
         private void BuildUi()
         {
-            tabMain = new TabControl { Dock = DockStyle.Fill };
+            tabMain = new XtraTabControl { Dock = DockStyle.Fill };
 
             // 1. 화면 모듈 배포
-            var tabDeploy = new TabPage("프로그램모듈 배포");
+            var tabDeploy = new XtraTabPage { Text = "프로그램모듈 배포" };
             var deployControl = new Views.ProgramDeployManagementControl(_moduleRepo, _configuration);
             deployControl.Dock = DockStyle.Fill;
             tabDeploy.Controls.Add(deployControl);
 
             // 2. Framework 컴포넌트 배포 
-            var tabComponent = new TabPage("어셈블리모듈 배포");
+            var tabComponent = new XtraTabPage { Text = "어셈블리모듈 배포" };
             var componentControl = new Views.AssemblyDeployManagementControl();            
             componentControl.Initialize(_componentRepo, _configuration);
             componentControl.Dock = DockStyle.Fill;
             tabComponent.Controls.Add(componentControl);
             
             // 3. 메뉴트리 관리
-            var tabMenu = new TabPage("메뉴트리 관리");
+            var tabMenu = new XtraTabPage { Text = "메뉴트리 관리" };
             var menuControl = new Views.MenuTreeManagementControl();
             menuControl.Dock = DockStyle.Fill;
             tabMenu.Controls.Add(menuControl);
 
             // 4. 사용자/권한 관리
-            var tabSecurity = new TabPage("사용자 권한 관리");
+            var tabSecurity = new XtraTabPage { Text = "사용자 권한 관리" };
             var securityControl = new Views.SecurityManagementControl();
             securityControl.Dock = DockStyle.Fill;
             tabSecurity.Controls.Add(securityControl);

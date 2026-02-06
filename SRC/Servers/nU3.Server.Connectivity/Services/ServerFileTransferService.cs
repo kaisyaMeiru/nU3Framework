@@ -25,7 +25,7 @@ namespace nU3.Server.Connectivity.Services
     public class ServerFileTransferService
     {
         // 기본 홈 디렉토리(설정으로 대체 가능)
-        public static string _serverHomeDirectory = @"D:\nU3_Framework_Server_Storage";
+        public static string _serverHomeDirectory = string.Empty;
         private static bool _homeDirectoryInitialized;
         private static readonly object _homeDirectoryLock = new();
         private readonly ILogger<ServerFileTransferService> _logger;

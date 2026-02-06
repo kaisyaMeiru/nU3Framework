@@ -4,53 +4,55 @@ namespace nU3.Tools.Deployer.Views
     {
         private System.ComponentModel.IContainer components = null;
 
-        private System.Windows.Forms.SplitContainer splitMain;
+        private DevExpress.XtraEditors.SplitContainerControl splitMain;
 
         // Left (scan)
-        private System.Windows.Forms.Panel pnlScanTop;
-        private System.Windows.Forms.Label lblModulesRoot;
-        private System.Windows.Forms.TextBox txtModulesRoot;
-        private System.Windows.Forms.Button btnBrowseModulesRoot;
-        private System.Windows.Forms.Button btnScanModules;
-        private System.Windows.Forms.DataGridView dgvModuleFiles;
-        private System.Windows.Forms.DataGridView dgvDbVersions;
+        private DevExpress.XtraEditors.PanelControl pnlScanTop;
+        private nU3.Core.UI.Controls.nU3LabelControl lblModulesRoot;
+        private nU3.Core.UI.Controls.nU3TextEdit txtModulesRoot;
+        private nU3.Core.UI.Controls.nU3SimpleButton btnBrowseModulesRoot;
+        private nU3.Core.UI.Controls.nU3SimpleButton btnScanModules;
+        private nU3.Core.UI.Controls.nU3GridControl dgvModuleFiles;
+        private nU3.Core.UI.Controls.nU3GridView gvModuleFiles;
+        private nU3.Core.UI.Controls.nU3GridControl dgvDbVersions;
+        private nU3.Core.UI.Controls.nU3GridView gvDbVersions;
 
         // Center filter (retained)
-        private System.Windows.Forms.Panel pnlFilter;
-        private System.Windows.Forms.Label lblFilterCategory;
-        private System.Windows.Forms.ComboBox cboFilterCategory;
-        private System.Windows.Forms.Label lblFilterSubSystem;
-        private System.Windows.Forms.ComboBox cboFilterSubSystem;
+        private DevExpress.XtraEditors.PanelControl pnlFilter;
+        private nU3.Core.UI.Controls.nU3LabelControl lblFilterCategory;
+        private nU3.Core.UI.Controls.nU3ComboBoxEdit cboFilterCategory;
+        private nU3.Core.UI.Controls.nU3LabelControl lblFilterSubSystem;
+        private nU3.Core.UI.Controls.nU3ComboBoxEdit cboFilterSubSystem;
 
         // Right (edit - base fields retained)
-        private System.Windows.Forms.Panel pnlEdit;
-        private System.Windows.Forms.Label lblId;
-        private System.Windows.Forms.TextBox txtModuleId;
-        private System.Windows.Forms.Label lblName;
-        private System.Windows.Forms.TextBox txtModuleName;
-        private System.Windows.Forms.Label lblCat;
-        private System.Windows.Forms.ComboBox cboCategory;
-        private System.Windows.Forms.Label lblSub;
-        private System.Windows.Forms.TextBox txtSubSystem;
-        private System.Windows.Forms.Label lblFile;
-        private System.Windows.Forms.TextBox txtFileName;
-        private System.Windows.Forms.Button btnAdd;
-        private System.Windows.Forms.Button btnDelete;
-        private System.Windows.Forms.Button btnRefresh;
-        private System.Windows.Forms.Button btnSmartUpload;
+        private DevExpress.XtraEditors.PanelControl pnlEdit;
+        private nU3.Core.UI.Controls.nU3LabelControl lblId;
+        private nU3.Core.UI.Controls.nU3TextEdit txtModuleId;
+        private nU3.Core.UI.Controls.nU3LabelControl lblName;
+        private nU3.Core.UI.Controls.nU3TextEdit txtModuleName;
+        private nU3.Core.UI.Controls.nU3LabelControl lblCat;
+        private nU3.Core.UI.Controls.nU3ComboBoxEdit cboCategory;
+        private nU3.Core.UI.Controls.nU3LabelControl lblSub;
+        private nU3.Core.UI.Controls.nU3TextEdit txtSubSystem;
+        private nU3.Core.UI.Controls.nU3LabelControl lblFile;
+        private nU3.Core.UI.Controls.nU3TextEdit txtFileName;
+        private nU3.Core.UI.Controls.nU3SimpleButton btnAdd;
+        private nU3.Core.UI.Controls.nU3SimpleButton btnDelete;
+        private nU3.Core.UI.Controls.nU3SimpleButton btnRefresh;
+        private nU3.Core.UI.Controls.nU3SimpleButton btnSmartUpload;
 
         // Right (edit)
         private System.Windows.Forms.TableLayoutPanel tblEdit;
-        private System.Windows.Forms.Label lblVer;
-        private System.Windows.Forms.TextBox txtActiveVersion;
-        private System.Windows.Forms.Label lblHash;
-        private System.Windows.Forms.TextBox txtFileHash;
-        private System.Windows.Forms.Label lblSize;
-        private System.Windows.Forms.TextBox txtFileSize;
-        private System.Windows.Forms.Label lblStorage;
-        private System.Windows.Forms.TextBox txtStoragePath;
-        private System.Windows.Forms.Label lblDeployDesc;
-        private System.Windows.Forms.TextBox txtDeployDesc;
+        private nU3.Core.UI.Controls.nU3LabelControl lblVer;
+        private nU3.Core.UI.Controls.nU3TextEdit txtActiveVersion;
+        private nU3.Core.UI.Controls.nU3LabelControl lblHash;
+        private nU3.Core.UI.Controls.nU3TextEdit txtFileHash;
+        private nU3.Core.UI.Controls.nU3LabelControl lblSize;
+        private nU3.Core.UI.Controls.nU3TextEdit txtFileSize;
+        private nU3.Core.UI.Controls.nU3LabelControl lblStorage;
+        private nU3.Core.UI.Controls.nU3TextEdit txtStoragePath;
+        private nU3.Core.UI.Controls.nU3LabelControl lblDeployDesc;
+        private nU3.Core.UI.Controls.nU3TextEdit txtDeployDesc;
 
         protected override void Dispose(bool disposing)
         {
@@ -63,57 +65,80 @@ namespace nU3.Tools.Deployer.Views
 
         private void InitializeComponent()
         {
-            splitMain = new System.Windows.Forms.SplitContainer();
-            dgvModuleFiles = new System.Windows.Forms.DataGridView();
-            pnlScanTop = new System.Windows.Forms.Panel();
-            txtModulesRoot = new System.Windows.Forms.TextBox();
-            btnBrowseModulesRoot = new System.Windows.Forms.Button();
-            btnScanModules = new System.Windows.Forms.Button();
-            chkUpdated = new System.Windows.Forms.CheckBox();
-            lblModulesRoot = new System.Windows.Forms.Label();
+            splitMain = new DevExpress.XtraEditors.SplitContainerControl();
+            dgvModuleFiles = new nU3.Core.UI.Controls.nU3GridControl();
+            gvModuleFiles = new nU3.Core.UI.Controls.nU3GridView();
+            pnlScanTop = new DevExpress.XtraEditors.PanelControl();
+            txtModulesRoot = new nU3.Core.UI.Controls.nU3TextEdit();
+            btnBrowseModulesRoot = new nU3.Core.UI.Controls.nU3SimpleButton();
+            btnScanModules = new nU3.Core.UI.Controls.nU3SimpleButton();
+            chkUpdated = new nU3.Core.UI.Controls.nU3CheckEdit();
+            lblModulesRoot = new nU3.Core.UI.Controls.nU3LabelControl();
             tblEdit = new System.Windows.Forms.TableLayoutPanel();
-            txtModuleId = new System.Windows.Forms.TextBox();
-            lblName = new System.Windows.Forms.Label();
-            txtModuleName = new System.Windows.Forms.TextBox();
-            cboCategory = new System.Windows.Forms.ComboBox();
-            lblSub = new System.Windows.Forms.Label();
-            txtSubSystem = new System.Windows.Forms.TextBox();
-            lblFile = new System.Windows.Forms.Label();
-            txtFileName = new System.Windows.Forms.TextBox();
-            lblVer = new System.Windows.Forms.Label();
-            txtActiveVersion = new System.Windows.Forms.TextBox();
-            lblHash = new System.Windows.Forms.Label();
-            txtFileHash = new System.Windows.Forms.TextBox();
-            lblSize = new System.Windows.Forms.Label();
-            txtFileSize = new System.Windows.Forms.TextBox();
-            lblStorage = new System.Windows.Forms.Label();
-            txtStoragePath = new System.Windows.Forms.TextBox();
-            lblDeployDesc = new System.Windows.Forms.Label();
-            txtDeployDesc = new System.Windows.Forms.TextBox();
-            lblCat = new System.Windows.Forms.Label();
-            lblId = new System.Windows.Forms.Label();
-            dgvDbVersions = new System.Windows.Forms.DataGridView();
-            pnlFilter = new System.Windows.Forms.Panel();
-            cboFilterCategory = new System.Windows.Forms.ComboBox();
-            lblFilterCategory = new System.Windows.Forms.Label();
-            lblFilterSubSystem = new System.Windows.Forms.Label();
-            cboFilterSubSystem = new System.Windows.Forms.ComboBox();
-            pnlEdit = new System.Windows.Forms.Panel();
+            txtModuleId = new nU3.Core.UI.Controls.nU3TextEdit();
+            lblName = new nU3.Core.UI.Controls.nU3LabelControl();
+            txtModuleName = new nU3.Core.UI.Controls.nU3TextEdit();
+            cboCategory = new nU3.Core.UI.Controls.nU3ComboBoxEdit();
+            lblSub = new nU3.Core.UI.Controls.nU3LabelControl();
+            txtSubSystem = new nU3.Core.UI.Controls.nU3TextEdit();
+            lblFile = new nU3.Core.UI.Controls.nU3LabelControl();
+            txtFileName = new nU3.Core.UI.Controls.nU3TextEdit();
+            lblVer = new nU3.Core.UI.Controls.nU3LabelControl();
+            txtActiveVersion = new nU3.Core.UI.Controls.nU3TextEdit();
+            lblHash = new nU3.Core.UI.Controls.nU3LabelControl();
+            txtFileHash = new nU3.Core.UI.Controls.nU3TextEdit();
+            lblSize = new nU3.Core.UI.Controls.nU3LabelControl();
+            txtFileSize = new nU3.Core.UI.Controls.nU3TextEdit();
+            lblStorage = new nU3.Core.UI.Controls.nU3LabelControl();
+            txtStoragePath = new nU3.Core.UI.Controls.nU3TextEdit();
+            lblDeployDesc = new nU3.Core.UI.Controls.nU3LabelControl();
+            txtDeployDesc = new nU3.Core.UI.Controls.nU3TextEdit();
+            lblCat = new nU3.Core.UI.Controls.nU3LabelControl();
+            lblId = new nU3.Core.UI.Controls.nU3LabelControl();
+            dgvDbVersions = new nU3.Core.UI.Controls.nU3GridControl();
+            gvDbVersions = new nU3.Core.UI.Controls.nU3GridView();
+            pnlFilter = new DevExpress.XtraEditors.PanelControl();
+            cboFilterCategory = new nU3.Core.UI.Controls.nU3ComboBoxEdit();
+            lblFilterCategory = new nU3.Core.UI.Controls.nU3LabelControl();
+            lblFilterSubSystem = new nU3.Core.UI.Controls.nU3LabelControl();
+            cboFilterSubSystem = new nU3.Core.UI.Controls.nU3ComboBoxEdit();
+            pnlEdit = new DevExpress.XtraEditors.PanelControl();
             tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            btnRefresh = new System.Windows.Forms.Button();
-            btnDelete = new System.Windows.Forms.Button();
-            btnSmartUpload = new System.Windows.Forms.Button();
-            btnAdd = new System.Windows.Forms.Button();
-            btnBulkUpload = new System.Windows.Forms.Button();
+            btnRefresh = new nU3.Core.UI.Controls.nU3SimpleButton();
+            btnDelete = new nU3.Core.UI.Controls.nU3SimpleButton();
+            btnSmartUpload = new nU3.Core.UI.Controls.nU3SimpleButton();
+            btnAdd = new nU3.Core.UI.Controls.nU3SimpleButton();
+            btnBulkUpload = new nU3.Core.UI.Controls.nU3SimpleButton();
             ((System.ComponentModel.ISupportInitialize)splitMain).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)splitMain.Panel1).BeginInit();
             splitMain.Panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)splitMain.Panel2).BeginInit();
             splitMain.Panel2.SuspendLayout();
             splitMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvModuleFiles).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)gvModuleFiles).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pnlScanTop).BeginInit();
             pnlScanTop.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)txtModulesRoot.Properties).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)chkUpdated.Properties).BeginInit();
             tblEdit.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)txtModuleId.Properties).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)txtModuleName.Properties).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)cboCategory.Properties).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)txtSubSystem.Properties).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)txtFileName.Properties).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)txtActiveVersion.Properties).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)txtFileHash.Properties).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)txtFileSize.Properties).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)txtStoragePath.Properties).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)txtDeployDesc.Properties).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvDbVersions).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)gvDbVersions).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pnlFilter).BeginInit();
             pnlFilter.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)cboFilterCategory.Properties).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)cboFilterSubSystem.Properties).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pnlEdit).BeginInit();
             pnlEdit.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
             SuspendLayout();
@@ -128,6 +153,7 @@ namespace nU3.Tools.Deployer.Views
             // 
             splitMain.Panel1.Controls.Add(dgvModuleFiles);
             splitMain.Panel1.Controls.Add(pnlScanTop);
+            splitMain.Panel1.Text = "Panel1";
             // 
             // splitMain.Panel2
             // 
@@ -135,30 +161,30 @@ namespace nU3.Tools.Deployer.Views
             splitMain.Panel2.Controls.Add(dgvDbVersions);
             splitMain.Panel2.Controls.Add(pnlFilter);
             splitMain.Panel2.Controls.Add(pnlEdit);
-            splitMain.Size = new System.Drawing.Size(1200, 700);
-            splitMain.SplitterDistance = 725;
-            splitMain.SplitterWidth = 6;
+            splitMain.Panel2.Text = "Panel2";
+            splitMain.Size = new System.Drawing.Size(2214, 1207);
+            splitMain.SplitterPosition = 725;
             splitMain.TabIndex = 0;
             // 
             // dgvModuleFiles
             // 
-            dgvModuleFiles.AllowUserToAddRows = false;
-            dgvModuleFiles.AllowUserToDeleteRows = false;
-            dgvModuleFiles.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            dgvModuleFiles.ColumnHeadersHeight = 34;
             dgvModuleFiles.Dock = System.Windows.Forms.DockStyle.Fill;
             dgvModuleFiles.Location = new System.Drawing.Point(0, 40);
-            dgvModuleFiles.MultiSelect = false;
+            dgvModuleFiles.MainView = gvModuleFiles;
             dgvModuleFiles.Name = "dgvModuleFiles";
-            dgvModuleFiles.ReadOnly = true;
-            dgvModuleFiles.RowHeadersWidth = 62;
-            dgvModuleFiles.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            dgvModuleFiles.Size = new System.Drawing.Size(725, 660);
+            dgvModuleFiles.Size = new System.Drawing.Size(725, 1167);
             dgvModuleFiles.TabIndex = 0;
+            dgvModuleFiles.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] { gvModuleFiles });
+            // 
+            // gvModuleFiles
+            // 
+            gvModuleFiles.GridControl = dgvModuleFiles;
+            gvModuleFiles.Name = "gvModuleFiles";
+            gvModuleFiles.OptionsBehavior.Editable = false;
+            gvModuleFiles.OptionsView.ShowGroupPanel = false;
             // 
             // pnlScanTop
             // 
-            pnlScanTop.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             pnlScanTop.Controls.Add(txtModulesRoot);
             pnlScanTop.Controls.Add(btnBrowseModulesRoot);
             pnlScanTop.Controls.Add(btnScanModules);
@@ -173,56 +199,58 @@ namespace nU3.Tools.Deployer.Views
             // txtModulesRoot
             // 
             txtModulesRoot.Dock = System.Windows.Forms.DockStyle.Fill;
-            txtModulesRoot.Location = new System.Drawing.Point(90, 0);
-            txtModulesRoot.Multiline = true;
+            txtModulesRoot.Location = new System.Drawing.Point(92, 2);
             txtModulesRoot.Name = "txtModulesRoot";
-            txtModulesRoot.ReadOnly = true;
-            txtModulesRoot.Size = new System.Drawing.Size(357, 38);
+            txtModulesRoot.Properties.AutoHeight = false;
+            txtModulesRoot.Properties.ReadOnly = true;
+            txtModulesRoot.Size = new System.Drawing.Size(287, 36);
             txtModulesRoot.TabIndex = 1;
             // 
             // btnBrowseModulesRoot
             // 
+            btnBrowseModulesRoot.AuthId = "";
             btnBrowseModulesRoot.Dock = System.Windows.Forms.DockStyle.Right;
-            btnBrowseModulesRoot.Location = new System.Drawing.Point(447, 0);
+            btnBrowseModulesRoot.Location = new System.Drawing.Point(379, 2);
             btnBrowseModulesRoot.Margin = new System.Windows.Forms.Padding(7);
             btnBrowseModulesRoot.Name = "btnBrowseModulesRoot";
-            btnBrowseModulesRoot.Size = new System.Drawing.Size(90, 38);
+            btnBrowseModulesRoot.Size = new System.Drawing.Size(90, 36);
             btnBrowseModulesRoot.TabIndex = 2;
             btnBrowseModulesRoot.Text = "Browse";
             btnBrowseModulesRoot.Click += BtnBrowseModulesRoot_Click;
             // 
             // btnScanModules
             // 
+            btnScanModules.AuthId = "";
             btnScanModules.Dock = System.Windows.Forms.DockStyle.Right;
-            btnScanModules.Location = new System.Drawing.Point(537, 0);
+            btnScanModules.Location = new System.Drawing.Point(469, 2);
             btnScanModules.Margin = new System.Windows.Forms.Padding(7);
             btnScanModules.Name = "btnScanModules";
-            btnScanModules.Size = new System.Drawing.Size(90, 38);
+            btnScanModules.Size = new System.Drawing.Size(90, 36);
             btnScanModules.TabIndex = 3;
             btnScanModules.Text = "Scan";
             btnScanModules.Click += BtnScanModules_Click;
             // 
             // chkUpdated
             // 
-            chkUpdated.AutoSize = true;
             chkUpdated.Dock = System.Windows.Forms.DockStyle.Right;
-            chkUpdated.Location = new System.Drawing.Point(627, 0);
+            chkUpdated.Location = new System.Drawing.Point(559, 2);
             chkUpdated.Margin = new System.Windows.Forms.Padding(3, 3, 13, 3);
             chkUpdated.Name = "chkUpdated";
-            chkUpdated.Size = new System.Drawing.Size(96, 38);
+            chkUpdated.Properties.AutoHeight = false;
+            chkUpdated.Properties.Caption = "Need Update";
+            chkUpdated.Size = new System.Drawing.Size(164, 36);
             chkUpdated.TabIndex = 4;
-            chkUpdated.Text = "Need Update";
-            chkUpdated.UseVisualStyleBackColor = true;
             // 
             // lblModulesRoot
             // 
+            lblModulesRoot.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
             lblModulesRoot.Dock = System.Windows.Forms.DockStyle.Left;
-            lblModulesRoot.Location = new System.Drawing.Point(0, 0);
+            lblModulesRoot.Location = new System.Drawing.Point(2, 2);
             lblModulesRoot.Name = "lblModulesRoot";
-            lblModulesRoot.Size = new System.Drawing.Size(90, 38);
+            lblModulesRoot.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
+            lblModulesRoot.Size = new System.Drawing.Size(90, 36);
             lblModulesRoot.TabIndex = 0;
             lblModulesRoot.Text = "Modules:";
-            lblModulesRoot.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // tblEdit
             // 
@@ -251,7 +279,7 @@ namespace nU3.Tools.Deployer.Views
             tblEdit.Controls.Add(lblCat, 0, 2);
             tblEdit.Controls.Add(lblId, 0, 0);
             tblEdit.Dock = System.Windows.Forms.DockStyle.Bottom;
-            tblEdit.Location = new System.Drawing.Point(0, 329);
+            tblEdit.Location = new System.Drawing.Point(0, 836);
             tblEdit.Name = "tblEdit";
             tblEdit.RowCount = 10;
             tblEdit.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
@@ -264,7 +292,7 @@ namespace nU3.Tools.Deployer.Views
             tblEdit.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
             tblEdit.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
             tblEdit.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
-            tblEdit.Size = new System.Drawing.Size(469, 272);
+            tblEdit.Size = new System.Drawing.Size(1474, 272);
             tblEdit.TabIndex = 0;
             // 
             // txtModuleId
@@ -272,26 +300,28 @@ namespace nU3.Tools.Deployer.Views
             txtModuleId.Dock = System.Windows.Forms.DockStyle.Fill;
             txtModuleId.Location = new System.Drawing.Point(103, 3);
             txtModuleId.Name = "txtModuleId";
-            txtModuleId.Size = new System.Drawing.Size(363, 23);
+            txtModuleId.Properties.AutoHeight = false;
+            txtModuleId.Size = new System.Drawing.Size(1368, 21);
             txtModuleId.TabIndex = 1;
             // 
             // lblName
             // 
+            lblName.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
             lblName.Dock = System.Windows.Forms.DockStyle.Top;
             lblName.Location = new System.Drawing.Point(3, 30);
             lblName.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
             lblName.Name = "lblName";
-            lblName.Size = new System.Drawing.Size(94, 24);
+            lblName.Size = new System.Drawing.Size(94, 21);
             lblName.TabIndex = 2;
-            lblName.Text = "∏µ‚∏Ì:";
-            lblName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            lblName.Text = "Ïù¥Î¶Ñ:";
             // 
             // txtModuleName
             // 
             txtModuleName.Dock = System.Windows.Forms.DockStyle.Fill;
             txtModuleName.Location = new System.Drawing.Point(103, 30);
             txtModuleName.Name = "txtModuleName";
-            txtModuleName.Size = new System.Drawing.Size(363, 23);
+            txtModuleName.Properties.AutoHeight = false;
+            txtModuleName.Size = new System.Drawing.Size(1368, 21);
             txtModuleName.TabIndex = 3;
             // 
             // cboCategory
@@ -299,175 +329,185 @@ namespace nU3.Tools.Deployer.Views
             cboCategory.Dock = System.Windows.Forms.DockStyle.Fill;
             cboCategory.Location = new System.Drawing.Point(103, 57);
             cboCategory.Name = "cboCategory";
-            cboCategory.Size = new System.Drawing.Size(363, 23);
+            cboCategory.Properties.AutoHeight = false;
+            cboCategory.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] { new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo) });
+            cboCategory.Size = new System.Drawing.Size(1368, 21);
             cboCategory.TabIndex = 5;
             // 
             // lblSub
             // 
+            lblSub.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
             lblSub.Location = new System.Drawing.Point(3, 84);
             lblSub.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
             lblSub.Name = "lblSub";
-            lblSub.Size = new System.Drawing.Size(90, 24);
+            lblSub.Size = new System.Drawing.Size(90, 21);
             lblSub.TabIndex = 6;
-            lblSub.Text = "º≠∫ÍΩ√Ω∫≈€:";
-            lblSub.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            lblSub.Text = "ÏÑúÎ∏åÏãúÏä§ÌÖú:";
             // 
             // txtSubSystem
             // 
             txtSubSystem.Dock = System.Windows.Forms.DockStyle.Fill;
             txtSubSystem.Location = new System.Drawing.Point(103, 84);
             txtSubSystem.Name = "txtSubSystem";
-            txtSubSystem.Size = new System.Drawing.Size(363, 23);
+            txtSubSystem.Properties.AutoHeight = false;
+            txtSubSystem.Size = new System.Drawing.Size(1368, 21);
             txtSubSystem.TabIndex = 7;
             // 
             // lblFile
             // 
+            lblFile.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
             lblFile.Location = new System.Drawing.Point(3, 111);
             lblFile.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
             lblFile.Name = "lblFile";
-            lblFile.Size = new System.Drawing.Size(90, 24);
+            lblFile.Size = new System.Drawing.Size(90, 21);
             lblFile.TabIndex = 8;
-            lblFile.Text = "∆ƒ¿œ∏Ì:";
-            lblFile.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            lblFile.Text = "ÌååÏùºÎ™Ö:";
             // 
             // txtFileName
             // 
             txtFileName.Dock = System.Windows.Forms.DockStyle.Fill;
             txtFileName.Location = new System.Drawing.Point(103, 111);
             txtFileName.Name = "txtFileName";
-            txtFileName.Size = new System.Drawing.Size(363, 23);
+            txtFileName.Properties.AutoHeight = false;
+            txtFileName.Size = new System.Drawing.Size(1368, 21);
             txtFileName.TabIndex = 9;
             // 
             // lblVer
             // 
+            lblVer.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
             lblVer.Location = new System.Drawing.Point(3, 138);
             lblVer.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
             lblVer.Name = "lblVer";
-            lblVer.Size = new System.Drawing.Size(90, 24);
+            lblVer.Size = new System.Drawing.Size(90, 21);
             lblVer.TabIndex = 10;
-            lblVer.Text = "πˆ¿¸:";
-            lblVer.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            lblVer.Text = "Î≤ÑÏ†Ñ:";
             // 
             // txtActiveVersion
             // 
             txtActiveVersion.Dock = System.Windows.Forms.DockStyle.Fill;
             txtActiveVersion.Location = new System.Drawing.Point(103, 138);
             txtActiveVersion.Name = "txtActiveVersion";
-            txtActiveVersion.Size = new System.Drawing.Size(363, 23);
+            txtActiveVersion.Properties.AutoHeight = false;
+            txtActiveVersion.Size = new System.Drawing.Size(1368, 21);
             txtActiveVersion.TabIndex = 11;
             // 
             // lblHash
             // 
+            lblHash.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
             lblHash.Location = new System.Drawing.Point(3, 165);
             lblHash.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
             lblHash.Name = "lblHash";
-            lblHash.Size = new System.Drawing.Size(90, 24);
+            lblHash.Size = new System.Drawing.Size(90, 21);
             lblHash.TabIndex = 12;
-            lblHash.Text = "∆ƒ¿œ«ÿΩ√:";
-            lblHash.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            lblHash.Text = "Ìï¥Ïãú:";
             // 
             // txtFileHash
             // 
             txtFileHash.Dock = System.Windows.Forms.DockStyle.Fill;
             txtFileHash.Location = new System.Drawing.Point(103, 165);
             txtFileHash.Name = "txtFileHash";
-            txtFileHash.Size = new System.Drawing.Size(363, 23);
+            txtFileHash.Properties.AutoHeight = false;
+            txtFileHash.Size = new System.Drawing.Size(1368, 21);
             txtFileHash.TabIndex = 13;
             // 
             // lblSize
             // 
+            lblSize.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
             lblSize.Location = new System.Drawing.Point(3, 192);
             lblSize.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
             lblSize.Name = "lblSize";
-            lblSize.Size = new System.Drawing.Size(90, 24);
+            lblSize.Size = new System.Drawing.Size(90, 21);
             lblSize.TabIndex = 14;
-            lblSize.Text = "∆ƒ¿œ≈©±‚:";
-            lblSize.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            lblSize.Text = "ÌååÏùºÌÅ¨Í∏∞:";
             // 
             // txtFileSize
             // 
             txtFileSize.Dock = System.Windows.Forms.DockStyle.Fill;
             txtFileSize.Location = new System.Drawing.Point(103, 192);
             txtFileSize.Name = "txtFileSize";
-            txtFileSize.Size = new System.Drawing.Size(363, 23);
+            txtFileSize.Properties.AutoHeight = false;
+            txtFileSize.Size = new System.Drawing.Size(1368, 21);
             txtFileSize.TabIndex = 15;
             // 
             // lblStorage
             // 
+            lblStorage.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
             lblStorage.Location = new System.Drawing.Point(3, 219);
             lblStorage.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
             lblStorage.Name = "lblStorage";
-            lblStorage.Size = new System.Drawing.Size(90, 24);
+            lblStorage.Size = new System.Drawing.Size(90, 21);
             lblStorage.TabIndex = 16;
-            lblStorage.Text = "¿˙¿Â∞Ê∑Œ:";
-            lblStorage.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            lblStorage.Text = "Ï†ÄÏû•Í≤ΩÎ°ú:";
             // 
             // txtStoragePath
             // 
             txtStoragePath.Dock = System.Windows.Forms.DockStyle.Fill;
             txtStoragePath.Location = new System.Drawing.Point(103, 219);
             txtStoragePath.Name = "txtStoragePath";
-            txtStoragePath.Size = new System.Drawing.Size(363, 23);
+            txtStoragePath.Properties.AutoHeight = false;
+            txtStoragePath.Size = new System.Drawing.Size(1368, 21);
             txtStoragePath.TabIndex = 17;
             // 
             // lblDeployDesc
             // 
+            lblDeployDesc.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
             lblDeployDesc.Location = new System.Drawing.Point(3, 246);
             lblDeployDesc.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
             lblDeployDesc.Name = "lblDeployDesc";
             lblDeployDesc.Size = new System.Drawing.Size(90, 25);
             lblDeployDesc.TabIndex = 18;
-            lblDeployDesc.Text = "πË∆˜º≥∏Ì:";
-            lblDeployDesc.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            lblDeployDesc.Text = "Î∞∞Ìè¨ÏÑ§Î™Ö:";
             // 
             // txtDeployDesc
             // 
             txtDeployDesc.Dock = System.Windows.Forms.DockStyle.Fill;
             txtDeployDesc.Location = new System.Drawing.Point(103, 246);
             txtDeployDesc.Name = "txtDeployDesc";
-            txtDeployDesc.Size = new System.Drawing.Size(363, 23);
+            txtDeployDesc.Properties.AutoHeight = false;
+            txtDeployDesc.Size = new System.Drawing.Size(1368, 23);
             txtDeployDesc.TabIndex = 19;
             // 
             // lblCat
             // 
+            lblCat.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
             lblCat.Dock = System.Windows.Forms.DockStyle.Top;
             lblCat.Location = new System.Drawing.Point(3, 57);
             lblCat.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
             lblCat.Name = "lblCat";
-            lblCat.Size = new System.Drawing.Size(94, 24);
+            lblCat.Size = new System.Drawing.Size(94, 21);
             lblCat.TabIndex = 4;
-            lblCat.Text = "ƒ´≈◊∞Ì∏Æ:";
-            lblCat.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            lblCat.Text = "Ïπ¥ÌÖåÍ≥†Î¶¨:";
             // 
             // lblId
             // 
+            lblId.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
             lblId.Dock = System.Windows.Forms.DockStyle.Top;
             lblId.Location = new System.Drawing.Point(3, 3);
             lblId.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
             lblId.Name = "lblId";
-            lblId.Size = new System.Drawing.Size(94, 24);
+            lblId.Size = new System.Drawing.Size(94, 21);
             lblId.TabIndex = 0;
             lblId.Text = "ModuleId:";
-            lblId.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // dgvDbVersions
             // 
-            dgvDbVersions.AllowUserToAddRows = false;
-            dgvDbVersions.AllowUserToDeleteRows = false;
-            dgvDbVersions.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            dgvDbVersions.ColumnHeadersHeight = 34;
             dgvDbVersions.Dock = System.Windows.Forms.DockStyle.Fill;
             dgvDbVersions.Location = new System.Drawing.Point(0, 40);
-            dgvDbVersions.MultiSelect = false;
+            dgvDbVersions.MainView = gvDbVersions;
             dgvDbVersions.Name = "dgvDbVersions";
-            dgvDbVersions.RowHeadersWidth = 62;
-            dgvDbVersions.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            dgvDbVersions.Size = new System.Drawing.Size(469, 561);
+            dgvDbVersions.Size = new System.Drawing.Size(1474, 1068);
             dgvDbVersions.TabIndex = 0;
+            dgvDbVersions.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] { gvDbVersions });
+            // 
+            // gvDbVersions
+            // 
+            gvDbVersions.GridControl = dgvDbVersions;
+            gvDbVersions.Name = "gvDbVersions";
+            gvDbVersions.OptionsBehavior.Editable = false;
+            gvDbVersions.OptionsView.ShowGroupPanel = false;
             // 
             // pnlFilter
             // 
-            pnlFilter.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             pnlFilter.Controls.Add(cboFilterCategory);
             pnlFilter.Controls.Add(lblFilterCategory);
             pnlFilter.Controls.Add(lblFilterSubSystem);
@@ -475,161 +515,176 @@ namespace nU3.Tools.Deployer.Views
             pnlFilter.Dock = System.Windows.Forms.DockStyle.Top;
             pnlFilter.Location = new System.Drawing.Point(0, 0);
             pnlFilter.Name = "pnlFilter";
-            pnlFilter.Size = new System.Drawing.Size(469, 40);
+            pnlFilter.Size = new System.Drawing.Size(1474, 40);
             pnlFilter.TabIndex = 1;
             // 
             // cboFilterCategory
             // 
-            cboFilterCategory.DropDownHeight = 120;
-            cboFilterCategory.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            cboFilterCategory.IntegralHeight = false;
-            cboFilterCategory.ItemHeight = 15;
-            cboFilterCategory.Location = new System.Drawing.Point(79, 6);
+            cboFilterCategory.Location = new System.Drawing.Point(79, 8);
             cboFilterCategory.Name = "cboFilterCategory";
-            cboFilterCategory.Size = new System.Drawing.Size(120, 23);
+            cboFilterCategory.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] { new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo) });
+            cboFilterCategory.Size = new System.Drawing.Size(120, 28);
             cboFilterCategory.TabIndex = 1;
             cboFilterCategory.SelectedIndexChanged += CboFilter_Changed;
             // 
             // lblFilterCategory
             // 
+            lblFilterCategory.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
             lblFilterCategory.Location = new System.Drawing.Point(3, 6);
             lblFilterCategory.Name = "lblFilterCategory";
             lblFilterCategory.Size = new System.Drawing.Size(70, 23);
             lblFilterCategory.TabIndex = 0;
             lblFilterCategory.Text = "System:";
-            lblFilterCategory.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // lblFilterSubSystem
             // 
+            lblFilterSubSystem.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
             lblFilterSubSystem.Location = new System.Drawing.Point(205, 5);
             lblFilterSubSystem.Name = "lblFilterSubSystem";
             lblFilterSubSystem.Size = new System.Drawing.Size(44, 23);
             lblFilterSubSystem.TabIndex = 2;
             lblFilterSubSystem.Text = "Sub:";
-            lblFilterSubSystem.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // cboFilterSubSystem
             // 
-            cboFilterSubSystem.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            cboFilterSubSystem.Location = new System.Drawing.Point(255, 6);
+            cboFilterSubSystem.Location = new System.Drawing.Point(255, 8);
             cboFilterSubSystem.Name = "cboFilterSubSystem";
-            cboFilterSubSystem.Size = new System.Drawing.Size(120, 23);
+            cboFilterSubSystem.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] { new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo) });
+            cboFilterSubSystem.Size = new System.Drawing.Size(120, 28);
             cboFilterSubSystem.TabIndex = 3;
             cboFilterSubSystem.SelectedIndexChanged += CboFilter_Changed;
             // 
             // pnlEdit
             // 
-            pnlEdit.AutoScroll = true;
-            pnlEdit.BackColor = System.Drawing.SystemColors.AppWorkspace;
             pnlEdit.Controls.Add(tableLayoutPanel1);
             pnlEdit.Dock = System.Windows.Forms.DockStyle.Bottom;
-            pnlEdit.Location = new System.Drawing.Point(0, 601);
+            pnlEdit.Location = new System.Drawing.Point(0, 1108);
             pnlEdit.MinimumSize = new System.Drawing.Size(250, 0);
             pnlEdit.Name = "pnlEdit";
             pnlEdit.Padding = new System.Windows.Forms.Padding(1);
-            pnlEdit.Size = new System.Drawing.Size(469, 99);
+            pnlEdit.Size = new System.Drawing.Size(1474, 99);
             pnlEdit.TabIndex = 0;
             // 
             // tableLayoutPanel1
             // 
             tableLayoutPanel1.BackColor = System.Drawing.SystemColors.ActiveCaption;
             tableLayoutPanel1.ColumnCount = 3;
-            tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.3333321F));
-            tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.3333321F));
-            tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.3333321F));
-            tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             tableLayoutPanel1.Controls.Add(btnRefresh, 0, 0);
             tableLayoutPanel1.Controls.Add(btnDelete, 2, 0);
             tableLayoutPanel1.Controls.Add(btnSmartUpload, 1, 0);
             tableLayoutPanel1.Controls.Add(btnAdd, 2, 1);
             tableLayoutPanel1.Controls.Add(btnBulkUpload, 1, 1);
             tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            tableLayoutPanel1.Location = new System.Drawing.Point(1, 1);
+            tableLayoutPanel1.Location = new System.Drawing.Point(3, 3);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 2;
-            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            tableLayoutPanel1.Size = new System.Drawing.Size(467, 97);
+            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            tableLayoutPanel1.Size = new System.Drawing.Size(1468, 93);
             tableLayoutPanel1.TabIndex = 5;
             // 
             // btnRefresh
             // 
+            btnRefresh.AuthId = "";
             btnRefresh.Dock = System.Windows.Forms.DockStyle.Fill;
             btnRefresh.Location = new System.Drawing.Point(3, 3);
             btnRefresh.Name = "btnRefresh";
-            btnRefresh.Padding = new System.Windows.Forms.Padding(3);
-            tableLayoutPanel1.SetRowSpan(btnRefresh, 2);
-            btnRefresh.Size = new System.Drawing.Size(149, 94);
+            btnRefresh.Size = new System.Drawing.Size(483, 40);
             btnRefresh.TabIndex = 2;
-            btnRefresh.Text = "ªı∑Œ∞Ìƒß";
+            btnRefresh.Text = "ÏÉàÎ°úÍ≥†Ïπ®";
             btnRefresh.Click += BtnRefresh_Click;
             // 
             // btnDelete
             // 
+            btnDelete.AuthId = "";
             btnDelete.Dock = System.Windows.Forms.DockStyle.Fill;
-            btnDelete.Location = new System.Drawing.Point(313, 3);
+            btnDelete.Location = new System.Drawing.Point(981, 3);
             btnDelete.Name = "btnDelete";
-            btnDelete.Size = new System.Drawing.Size(151, 44);
+            btnDelete.Size = new System.Drawing.Size(484, 40);
             btnDelete.TabIndex = 3;
-            btnDelete.Text = "ªË¡¶";
+            btnDelete.Text = "ÏÇ≠Ï†ú";
             btnDelete.Click += BtnDelete_Click;
             // 
             // btnSmartUpload
             // 
+            btnSmartUpload.AuthId = "";
             btnSmartUpload.Dock = System.Windows.Forms.DockStyle.Fill;
-            btnSmartUpload.Location = new System.Drawing.Point(158, 3);
+            btnSmartUpload.Location = new System.Drawing.Point(492, 3);
             btnSmartUpload.Name = "btnSmartUpload";
-            btnSmartUpload.Size = new System.Drawing.Size(149, 44);
+            btnSmartUpload.Size = new System.Drawing.Size(483, 40);
             btnSmartUpload.TabIndex = 1;
-            btnSmartUpload.Text = "∞≥∫∞ æ˜∑ŒµÂ";
+            btnSmartUpload.Text = "Ïä§ÎßàÌä∏ ÏóÖÎ°úÎìú";
             btnSmartUpload.Click += BtnSmartUpload_Click;
             // 
             // btnAdd
             // 
-            btnAdd.Location = new System.Drawing.Point(3, 103);
+            btnAdd.AuthId = "";
+            btnAdd.Dock = System.Windows.Forms.DockStyle.Fill;
+            btnAdd.Location = new System.Drawing.Point(981, 49);
             btnAdd.Name = "btnAdd";
-            btnAdd.Size = new System.Drawing.Size(114, 14);
+            btnAdd.Size = new System.Drawing.Size(484, 41);
             btnAdd.TabIndex = 4;
-            btnAdd.Text = "¿˙¿Â";
+            btnAdd.Text = "Ï†ÄÏû•";
             btnAdd.Click += BtnAdd_Click;
             // 
             // btnBulkUpload
             // 
-            tableLayoutPanel1.SetColumnSpan(btnBulkUpload, 2);
+            btnBulkUpload.AuthId = "";
             btnBulkUpload.Dock = System.Windows.Forms.DockStyle.Fill;
-            btnBulkUpload.Location = new System.Drawing.Point(158, 53);
+            btnBulkUpload.Location = new System.Drawing.Point(492, 49);
             btnBulkUpload.Name = "btnBulkUpload";
-            btnBulkUpload.Size = new System.Drawing.Size(306, 44);
+            btnBulkUpload.Size = new System.Drawing.Size(483, 41);
             btnBulkUpload.TabIndex = 5;
-            btnBulkUpload.Text = "¿œ∞˝æ˜∑ŒµÂ";
+            btnBulkUpload.Text = "ÏùºÍ¥Ñ ÏóÖÎ°úÎìú";
             btnBulkUpload.Click += btnBulkUpload_Click;
             // 
             // ProgramDeployManagementControl
             // 
-            AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            AutoSize = true;
             Controls.Add(splitMain);
             Name = "ProgramDeployManagementControl";
-            Size = new System.Drawing.Size(1200, 700);
+            Size = new System.Drawing.Size(2214, 1207);
+            ((System.ComponentModel.ISupportInitialize)splitMain.Panel1).EndInit();
             splitMain.Panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)splitMain.Panel2).EndInit();
             splitMain.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitMain).EndInit();
             splitMain.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dgvModuleFiles).EndInit();
+            ((System.ComponentModel.ISupportInitialize)gvModuleFiles).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pnlScanTop).EndInit();
             pnlScanTop.ResumeLayout(false);
-            pnlScanTop.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)txtModulesRoot.Properties).EndInit();
+            ((System.ComponentModel.ISupportInitialize)chkUpdated.Properties).EndInit();
             tblEdit.ResumeLayout(false);
             tblEdit.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)txtModuleId.Properties).EndInit();
+            ((System.ComponentModel.ISupportInitialize)txtModuleName.Properties).EndInit();
+            ((System.ComponentModel.ISupportInitialize)cboCategory.Properties).EndInit();
+            ((System.ComponentModel.ISupportInitialize)txtSubSystem.Properties).EndInit();
+            ((System.ComponentModel.ISupportInitialize)txtFileName.Properties).EndInit();
+            ((System.ComponentModel.ISupportInitialize)txtActiveVersion.Properties).EndInit();
+            ((System.ComponentModel.ISupportInitialize)txtFileHash.Properties).EndInit();
+            ((System.ComponentModel.ISupportInitialize)txtFileSize.Properties).EndInit();
+            ((System.ComponentModel.ISupportInitialize)txtStoragePath.Properties).EndInit();
+            ((System.ComponentModel.ISupportInitialize)txtDeployDesc.Properties).EndInit();
             ((System.ComponentModel.ISupportInitialize)dgvDbVersions).EndInit();
+            ((System.ComponentModel.ISupportInitialize)gvDbVersions).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pnlFilter).EndInit();
             pnlFilter.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)cboFilterCategory.Properties).EndInit();
+            ((System.ComponentModel.ISupportInitialize)cboFilterSubSystem.Properties).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pnlEdit).EndInit();
             pnlEdit.ResumeLayout(false);
             tableLayoutPanel1.ResumeLayout(false);
             ResumeLayout(false);
+
         }
-        private System.Windows.Forms.CheckBox chkUpdated;
+
+        private nU3.Core.UI.Controls.nU3CheckEdit chkUpdated;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private System.Windows.Forms.Button btnBulkUpload;
+        private nU3.Core.UI.Controls.nU3SimpleButton btnBulkUpload;
     }
 }

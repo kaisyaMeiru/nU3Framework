@@ -39,6 +39,9 @@ namespace nU3.Core.UI.Controls
         public void SetValue(object? value) => this.EditValue = value;
         public new void Clear() => this.EditValue = null;
         public string GetControlId() => this.Name;
+
+        // Designer property used in generated code
+        public bool IsRequired { get; set; }
     }
 
     #endregion
@@ -140,6 +143,9 @@ namespace nU3.Core.UI.Controls
         public void SetValue(object? value) => this.EditValue = value;
         public new void Clear() => this.EditValue = null;
         public string GetControlId() => this.Name;
+
+        // Designer property
+        public bool IsRequired { get; set; }
     }
 
     #endregion
@@ -172,6 +178,9 @@ namespace nU3.Core.UI.Controls
         public void SetValue(object? value) => this.EditValue = value;
         public new void Clear() => this.EditValue = null;
         public string GetControlId() => this.Name;
+
+        // Designer property
+        public bool IsRequired { get; set; }
     }
 
     #endregion
@@ -204,6 +213,9 @@ namespace nU3.Core.UI.Controls
         public void SetValue(object? value) => this.EditValue = value;
         public new void Clear() => this.EditValue = null;
         public string GetControlId() => this.Name;
+
+        // Designer property
+        public bool IsRequired { get; set; }
     }
 
     #endregion
@@ -268,6 +280,9 @@ namespace nU3.Core.UI.Controls
         public void SetValue(object? value) => this.EditValue = value;
         public new void Clear() => this.Value = 0;
         public string GetControlId() => this.Name;
+
+        // Designer property
+        public bool IsRequired { get; set; }
     }
 
     #endregion
@@ -439,6 +454,9 @@ namespace nU3.Core.UI.Controls
         public void SetValue(object? value) => this.Text = value?.ToString();
         public void Clear() => this.Text = string.Empty;
         public string GetControlId() => this.Name;
+
+        // Designer property
+        public bool IsRequiredMarker { get; set; }
     }
 
     #endregion

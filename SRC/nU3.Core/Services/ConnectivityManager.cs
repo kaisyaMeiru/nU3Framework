@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using nU3.Connectivity.Implementations;
+using System.Collections.Generic;
 
 namespace nU3.Core.Services
 {
@@ -708,6 +709,7 @@ namespace nU3.Core.Services
                 _instance = null;
             }
         }
+
     }
 
     #region Pooled Client Wrappers

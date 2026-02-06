@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.Extensions.Configuration;
 using nU3.Data;
+using nU3.Connectivity;
+using nU3.Connectivity.Implementations;
 
 namespace nU3.Bootstrapper
 {
@@ -23,7 +25,7 @@ namespace nU3.Bootstrapper
         private static IConfiguration? _configuration;
 
         [STAThread]
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
@@ -42,33 +44,50 @@ namespace nU3.Bootstrapper
                 FileLogger.Debug($"appsettings.json 경로: {Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "appsettings.json")}");
                 FileLogger.SectionEnd("시스템 설정 로드");
 
-                var dbManager = new LocalDatabaseManager();
+                // DB 서비스 초기화 (HTTP 클라이언트)
+                string baseUrl = _configuration.GetValue<string>("ServerConnection:BaseUrl") ?? "http://localhost:5000";
                 
-                // 1. DB 초기화
-                FileLogger.SectionStart("로컬 데이터베이스 초기화");
-                dbManager.InitializeSchema();
-                FileLogger.Info("로컬 데이터베이스 초기화 완료");
-                FileLogger.Debug($"DB 연결 문자열: {dbManager.GetConnectionString()}");
-                FileLogger.SectionEnd("로컬 데이터베이스 초기화");
+                // HttpClient 설정
+                var httpClient = new System.Net.Http.HttpClient 
+                { 
+                    BaseAddress = new Uri(baseUrl),
+                    Timeout = TimeSpan.FromMinutes(10)
+                };
+                
+                IDBAccessService dbService = new HttpDBAccessClient(httpClient, baseUrl);
+                
+                // 1. DB 연결 확인 (초기화는 서버에서 수행됨)
+                FileLogger.SectionStart("데이터베이스 연결 확인");
+                bool isConnected = dbService.Connect();
+                if (isConnected)
+                {
+                    FileLogger.Info("데이터베이스 연결 성공");
+                }
+                else
+                {
+                    FileLogger.Warning("데이터베이스 연결 실패. 서버 상태를 확인하세요.");
+                }
+                FileLogger.SectionEnd("데이터베이스 연결 확인");
+
+
 
                 // 2. Shell 실행 파일 위치 확인
                 FileLogger.SectionStart("Shell 실행 파일 위치 확인");
-                string? shellPath = FindShellPath();
+                string? shellPath = FindShellPath(_configuration);
                 if (string.IsNullOrEmpty(shellPath))
                 {
                     FileLogger.Warning("Shell 실행 파일을 찾을 수 없습니다.");
-                    MessageBox.Show("nU3.MainShell.exe를 찾을 수 없습니다.", "오류", 
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("시작위치를 확인 할수 없습니다.", "오류",  MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
                 FileLogger.Info($"Shell 경로: {shellPath}");
                 FileLogger.SectionEnd("Shell 실행 파일 위치 확인");
 
-                string? installPath = Path.GetDirectoryName(shellPath);
+
 
                 // 3. 프레임워크 컴포넌트 업데이트 (서버 또는 캐시에서 다운로드)
                 FileLogger.SectionStart("프레임워크 컴포넌트 업데이트 확인");
-                using var componentLoader = new ComponentLoader(dbManager, _configuration, installPath);
+                using var componentLoader = new ComponentLoader(dbService, _configuration, shellPath);
                 FileLogger.Info($"설치 경로: {componentLoader.InstallPath}");
                 var componentUpdates = componentLoader.CheckForUpdates();
 
@@ -112,8 +131,7 @@ namespace nU3.Bootstrapper
 
                 // 4. 화면 모듈 검사 및 동기화 (HTTP 전용)
                 FileLogger.SectionStart("화면 모듈 검사 및 동기화");
-                var moduleLoader = new ModuleLoader(_configuration);
-                moduleLoader.EnsureDatabaseInitialized();
+                var moduleLoader = new ModuleLoader(dbService, _configuration);
                 moduleLoader.CheckAndLoadModules(shellPath);
                 FileLogger.Info("화면 모듈 검사 완료");
                 FileLogger.SectionEnd("화면 모듈 검사 및 동기화");
@@ -121,7 +139,7 @@ namespace nU3.Bootstrapper
                 // 5. Seeder (개발 환경용 더미 데이터)
                 #if DEBUG
                 FileLogger.SectionStart("더미 데이터 생성");
-                var seeder = new Seeder(dbManager);
+                var seeder = new Seeder(dbService);
                 seeder.SeedDummyData();
                 FileLogger.Info("더미 데이터 생성 완료");
                 FileLogger.SectionEnd("더미 데이터 생성");
@@ -141,11 +159,6 @@ namespace nU3.Bootstrapper
                 MessageBox.Show($"작업 중 오류 발생:\n{ex.Message}", "오류",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
-            #if DEBUG
-            //Console.WriteLine("\n종료하려면 아무 키나 누르세요...");
-            //Console.ReadKey();
-            #endif
         }
 
         /// <summary>
@@ -186,8 +199,6 @@ namespace nU3.Bootstrapper
                         
                         FileLogger.Info("설정 리소스 로드: appsettings.json (임시 파일)");
                         FileLogger.Debug($"임시 경로: {tempConfigPath}");
-                        
-                        // 참조 유지를 위해 파일 삭제하지 않음 (종료 시 자동 정리됨)
                     }
                     else
                     {
@@ -204,45 +215,23 @@ namespace nU3.Bootstrapper
         }
 
         /// <summary>
-        /// MainShell 또는 Shell 실행 파일을 찾습니다. 여러 위치(배포/개발/상위 디렉토리)를 검사합니다.
+        /// MainShell 또는 Shell 실행 파일을 찾습니다.
         /// </summary>
-        private static string? FindShellPath()
+        private static string? FindShellPath(IConfiguration configuration)
         {
+            // 1) appsettings의 RuntimeDirectory를 우선 사용하여 쉘 실행 파일을 찾습니다.
 
-            return "c:\\nU3Framework_BIn\\";
-
-
-            string baseDir = AppDomain.CurrentDomain.BaseDirectory;
-            
-            // 1. 같은 디렉토리에서 MainShell 검색
-            string shellPath = Path.Combine(baseDir, "nU3.MainShell.exe");
-            if (File.Exists(shellPath)) return shellPath;
-
-            // 2. 같은 디렉토리에서 Shell 검색 (fallback)
-            shellPath = Path.Combine(baseDir, "nU3.Shell.exe");
-            if (File.Exists(shellPath)) return shellPath;
-
-            // 3. Debug 개발 환경: MainShell 프로젝트 bin 폴더 검색
-            shellPath = Path.GetFullPath(Path.Combine(baseDir, "..", "..", "..", 
-                "nU3.MainShell", "bin", "Debug", "nU3.MainShell.exe"));
-            if (File.Exists(shellPath)) return shellPath;
-
-            // 4. Debug 개발 환경: Shell 프로젝트 bin 폴더 검색
-            shellPath = Path.GetFullPath(Path.Combine(baseDir, "..", "..", "..", 
-                "nU3.Shell", "bin", "Debug", "nU3.Shell.exe"));
-            if (File.Exists(shellPath)) return shellPath;
-
-            // 5. 상위 디렉토리 전체 검색
-            var parentDir = Directory.GetParent(baseDir)?.FullName;
-            if (!string.IsNullOrEmpty(parentDir))
+            try
             {
-                var files = Directory.GetFiles(parentDir, "nU3.MainShell.exe", SearchOption.AllDirectories);
-                if (files.Length > 0) return files[0];
-
-                files = Directory.GetFiles(parentDir, "nU3.Shell.exe", SearchOption.AllDirectories);
-                if (files.Length > 0) return files[0];
+                var runtimeDir = configuration?.GetValue<string>("RuntimeDirectory");
+                if (!string.IsNullOrWhiteSpace(runtimeDir))
+                {
+                    if(System.IO.Directory.Exists(runtimeDir))
+                        return runtimeDir;
+                }
             }
-
+            catch { /* 무시하고 다음 탐색으로 진행 */ }
+           
             return null;
         }
 

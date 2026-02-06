@@ -1,17 +1,22 @@
 using System;
+using System.Collections.Generic;
+using System.Data;
 using System.Data.SQLite;
 using System.IO;
+using System.Threading.Tasks;
+using nU3.Connectivity;
 
 namespace nU3.Data
 {
-    public class LocalDatabaseManager
+    public class LocalDbService : IDBAccessService, IDisposable
     {
         private readonly string _dbPath;
         private readonly string _connectionString;
+        private SQLiteConnection? _connection;
+        private SQLiteTransaction? _transaction;
 
-        public LocalDatabaseManager(string dbFileName = "nU3_Local.db")
+        public LocalDbService(string dbFileName = "nU3_Local.db")
         {
-            // Changed back to ApplicationData to ensure all processes share the same DB
             string appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             string folder = Path.Combine(appData, "nU3.Framework", "Database");
 
@@ -22,369 +27,255 @@ namespace nU3.Data
 
             _dbPath = Path.Combine(folder, dbFileName);
             _connectionString = $"Data Source={_dbPath};Version=3;";
-            InitializeSchema();
+            
+            // Client might not need to init schema if Server does, but for safety/standalone:
+            // We can keep it or rely on Server. Let's assume standalone capability for Deployer.
+            // InitializeSchema(); 
         }
+
+        public string GetConnectionString() => _connectionString;
+
+        public bool Connect()
+        {
+            try
+            {
+                if (_connection == null)
+                {
+                    _connection = new SQLiteConnection(_connectionString);
+                }
+                if (_connection.State != ConnectionState.Open)
+                {
+                    _connection.Open();
+                }
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> ConnectAsync()
+        {
+            try
+            {
+                if (_connection == null)
+                {
+                    _connection = new SQLiteConnection(_connectionString);
+                }
+                if (_connection.State != ConnectionState.Open)
+                {
+                    await _connection.OpenAsync();
+                }
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public void BeginTransaction()
+        {
+            Connect();
+            _transaction = _connection!.BeginTransaction();
+        }
+
+        public void CommitTransaction()
+        {
+            _transaction?.Commit();
+            _transaction = null;
+        }
+
+        public void RollbackTransaction()
+        {
+            _transaction?.Rollback();
+            _transaction = null;
+        }
+
+        private SQLiteCommand CreateCommand(string commandText, Dictionary<string, object>? parameters)
+        {
+            Connect();
+            var cmd = _connection!.CreateCommand();
+            cmd.CommandText = commandText;
+            cmd.Transaction = _transaction;
+
+            if (parameters != null)
+            {
+                foreach (var kvp in parameters)
+                {
+                    cmd.Parameters.AddWithValue(kvp.Key, kvp.Value ?? DBNull.Value);
+                }
+            }
+            return cmd;
+        }
+
+        public DataTable ExecuteDataTable(string commandText, Dictionary<string, object>? parameters = null)
+        {
+            using var cmd = CreateCommand(commandText, parameters);
+            using var reader = cmd.ExecuteReader();
+            var dt = new DataTable();
+            dt.Load(reader);
+            return dt;
+        }
+
+        public async Task<DataTable> ExecuteDataTableAsync(string commandText, Dictionary<string, object>? parameters = null)
+        {
+            using var cmd = CreateCommand(commandText, parameters);
+            using var reader = await cmd.ExecuteReaderAsync();
+            var dt = new DataTable();
+            dt.Load(reader);
+            return dt;
+        }
+
+        public DataSet ExecuteDataSet(string commandText, Dictionary<string, object>? parameters = null)
+        {
+            var dt = ExecuteDataTable(commandText, parameters);
+            var ds = new DataSet();
+            ds.Tables.Add(dt);
+            return ds;
+        }
+
+        public async Task<DataSet> ExecuteDataSetAsync(string commandText, Dictionary<string, object>? parameters = null)
+        {
+            var dt = await ExecuteDataTableAsync(commandText, parameters);
+            var ds = new DataSet();
+            ds.Tables.Add(dt);
+            return ds;
+        }
+
+        public bool ExecuteNonQuery(string commandText, Dictionary<string, object>? parameters = null)
+        {
+            using var cmd = CreateCommand(commandText, parameters);
+            return cmd.ExecuteNonQuery() >= 0;
+        }
+
+        public async Task<bool> ExecuteNonQueryAsync(string commandText, Dictionary<string, object>? parameters = null)
+        {
+            using var cmd = CreateCommand(commandText, parameters);
+            await cmd.ExecuteNonQueryAsync();
+            return true;
+        }
+
+        public object ExecuteScalarValue(string commandText, Dictionary<string, object>? parameters = null)
+        {
+            using var cmd = CreateCommand(commandText, parameters);
+            return cmd.ExecuteScalar();
+        }
+
+        public async Task<object> ExecuteScalarValueAsync(string commandText, Dictionary<string, object>? parameters = null)
+        {
+            using var cmd = CreateCommand(commandText, parameters);
+            return await cmd.ExecuteScalarAsync();
+        }
+
+        public bool ExecuteProcedure(string spName, Dictionary<string, object> inputParams, Dictionary<string, object> outputParams)
+        {
+            // SQLite does not support Stored Procedures efficiently. 
+            // Mapping to simple Query or Throwing.
+            throw new NotSupportedException("SQLite does not support Stored Procedures.");
+        }
+
+        public Task<bool> ExecuteProcedureAsync(string spName, Dictionary<string, object> inputParams, Dictionary<string, object> outputParams)
+        {
+            throw new NotSupportedException("SQLite does not support Stored Procedures.");
+        }
+
+        public void Dispose()
+        {
+            _transaction?.Dispose();
+            _connection?.Dispose();
+        }
+    }
+
+    // Wrapper expected by other projects
+    public class LocalDatabaseManager : nU3.Connectivity.IDBAccessService
+    {
+        private readonly LocalDbService _service;
+        private readonly string _dbFilePath;
+        private readonly string _connectionString;
+
+        public LocalDatabaseManager(string dbFileName = "nU3_local.db")
+        {
+            _service = new LocalDbService(dbFileName);
+            _connectionString = _service.GetConnectionString();
+
+            // expose path for other components
+            var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            var dir = Path.Combine(appData, "nU3.Framework");
+            if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
+            _dbFilePath = Path.Combine(dir, dbFileName);
+        }
+
+        // Keep compatibility method used across codebase
+        public string GetConnectionString() => _connectionString;
 
         public void InitializeSchema()
         {
-            if (!File.Exists(_dbPath))
-            {
-                SQLiteConnection.CreateFile(_dbPath);
-            }
-
-            using (var conn = new SQLiteConnection(_connectionString))
-            {
-                conn.Open();
-                using (var cmd = new SQLiteCommand(conn))
-                {
-                    // A. Module Master (IS_USE 제거)
-                    cmd.CommandText = @"
-                        CREATE TABLE IF NOT EXISTS SYS_MODULE_MST (
-                            MODULE_ID TEXT PRIMARY KEY,
-                            CATEGORY TEXT,
-                            SUBSYSTEM TEXT,
-                            MODULE_NAME TEXT,
-                            FILE_NAME TEXT NOT NULL,
-                            REG_DATE TEXT DEFAULT CURRENT_TIMESTAMP
-                        );";
-                    cmd.ExecuteNonQuery();
-
-                    // Migration: Check if CATEGORY/SUBSYSTEM columns exist
-                    cmd.CommandText = "PRAGMA table_info(SYS_MODULE_MST);";
-                    bool hasCategory = false;
-                    bool hasSubSystem = false;
-                    bool hasIsUse = false;
-                    using (var reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            string colName = reader["name"].ToString();
-                            if (colName.Equals("CATEGORY", StringComparison.OrdinalIgnoreCase)) hasCategory = true;
-                            if (colName.Equals("SUBSYSTEM", StringComparison.OrdinalIgnoreCase)) hasSubSystem = true;
-                            
-                        }
-                    }
-
-                    if (!hasCategory)
-                    {
-                        cmd.CommandText = "ALTER TABLE SYS_MODULE_MST ADD COLUMN CATEGORY TEXT;";
-                        cmd.ExecuteNonQuery();
-                    }
-                    if (!hasSubSystem)
-                    {
-                        cmd.CommandText = "ALTER TABLE SYS_MODULE_MST ADD COLUMN SUBSYSTEM TEXT;";
-                        cmd.ExecuteNonQuery();
-                    }
-                    if (hasIsUse)
-                    {
-                        RebuildSysModuleMst(conn);
-                    }
-
-                    // B. Module Version (IS_ACTIVE/IS_DELETED 제거, IS_DELETED -> DEL_DATE)
-                    cmd.CommandText = @"
-                        CREATE TABLE IF NOT EXISTS SYS_MODULE_VER (
-                            MODULE_ID TEXT,
-                            VERSION TEXT,
-                            FILE_HASH TEXT,
-                            FILE_SIZE INTEGER,
-                            STORAGE_PATH TEXT,
-                            DEPLOY_DESC TEXT,
-                            DEPLOY_DATE TEXT DEFAULT CURRENT_TIMESTAMP,
-                            DEPLOYER TEXT,
-                            DEL_DATE TEXT,
-                            PRIMARY KEY (MODULE_ID, VERSION)
-                        );";
-                    cmd.ExecuteNonQuery();
-
-                    MigrateSysModuleVer(conn);
-
-                    // C. Program Master (SCREEN_NAME -> PROG_NAME, IS_ACTIVE 추가, PROG_TYPE 추가)
-                    cmd.CommandText = @"
-                        CREATE TABLE IF NOT EXISTS SYS_PROG_MST (
-                            PROG_ID TEXT PRIMARY KEY,
-                            MODULE_ID TEXT,
-                            CLASS_NAME TEXT,
-                            PROG_NAME TEXT,
-                            AUTH_LEVEL INTEGER DEFAULT 1,
-                            IS_ACTIVE TEXT DEFAULT 'N',
-                            PROG_TYPE INTEGER DEFAULT 1,
-                            FOREIGN KEY(MODULE_ID) REFERENCES SYS_MODULE_MST(MODULE_ID)
-                        );";
-                    cmd.ExecuteNonQuery();
-
-                    MigrateSysProgMst(conn);
-
-                    cmd.CommandText = @"
-                        CREATE TABLE IF NOT EXISTS SYS_MENU (
-                            MENU_ID TEXT PRIMARY KEY,
-                            PARENT_ID TEXT,
-                            MENU_NAME TEXT,
-                            PROG_ID TEXT,
-                            ICON_RES TEXT,
-                            SORT_ORD INTEGER,
-                            SHORTCUT TEXT,
-                            AUTH_LEVEL INTEGER DEFAULT 1,
-                            FOREIGN KEY(PROG_ID) REFERENCES SYS_PROG_MST(PROG_ID)
-                        );";
-                    cmd.ExecuteNonQuery();
-
-                    // Migration: Check for AUTH_LEVEL
-                    cmd.CommandText = "PRAGMA table_info(SYS_MENU);";
-                    bool hasAuth = false;
-                    using (var reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            if (reader["name"].ToString().Equals("AUTH_LEVEL", StringComparison.OrdinalIgnoreCase))
-                            {
-                                hasAuth = true;
-                                break;
-                            }
-                        }
-                    }
-
-                    if (!hasAuth)
-                    {
-                        cmd.CommandText = "ALTER TABLE SYS_MENU ADD COLUMN AUTH_LEVEL INTEGER DEFAULT 1;";
-                        cmd.ExecuteNonQuery();
-                    }
-
-                    // D. Component Master (Framework DLL, 공용 라이브러리, EXE 관리)
-                    cmd.CommandText = @"
-                        CREATE TABLE IF NOT EXISTS SYS_COMPONENT_MST (
-                            COMPONENT_ID TEXT PRIMARY KEY,
-                            COMPONENT_TYPE INTEGER NOT NULL DEFAULT 0,
-                            COMPONENT_NAME TEXT NOT NULL,
-                            FILE_NAME TEXT NOT NULL,
-                            INSTALL_PATH TEXT,
-                            GROUP_NAME TEXT,
-                            IS_REQUIRED INTEGER DEFAULT 0,
-                            AUTO_UPDATE INTEGER DEFAULT 1,
-                            DESCRIPTION TEXT,
-                            PRIORITY INTEGER DEFAULT 100,
-                            DEPENDENCIES TEXT,
-                            REG_DATE TEXT DEFAULT CURRENT_TIMESTAMP,
-                            MOD_DATE TEXT,
-                            IS_ACTIVE TEXT DEFAULT 'Y'
-                        );";
-                    cmd.ExecuteNonQuery();
-
-                    // E. Component Version
-                    cmd.CommandText = @"
-                        CREATE TABLE IF NOT EXISTS SYS_COMPONENT_VER (
-                            COMPONENT_ID TEXT,
-                            VERSION TEXT,
-                            FILE_HASH TEXT,
-                            FILE_SIZE INTEGER,
-                            STORAGE_PATH TEXT,
-                            MIN_FRAMEWORK_VER TEXT,
-                            MAX_FRAMEWORK_VER TEXT,
-                            DEPLOY_DESC TEXT,
-                            RELEASE_NOTE_URL TEXT,
-                            REG_DATE TEXT DEFAULT CURRENT_TIMESTAMP,
-                            DEL_DATE TEXT,
-                            IS_ACTIVE TEXT DEFAULT 'Y',
-                            PRIMARY KEY (COMPONENT_ID, VERSION),
-                            FOREIGN KEY(COMPONENT_ID) REFERENCES SYS_COMPONENT_MST(COMPONENT_ID)
-                        );";
-                    cmd.ExecuteNonQuery();
-
-                    // F. Client Component (클라이언트 설치 현황 - 로컬 전용)
-                    cmd.CommandText = @"
-                        CREATE TABLE IF NOT EXISTS SYS_CLIENT_COMPONENT (
-                            COMPONENT_ID TEXT PRIMARY KEY,
-                            INSTALLED_VERSION TEXT,
-                            INSTALLED_PATH TEXT,
-                            INSTALLED_DATE TEXT,
-                            FILE_HASH TEXT
-                        );";
-                    cmd.ExecuteNonQuery();
-                }
-            }
-        }
-
-        private static bool ColumnExists(SQLiteConnection conn, string tableName, string columnName)
-        {
-            using var cmd = new SQLiteCommand($"PRAGMA table_info({tableName});", conn);
-            using var reader = cmd.ExecuteReader();
-            while (reader.Read())
-            {
-                if (reader["name"].ToString().Equals(columnName, StringComparison.OrdinalIgnoreCase))
-                    return true;
-            }
-            return false;
-        }
-
-        private static void RebuildSysModuleMst(SQLiteConnection conn)
-        {
-            using var tx = conn.BeginTransaction();
-            using var cmd = new SQLiteCommand(conn);
-
-            cmd.CommandText = @"
-                CREATE TABLE IF NOT EXISTS SYS_MODULE_MST__NEW (
-                    MODULE_ID TEXT PRIMARY KEY,
-                    CATEGORY TEXT,
-                    SUBSYSTEM TEXT,
-                    MODULE_NAME TEXT,
-                    FILE_NAME TEXT NOT NULL,
-                    REG_DATE TEXT DEFAULT CURRENT_TIMESTAMP
-                );";
-            cmd.ExecuteNonQuery();
-
-            cmd.CommandText = @"
-                INSERT INTO SYS_MODULE_MST__NEW (MODULE_ID, CATEGORY, SUBSYSTEM, MODULE_NAME, FILE_NAME, REG_DATE)
-                SELECT MODULE_ID, CATEGORY, SUBSYSTEM, MODULE_NAME, FILE_NAME, REG_DATE
-                FROM SYS_MODULE_MST;";
-            cmd.ExecuteNonQuery();
-
-            cmd.CommandText = "DROP TABLE SYS_MODULE_MST;";
-            cmd.ExecuteNonQuery();
-
-            cmd.CommandText = "ALTER TABLE SYS_MODULE_MST__NEW RENAME TO SYS_MODULE_MST;";
-            cmd.ExecuteNonQuery();
-
-            tx.Commit();
-        }
-
-        private static void MigrateSysModuleVer(SQLiteConnection conn)
-        {
-            bool hasIsActive = ColumnExists(conn, "SYS_MODULE_VER", "IS_ACTIVE");
-            bool hasIsDeleted = ColumnExists(conn, "SYS_MODULE_VER", "IS_DELETED");
-            bool hasDelDate = ColumnExists(conn, "SYS_MODULE_VER", "DEL_DATE");
-
-            if (!hasIsActive && !hasIsDeleted)
-            {
-                if (!hasDelDate)
-                {
-                    using var cmdAdd = new SQLiteCommand("ALTER TABLE SYS_MODULE_VER ADD COLUMN DEL_DATE TEXT;", conn);
-                    cmdAdd.ExecuteNonQuery();
-                }
-                return;
-            }
+            // Delegate to LocalDbService implementation to create tables
+            // We'll open a direct connection here to create schema (same SQL as before)
+            using var conn = new SQLiteConnection(_connectionString);
+            conn.Open();
 
             using var tx = conn.BeginTransaction();
-            using var cmd = new SQLiteCommand(conn);
-
-            cmd.CommandText = @"
-                CREATE TABLE IF NOT EXISTS SYS_MODULE_VER__NEW (
-                    MODULE_ID TEXT,
-                    VERSION TEXT,
-                    FILE_HASH TEXT,
-                    FILE_SIZE INTEGER,
-                    STORAGE_PATH TEXT,
-                    DEPLOY_DESC TEXT,
-                    DEPLOY_DATE TEXT DEFAULT CURRENT_TIMESTAMP,
-                    DEPLOYER TEXT,
-                    DEL_DATE TEXT,
-                    PRIMARY KEY (MODULE_ID, VERSION)
-                );";
-            cmd.ExecuteNonQuery();
-
-            if (hasIsDeleted)
+            using (var cmd = conn.CreateCommand())
             {
+                cmd.CommandText = @"CREATE TABLE IF NOT EXISTS SYS_ROLE (ROLE_CODE TEXT PRIMARY KEY, ROLE_NAME TEXT, DESCRIPTION TEXT);";
+                cmd.ExecuteNonQuery();
+
+                cmd.CommandText = @"CREATE TABLE IF NOT EXISTS SYS_DEPT (DEPT_CODE TEXT PRIMARY KEY, DEPT_NAME TEXT);";
+                cmd.ExecuteNonQuery();
+
                 cmd.CommandText = @"
-                    INSERT INTO SYS_MODULE_VER__NEW (MODULE_ID, VERSION, FILE_HASH, FILE_SIZE, STORAGE_PATH, DEPLOY_DESC, DEPLOY_DATE, DEPLOYER, DEL_DATE)
-                    SELECT MODULE_ID, VERSION, FILE_HASH, FILE_SIZE, STORAGE_PATH, DEPLOY_DESC, DEPLOY_DATE, DEPLOYER,
-                           CASE WHEN IFNULL(IS_DELETED,'N') = 'Y' THEN CURRENT_TIMESTAMP ELSE NULL END
-                    FROM SYS_MODULE_VER;";
+                    CREATE TABLE IF NOT EXISTS SYS_USER (
+                        USER_ID TEXT PRIMARY KEY,
+                        USERNAME TEXT,
+                        PASSWORD TEXT,
+                        EMAIL TEXT,
+                        ROLE_CODE TEXT,
+                        IS_ACTIVE TEXT DEFAULT 'Y',
+                        REG_DATE TEXT DEFAULT (datetime('now')),
+                        MOD_DATE TEXT,
+                        FOREIGN KEY(ROLE_CODE) REFERENCES SYS_ROLE(ROLE_CODE)
+                    );";
+                cmd.ExecuteNonQuery();
+
+                cmd.CommandText = @"CREATE TABLE IF NOT EXISTS SYS_USER_DEPT (USER_ID TEXT, DEPT_CODE TEXT, SEQ INTEGER DEFAULT 0, PRIMARY KEY(USER_ID, DEPT_CODE));";
+                cmd.ExecuteNonQuery();
+
+                cmd.CommandText = @"CREATE TABLE IF NOT EXISTS SYS_PERMISSION (TARGET_TYPE TEXT, TARGET_ID TEXT, PROG_ID TEXT, CAN_READ INTEGER DEFAULT 0, CAN_CREATE INTEGER DEFAULT 0, CAN_UPDATE INTEGER DEFAULT 0, CAN_DELETE INTEGER DEFAULT 0, CAN_PRINT INTEGER DEFAULT 0, CAN_EXPORT INTEGER DEFAULT 0, CAN_APPROVE INTEGER DEFAULT 0, CAN_CANCEL INTEGER DEFAULT 0, PRIMARY KEY(TARGET_TYPE, TARGET_ID, PROG_ID));";
+                cmd.ExecuteNonQuery();
+
+                cmd.CommandText = @"CREATE TABLE IF NOT EXISTS SYS_PROG_MST (PROG_ID TEXT PRIMARY KEY, PROG_NAME TEXT, MODULE_ID TEXT, IS_ACTIVE TEXT DEFAULT 'Y');";
+                cmd.ExecuteNonQuery();
+
+                cmd.CommandText = @"CREATE TABLE IF NOT EXISTS SYS_MODULE_MST (MODULE_ID TEXT PRIMARY KEY, MODULE_NAME TEXT, FILE_NAME TEXT, IS_ACTIVE TEXT DEFAULT 'Y');";
+                cmd.ExecuteNonQuery();
+
+                cmd.CommandText = @"CREATE TABLE IF NOT EXISTS SYS_MENU (MENU_ID TEXT PRIMARY KEY, PARENT_ID TEXT, MENU_NAME TEXT, PROG_ID TEXT, SORT_ORD INTEGER DEFAULT 0, AUTH_LEVEL INTEGER DEFAULT 1);";
+                cmd.ExecuteNonQuery();
+
+                tx.Commit();
             }
-            else
-            {
-                cmd.CommandText = @"
-                    INSERT INTO SYS_MODULE_VER__NEW (MODULE_ID, VERSION, FILE_HASH, FILE_SIZE, STORAGE_PATH, DEPLOY_DESC, DEPLOY_DATE, DEPLOYER, DEL_DATE)
-                    SELECT MODULE_ID, VERSION, FILE_HASH, FILE_SIZE, STORAGE_PATH, DEPLOY_DESC, DEPLOY_DATE, DEPLOYER, NULL
-                    FROM SYS_MODULE_VER;";
-            }
-            cmd.ExecuteNonQuery();
 
-            cmd.CommandText = "DROP TABLE SYS_MODULE_VER;";
-            cmd.ExecuteNonQuery();
-
-            cmd.CommandText = "ALTER TABLE SYS_MODULE_VER__NEW RENAME TO SYS_MODULE_VER;";
-            cmd.ExecuteNonQuery();
-
-            tx.Commit();
+            conn.Close();
         }
 
-        private static void MigrateSysProgMst(SQLiteConnection conn)
-        {
-            bool hasScreenName = ColumnExists(conn, "SYS_PROG_MST", "SCREEN_NAME");
-            bool hasProgName = ColumnExists(conn, "SYS_PROG_MST", "PROG_NAME");
-            bool hasIsActive = ColumnExists(conn, "SYS_PROG_MST", "IS_ACTIVE");
-            bool hasProgType = ColumnExists(conn, "SYS_PROG_MST", "PROG_TYPE");
-
-            if (!hasScreenName && hasProgName)
-            {
-                if (!hasIsActive)
-                {
-                    using var cmdAdd = new SQLiteCommand("ALTER TABLE SYS_PROG_MST ADD COLUMN IS_ACTIVE TEXT DEFAULT 'N';", conn);
-                    cmdAdd.ExecuteNonQuery();
-                }
-                if (!hasProgType)
-                {
-                    using var cmdAdd = new SQLiteCommand("ALTER TABLE SYS_PROG_MST ADD COLUMN PROG_TYPE INTEGER DEFAULT 1;", conn);
-                    cmdAdd.ExecuteNonQuery();
-                }
-                return;
-            }
-
-            using var tx = conn.BeginTransaction();
-            using var cmd = new SQLiteCommand(conn);
-
-            cmd.CommandText = @"
-                CREATE TABLE IF NOT EXISTS SYS_PROG_MST__NEW (
-                    PROG_ID TEXT PRIMARY KEY,
-                    MODULE_ID TEXT,
-                    CLASS_NAME TEXT,
-                    PROG_NAME TEXT,
-                    AUTH_LEVEL INTEGER DEFAULT 1,
-                    IS_ACTIVE TEXT DEFAULT 'N',
-                    PROG_TYPE INTEGER DEFAULT 1,
-                    FOREIGN KEY(MODULE_ID) REFERENCES SYS_MODULE_MST(MODULE_ID)
-                );";
-            cmd.ExecuteNonQuery();
-
-            if (hasScreenName)
-            {
-                cmd.CommandText = @"
-                    INSERT INTO SYS_PROG_MST__NEW (PROG_ID, MODULE_ID, CLASS_NAME, PROG_NAME, AUTH_LEVEL, IS_ACTIVE, PROG_TYPE)
-                    SELECT PROG_ID, MODULE_ID, CLASS_NAME, SCREEN_NAME, AUTH_LEVEL,
-                           'N',
-                           1
-                    FROM SYS_PROG_MST;";
-            }
-            else if (hasProgName)
-            {
-                cmd.CommandText = @"
-                    INSERT INTO SYS_PROG_MST__NEW (PROG_ID, MODULE_ID, CLASS_NAME, PROG_NAME, AUTH_LEVEL, IS_ACTIVE, PROG_TYPE)
-                    SELECT PROG_ID, MODULE_ID, CLASS_NAME, PROG_NAME, AUTH_LEVEL,
-                           COALESCE(IS_ACTIVE,'N'),
-                           COALESCE(PROG_TYPE,1)
-                    FROM SYS_PROG_MST;";
-            }
-            else
-            {
-                cmd.CommandText = @"
-                    INSERT INTO SYS_PROG_MST__NEW (PROG_ID, MODULE_ID, CLASS_NAME, PROG_NAME, AUTH_LEVEL, IS_ACTIVE, PROG_TYPE)
-                    SELECT PROG_ID, MODULE_ID, CLASS_NAME, NULL, AUTH_LEVEL,
-                           'N',
-                           1
-                    FROM SYS_PROG_MST;";
-            }
-            cmd.ExecuteNonQuery();
-
-            cmd.CommandText = "DROP TABLE SYS_PROG_MST;";
-            cmd.ExecuteNonQuery();
-
-            cmd.CommandText = "ALTER TABLE SYS_PROG_MST__NEW RENAME TO SYS_PROG_MST;";
-            cmd.ExecuteNonQuery();
-
-            tx.Commit();
-        }
-
-        public string GetConnectionString()
-        {
-            return _connectionString;
-        }
+        // IDBAccessService compatibility - delegate to LocalDbService
+        public bool Connect() => _service.Connect();
+        public Task<bool> ConnectAsync() => _service.ConnectAsync();
+        public void BeginTransaction() => _service.BeginTransaction();
+        public void CommitTransaction() => _service.CommitTransaction();
+        public void RollbackTransaction() => _service.RollbackTransaction();
+        public System.Data.DataTable ExecuteDataTable(string commandText, Dictionary<string, object>? parameters = null) => _service.ExecuteDataTable(commandText, parameters);
+        public Task<System.Data.DataTable> ExecuteDataTableAsync(string commandText, Dictionary<string, object>? parameters = null) => _service.ExecuteDataTableAsync(commandText, parameters);
+        public System.Data.DataSet ExecuteDataSet(string commandText, Dictionary<string, object>? parameters = null) => _service.ExecuteDataSet(commandText, parameters);
+        public Task<System.Data.DataSet> ExecuteDataSetAsync(string commandText, Dictionary<string, object>? parameters = null) => _service.ExecuteDataSetAsync(commandText, parameters);
+        public bool ExecuteNonQuery(string commandText, Dictionary<string, object>? parameters = null) => _service.ExecuteNonQuery(commandText, parameters);
+        public Task<bool> ExecuteNonQueryAsync(string commandText, Dictionary<string, object>? parameters = null) => _service.ExecuteNonQueryAsync(commandText, parameters);
+        public object ExecuteScalarValue(string commandText, Dictionary<string, object>? parameters = null) => _service.ExecuteScalarValue(commandText, parameters);
+        public Task<object> ExecuteScalarValueAsync(string commandText, Dictionary<string, object>? parameters = null) => _service.ExecuteScalarValueAsync(commandText, parameters);
+        public bool ExecuteProcedure(string spName, Dictionary<string, object> inputParams, Dictionary<string, object> outputParams) => _service.ExecuteProcedure(spName, inputParams, outputParams);
+        public Task<bool> ExecuteProcedureAsync(string spName, Dictionary<string, object> inputParams, Dictionary<string, object> outputParams) => _service.ExecuteProcedureAsync(spName, inputParams, outputParams);
     }
 }

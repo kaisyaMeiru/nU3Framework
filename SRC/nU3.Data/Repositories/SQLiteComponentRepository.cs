@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Data.SQLite;
+using System.Data;
 using System.Linq;
 using nU3.Models;
 using nU3.Core.Repositories;
+using nU3.Connectivity;
 
 namespace nU3.Data.Repositories
 {
@@ -12,9 +13,9 @@ namespace nU3.Data.Repositories
     /// </summary>
     public class SQLiteComponentRepository : IComponentRepository
     {
-        private readonly LocalDatabaseManager _db;
+        private readonly IDBAccessService _db;
 
-        public SQLiteComponentRepository(LocalDatabaseManager db)
+        public SQLiteComponentRepository(IDBAccessService db)
         {
             _db = db;
         }
@@ -23,185 +24,96 @@ namespace nU3.Data.Repositories
 
         public List<ComponentMstDto> GetAllComponents()
         {
-            var list = new List<ComponentMstDto>();
-            using (var conn = new SQLiteConnection(_db.GetConnectionString()))
-            {
-                conn.Open();
-                string sql = @"
-                    SELECT * FROM SYS_COMPONENT_MST 
-                    WHERE IS_ACTIVE = 'Y'
-                    ORDER BY PRIORITY, GROUP_NAME, COMPONENT_NAME";
-
-                using (var cmd = new SQLiteCommand(sql, conn))
-                using (var reader = cmd.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        list.Add(MapToComponentMst(reader));
-                    }
-                }
-            }
-            return list;
+            string sql = @"
+                SELECT * FROM SYS_COMPONENT_MST 
+                WHERE IS_ACTIVE = 'Y'
+                ORDER BY PRIORITY, GROUP_NAME, COMPONENT_NAME";
+            return GetMstList(sql);
         }
 
         public List<ComponentMstDto> GetComponentsByType(ComponentType type)
         {
-            var list = new List<ComponentMstDto>();
-            using (var conn = new SQLiteConnection(_db.GetConnectionString()))
-            {
-                conn.Open();
-                string sql = @"
-                    SELECT * FROM SYS_COMPONENT_MST 
-                    WHERE COMPONENT_TYPE = @type AND IS_ACTIVE = 'Y'
-                    ORDER BY PRIORITY, COMPONENT_NAME";
-
-                using (var cmd = new SQLiteCommand(sql, conn))
-                {
-                    cmd.Parameters.AddWithValue("@type", (int)type);
-                    using (var reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            list.Add(MapToComponentMst(reader));
-                        }
-                    }
-                }
-            }
-            return list;
+            string sql = @"
+                SELECT * FROM SYS_COMPONENT_MST 
+                WHERE COMPONENT_TYPE = @type AND IS_ACTIVE = 'Y'
+                ORDER BY PRIORITY, COMPONENT_NAME";
+            return GetMstList(sql, new Dictionary<string, object> { { "@type", (int)type } });
         }
 
         public List<ComponentMstDto> GetComponentsByGroup(string groupName)
         {
-            var list = new List<ComponentMstDto>();
-            using (var conn = new SQLiteConnection(_db.GetConnectionString()))
-            {
-                conn.Open();
-                string sql = @"
-                    SELECT * FROM SYS_COMPONENT_MST 
-                    WHERE GROUP_NAME = @group AND IS_ACTIVE = 'Y'
-                    ORDER BY PRIORITY, COMPONENT_NAME";
-
-                using (var cmd = new SQLiteCommand(sql, conn))
-                {
-                    cmd.Parameters.AddWithValue("@group", groupName);
-                    using (var reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            list.Add(MapToComponentMst(reader));
-                        }
-                    }
-                }
-            }
-            return list;
+            string sql = @"
+                SELECT * FROM SYS_COMPONENT_MST 
+                WHERE GROUP_NAME = @group AND IS_ACTIVE = 'Y'
+                ORDER BY PRIORITY, COMPONENT_NAME";
+            return GetMstList(sql, new Dictionary<string, object> { { "@group", groupName } });
         }
 
         public List<ComponentMstDto> GetRequiredComponents()
         {
-            var list = new List<ComponentMstDto>();
-            using (var conn = new SQLiteConnection(_db.GetConnectionString()))
-            {
-                conn.Open();
-                string sql = @"
-                    SELECT * FROM SYS_COMPONENT_MST 
-                    WHERE IS_REQUIRED = 1 AND IS_ACTIVE = 'Y'
-                    ORDER BY PRIORITY, COMPONENT_NAME";
-
-                using (var cmd = new SQLiteCommand(sql, conn))
-                using (var reader = cmd.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        list.Add(MapToComponentMst(reader));
-                    }
-                }
-            }
-            return list;
+            string sql = @"
+                SELECT * FROM SYS_COMPONENT_MST 
+                WHERE IS_REQUIRED = 1 AND IS_ACTIVE = 'Y'
+                ORDER BY PRIORITY, COMPONENT_NAME";
+            return GetMstList(sql);
         }
 
         public ComponentMstDto GetComponent(string componentId)
         {
-            using (var conn = new SQLiteConnection(_db.GetConnectionString()))
-            {
-                conn.Open();
-                string sql = "SELECT * FROM SYS_COMPONENT_MST WHERE COMPONENT_ID = @id";
-
-                using (var cmd = new SQLiteCommand(sql, conn))
-                {
-                    cmd.Parameters.AddWithValue("@id", componentId);
-                    using (var reader = cmd.ExecuteReader())
-                    {
-                        if (reader.Read())
-                        {
-                            return MapToComponentMst(reader);
-                        }
-                    }
-                }
-            }
-            return null;
+            string sql = "SELECT * FROM SYS_COMPONENT_MST WHERE COMPONENT_ID = @id";
+            var list = GetMstList(sql, new Dictionary<string, object> { { "@id", componentId } });
+            return list.FirstOrDefault();
         }
 
         public void SaveComponent(ComponentMstDto component)
         {
-            using (var conn = new SQLiteConnection(_db.GetConnectionString()))
-            {
-                conn.Open();
-                string sql = @"
-                    INSERT INTO SYS_COMPONENT_MST (
-                        COMPONENT_ID, COMPONENT_TYPE, COMPONENT_NAME, FILE_NAME,
-                        INSTALL_PATH, GROUP_NAME, IS_REQUIRED, AUTO_UPDATE,
-                        DESCRIPTION, PRIORITY, DEPENDENCIES, IS_ACTIVE
-                    ) VALUES (
-                        @id, @type, @name, @file,
-                        @path, @group, @required, @auto,
-                        @desc, @priority, @deps, @active
-                    )
-                    ON CONFLICT(COMPONENT_ID) DO UPDATE SET
-                        COMPONENT_TYPE = @type,
-                        COMPONENT_NAME = @name,
-                        FILE_NAME = @file,
-                        INSTALL_PATH = @path,
-                        GROUP_NAME = @group,
-                        IS_REQUIRED = @required,
-                        AUTO_UPDATE = @auto,
-                        DESCRIPTION = @desc,
-                        PRIORITY = @priority,
-                        DEPENDENCIES = @deps,
-                        IS_ACTIVE = @active,
-                        MOD_DATE = CURRENT_TIMESTAMP";
+            string sql = @"
+                INSERT INTO SYS_COMPONENT_MST (
+                    COMPONENT_ID, COMPONENT_TYPE, COMPONENT_NAME, FILE_NAME,
+                    INSTALL_PATH, GROUP_NAME, IS_REQUIRED, AUTO_UPDATE,
+                    DESCRIPTION, PRIORITY, DEPENDENCIES, IS_ACTIVE
+                ) VALUES (
+                    @id, @type, @name, @file,
+                    @path, @group, @required, @auto,
+                    @desc, @priority, @deps, @active
+                )
+                ON CONFLICT(COMPONENT_ID) DO UPDATE SET
+                    COMPONENT_TYPE = @type,
+                    COMPONENT_NAME = @name,
+                    FILE_NAME = @file,
+                    INSTALL_PATH = @path,
+                    GROUP_NAME = @group,
+                    IS_REQUIRED = @required,
+                    AUTO_UPDATE = @auto,
+                    DESCRIPTION = @desc,
+                    PRIORITY = @priority,
+                    DEPENDENCIES = @deps,
+                    IS_ACTIVE = @active,
+                    MOD_DATE = CURRENT_TIMESTAMP";
 
-                using (var cmd = new SQLiteCommand(sql, conn))
-                {
-                    cmd.Parameters.AddWithValue("@id", component.ComponentId);
-                    cmd.Parameters.AddWithValue("@type", (int)component.ComponentType);
-                    cmd.Parameters.AddWithValue("@name", component.ComponentName);
-                    cmd.Parameters.AddWithValue("@file", component.FileName);
-                    cmd.Parameters.AddWithValue("@path", (object)component.InstallPath ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("@group", (object)component.GroupName ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("@required", component.IsRequired ? 1 : 0);
-                    cmd.Parameters.AddWithValue("@auto", component.AutoUpdate ? 1 : 0);
-                    cmd.Parameters.AddWithValue("@desc", (object)component.Description ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("@priority", component.Priority);
-                    cmd.Parameters.AddWithValue("@deps", (object)component.Dependencies ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("@active", component.IsActive ?? "Y");
-                    cmd.ExecuteNonQuery();
-                }
-            }
+            var parameters = new Dictionary<string, object>
+            {
+                { "@id", component.ComponentId },
+                { "@type", (int)component.ComponentType },
+                { "@name", component.ComponentName },
+                { "@file", component.FileName },
+                { "@path", (object)component.InstallPath ?? DBNull.Value },
+                { "@group", (object)component.GroupName ?? DBNull.Value },
+                { "@required", component.IsRequired ? 1 : 0 },
+                { "@auto", component.AutoUpdate ? 1 : 0 },
+                { "@desc", (object)component.Description ?? DBNull.Value },
+                { "@priority", component.Priority },
+                { "@deps", (object)component.Dependencies ?? DBNull.Value },
+                { "@active", component.IsActive ?? "Y" }
+            };
+
+            _db.ExecuteNonQuery(sql, parameters);
         }
 
         public void DeleteComponent(string componentId)
         {
-            using (var conn = new SQLiteConnection(_db.GetConnectionString()))
-            {
-                conn.Open();
-                // Soft delete
-                using (var cmd = new SQLiteCommand(
-                    "UPDATE SYS_COMPONENT_MST SET IS_ACTIVE = 'N', MOD_DATE = CURRENT_TIMESTAMP WHERE COMPONENT_ID = @id", conn))
-                {
-                    cmd.Parameters.AddWithValue("@id", componentId);
-                    cmd.ExecuteNonQuery();
-                }
-            }
+            string sql = "UPDATE SYS_COMPONENT_MST SET IS_ACTIVE = 'N', MOD_DATE = CURRENT_TIMESTAMP WHERE COMPONENT_ID = @id";
+            _db.ExecuteNonQuery(sql, new Dictionary<string, object> { { "@id", componentId } });
         }
 
         #endregion
@@ -210,205 +122,116 @@ namespace nU3.Data.Repositories
 
         public List<ComponentVerDto> GetActiveVersions()
         {
-            var list = new List<ComponentVerDto>();
-            using (var conn = new SQLiteConnection(_db.GetConnectionString()))
-            {
-                conn.Open();
-                string sql = @"
-                    SELECT v.*, m.COMPONENT_TYPE, m.COMPONENT_NAME, m.INSTALL_PATH, m.GROUP_NAME
-                    FROM SYS_COMPONENT_VER v
-                    JOIN SYS_COMPONENT_MST m ON v.COMPONENT_ID = m.COMPONENT_ID
-                    WHERE v.IS_ACTIVE = 'Y' AND v.DEL_DATE IS NULL AND m.IS_ACTIVE = 'Y'
-                    ORDER BY m.PRIORITY, m.COMPONENT_NAME";
-
-                using (var cmd = new SQLiteCommand(sql, conn))
-                using (var reader = cmd.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        list.Add(MapToComponentVer(reader));
-                    }
-                }
-            }
-            return list;
+            string sql = @"
+                SELECT v.*, m.COMPONENT_TYPE, m.COMPONENT_NAME, m.INSTALL_PATH, m.GROUP_NAME
+                FROM SYS_COMPONENT_VER v
+                JOIN SYS_COMPONENT_MST m ON v.COMPONENT_ID = m.COMPONENT_ID
+                WHERE v.IS_ACTIVE = 'Y' AND v.DEL_DATE IS NULL AND m.IS_ACTIVE = 'Y'
+                ORDER BY m.PRIORITY, m.COMPONENT_NAME";
+            return GetVerList(sql);
         }
 
         public List<ComponentVerDto> GetActiveVersionsByType(ComponentType type)
         {
-            var list = new List<ComponentVerDto>();
-            using (var conn = new SQLiteConnection(_db.GetConnectionString()))
-            {
-                conn.Open();
-                string sql = @"
-                    SELECT v.*, m.COMPONENT_TYPE, m.COMPONENT_NAME, m.INSTALL_PATH, m.GROUP_NAME
-                    FROM SYS_COMPONENT_VER v
-                    JOIN SYS_COMPONENT_MST m ON v.COMPONENT_ID = m.COMPONENT_ID
-                    WHERE v.IS_ACTIVE = 'Y' AND v.DEL_DATE IS NULL 
-                      AND m.IS_ACTIVE = 'Y' AND m.COMPONENT_TYPE = @type
-                    ORDER BY m.PRIORITY, m.COMPONENT_NAME";
-
-                using (var cmd = new SQLiteCommand(sql, conn))
-                {
-                    cmd.Parameters.AddWithValue("@type", (int)type);
-                    using (var reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            list.Add(MapToComponentVer(reader));
-                        }
-                    }
-                }
-            }
-            return list;
+            string sql = @"
+                SELECT v.*, m.COMPONENT_TYPE, m.COMPONENT_NAME, m.INSTALL_PATH, m.GROUP_NAME
+                FROM SYS_COMPONENT_VER v
+                JOIN SYS_COMPONENT_MST m ON v.COMPONENT_ID = m.COMPONENT_ID
+                WHERE v.IS_ACTIVE = 'Y' AND v.DEL_DATE IS NULL 
+                  AND m.IS_ACTIVE = 'Y' AND m.COMPONENT_TYPE = @type
+                ORDER BY m.PRIORITY, m.COMPONENT_NAME";
+            return GetVerList(sql, new Dictionary<string, object> { { "@type", (int)type } });
         }
 
         public ComponentVerDto GetActiveVersion(string componentId)
         {
-            using (var conn = new SQLiteConnection(_db.GetConnectionString()))
-            {
-                conn.Open();
-                string sql = @"
-                    SELECT v.*, m.COMPONENT_TYPE, m.COMPONENT_NAME, m.INSTALL_PATH, m.GROUP_NAME
-                    FROM SYS_COMPONENT_VER v
-                    JOIN SYS_COMPONENT_MST m ON v.COMPONENT_ID = m.COMPONENT_ID
-                    WHERE v.COMPONENT_ID = @id AND v.IS_ACTIVE = 'Y' AND v.DEL_DATE IS NULL";
-
-                using (var cmd = new SQLiteCommand(sql, conn))
-                {
-                    cmd.Parameters.AddWithValue("@id", componentId);
-                    using (var reader = cmd.ExecuteReader())
-                    {
-                        if (reader.Read())
-                        {
-                            return MapToComponentVer(reader);
-                        }
-                    }
-                }
-            }
-            return null;
+            string sql = @"
+                SELECT v.*, m.COMPONENT_TYPE, m.COMPONENT_NAME, m.INSTALL_PATH, m.GROUP_NAME
+                FROM SYS_COMPONENT_VER v
+                JOIN SYS_COMPONENT_MST m ON v.COMPONENT_ID = m.COMPONENT_ID
+                WHERE v.COMPONENT_ID = @id AND v.IS_ACTIVE = 'Y' AND v.DEL_DATE IS NULL";
+            return GetVerList(sql, new Dictionary<string, object> { { "@id", componentId } }).FirstOrDefault();
         }
 
         public List<ComponentVerDto> GetVersionHistory(string componentId)
         {
-            var list = new List<ComponentVerDto>();
-            using (var conn = new SQLiteConnection(_db.GetConnectionString()))
-            {
-                conn.Open();
-                string sql = @"
-                    SELECT v.*, m.COMPONENT_TYPE, m.COMPONENT_NAME, m.INSTALL_PATH, m.GROUP_NAME
-                    FROM SYS_COMPONENT_VER v
-                    JOIN SYS_COMPONENT_MST m ON v.COMPONENT_ID = m.COMPONENT_ID
-                    WHERE v.COMPONENT_ID = @id
-                    ORDER BY v.REG_DATE DESC";
-
-                using (var cmd = new SQLiteCommand(sql, conn))
-                {
-                    cmd.Parameters.AddWithValue("@id", componentId);
-                    using (var reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            list.Add(MapToComponentVer(reader));
-                        }
-                    }
-                }
-            }
-            return list;
+            string sql = @"
+                SELECT v.*, m.COMPONENT_TYPE, m.COMPONENT_NAME, m.INSTALL_PATH, m.GROUP_NAME
+                FROM SYS_COMPONENT_VER v
+                JOIN SYS_COMPONENT_MST m ON v.COMPONENT_ID = m.COMPONENT_ID
+                WHERE v.COMPONENT_ID = @id
+                ORDER BY v.REG_DATE DESC";
+            return GetVerList(sql, new Dictionary<string, object> { { "@id", componentId } });
         }
 
         public void AddVersion(ComponentVerDto version)
         {
-            using (var conn = new SQLiteConnection(_db.GetConnectionString()))
-            {
-                conn.Open();
-                string sql = @"
-                    INSERT INTO SYS_COMPONENT_VER (
-                        COMPONENT_ID, VERSION, FILE_HASH, FILE_SIZE, STORAGE_PATH,
-                        MIN_FRAMEWORK_VER, MAX_FRAMEWORK_VER, DEPLOY_DESC, RELEASE_NOTE_URL, IS_ACTIVE
-                    ) VALUES (
-                        @id, @ver, @hash, @size, @path,
-                        @minVer, @maxVer, @desc, @note, @active
-                    )
-                    ON CONFLICT(COMPONENT_ID, VERSION) DO UPDATE SET
-                        FILE_HASH = @hash,
-                        FILE_SIZE = @size,
-                        STORAGE_PATH = @path,
-                        MIN_FRAMEWORK_VER = @minVer,
-                        MAX_FRAMEWORK_VER = @maxVer,
-                        DEPLOY_DESC = @desc,
-                        RELEASE_NOTE_URL = @note,
-                        IS_ACTIVE = @active,
-                        DEL_DATE = NULL";
+            string sql = @"
+                INSERT INTO SYS_COMPONENT_VER (
+                    COMPONENT_ID, VERSION, FILE_HASH, FILE_SIZE, STORAGE_PATH,
+                    MIN_FRAMEWORK_VER, MAX_FRAMEWORK_VER, DEPLOY_DESC, RELEASE_NOTE_URL, IS_ACTIVE
+                ) VALUES (
+                    @id, @ver, @hash, @size, @path,
+                    @minVer, @maxVer, @desc, @note, @active
+                )
+                ON CONFLICT(COMPONENT_ID, VERSION) DO UPDATE SET
+                    FILE_HASH = @hash,
+                    FILE_SIZE = @size,
+                    STORAGE_PATH = @path,
+                    MIN_FRAMEWORK_VER = @minVer,
+                    MAX_FRAMEWORK_VER = @maxVer,
+                    DEPLOY_DESC = @desc,
+                    RELEASE_NOTE_URL = @note,
+                    IS_ACTIVE = @active,
+                    DEL_DATE = NULL";
 
-                using (var cmd = new SQLiteCommand(sql, conn))
-                {
-                    cmd.Parameters.AddWithValue("@id", version.ComponentId);
-                    cmd.Parameters.AddWithValue("@ver", version.Version);
-                    cmd.Parameters.AddWithValue("@hash", version.FileHash);
-                    cmd.Parameters.AddWithValue("@size", version.FileSize);
-                    cmd.Parameters.AddWithValue("@path", version.StoragePath);
-                    cmd.Parameters.AddWithValue("@minVer", (object)version.MinFrameworkVersion ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("@maxVer", (object)version.MaxFrameworkVersion ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("@desc", (object)version.DeployDesc ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("@note", (object)version.ReleaseNoteUrl ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("@active", version.IsActive ?? "Y");
-                    cmd.ExecuteNonQuery();
-                }
-            }
+            var parameters = new Dictionary<string, object>
+            {
+                { "@id", version.ComponentId },
+                { "@ver", version.Version },
+                { "@hash", version.FileHash },
+                { "@size", version.FileSize },
+                { "@path", version.StoragePath },
+                { "@minVer", (object)version.MinFrameworkVersion ?? DBNull.Value },
+                { "@maxVer", (object)version.MaxFrameworkVersion ?? DBNull.Value },
+                { "@desc", (object)version.DeployDesc ?? DBNull.Value },
+                { "@note", (object)version.ReleaseNoteUrl ?? DBNull.Value },
+                { "@active", version.IsActive ?? "Y" }
+            };
+
+            _db.ExecuteNonQuery(sql, parameters);
         }
 
         public void DeactivateOldVersions(string componentId)
         {
-            using (var conn = new SQLiteConnection(_db.GetConnectionString()))
-            {
-                conn.Open();
-                using (var cmd = new SQLiteCommand(
-                    @"UPDATE SYS_COMPONENT_VER 
-                      SET IS_ACTIVE = 'N', DEL_DATE = CURRENT_TIMESTAMP 
-                      WHERE COMPONENT_ID = @id AND IS_ACTIVE = 'Y'", conn))
-                {
-                    cmd.Parameters.AddWithValue("@id", componentId);
-                    cmd.ExecuteNonQuery();
-                }
-            }
+            string sql = @"UPDATE SYS_COMPONENT_VER 
+                          SET IS_ACTIVE = 'N', DEL_DATE = CURRENT_TIMESTAMP 
+                          WHERE COMPONENT_ID = @id AND IS_ACTIVE = 'Y'";
+            _db.ExecuteNonQuery(sql, new Dictionary<string, object> { { "@id", componentId } });
         }
 
         public void SetActiveVersion(string componentId, string version)
         {
-            using (var conn = new SQLiteConnection(_db.GetConnectionString()))
+            _db.BeginTransaction();
+            try
             {
-                conn.Open();
-                using (var transaction = conn.BeginTransaction())
-                {
-                    try
-                    {
-                        // Deactivate all versions
-                        using (var cmd = new SQLiteCommand(
-                            "UPDATE SYS_COMPONENT_VER SET IS_ACTIVE = 'N' WHERE COMPONENT_ID = @id", conn))
-                        {
-                            cmd.Parameters.AddWithValue("@id", componentId);
-                            cmd.ExecuteNonQuery();
-                        }
+                // Deactivate all versions
+                _db.ExecuteNonQuery("UPDATE SYS_COMPONENT_VER SET IS_ACTIVE = 'N' WHERE COMPONENT_ID = @id", 
+                    new Dictionary<string, object> { { "@id", componentId } });
 
-                        // Activate specific version
-                        using (var cmd = new SQLiteCommand(
-                            @"UPDATE SYS_COMPONENT_VER 
-                              SET IS_ACTIVE = 'Y', DEL_DATE = NULL 
-                              WHERE COMPONENT_ID = @id AND VERSION = @ver", conn))
-                        {
-                            cmd.Parameters.AddWithValue("@id", componentId);
-                            cmd.Parameters.AddWithValue("@ver", version);
-                            cmd.ExecuteNonQuery();
-                        }
+                // Activate specific version
+                _db.ExecuteNonQuery(
+                    @"UPDATE SYS_COMPONENT_VER 
+                      SET IS_ACTIVE = 'Y', DEL_DATE = NULL 
+                      WHERE COMPONENT_ID = @id AND VERSION = @ver",
+                    new Dictionary<string, object> { { "@id", componentId }, { "@ver", version } });
 
-                        transaction.Commit();
-                    }
-                    catch
-                    {
-                        transaction.Rollback();
-                        throw;
-                    }
-                }
+                _db.CommitTransaction();
+            }
+            catch
+            {
+                _db.RollbackTransaction();
+                throw;
             }
         }
 
@@ -428,17 +251,14 @@ namespace nU3.Data.Repositories
 
                 if (clientVer == null)
                 {
-                    // Component not installed - needs install
                     updates.Add(serverVer);
                 }
                 else if (CompareVersions(serverVer.Version, clientVer.InstalledVersion) > 0)
                 {
-                    // Server version is newer
                     updates.Add(serverVer);
                 }
                 else if (serverVer.FileHash != clientVer.FileHash)
                 {
-                    // Hash mismatch - file may be corrupted
                     updates.Add(serverVer);
                 }
             }
@@ -460,48 +280,74 @@ namespace nU3.Data.Repositories
 
         #region Private Helpers
 
-        private static ComponentMstDto MapToComponentMst(SQLiteDataReader reader)
+        private List<ComponentMstDto> GetMstList(string sql, Dictionary<string, object> parameters = null)
+        {
+            var list = new List<ComponentMstDto>();
+            using (var dt = _db.ExecuteDataTable(sql, parameters))
+            {
+                foreach (DataRow row in dt.Rows)
+                {
+                    list.Add(MapToComponentMst(row));
+                }
+            }
+            return list;
+        }
+
+        private List<ComponentVerDto> GetVerList(string sql, Dictionary<string, object> parameters = null)
+        {
+            var list = new List<ComponentVerDto>();
+            using (var dt = _db.ExecuteDataTable(sql, parameters))
+            {
+                foreach (DataRow row in dt.Rows)
+                {
+                    list.Add(MapToComponentVer(row));
+                }
+            }
+            return list;
+        }
+
+        private static ComponentMstDto MapToComponentMst(DataRow row)
         {
             return new ComponentMstDto
             {
-                ComponentId = reader["COMPONENT_ID"].ToString(),
-                ComponentType = (ComponentType)Convert.ToInt32(reader["COMPONENT_TYPE"]),
-                ComponentName = reader["COMPONENT_NAME"].ToString(),
-                FileName = reader["FILE_NAME"].ToString(),
-                InstallPath = reader["INSTALL_PATH"]?.ToString(),
-                GroupName = reader["GROUP_NAME"]?.ToString(),
-                IsRequired = Convert.ToInt32(reader["IS_REQUIRED"]) == 1,
-                AutoUpdate = Convert.ToInt32(reader["AUTO_UPDATE"]) == 1,
-                Description = reader["DESCRIPTION"]?.ToString(),
-                Priority = Convert.ToInt32(reader["PRIORITY"]),
-                Dependencies = reader["DEPENDENCIES"]?.ToString(),
-                RegDate = Convert.ToDateTime(reader["REG_DATE"]),
-                ModDate = reader["MOD_DATE"] == DBNull.Value ? null : Convert.ToDateTime(reader["MOD_DATE"]),
-                IsActive = reader["IS_ACTIVE"]?.ToString() ?? "Y"
+                ComponentId = row["COMPONENT_ID"].ToString(),
+                ComponentType = (ComponentType)Convert.ToInt32(row["COMPONENT_TYPE"]),
+                ComponentName = row["COMPONENT_NAME"].ToString(),
+                FileName = row["FILE_NAME"].ToString(),
+                InstallPath = row["INSTALL_PATH"] == DBNull.Value ? null : row["INSTALL_PATH"].ToString(),
+                GroupName = row["GROUP_NAME"] == DBNull.Value ? null : row["GROUP_NAME"].ToString(),
+                IsRequired = Convert.ToInt32(row["IS_REQUIRED"]) == 1,
+                AutoUpdate = Convert.ToInt32(row["AUTO_UPDATE"]) == 1,
+                Description = row["DESCRIPTION"] == DBNull.Value ? null : row["DESCRIPTION"].ToString(),
+                Priority = Convert.ToInt32(row["PRIORITY"]),
+                Dependencies = row["DEPENDENCIES"] == DBNull.Value ? null : row["DEPENDENCIES"].ToString(),
+                RegDate = Convert.ToDateTime(row["REG_DATE"]),
+                ModDate = row["MOD_DATE"] == DBNull.Value ? null : Convert.ToDateTime(row["MOD_DATE"]),
+                IsActive = row["IS_ACTIVE"] == DBNull.Value ? "Y" : row["IS_ACTIVE"].ToString()
             };
         }
 
-        private static ComponentVerDto MapToComponentVer(SQLiteDataReader reader)
+        private static ComponentVerDto MapToComponentVer(DataRow row)
         {
             return new ComponentVerDto
             {
-                ComponentId = reader["COMPONENT_ID"].ToString(),
-                Version = reader["VERSION"].ToString(),
-                FileHash = reader["FILE_HASH"].ToString(),
-                FileSize = Convert.ToInt64(reader["FILE_SIZE"]),
-                StoragePath = reader["STORAGE_PATH"].ToString(),
-                MinFrameworkVersion = reader["MIN_FRAMEWORK_VER"]?.ToString(),
-                MaxFrameworkVersion = reader["MAX_FRAMEWORK_VER"]?.ToString(),
-                DeployDesc = reader["DEPLOY_DESC"]?.ToString(),
-                ReleaseNoteUrl = reader["RELEASE_NOTE_URL"]?.ToString(),
-                RegDate = Convert.ToDateTime(reader["REG_DATE"]),
-                DelDate = reader["DEL_DATE"] == DBNull.Value ? null : Convert.ToDateTime(reader["DEL_DATE"]),
-                IsActive = reader["IS_ACTIVE"]?.ToString() ?? "Y",
+                ComponentId = row["COMPONENT_ID"].ToString(),
+                Version = row["VERSION"].ToString(),
+                FileHash = row["FILE_HASH"].ToString(),
+                FileSize = Convert.ToInt64(row["FILE_SIZE"]),
+                StoragePath = row["STORAGE_PATH"].ToString(),
+                MinFrameworkVersion = row["MIN_FRAMEWORK_VER"] == DBNull.Value ? null : row["MIN_FRAMEWORK_VER"].ToString(),
+                MaxFrameworkVersion = row["MAX_FRAMEWORK_VER"] == DBNull.Value ? null : row["MAX_FRAMEWORK_VER"].ToString(),
+                DeployDesc = row["DEPLOY_DESC"] == DBNull.Value ? null : row["DEPLOY_DESC"].ToString(),
+                ReleaseNoteUrl = row["RELEASE_NOTE_URL"] == DBNull.Value ? null : row["RELEASE_NOTE_URL"].ToString(),
+                RegDate = Convert.ToDateTime(row["REG_DATE"]),
+                DelDate = row["DEL_DATE"] == DBNull.Value ? null : Convert.ToDateTime(row["DEL_DATE"]),
+                IsActive = row["IS_ACTIVE"] == DBNull.Value ? "Y" : row["IS_ACTIVE"].ToString(),
                 // Joined fields
-                ComponentType = (ComponentType)Convert.ToInt32(reader["COMPONENT_TYPE"]),
-                ComponentName = reader["COMPONENT_NAME"]?.ToString(),
-                InstallPath = reader["INSTALL_PATH"]?.ToString(),
-                GroupName = reader["GROUP_NAME"]?.ToString()
+                ComponentType = row.Table.Columns.Contains("COMPONENT_TYPE") ? (ComponentType)Convert.ToInt32(row["COMPONENT_TYPE"]) : ComponentType.Other,
+                ComponentName = row.Table.Columns.Contains("COMPONENT_NAME") ? row["COMPONENT_NAME"].ToString() : null,
+                InstallPath = row.Table.Columns.Contains("INSTALL_PATH") ? row["INSTALL_PATH"] == DBNull.Value ? null : row["INSTALL_PATH"].ToString() : null,
+                GroupName = row.Table.Columns.Contains("GROUP_NAME") ? row["GROUP_NAME"] == DBNull.Value ? null : row["GROUP_NAME"].ToString() : null
             };
         }
 

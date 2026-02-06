@@ -1,0 +1,1 @@
+nU3.Server.Host.exe --ip 0.0.0.0 --port 64228 --scheme http

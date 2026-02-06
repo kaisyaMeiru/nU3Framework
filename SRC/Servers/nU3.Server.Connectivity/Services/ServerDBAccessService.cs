@@ -3,21 +3,15 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Threading.Tasks;
+using System.Text.Json;
+using nU3.Connectivity;
 
 namespace nU3.Server.Connectivity.Services
 {
     /// <summary>
-    /// ¼­¹ö Ãø µ¥ÀÌÅÍº£ÀÌ½º Á¢±Ù ¼­ºñ½ºÀÔ´Ï´Ù.
-    /// 
-    /// Ã¥ÀÓ:
-    /// - µ¥ÀÌÅÍº£ÀÌ½º ¿¬°á/Æ®·£Àè¼Ç °ü¸®¸¦ Á¦°ø
-    /// - SQL ½ÇÇà ¹× ÇÁ·Î½ÃÀú È£ÃâÀ» µ¿±â/ºñµ¿±â ¹æ½ÄÀ¸·Î Áö¿ø
-    /// 
-    /// »ç¿ë¹ı:
-    /// - »ı¼º ½Ã ¿¬°á ¹®ÀÚ¿­°ú DbConnection »ı¼º ÆÑÅä¸®¸¦ Àü´ŞÇÏ¼¼¿ä.
-    /// - Oracle, SQLServer µî Æ¯Á¤ °ø±ŞÀÚ¿¡ ¸Â´Â DbConnectionÀ» ÆÑÅä¸®·Î Á¦°øÇØ¾ß ÇÕ´Ï´Ù.
+    /// ì„œë²„ ì¸¡ ë°ì´í„°ë² ì´ìŠ¤ ì ‘ê·¼ ì„œë¹„ìŠ¤ë¥¼ ì œê³µí•©ë‹ˆë‹¤.
     /// </summary>
-    public class ServerDBAccessService : IDisposable
+    public class ServerDBAccessService : IDBAccessService, IDisposable
     {
         private readonly string _connectionString;
         private DbConnection? _connection;
@@ -25,10 +19,10 @@ namespace nU3.Server.Connectivity.Services
         private readonly Func<DbConnection> _connectionFactory;
 
         /// <summary>
-        /// »ı¼ºÀÚ
+        /// ìƒì„±ì
         /// </summary>
-        /// <param name="connectionString">DB ¿¬°á ¹®ÀÚ¿­</param>
-        /// <param name="connectionFactory">DbConnectionÀ» »ı¼ºÇÏ´Â ÆÑÅä¸® ÇÔ¼ö (¿¹: () => new OracleConnection())</param>
+        /// <param name="connectionString">DB ì—°ê²° ë¬¸ìì—´</param>
+        /// <param name="connectionFactory">DbConnection ì¸ìŠ¤í„´ìŠ¤ë¥¼ ìƒì„±í•˜ëŠ” íŒ©í† ë¦¬ í•¨ìˆ˜(ì˜ˆ: () => new OracleConnection())</param>
         public ServerDBAccessService(string connectionString, Func<DbConnection> connectionFactory)
         {
             _connectionString = connectionString;
@@ -36,9 +30,9 @@ namespace nU3.Server.Connectivity.Services
         }
 
         /// <summary>
-        /// µ¿±âÀûÀ¸·Î DB¿¡ ¿¬°áÇÕ´Ï´Ù.
+        /// ë™ê¸°ì ìœ¼ë¡œ DBì— ì—°ê²°í•©ë‹ˆë‹¤.
         /// </summary>
-        /// <returns>¿¬°á ¼º°ø ¿©ºÎ</returns>
+        /// <returns>ì—°ê²° ì„±ê³µ ì—¬ë¶€</returns>
         public bool Connect()
         {
             try
@@ -57,14 +51,14 @@ namespace nU3.Server.Connectivity.Services
             }
             catch (Exception ex)
             {
-                // ÄÜ¼Ö¿¡ °£´ÜÈ÷ ·Î±ëÇÕ´Ï´Ù. ÇÊ¿ä ½Ã ILogger·Î ´ëÃ¼ÇÏ¼¼¿ä.
-                Console.WriteLine($"DB ¿¬°á ¿À·ù: {ex.Message}");
+                // TODO: ILoggerë¡œ ë¡œê¹…í•˜ë„ë¡ ë³€ê²½ ê¶Œì¥
+                Console.WriteLine($"DB ì—°ê²° ì‹¤íŒ¨: {ex.Message}");
                 return false;
             }
         }
 
         /// <summary>
-        /// ºñµ¿±âÀûÀ¸·Î DB¿¡ ¿¬°áÇÕ´Ï´Ù.
+        /// ë¹„ë™ê¸°ì ìœ¼ë¡œ DBì— ì—°ê²°í•©ë‹ˆë‹¤.
         /// </summary>
         public async Task<bool> ConnectAsync()
         {
@@ -84,13 +78,13 @@ namespace nU3.Server.Connectivity.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"DB ¿¬°á ¿À·ù: {ex.Message}");
+                Console.WriteLine($"DB ì—°ê²° ì‹¤íŒ¨: {ex.Message}");
                 return false;
             }
         }
 
         /// <summary>
-        /// Æ®·£Àè¼Ç ½ÃÀÛ
+        /// íŠ¸ëœì­ì…˜ì„ ì‹œì‘í•©ë‹ˆë‹¤.
         /// </summary>
         public void BeginTransaction()
         {
@@ -99,7 +93,7 @@ namespace nU3.Server.Connectivity.Services
         }
 
         /// <summary>
-        /// Æ®·£Àè¼Ç Ä¿¹Ô
+        /// íŠ¸ëœì­ì…˜ì„ ì»¤ë°‹í•©ë‹ˆë‹¤.
         /// </summary>
         public void CommitTransaction()
         {
@@ -108,7 +102,7 @@ namespace nU3.Server.Connectivity.Services
         }
 
         /// <summary>
-        /// Æ®·£Àè¼Ç ·Ñ¹é
+        /// íŠ¸ëœì­ì…˜ì„ ë¡¤ë°±í•©ë‹ˆë‹¤.
         /// </summary>
         public void RollbackTransaction()
         {
@@ -117,7 +111,7 @@ namespace nU3.Server.Connectivity.Services
         }
 
         /// <summary>
-        /// DbCommand¸¦ »ı¼ºÇÏ°í ÆÄ¶ó¹ÌÅÍ¸¦ Ãß°¡ÇÕ´Ï´Ù.
+        /// DbCommandë¥¼ ìƒì„±í•˜ê³  íŒŒë¼ë¯¸í„°ë¥¼ ì¶”ê°€í•©ë‹ˆë‹¤.
         /// </summary>
         private DbCommand CreateCommand(string commandText, Dictionary<string, object>? parameters)
         {
@@ -132,7 +126,9 @@ namespace nU3.Server.Connectivity.Services
                 {
                     var p = cmd.CreateParameter();
                     p.ParameterName = kvp.Key;
-                    p.Value = kvp.Value ?? DBNull.Value;
+                    
+                    // JsonElement ëŒ€ì‘ ë³€í™˜ ë¡œì§ ì ìš©
+                    p.Value = ConvertJsonValue(kvp.Value);
                     cmd.Parameters.Add(p);
                 }
             }
@@ -140,7 +136,36 @@ namespace nU3.Server.Connectivity.Services
         }
 
         /// <summary>
-        /// Äõ¸®¸¦ ½ÇÇàÇÏ¿© DataTableÀ» ¹İÈ¯ÇÕ´Ï´Ù(µ¿±â).
+        /// JsonElement ê°’ì„ .NET í‘œì¤€ íƒ€ì…ìœ¼ë¡œ ë³€í™˜í•©ë‹ˆë‹¤.
+        /// </summary>
+        private object ConvertJsonValue(object? value)
+        {
+            if (value is JsonElement element)
+            {
+                switch (element.ValueKind)
+                {
+                    case JsonValueKind.String:
+                        return element.GetString() ?? (object)DBNull.Value;
+                    case JsonValueKind.Number:
+                        if (element.TryGetInt32(out int i)) return i;
+                        if (element.TryGetInt64(out long l)) return l;
+                        return element.GetDouble();
+                    case JsonValueKind.True:
+                        return true;
+                    case JsonValueKind.False:
+                        return false;
+                    case JsonValueKind.Null:
+                        return DBNull.Value;
+                    default:
+                        // ê°ì²´ë‚˜ ë°°ì—´ì€ ì›ë¬¸ JSON ë¬¸ìì—´ë¡œ ë³€í™˜í•˜ì—¬ ì²˜ë¦¬ ì‹œë„
+                        return element.GetRawText();
+                }
+            }
+            return value ?? DBNull.Value;
+        }
+
+        /// <summary>
+        /// ì§€ì •í•œ SQLì„ ì‹¤í–‰í•˜ì—¬ DataTableì„ ë°˜í™˜í•©ë‹ˆë‹¤(ë™ê¸°).
         /// </summary>
         public DataTable ExecuteDataTable(string commandText, Dictionary<string, object>? parameters = null)
         {
@@ -152,19 +177,19 @@ namespace nU3.Server.Connectivity.Services
         }
 
         /// <summary>
-        /// Äõ¸®¸¦ ºñµ¿±âÀûÀ¸·Î ½ÇÇàÇÏ¿© DataTableÀ» ¹İÈ¯ÇÕ´Ï´Ù.
+        /// ì§€ì •í•œ SQLì„ ë¹„ë™ê¸°ì ìœ¼ë¡œ ì‹¤í–‰í•˜ì—¬ DataTableì„ ë°˜í™˜í•©ë‹ˆë‹¤.
         /// </summary>
         public async Task<DataTable> ExecuteDataTableAsync(string commandText, Dictionary<string, object>? parameters = null)
         {
             using var cmd = CreateCommand(commandText, parameters);
             using var reader = await cmd.ExecuteReaderAsync();
             var dt = new DataTable();
-            dt.Load(reader); // DataTable.Load´Â ºñµ¿±â°¡ ¾Æ´Ï¹Ç·Î ÁÖÀÇ
+            dt.Load(reader); // DataTable.LoadëŠ” ë™ê¸° APIì§€ë§Œ ì—¬ê¸°ì„œëŠ” readerê°€ ë¹„ë™ê¸°ì ìœ¼ë¡œ ì¤€ë¹„ëœ ë’¤ ë¡œë“œí•©ë‹ˆë‹¤.
             return dt;
         }
 
         /// <summary>
-        /// Äõ¸®¸¦ ½ÇÇàÇÏ¿© DataSetÀ» ¹İÈ¯ÇÕ´Ï´Ù(µ¿±â).
+        /// ì§€ì •í•œ SQLì„ ì‹¤í–‰í•˜ì—¬ DataSetì„ ë°˜í™˜í•©ë‹ˆë‹¤(ë™ê¸°).
         /// </summary>
         public DataSet ExecuteDataSet(string commandText, Dictionary<string, object>? parameters = null)
         {
@@ -175,7 +200,7 @@ namespace nU3.Server.Connectivity.Services
         }
 
         /// <summary>
-        /// Äõ¸®¸¦ ºñµ¿±âÀûÀ¸·Î ½ÇÇàÇÏ¿© DataSetÀ» ¹İÈ¯ÇÕ´Ï´Ù.
+        /// ì§€ì •í•œ SQLì„ ë¹„ë™ê¸°ì ìœ¼ë¡œ ì‹¤í–‰í•˜ì—¬ DataSetì„ ë°˜í™˜í•©ë‹ˆë‹¤.
         /// </summary>
         public async Task<DataSet> ExecuteDataSetAsync(string commandText, Dictionary<string, object>? parameters = null)
         {
@@ -186,16 +211,16 @@ namespace nU3.Server.Connectivity.Services
         }
 
         /// <summary>
-        /// ºñÄõ¸®¸¦ ½ÇÇàÇÕ´Ï´Ù(INSERT/UPDATE/DELETE µî).
+        /// INSERT/UPDATE/DELETE ëª…ë ¹ì„ ì‹¤í–‰í•©ë‹ˆë‹¤.
         /// </summary>
         public bool ExecuteNonQuery(string commandText, Dictionary<string, object>? parameters = null)
         {
             using var cmd = CreateCommand(commandText, parameters);
-            return cmd.ExecuteNonQuery() >= 0; // ÀÏºÎ °ø±ŞÀÚ´Â -1À» ¹İÈ¯ÇÒ ¼ö ÀÖÀ½
+            return cmd.ExecuteNonQuery() >= 0; // ì„±ê³µ ì‹œ ì˜í–¥ì„ ë°›ì€ í–‰ ìˆ˜(>=0)ë¥¼ ë°˜í™˜
         }
 
         /// <summary>
-        /// ºñÄõ¸®¸¦ ºñµ¿±âÀûÀ¸·Î ½ÇÇàÇÕ´Ï´Ù.
+        /// INSERT/UPDATE/DELETE ëª…ë ¹ì„ ë¹„ë™ê¸°ì ìœ¼ë¡œ ì‹¤í–‰í•©ë‹ˆë‹¤.
         /// </summary>
         public async Task<bool> ExecuteNonQueryAsync(string commandText, Dictionary<string, object>? parameters = null)
         {
@@ -205,7 +230,7 @@ namespace nU3.Server.Connectivity.Services
         }
 
         /// <summary>
-        /// ´ÜÀÏ ½ºÄ®¶ó °ªÀ» ¹İÈ¯ÇÕ´Ï´Ù.
+        /// ë‹¨ì¼ ê°’(ìŠ¤ì¹¼ë¼)ì„ ë°˜í™˜í•©ë‹ˆë‹¤.
         /// </summary>
         public object ExecuteScalarValue(string commandText, Dictionary<string, object>? parameters = null)
         {
@@ -214,7 +239,7 @@ namespace nU3.Server.Connectivity.Services
         }
 
         /// <summary>
-        /// ½ºÄ®¶ó °ªÀ» ºñµ¿±âÀûÀ¸·Î ¹İÈ¯ÇÕ´Ï´Ù.
+        /// ë‹¨ì¼ ê°’(ìŠ¤ì¹¼ë¼)ì„ ë¹„ë™ê¸°ì ìœ¼ë¡œ ë°˜í™˜í•©ë‹ˆë‹¤.
         /// </summary>
         public async Task<object> ExecuteScalarValueAsync(string commandText, Dictionary<string, object>? parameters = null)
         {
@@ -223,7 +248,7 @@ namespace nU3.Server.Connectivity.Services
         }
 
         /// <summary>
-        /// ÀúÀå ÇÁ·Î½ÃÀú¸¦ ½ÇÇàÇÏ°í Ãâ·Â ÆÄ¶ó¹ÌÅÍ¸¦ °»½ÅÇÕ´Ï´Ù.
+        /// ì €ì¥ í”„ë¡œì‹œì € í˜¸ì¶œì„ ë™ê¸°ì ìœ¼ë¡œ ì‹¤í–‰í•©ë‹ˆë‹¤.
         /// </summary>
         public bool ExecuteProcedure(string spName, Dictionary<string, object> inputParams, Dictionary<string, object> outputParams)
         {
@@ -262,7 +287,7 @@ namespace nU3.Server.Connectivity.Services
         }
 
         /// <summary>
-        /// ÀúÀå ÇÁ·Î½ÃÀú¸¦ ºñµ¿±âÀûÀ¸·Î ½ÇÇàÇÏ°í Ãâ·Â ÆÄ¶ó¹ÌÅÍ¸¦ °»½ÅÇÕ´Ï´Ù.
+        /// ì €ì¥ í”„ë¡œì‹œì € í˜¸ì¶œì„ ë¹„ë™ê¸°ì ìœ¼ë¡œ ì‹¤í–‰í•©ë‹ˆë‹¤.
         /// </summary>
         public async Task<bool> ExecuteProcedureAsync(string spName, Dictionary<string, object> inputParams, Dictionary<string, object> outputParams)
         {
@@ -300,7 +325,7 @@ namespace nU3.Server.Connectivity.Services
         }
 
         /// <summary>
-        /// ¿¬°á/Æ®·£Àè¼Ç °ü·Ã ÀÚ¿øÀ» ÇØÁ¦ÇÕ´Ï´Ù.
+        /// ë¦¬ì†ŒìŠ¤ë¥¼ í•´ì œí•©ë‹ˆë‹¤.
         /// </summary>
         public void Dispose()
         {
@@ -310,21 +335,21 @@ namespace nU3.Server.Connectivity.Services
     }
 
     /// <summary>
-    /// DbConnection »ı¼ºÀ» µµ¿ÍÁÖ´Â ÆÑÅä¸® À¯Æ¿¸®Æ¼ÀÔ´Ï´Ù.
-    /// - ReflectionÀ» »ç¿ëÇÏ¿© ·±Å¸ÀÓ¿¡ Á¦°øµÇ´Â ADO.NET °ø±ŞÀÚ ¾î¼Àºí¸®¿¡¼­ Connection Å¸ÀÔÀ» Ã£½À´Ï´Ù.
-    /// - Oracle.ManagedDataAccess.Core, MySqlConnector(MySqlConnector) ¹× MySql.Data Áö¿ø
+    /// DbConnection ìƒì„± íŒ©í† ë¦¬ ìœ í‹¸ë¦¬í‹°ì…ë‹ˆë‹¤.
+    /// - Reflectionì„ ì‚¬ìš©í•´ ëŸ°íƒ€ì„ì— ì ì ˆí•œ ADO.NET ì œê³µìë¥¼ ì°¾ì•„ DbConnection ì¸ìŠ¤í„´ìŠ¤ë¥¼ ìƒì„±í•©ë‹ˆë‹¤.
+    /// - í•„ìš”í•œ ì–´ì…ˆë¸”ë¦¬ê°€ ì°¸ì¡°ë˜ì–´ ìˆì§€ ì•Šìœ¼ë©´ ì˜ˆì™¸ë¥¼ ë°œìƒì‹œí‚µë‹ˆë‹¤.
     /// </summary>
     public static class DbConnectionFactories
     {
         /// <summary>
-        /// Oracle¿ë DbConnection ÆÑÅä¸®¸¦ »ı¼ºÇÕ´Ï´Ù. Oracle.ManagedDataAccess.Core ¾î¼Àºí¸®°¡ ¼³Ä¡µÇ¾î ÀÖ¾î¾ß ÇÕ´Ï´Ù.
-        /// »ç¿ë ¿¹: var factory = DbConnectionFactories.CreateOracleFactory(connStr); var service = new ServerDBAccessService(connStr, factory);
+        /// Oracleìš© DbConnection íŒ©í† ë¦¬ë¥¼ ìƒì„±í•©ë‹ˆë‹¤. Oracle.ManagedDataAccess.Core ì–´ì…ˆë¸”ë¦¬ê°€ í•„ìš”í•©ë‹ˆë‹¤.
+        /// ì‚¬ìš© ì˜ˆ: var factory = DbConnectionFactories.CreateOracleFactory(connStr); var service = new ServerDBAccessService(connStr, factory);
         /// </summary>
         public static Func<DbConnection> CreateOracleFactory(string connectionString)
         {
             return () =>
             {
-                // °¡´ÉÇÑ Å¸ÀÔ ÀÌ¸§µéÀ» ½ÃµµÇÕ´Ï´Ù.
+                // ê°€ëŠ¥í•œ íƒ€ì… ì´ë¦„ ëª©ë¡
                 var typeNames = new[]
                 {
                     "Oracle.ManagedDataAccess.Client.OracleConnection, Oracle.ManagedDataAccess.Core",
@@ -340,25 +365,23 @@ namespace nU3.Server.Connectivity.Services
 
                 if (connType == null)
                 {
-                    throw new InvalidOperationException("Oracle °ø±ŞÀÚ¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù. Oracle.ManagedDataAccess.Core ÆĞÅ°Áö¸¦ ¼³Ä¡ÇÏ°í ÂüÁ¶¸¦ Ãß°¡ÇÏ¼¼¿ä.");
+                    throw new InvalidOperationException("Oracle ê³µê¸‰ìë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤. Oracle.ManagedDataAccess.Core íŒ¨í‚¤ì§€ë¥¼ ì„¤ì¹˜í•˜ì„¸ìš”.");
                 }
 
                 var conn = (DbConnection?)Activator.CreateInstance(connType);
-                if (conn == null) throw new InvalidOperationException("OracleConnection ÀÎ½ºÅÏ½º »ı¼º ½ÇÆĞ");
+                if (conn == null) throw new InvalidOperationException("OracleConnection ì¸ìŠ¤í„´ìŠ¤ ìƒì„± ì‹¤íŒ¨");
                 conn.ConnectionString = connectionString;
                 return conn;
             };
         }
 
         /// <summary>
-        /// MariaDB(MySQL)¿ë DbConnection ÆÑÅä¸®¸¦ »ı¼ºÇÕ´Ï´Ù. ¿ì¼± MySqlConnector¸¦ ½ÃµµÇÏ°í, ¾øÀ¸¸é MySql.Data¸¦ ½ÃµµÇÕ´Ï´Ù.
-        /// »ç¿ë ¿¹: var factory = DbConnectionFactories.CreateMariaDbFactory(connStr); var service = new ServerDBAccessService(connStr, factory);
+        /// MariaDB(MySQL)ìš© DbConnection íŒ©í† ë¦¬ë¥¼ ìƒì„±í•©ë‹ˆë‹¤. MySqlConnector ë˜ëŠ” MySql.Dataê°€ í•„ìš”í•©ë‹ˆë‹¤.
         /// </summary>
         public static Func<DbConnection> CreateMariaDbFactory(string connectionString)
         {
             return () =>
             {
-                // MySqlConnector
                 var typeNames = new[]
                 {
                     "MySqlConnector.MySqlConnection, MySqlConnector",
@@ -374,25 +397,23 @@ namespace nU3.Server.Connectivity.Services
 
                 if (connType == null)
                 {
-                    throw new InvalidOperationException("MariaDB/MySQL °ø±ŞÀÚ¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù. MySqlConnector ¶Ç´Â MySql.Data ÆĞÅ°Áö¸¦ ¼³Ä¡ÇÏ°í ÂüÁ¶¸¦ Ãß°¡ÇÏ¼¼¿ä.");
+                    throw new InvalidOperationException("MariaDB/MySQL ê³µê¸‰ìë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤. MySqlConnector ë˜ëŠ” MySql.Data íŒ¨í‚¤ì§€ë¥¼ ì„¤ì¹˜í•˜ì„¸ìš”.");
                 }
 
                 var conn = (DbConnection?)Activator.CreateInstance(connType);
-                if (conn == null) throw new InvalidOperationException("MySqlConnection ÀÎ½ºÅÏ½º »ı¼º ½ÇÆĞ");
+                if (conn == null) throw new InvalidOperationException("MySqlConnection ì¸ìŠ¤í„´ìŠ¤ ìƒì„± ì‹¤íŒ¨");
                 conn.ConnectionString = connectionString;
                 return conn;
             };
         }
 
         /// <summary>
-        /// SQLite¿ë DbConnection ÆÑÅä¸®¸¦ »ı¼ºÇÕ´Ï´Ù. Microsoft.Data.Sqlite ¶Ç´Â System.Data.SQLite ¾î¼Àºí¸®°¡ ¼³Ä¡µÇ¾î ÀÖ¾î¾ß ÇÕ´Ï´Ù.
-        /// »ç¿ë ¿¹: var factory = DbConnectionFactories.CreateSqliteFactory(connStr); var service = new ServerDBAccessService(connStr, factory);
+        /// SQLiteìš© DbConnection íŒ©í† ë¦¬ë¥¼ ìƒì„±í•©ë‹ˆë‹¤. Microsoft.Data.Sqlite ë˜ëŠ” System.Data.SQLiteê°€ í•„ìš”í•©ë‹ˆë‹¤.
         /// </summary>
         public static Func<DbConnection> CreateSqliteFactory(string connectionString)
         {
             return () =>
             {
-                // °¡´ÉÇÑ Å¸ÀÔ ÀÌ¸§µéÀ» ½ÃµµÇÕ´Ï´Ù.
                 var typeNames = new[]
                 {
                     "Microsoft.Data.Sqlite.SqliteConnection, Microsoft.Data.Sqlite",
@@ -408,11 +429,11 @@ namespace nU3.Server.Connectivity.Services
 
                 if (connType == null)
                 {
-                    throw new InvalidOperationException("SQLite °ø±ŞÀÚ¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù. Microsoft.Data.Sqlite ¶Ç´Â System.Data.SQLite ÆĞÅ°Áö¸¦ ¼³Ä¡ÇÏ°í ÂüÁ¶¸¦ Ãß°¡ÇÏ¼¼¿ä.");
+                    throw new InvalidOperationException("SQLite ê³µê¸‰ìë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤. Microsoft.Data.Sqlite ë˜ëŠ” System.Data.SQLite íŒ¨í‚¤ì§€ë¥¼ ì„¤ì¹˜í•˜ì„¸ìš”.");
                 }
 
                 var conn = (DbConnection?)Activator.CreateInstance(connType);
-                if (conn == null) throw new InvalidOperationException("SqliteConnection ÀÎ½ºÅÏ½º »ı¼º ½ÇÆĞ");
+                if (conn == null) throw new InvalidOperationException("SqliteConnection ì¸ìŠ¤í„´ìŠ¤ ìƒì„± ì‹¤íŒ¨");
                 conn.ConnectionString = connectionString;
                 return conn;
             };

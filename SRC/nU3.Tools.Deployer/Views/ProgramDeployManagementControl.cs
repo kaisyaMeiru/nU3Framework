@@ -13,13 +13,18 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using nU3.Core.UI;
+using nU3.Core.UI.Controls;
+using DevExpress.XtraGrid.Views.Grid;
+using DevExpress.XtraGrid.Columns;
+using System.Drawing;
 
 namespace nU3.Tools.Deployer.Views
 {
     /// <summary>
     /// 모듈(Assembly/DLL) 배포 관리를 위한 메인 컨트롤입니다.
     /// </summary>
-    public partial class ProgramDeployManagementControl : UserControl
+    public partial class ProgramDeployManagementControl : BaseWorkControl
     {
         private readonly IModuleRepository? _moduleRepo;
         private IFileTransferService? _fileTransferService;
@@ -41,6 +46,14 @@ namespace nU3.Tools.Deployer.Views
 
         private BindingList<ProgramEditRow> _programEditRows = new();
         private string? _selectedScanModuleId;
+
+        /// <summary>
+        /// Designer 전용 생성자입니다.
+        /// </summary>
+        public ProgramDeployManagementControl()
+        {
+            InitializeComponent();
+        }
 
         public ProgramDeployManagementControl(IModuleRepository moduleRepo, IConfiguration configuration)
         {
@@ -79,14 +92,12 @@ namespace nU3.Tools.Deployer.Views
 
         private void WireUiEvents()
         {
-            // 체크박스 이벤트를 안전하게 재연결
             chkUpdated.CheckedChanged -= ChkUpdated_CheckedChanged;
             chkUpdated.CheckedChanged += ChkUpdated_CheckedChanged;
         }
 
         private void ChkUpdated_CheckedChanged(object? sender, EventArgs e)
         {
-            // 스캔 데이터가 이미 있다면 필터 적용 갱신
             if (_scannedFiles.Count > 0)
             {
                 RebuildScanGridRowsFromScannedFiles();
@@ -99,13 +110,12 @@ namespace nU3.Tools.Deployer.Views
             if (!chkUpdated.Checked) return true;
 
             if (string.IsNullOrWhiteSpace(m.ModuleId))
-                return true; // ModuleId 없는 DLL은 항상 표시
+                return true; 
 
             var dbVer = _dbActiveVersions.FirstOrDefault(v => string.Equals(v.ModuleId, m.ModuleId, StringComparison.OrdinalIgnoreCase));
             if (dbVer == null)
-                return true; // DB에 버전이 없는 경우 표시
+                return true; 
 
-            // DB와 스캔 버전이 다르면 표시
             return !string.Equals(dbVer.Version ?? string.Empty, m.Version ?? string.Empty, StringComparison.OrdinalIgnoreCase);
         }
 
@@ -118,7 +128,6 @@ namespace nU3.Tools.Deployer.Views
             {
                 if (!ShouldShowModuleInScanGrid(m))
                 {
-                    // 필터 제외이면 expand 상태도 제거
                     if (!string.IsNullOrWhiteSpace(m.ModuleId))
                         _expandedModuleIds.Remove(m.ModuleId);
                     continue;
@@ -143,209 +152,69 @@ namespace nU3.Tools.Deployer.Views
 
         private void SetupScanGrid()
         {
-            dgvModuleFiles.AutoGenerateColumns = false;
-            dgvModuleFiles.Columns.Clear();
+            gvModuleFiles.Columns.Clear();
 
-            dgvModuleFiles.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "ColExpand",
-                HeaderText = "",
-                DataPropertyName = nameof(ScanGridRow.ExpandText),
-                Width = 28,
-                ReadOnly = true
-            });
+            AddGridColumn(gvModuleFiles, "ExpandText", "", 28);
+            AddGridColumn(gvModuleFiles, "RowType", "유형", 70);
+            AddGridColumn(gvModuleFiles, "DllOrClassName", "DLL (클래스명)", 260);
+            AddGridColumn(gvModuleFiles, "SystemType", "시스템", 60);
+            AddGridColumn(gvModuleFiles, "SubSystem", "서브", 60);
+            AddGridColumn(gvModuleFiles, "ModuleOrScreenName", "모듈명 (화면명)", 240);
+            AddGridColumn(gvModuleFiles, "Version", "버전", 90);
+            AddGridColumn(gvModuleFiles, "ProgNoText", "프로그램#", 60);
+            AddGridColumn(gvModuleFiles, "AuthLevel", "권한", 50);
+            AddGridColumn(gvModuleFiles, "ModuleId", "모듈ID", 200);
+            AddGridColumn(gvModuleFiles, "ProgId", "프로그램ID", 120);
+            AddGridColumn(gvModuleFiles, "ValidationStatus", "검증", 100);
 
-            dgvModuleFiles.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "ColType",
-                HeaderText = "유형",
-                DataPropertyName = nameof(ScanGridRow.RowType),
-                Width = 70,
-                ReadOnly = true
-            });
+            gvModuleFiles.OptionsBehavior.Editable = false;
+            gvModuleFiles.OptionsView.ShowGroupPanel = false;
+            gvModuleFiles.OptionsView.EnableAppearanceEvenRow = false;
+            gvModuleFiles.OptionsView.EnableAppearanceOddRow = false;
 
-            dgvModuleFiles.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "ColDllOrClass",
-                HeaderText = "DLL (클래스명)",
-                DataPropertyName = nameof(ScanGridRow.DllOrClassName),
-                Width = 260,
-                ReadOnly = true
-            });
+            gvModuleFiles.RowCellClick += GvModuleFiles_RowCellClick;
+            gvModuleFiles.DoubleClick += GvModuleFiles_DoubleClick;
+            gvModuleFiles.RowStyle += GvModuleFiles_RowStyle;
+            gvModuleFiles.SelectionChanged += GvModuleFiles_SelectionChanged;
+        }
 
-            dgvModuleFiles.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "ColSystem",
-                HeaderText = "시스템",
-                DataPropertyName = nameof(ScanGridRow.SystemType),
-                Width = 60,
-                ReadOnly = true
-            });
-
-            dgvModuleFiles.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "ColSubSystem",
-                HeaderText = "서브",
-                DataPropertyName = nameof(ScanGridRow.SubSystem),
-                Width = 60,
-                ReadOnly = true
-            });
-
-            dgvModuleFiles.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "ColModuleOrScreen",
-                HeaderText = "모듈명 (화면명)",
-                DataPropertyName = nameof(ScanGridRow.ModuleOrScreenName),
-                Width = 240,
-                ReadOnly = true
-            });
-
-            dgvModuleFiles.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "ColVersion",
-                HeaderText = "버전",
-                DataPropertyName = nameof(ScanGridRow.Version),
-                Width = 90,
-                ReadOnly = true
-            });
-
-            dgvModuleFiles.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "ColProgNo",
-                HeaderText = "프로그램#",
-                DataPropertyName = nameof(ScanGridRow.ProgNoText),
-                Width = 60,
-                ReadOnly = true
-            });
-
-            dgvModuleFiles.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "ColAuth",
-                HeaderText = "권한",
-                DataPropertyName = nameof(ScanGridRow.AuthLevel),
-                Width = 50,
-                ReadOnly = true
-            });
-
-            dgvModuleFiles.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "ColModuleId",
-                HeaderText = "모듈ID",
-                DataPropertyName = nameof(ScanGridRow.ModuleId),
-                Width = 200,
-                ReadOnly = true
-            });
-
-            dgvModuleFiles.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "ColProgId",
-                HeaderText = "프로그램ID",
-                DataPropertyName = nameof(ScanGridRow.ProgId),
-                Width = 120,
-                ReadOnly = true
-            });
-
-            dgvModuleFiles.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "ColValidation",
-                HeaderText = "검증",
-                DataPropertyName = nameof(ScanGridRow.ValidationStatus),
-                Width = 100,
-                ReadOnly = true
-            });
-
-            dgvModuleFiles.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
-            dgvModuleFiles.CellContentClick -= DgvModuleFiles_CellContentClick;
-            dgvModuleFiles.CellContentClick += DgvModuleFiles_CellContentClick;
-            dgvModuleFiles.CellDoubleClick -= DgvModuleFiles_CellDoubleClick;
-            dgvModuleFiles.CellDoubleClick += DgvModuleFiles_CellDoubleClick;
-            dgvModuleFiles.RowPrePaint -= DgvModuleFiles_RowPrePaint;
-            dgvModuleFiles.RowPrePaint += DgvModuleFiles_RowPrePaint;
-            dgvModuleFiles.SelectionChanged -= DgvModuleFiles_SelectionChanged;
-            dgvModuleFiles.SelectionChanged += DgvModuleFiles_SelectionChanged;
+        private void AddGridColumn(GridView view, string fieldName, string caption, int width)
+        {
+            var col = view.Columns.AddVisible(fieldName, caption);
+            col.Width = width;
         }
 
         private void SetupProgramEditGrid()
         {
-            // 프로그램 병합/비교/편집용 그리드 설정
-            dgvDbVersions.AutoGenerateColumns = false;
-            dgvDbVersions.Columns.Clear();
+            gvDbVersions.Columns.Clear();
 
-            dgvDbVersions.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "ColPStatus",
-                HeaderText = "상태",
-                DataPropertyName = nameof(ProgramEditRow.DbStatus),
-                Width = 70,
-                ReadOnly = true
-            });
+            AddGridColumn(gvDbVersions, "DbStatus", "상태", 70);
+            AddGridColumn(gvDbVersions, "ProgId", "프로그램ID", 120);
+            AddGridColumn(gvDbVersions, "ProgName", "화면명", 200);
+            AddGridColumn(gvDbVersions, "ClassName", "클래스명", 280);
+            AddGridColumn(gvDbVersions, "AuthLevel", "권한", 60);
+            AddGridColumn(gvDbVersions, "DiffText", "차이", 240);
+            AddGridColumn(gvDbVersions, "ModuleId", "모듈ID", 140);
 
-            dgvDbVersions.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "ColPProgId",
-                HeaderText = "프로그램ID",
-                DataPropertyName = nameof(ProgramEditRow.ProgId),
-                Width = 120
-            });
-
-            dgvDbVersions.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "ColPScreenName",
-                HeaderText = "화면명",
-                DataPropertyName = nameof(ProgramEditRow.ProgName),
-                Width = 200
-            });
-
-            dgvDbVersions.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "ColPClassName",
-                HeaderText = "클래스명",
-                DataPropertyName = nameof(ProgramEditRow.ClassName),
-                Width = 280,
-                ReadOnly = true
-            });
-
-            dgvDbVersions.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "ColPAuth",
-                HeaderText = "권한",
-                DataPropertyName = nameof(ProgramEditRow.AuthLevel),
-                Width = 60
-            });
-
-            dgvDbVersions.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "ColPDbDiff",
-                HeaderText = "차이",
-                DataPropertyName = nameof(ProgramEditRow.DiffText),
-                Width = 240,
-                ReadOnly = true
-            });
-
-            dgvDbVersions.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "ColPModuleId",
-                HeaderText = "모듈ID",
-                DataPropertyName = nameof(ProgramEditRow.ModuleId),
-                Width = 140,
-                ReadOnly = true
-            });
+            gvDbVersions.OptionsBehavior.Editable = false;
+            gvDbVersions.OptionsView.ShowGroupPanel = false;
 
             dgvDbVersions.DataSource = _programEditRows;
         }
 
-        // 디자이너의 일부 버전에서 여전히 참조될 수 있는 핸들러입니다.
-        private void splitMasterDetail_Panel2_Paint(object sender, PaintEventArgs e)
+        private void GvModuleFiles_DoubleClick(object sender, EventArgs e)
         {
-        }
+            var view = sender as GridView;
+            if (view == null) return;
+            
+            var pt = view.GridControl.PointToClient(Control.MousePosition);
+            var hitInfo = view.CalcHitInfo(pt);
+            
+            if (!hitInfo.InRow) return;
 
-        private void DgvModuleFiles_CellDoubleClick(object? sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex < 0) return;
+            var row = view.GetRow(hitInfo.RowHandle) as ScanGridRow;
+            if (row == null) return;
 
-            var row = _scanGridRows[e.RowIndex];
-
-            // 검증 오류가 있으면 상세 메시지 표시
             if (!string.IsNullOrWhiteSpace(row.ValidationErrors))
             {
                 MessageBox.Show(
@@ -356,15 +225,15 @@ namespace nU3.Tools.Deployer.Views
                 return;
             }
 
-            // 오류가 없으면 확장/축소 토글
-            ToggleScanRowExpandAt(e.RowIndex);
+            ToggleScanRowExpandAt(hitInfo.RowHandle);
         }
 
-        private void DgvModuleFiles_CellContentClick(object? sender, DataGridViewCellEventArgs e)
+        private void GvModuleFiles_RowCellClick(object sender, RowCellClickEventArgs e)
         {
-            if (e.RowIndex < 0) return;
-            if (dgvModuleFiles.Columns[e.ColumnIndex].Name != "ColExpand") return;
-            ToggleScanRowExpandAt(e.RowIndex);
+            if (e.Column.FieldName == "ExpandText")
+            {
+                ToggleScanRowExpandAt(e.RowHandle);
+            }
         }
 
         private void ToggleScanRowExpandAt(int rowIndex)
@@ -417,46 +286,45 @@ namespace nU3.Tools.Deployer.Views
 
         private void RebindScanGrid(bool preserveScroll)
         {
-            var firstRow = preserveScroll ? dgvModuleFiles.FirstDisplayedScrollingRowIndex : -1;
+            var topRowIndex = preserveScroll ? gvModuleFiles.TopRowIndex : 0;
+            var focusedRowHandle = gvModuleFiles.FocusedRowHandle;
+
             dgvModuleFiles.DataSource = null;
             dgvModuleFiles.DataSource = _scanGridRows;
-            if (preserveScroll && firstRow >= 0 && firstRow < dgvModuleFiles.RowCount)
-                dgvModuleFiles.FirstDisplayedScrollingRowIndex = firstRow;
+            gvModuleFiles.RefreshData();
+
+            if (preserveScroll)
+            {
+                gvModuleFiles.TopRowIndex = topRowIndex;
+                if (focusedRowHandle >= 0 && focusedRowHandle < gvModuleFiles.DataRowCount)
+                    gvModuleFiles.FocusedRowHandle = focusedRowHandle;
+            }
         }
 
-        private void DgvModuleFiles_RowPrePaint(object? sender, DataGridViewRowPrePaintEventArgs e)
+        private void GvModuleFiles_RowStyle(object sender, RowStyleEventArgs e)
         {
-            if (e.RowIndex < 0 || e.RowIndex >= _scanGridRows.Count) return;
+            if (e.RowHandle < 0) return;
+            var view = sender as GridView;
+            var row = view?.GetRow(e.RowHandle) as ScanGridRow;
+            if (row == null) return;
 
-            var row = _scanGridRows[e.RowIndex];
             var hasValidationError = !string.IsNullOrWhiteSpace(row.ValidationErrors);
 
             if (!row.IsModule)
             {
-                dgvModuleFiles.Rows[e.RowIndex].DefaultCellStyle.BackColor = hasValidationError
-                    ? System.Drawing.Color.FromArgb(255, 240, 240)
-                    : System.Drawing.Color.FromArgb(248, 248, 248);
-                dgvModuleFiles.Rows[e.RowIndex].DefaultCellStyle.Font = new System.Drawing.Font(dgvModuleFiles.Font, System.Drawing.FontStyle.Regular);
-                dgvModuleFiles.Rows[e.RowIndex].Cells["ColDllOrClass"].Style.Padding = new Padding(18, 0, 0, 0);
+                e.Appearance.BackColor = hasValidationError
+                    ? Color.FromArgb(255, 240, 240)
+                    : Color.FromArgb(248, 248, 248);
+                // Font cannot be easily changed per row in RowStyle without handling CustomDrawCell, but simple style works.
+                // Indentation simulation logic was here, but we can't easily do padding in RowStyle.
+                // DevExpress handles hierarchy better, but for this port we stick to flat list.
             }
             else
             {
-                dgvModuleFiles.Rows[e.RowIndex].DefaultCellStyle.BackColor = hasValidationError
-                    ? System.Drawing.Color.FromArgb(255, 230, 230)
-                    : System.Drawing.Color.White;
-                dgvModuleFiles.Rows[e.RowIndex].DefaultCellStyle.Font = new System.Drawing.Font(dgvModuleFiles.Font, System.Drawing.FontStyle.Bold);
-                dgvModuleFiles.Rows[e.RowIndex].Cells["ColDllOrClass"].Style.Padding = new Padding(0, 0, 0, 0);
-            }
-
-            // 검증 컬럼 색상 설정
-            if (hasValidationError)
-            {
-                dgvModuleFiles.Rows[e.RowIndex].Cells["ColValidation"].Style.ForeColor = System.Drawing.Color.Red;
-                dgvModuleFiles.Rows[e.RowIndex].Cells["ColValidation"].Style.Font = new System.Drawing.Font(dgvModuleFiles.Font, System.Drawing.FontStyle.Bold);
-            }
-            else
-            {
-                dgvModuleFiles.Rows[e.RowIndex].Cells["ColValidation"].Style.ForeColor = System.Drawing.Color.Green;
+                e.Appearance.BackColor = hasValidationError
+                    ? Color.FromArgb(255, 230, 230)
+                    : Color.White;
+                e.Appearance.Font = new Font(e.Appearance.Font, FontStyle.Bold);
             }
         }
 
@@ -506,9 +374,9 @@ namespace nU3.Tools.Deployer.Views
                     IsModule = false,
                     ExpandText = string.Empty,
                     ModuleId = moduleId,
-                    DllOrClassName = p.ClassName,
-                    SystemType = p.SystemType ?? string.Empty,  // DLL에서 읽어온 실제 값
-                    SubSystem = p.SubSystem ?? string.Empty,    // DLL에서 읽어온 실제 값
+                    DllOrClassName = "    " + p.ClassName, // Simple indentation hack
+                    SystemType = p.SystemType ?? string.Empty,
+                    SubSystem = p.SubSystem ?? string.Empty,
                     ModuleOrScreenName = p.ProgName,
                     ProgNoText = (index + 1).ToString(),
                     ProgId = p.ProgId,
@@ -521,7 +389,7 @@ namespace nU3.Tools.Deployer.Views
 
         private static bool IsDesignMode()
         {
-            return System.ComponentModel.LicenseManager.UsageMode == System.ComponentModel.LicenseUsageMode.Designtime;
+            return LicenseManager.UsageMode == LicenseUsageMode.Designtime;
         }
 
         private void InitFilterCombos()
@@ -529,30 +397,14 @@ namespace nU3.Tools.Deployer.Views
             _isRefreshingFilterCombos = true;
             try
             {
-                cboFilterCategory.BeginUpdate();
-                try
-                {
-                    cboFilterCategory.Items.Clear();
-                    cboFilterCategory.Items.Add("(ALL)");
-                    cboFilterCategory.Items.AddRange(new object[] { "EMR", "ADM", "BAS" });
-                    cboFilterCategory.SelectedIndex = 0;
-                }
-                finally
-                {
-                    cboFilterCategory.EndUpdate();
-                }
+                cboFilterCategory.Properties.Items.Clear();
+                cboFilterCategory.Properties.Items.Add("(ALL)");
+                cboFilterCategory.Properties.Items.AddRange(new object[] { "EMR", "ADM", "BAS" });
+                cboFilterCategory.SelectedIndex = 0;
 
-                cboFilterSubSystem.BeginUpdate();
-                try
-                {
-                    cboFilterSubSystem.Items.Clear();
-                    cboFilterSubSystem.Items.Add("(ALL)");
-                    cboFilterSubSystem.SelectedIndex = 0;
-                }
-                finally
-                {
-                    cboFilterSubSystem.EndUpdate();
-                }
+                cboFilterSubSystem.Properties.Items.Clear();
+                cboFilterSubSystem.Properties.Items.Add("(ALL)");
+                cboFilterSubSystem.SelectedIndex = 0;
             }
             finally
             {
@@ -613,7 +465,6 @@ namespace nU3.Tools.Deployer.Views
 
             RefreshFilterSubSystems();
 
-            // DB 로드 이후에는 화면 필터 반영
             if (_scannedFiles.Count > 0)
             {
                 RebuildScanGridRowsFromScannedFiles();
@@ -660,7 +511,6 @@ namespace nU3.Tools.Deployer.Views
                         item.Version = info.Version;
                         item.ProgramCount = info.Programs?.Count ?? 0;
 
-                        // 검증 오류 저장
                         if (info.HasValidationErrors)
                         {
                             _moduleValidationErrors[item.ModuleId] = info.GetValidationSummary();
@@ -670,11 +520,9 @@ namespace nU3.Tools.Deployer.Views
                         {
                             _scannedProgramsByModuleId[item.ModuleId] = info.Programs;
 
-                            // 프로그램별 검증 오류 저장
                             var progErrs = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
                             foreach (var prog in info.Programs)
                             {
-                                // 프로그램별 검증 오류는 ValidationErrors에 포함되어 있음
                                 var progErrors = info.ValidationErrors
                                     .Where(e => e.StartsWith($"[{prog.ClassName?.Split('.').LastOrDefault() ?? prog.ProgId}]"))
                                     .ToList();
@@ -693,14 +541,12 @@ namespace nU3.Tools.Deployer.Views
                     }
                     catch
                     {
-                        // 파싱 실패는 무시하고 기본 파일 정보만 유지
                     }
 
                     list.Add(item);
                 }
                 catch
                 {
-                    // 파일 접근 오류는 무시
                 }
             }
 
@@ -709,7 +555,6 @@ namespace nU3.Tools.Deployer.Views
             RebuildScanGridRowsFromScannedFiles();
             RebindScanGrid(preserveScroll: false);
 
-            // 검증 오류가 있으면 메시지 표시
             var totalErrors = _moduleValidationErrors.Count + _programValidationErrors.Values.Sum(d => d.Count);
             if (totalErrors > 0)
             {
@@ -722,10 +567,6 @@ namespace nU3.Tools.Deployer.Views
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
             }
-        }
-
-        private void BuildCompareRowsAndBind()
-        {
         }
 
         private void RefreshFilterSubSystems()
@@ -747,26 +588,18 @@ namespace nU3.Tools.Deployer.Views
 
                 var current = cboFilterSubSystem.SelectedItem?.ToString();
 
-                cboFilterSubSystem.BeginUpdate();
-                try
+                cboFilterSubSystem.Properties.Items.Clear();
+                cboFilterSubSystem.Properties.Items.Add("(ALL)");
+                foreach (var s in subs) cboFilterSubSystem.Properties.Items.Add(s);
+
+                if (cboFilterSubSystem.SelectedIndex != 0)
                 {
-                    cboFilterSubSystem.Items.Clear();
-                    cboFilterSubSystem.Items.Add("(ALL)");
-                    foreach (var s in subs) cboFilterSubSystem.Items.Add(s);
-
-                    if (cboFilterSubSystem.SelectedIndex != 0)
-                    {
-                        cboFilterSubSystem.SelectedIndex = 0;
-                    }
-
-                    if (!string.IsNullOrWhiteSpace(current) && cboFilterSubSystem.Items.Contains(current))
-                    {
-                        cboFilterSubSystem.SelectedItem = current;
-                    }
+                    cboFilterSubSystem.SelectedIndex = 0;
                 }
-                finally
+
+                if (!string.IsNullOrWhiteSpace(current) && cboFilterSubSystem.Properties.Items.Contains(current))
                 {
-                    cboFilterSubSystem.EndUpdate();
+                    cboFilterSubSystem.SelectedItem = current;
                 }
             }
             finally
@@ -808,18 +641,16 @@ namespace nU3.Tools.Deployer.Views
             // 중앙 마스터 그리드 제거됨 - 바인딩할 내용 없음
         }
 
-        private void DgvDbMaster_RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)
+        private void GvModuleFiles_SelectionChanged(object sender, DevExpress.Data.SelectionChangedEventArgs e)
         {
-        }
-
-        private void DgvDbMaster_SelectionChanged(object sender, EventArgs e)
-        {
-        }
-
-        private void DgvModuleFiles_SelectionChanged(object? sender, EventArgs e)
-        {
-            if (dgvModuleFiles.SelectedRows.Count <= 0) return;
-            if (dgvModuleFiles.SelectedRows[0].DataBoundItem is not ScanGridRow row) return;
+            var view = sender as GridView;
+            if (view == null) return;
+            
+            if (view.SelectedRowsCount <= 0) return;
+            
+            var rowHandle = view.GetSelectedRows()[0];
+            var row = view.GetRow(rowHandle) as ScanGridRow;
+            if (row == null) return;
 
             if (string.IsNullOrWhiteSpace(row.ModuleId)) return;
 
@@ -829,7 +660,6 @@ namespace nU3.Tools.Deployer.Views
 
         private void RefreshCenterForSelectedScanModule(string moduleId)
         {
-            // 오른쪽 패널: DB에 모듈 정보가 있으면 DB 값, 없으면 스캔 값으로 채움
             var dbMst = _dbMasters.FirstOrDefault(m => string.Equals(m.ModuleId, moduleId, StringComparison.OrdinalIgnoreCase));
             var scan = _scannedFiles.FirstOrDefault(s => string.Equals(s.ModuleId, moduleId, StringComparison.OrdinalIgnoreCase));
 
@@ -850,7 +680,6 @@ namespace nU3.Tools.Deployer.Views
                 txtFileName.Text = scan.FileName;
             }
 
-            // 오른쪽 패널: DB의 활성 버전 정보 표시
             var dbVer = _dbActiveVersions.FirstOrDefault(v => string.Equals(v.ModuleId, moduleId, StringComparison.OrdinalIgnoreCase));
             if (dbVer != null)
             {
@@ -869,7 +698,6 @@ namespace nU3.Tools.Deployer.Views
                 txtDeployDesc.Text = string.Empty;
             }
 
-            // 가운데 그리드: 프로그램 비교/편집 행 구성
             var progRepo = Program.ServiceProvider.GetRequiredService<IProgramRepository>();
             var dbModulePrograms = progRepo.GetProgramsByModuleId(moduleId);
             var dbByProgId = dbModulePrograms
@@ -921,7 +749,7 @@ namespace nU3.Tools.Deployer.Views
 
         private sealed class ProgramEditRow
         {
-            public string DbStatus { get; set; } = string.Empty; // NEW / UPDATE / OK
+            public string DbStatus { get; set; } = string.Empty; 
             public string DiffText { get; set; } = string.Empty;
             public string ModuleId { get; set; } = string.Empty;
             public string ProgId { get; set; } = string.Empty;

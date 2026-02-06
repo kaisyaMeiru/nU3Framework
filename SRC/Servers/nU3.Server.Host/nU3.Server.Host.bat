@@ -1,0 +1,1 @@
+nU3.Server.Host.exe --urls "http://0.0.0.0:64228;https://0.0.0.0:64229"

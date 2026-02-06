@@ -44,35 +44,30 @@ namespace nU3.Bootstrapper
         /// <summary>
         /// ComponentLoader 생성자
         /// </summary>
-        /// <param name="dbManager">로컬 DB 매니저 (컴포넌트 메타데이터 조회용)</param>
+        /// <param name="dbService">DB 접근 서비스 (HTTP 또는 로컬)</param>
         /// <param name="configuration">앱 설정(IConfiguration) - 서버 경로 및 옵션 로드</param>
         /// <param name="installPath">설치 루트 경로(선택). null이면 현재 애플리케이션 베이스 디렉토리 사용</param>
-        public ComponentLoader(LocalDatabaseManager dbManager, IConfiguration configuration, string? installPath = null)
+        public ComponentLoader(IDBAccessService dbService, IConfiguration configuration, string? installPath = null)
         {
-            _componentRepo = new SQLiteComponentRepository(dbManager);
+            // 리포지토리는 이제 주입받거나, IDBAccessService를 사용하여 생성
+            // 여기서는 심플함을 위해 직접 생성하지만, DI를 통하는 것이 더 좋음
+            _componentRepo = new SQLiteComponentRepository(dbService);
 
             // 캐시 경로: %AppData%\nU3.Framework\Cache\Components
             var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);            
-            _cachePath = Path.Combine(appData, "nU3.Framework", "Cache", "Components");
+            _cachePath = Path.Combine(appData, "nU3.Framework", "Cache", "Patch");
             if (!Directory.Exists(_cachePath))
                 Directory.CreateDirectory(_cachePath);
 
             // 설치 기본 경로 설정
-            // 1. 설정 파일(appsettings.json)의 RuntimeDirectory 우선
-            // 2. 생성자 파라미터로 전달된 installPath
-            // 3. 현재 애플리케이션의 베이스 디렉토리
-            var configRuntimeDir = configuration.GetValue<string>("RuntimeDirectory");
-            _installPath = !string.IsNullOrWhiteSpace(configRuntimeDir) 
-                ? configRuntimeDir 
-                : (installPath ?? AppDomain.CurrentDomain.BaseDirectory);
-
-            _installPath = _installPath.TrimEnd('\\', '/');
+            // 설정 파일(appsettings.json)의 RuntimeDirectory 우선
+            _installPath = installPath.TrimEnd('\\', '/');
             if (!Directory.Exists(_installPath))
                 Directory.CreateDirectory(_installPath);
 
             // 서버 연결 및 경로 설정 읽기
-            var serverEnabled = configuration.GetValue<bool>("ServerConnection:Enabled", false);
-            var baseUrl = configuration.GetValue<string>("ServerConnection:BaseUrl") ?? "https://localhost:64229";
+            var serverEnabled = configuration.GetValue<bool>("ServerConnection:Enabled",true);
+            var baseUrl = configuration.GetValue<string>("ServerConnection:BaseUrl") ?? "http://localhost:64228";
             _serverComponentPath = configuration.GetValue<string>("ComponentStorage:ServerPath") ?? "Patch";
             _useServerTransfer = configuration.GetValue<bool>("ComponentStorage:UseServerTransfer", true) && serverEnabled;
 

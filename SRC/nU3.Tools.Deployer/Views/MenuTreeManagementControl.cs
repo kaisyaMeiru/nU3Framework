@@ -2,51 +2,55 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Data.SQLite;
 using System.Drawing;
 using System.Windows.Forms;
 using nU3.Data;
 using nU3.Core.UI;
+using nU3.Core.UI.Controls;
+using DevExpress.XtraEditors;
 
 namespace nU3.Tools.Deployer.Views
 {
     /// <summary>
-    /// ¸Ş´º Æ®¸®(³×ºñ°ÔÀÌ¼Ç ¸Ş´º)¸¦ ÆíÁıÇÏ°í ·ÎÄÃ DB¿¡ ÀúÀåÇÒ ¼ö ÀÖ´Â ¿¡µğÅÍ ÄÁÆ®·ÑÀÔ´Ï´Ù.
-    /// ÁÖ¿ä ±â´É:
-    /// - µî·ÏµÈ ÇÁ·Î±×·¥ ¸ñ·Ï ·Îµå
-    /// - SYS_MENU Å×ÀÌºí ±â¹İÀÇ ¸Ş´º Æ®¸® ·Îµå/ÆíÁı/ÀúÀå
-    /// - ³ëµå Ãß°¡(·çÆ®/ÀÚ½Ä), »èÁ¦, ÀÎÁõ ·¹º§ ÆíÁı
+    /// ë©”ë‰´ íŠ¸ë¦¬(Menu Navigation Tree)ë¥¼ ê´€ë¦¬í•˜ê³  í¸ì§‘í•˜ëŠ” ì»¨íŠ¸ë¡¤ì…ë‹ˆë‹¤.
+    /// ì£¼ìš” ê¸°ëŠ¥:
+    /// - ì „ì²´ í”„ë¡œê·¸ë¨ ëª©ë¡ì˜ ë¡œë“œ
+    /// - SYS_MENU í…Œì´ë¸”ì˜ ë©”ë‰´ íŠ¸ë¦¬ ë¡œë“œ/ì €ì¥/ì‚­ì œ
+    /// - ìƒˆ í•­ëª© ì¶”ê°€(ë£¨íŠ¸/ìì‹), í¸ì§‘, ì‚­ì œ ê¸°ëŠ¥
     /// </summary>
-    public partial class MenuTreeManagementControl : UserControl
+    public partial class MenuTreeManagementControl : BaseWorkControl
     {
-        private readonly LocalDatabaseManager _dbManager;
+        private readonly LocalDbService _dbManager;
 
+        /// <summary>
+        /// Designer ì „ìš© ìƒì„±ì
+        /// </summary>
         public MenuTreeManagementControl()
         {
-            _dbManager = new LocalDatabaseManager();
-            this.Text = "¸Ş´º ±¸¼º ÆíÁı±â";
-            this.Size = new System.Drawing.Size(1000, 700);
-
+            _dbManager = new LocalDbService();
             InitializeComponent();
 
             if (!IsDesignMode())
             {
                 LoadPrograms();
                 LoadMenuTree();
+                WireEvents();
             }
         }
 
-        /// <summary>
-        /// µğÀÚÀÌ³Ê ¸ğµå ¿©ºÎ È®ÀÎ (µğÀÚÀÎÅ¸ÀÓ¿¡´Â DB Á¢±Ù µîÀ» °Ç³Ê¶İ´Ï´Ù)
-        /// </summary>
         private static bool IsDesignMode()
         {
             return LicenseManager.UsageMode == LicenseUsageMode.Designtime;
         }
 
-        /// <summary>
-        /// Æ®¸®¿¡¼­ ³ëµå ¼±ÅÃÀÌ º¯°æµÇ¾úÀ» ¶§ ¹öÆ° »óÅÂ¿Í ÀÎÁõ ·¹º§ ÄÁÆ®·ÑÀ» °»½ÅÇÕ´Ï´Ù.
-        /// </summary>
+        private void WireEvents()
+        {
+            lbPrograms.DoubleClick += LbPrograms_DoubleClick;
+            cmsTree.Items.Add("ë£¨íŠ¸ ì¶”ê°€", null, CmsAddRoot_Click);
+            cmsTree.Items.Add("ìì‹ ì¶”ê°€", null, CmsAddChild_Click);
+            cmsTree.Items.Add("ì‚­ì œ", null, CmsDelete_Click);
+        }
+
         private void TvMenu_AfterSelect(object sender, TreeViewEventArgs e)
         {
             UpdateButtons();
@@ -60,9 +64,6 @@ namespace nU3.Tools.Deployer.Views
             }
         }
 
-        /// <summary>
-        /// ÀÎÁõ ·¹º§ °ª º¯°æ ½Ã ¼±ÅÃµÈ ³ëµåÀÇ µ¥ÀÌÅÍ¿¡ ¹İ¿µÇÕ´Ï´Ù.
-        /// </summary>
         private void NumAuthLevel_ValueChanged(object sender, EventArgs e)
         {
             if (tvMenu.SelectedNode != null)
@@ -75,44 +76,15 @@ namespace nU3.Tools.Deployer.Views
             }
         }
 
-        private void CmsAddRoot_Click(object sender, EventArgs e)
-        {
-            AddRootNode();
-        }
+        private void CmsAddRoot_Click(object? sender, EventArgs e) => AddRootNode();
+        private void CmsAddChild_Click(object? sender, EventArgs e) => AddChildNode();
+        private void CmsDelete_Click(object? sender, EventArgs e) => DeleteNode();
 
-        private void CmsAddChild_Click(object sender, EventArgs e)
-        {
-            AddChildNode();
-        }
+        private void BtnAddRoot_Click(object sender, EventArgs e) => AddRootNode();
+        private void BtnAddChild_Click(object sender, EventArgs e) => AddChildNode();
+        private void BtnDeleteNode_Click(object sender, EventArgs e) => DeleteNode();
+        private void BtnSave_Click(object sender, EventArgs e) => SaveMenu();
 
-        private void CmsDelete_Click(object sender, EventArgs e)
-        {
-            DeleteNode();
-        }
-
-        private void BtnAddRoot_Click(object sender, EventArgs e)
-        {
-            AddRootNode();
-        }
-
-        private void BtnAddChild_Click(object sender, EventArgs e)
-        {
-            AddChildNode();
-        }
-
-        private void BtnDeleteNode_Click(object sender, EventArgs e)
-        {
-            DeleteNode();
-        }
-
-        private void BtnSave_Click(object sender, EventArgs e)
-        {
-            SaveMenu();
-        }
-
-        /// <summary>
-        /// Æ®¸® ¼±ÅÃ »óÅÂ¿¡ µû¶ó ¹öÆ°/ÄÁÆ®·ÑÀÇ È°¼ºÈ­ »óÅÂ¸¦ °»½ÅÇÕ´Ï´Ù.
-        /// </summary>
         private void UpdateButtons()
         {
             bool hasSelection = tvMenu.SelectedNode != null;
@@ -121,266 +93,163 @@ namespace nU3.Tools.Deployer.Views
             numAuthLevel.Enabled = hasSelection;
         }
 
-        /// <summary>
-        /// DB¿¡¼­ È°¼ºÈ­µÈ ÇÁ·Î±×·¥ ¸ñ·ÏÀ» ·ÎµåÇÏ¿© ¸®½ºÆ®¹Ú½º¿¡ Ç¥½ÃÇÕ´Ï´Ù.
-        /// Ç¥½Ã Çü½Ä: [ModuleId] ProgName (ProgId)
-        /// </summary>
         private void LoadPrograms()
         {
             lbPrograms.Items.Clear();
             lbPrograms.DisplayMember = "DisplayInfo";
 
-            using (var conn = new SQLiteConnection(_dbManager.GetConnectionString()))
+            string sql = "SELECT PROG_ID, PROG_NAME, MODULE_ID, IS_ACTIVE, PROG_TYPE FROM SYS_PROG_MST WHERE IFNULL(IS_ACTIVE,'Y') = 'Y' ORDER BY PROG_NAME";
+            using (var dt = _dbManager.ExecuteDataTable(sql))
             {
-                conn.Open();
-                string sql = "SELECT PROG_ID, PROG_NAME, MODULE_ID, IS_ACTIVE, PROG_TYPE FROM SYS_PROG_MST WHERE IFNULL(IS_ACTIVE,'Y') = 'Y' ORDER BY PROG_NAME";
-                using (var cmd = new SQLiteCommand(sql, conn))
-                using (var reader = cmd.ExecuteReader())
+                foreach (DataRow reader in dt.Rows)
                 {
-                    while (reader.Read())
-                    {
-                        var item = new ProgramItem();
-                        item.ProgId = reader["PROG_ID"].ToString();
-                        item.ProgName = reader["PROG_NAME"]?.ToString();
-                        item.ModuleId = reader["MODULE_ID"].ToString();
-                        item.IsActive = reader["IS_ACTIVE"] == DBNull.Value ? "Y" : reader["IS_ACTIVE"].ToString();
-                        item.ProgType = reader["PROG_TYPE"] == DBNull.Value ? 1 : Convert.ToInt32(reader["PROG_TYPE"]);
-                        lbPrograms.Items.Add(item);
-                    }
+                    var item = new ProgramItem();
+                    item.ProgId = reader["PROG_ID"].ToString();
+                    item.ProgName = reader["PROG_NAME"]?.ToString();
+                    item.ModuleId = reader["MODULE_ID"].ToString();
+                    item.IsActive = reader["IS_ACTIVE"] == DBNull.Value ? "Y" : reader["IS_ACTIVE"].ToString();
+                    item.ProgType = reader["PROG_TYPE"] == DBNull.Value ? 1 : Convert.ToInt32(reader["PROG_TYPE"]);
+                    lbPrograms.Items.Add(item);
                 }
             }
         }
 
-        /// <summary>
-        /// ·ÎÄÃ DBÀÇ SYS_MENU Å×ÀÌºíÀ» ÀĞ¾î TreeView¿¡ ³ëµåµéÀ» ±¸¼ºÇÕ´Ï´Ù.
-        /// </summary>
         private void LoadMenuTree()
         {
             tvMenu.Nodes.Clear();
-            using (var conn = new SQLiteConnection(_dbManager.GetConnectionString()))
+            string sql = "SELECT * FROM SYS_MENU ORDER BY PARENT_ID, SORT_ORD";
+            using (var dt = _dbManager.ExecuteDataTable(sql))
             {
-                conn.Open();
-                string sql = "SELECT * FROM SYS_MENU ORDER BY PARENT_ID, SORT_ORD";
-                using (var da = new SQLiteDataAdapter(sql, conn))
-                {
-                    DataTable dt = new DataTable();
-                    da.Fill(dt);
-
-                    AddTreeNodes(dt, null, tvMenu.Nodes);
-                }
+                AddTreeNodes(dt, null, tvMenu.Nodes);
             }
             tvMenu.ExpandAll();
         }
 
-        /// <summary>
-        /// DataTableÀÇ ¸Ş´º ·¹ÄÚµå¸¦ Àç±ÍÀûÀ¸·Î ¼øÈ¸ÇÏ¿© TreeNode¸¦ ±¸¼ºÇÏ°í nodes ÄÃ·º¼Ç¿¡ Ãß°¡ÇÕ´Ï´Ù.
-        /// ÇÁ·Î±×·¥°ú ¿¬°áµÈ ³ëµå´Â ÆÄ¶õ»öÀ¸·Î Ç¥½ÃÇÕ´Ï´Ù.
-        /// </summary>
-        private void AddTreeNodes(DataTable dt, string parentId, TreeNodeCollection nodes)
+        private void AddTreeNodes(DataTable dt, string? parentId, TreeNodeCollection nodes)
         {
             string filter = parentId == null ? "PARENT_ID IS NULL" : $"PARENT_ID = '{parentId}'";
             foreach (DataRow row in dt.Select(filter, "SORT_ORD"))
             {
-                string id = row["MENU_ID"].ToString();
-                string name = row["MENU_NAME"].ToString();
-                string progId = row["PROG_ID"].ToString();
+                string id = row["MENU_ID"].ToString() ?? string.Empty;
+                string name = row["MENU_NAME"].ToString() ?? string.Empty;
+                string progId = row["PROG_ID"].ToString() ?? string.Empty;
                 int auth = row["AUTH_LEVEL"] == DBNull.Value ? 1 : Convert.ToInt32(row["AUTH_LEVEL"]);
 
-                var data = new MenuNodeData();
-                data.MenuId = id;
-                data.ProgId = progId;
-                data.AuthLevel = auth;
+                var data = new MenuNodeData { MenuId = id, ProgId = progId, AuthLevel = auth };
+                var node = new TreeNode(name) { Tag = data };
 
-                var node = new TreeNode(name);
-                node.Tag = data;
-
-                // ÇÁ·Î±×·¥ÀÌ ¿¬°áµÈ ³ëµå´Â ÆÄ¶õ»öÀ¸·Î Ç¥½Ã
-                if (!string.IsNullOrEmpty(progId))
-                    node.ForeColor = Color.Blue;
+                if (!string.IsNullOrEmpty(progId)) node.ForeColor = Color.Blue;
 
                 nodes.Add(node);
                 AddTreeNodes(dt, id, node.Nodes);
             }
         }
 
-        /// <summary>
-        /// ·çÆ® ³ëµå¸¦ Ãß°¡ÇÕ´Ï´Ù. »ç¿ëÀÚ¿¡°Ô ÀÌ¸§À» ÀÔ·Â¹Ş¾Æ Æ®¸®¿¡ Ãß°¡ÇÕ´Ï´Ù.
-        /// </summary>
         private void AddRootNode()
         {
-            string name = Prompt.ShowDialog("·çÆ® ¸Ş´º ÀÌ¸§À» ÀÔ·ÂÇÏ¼¼¿ä:", "·çÆ® Ãß°¡");
+            string name = XtraInputBox.Show("ë£¨íŠ¸ ë©”ë‰´ ì´ë¦„ì„ ì…ë ¥í•˜ì„¸ìš”:", "ë£¨íŠ¸ ì¶”ê°€", "");
             if (!string.IsNullOrEmpty(name))
             {
-                var data = new MenuNodeData();
-                data.MenuId = Guid.NewGuid().ToString().Substring(0, 8);
-                data.ProgId = null;
-                data.AuthLevel = 1;
-
-                var node = new TreeNode(name);
-                node.Tag = data;
-
-                tvMenu.Nodes.Add(node);
+                var data = new MenuNodeData { MenuId = Guid.NewGuid().ToString().Substring(0, 8), ProgId = null, AuthLevel = 1 };
+                tvMenu.Nodes.Add(new TreeNode(name) { Tag = data });
             }
         }
 
-        /// <summary>
-        /// ¼±ÅÃµÈ ³ëµåÀÇ ÀÚ½Ä ³ëµå¸¦ Ãß°¡ÇÕ´Ï´Ù. ÀÌ¸§Àº »ç¿ëÀÚ ÀÔ·ÂÀ¸·Î ¹Ş½À´Ï´Ù.
-        /// </summary>
         private void AddChildNode()
         {
             if (tvMenu.SelectedNode == null) return;
-            string name = Prompt.ShowDialog("ÀÚ½Ä ¸Ş´º ÀÌ¸§À» ÀÔ·ÂÇÏ¼¼¿ä:", "ÀÚ½Ä Ãß°¡");
+            string name = XtraInputBox.Show("ìì‹ ë©”ë‰´ ì´ë¦„ì„ ì…ë ¥í•˜ì„¸ìš”:", "ìì‹ ì¶”ê°€", "");
             if (!string.IsNullOrEmpty(name))
             {
-                var data = new MenuNodeData();
-                data.MenuId = Guid.NewGuid().ToString().Substring(0, 8);
-                data.ProgId = null;
-                data.AuthLevel = 1;
-
-                var node = new TreeNode(name);
-                node.Tag = data;
-
-                tvMenu.SelectedNode.Nodes.Add(node);
+                var data = new MenuNodeData { MenuId = Guid.NewGuid().ToString().Substring(0, 8), ProgId = null, AuthLevel = 1 };
+                tvMenu.SelectedNode.Nodes.Add(new TreeNode(name) { Tag = data });
                 tvMenu.SelectedNode.Expand();
             }
         }
 
-        /// <summary>
-        /// ÇÁ·Î±×·¥ ¸®½ºÆ®¿¡¼­ Ç×¸ñÀ» ´õºíÅ¬¸¯ÇÏ¸é ¼±ÅÃµÈ Æ®¸® ³ëµåÀÇ ÀÚ½ÄÀ¸·Î Ãß°¡µË´Ï´Ù. ÇÁ·Î±×·¥ ³ëµå´Â ÆÄ¶õ»öÀ¸·Î Ç¥½ÃµË´Ï´Ù.
-        /// </summary>
-        private void LbPrograms_DoubleClick(object sender, EventArgs e)
-        {
-            if (lbPrograms.SelectedItem is ProgramItem prog && tvMenu.SelectedNode != null)
-            {
-                var data = new MenuNodeData();
-                data.MenuId = Guid.NewGuid().ToString().Substring(0, 8);
-                data.ProgId = prog.ProgId;
-                data.AuthLevel = 1;
-
-                var node = new TreeNode(prog.ProgName);
-                node.Tag = data;
-                node.ForeColor = Color.Blue;
-
-                tvMenu.SelectedNode.Nodes.Add(node);
-                tvMenu.SelectedNode.Expand();
-            }
-        }
-
-        /// <summary>
-        /// ÇöÀç ¼±ÅÃµÈ ³ëµå¸¦ »èÁ¦ÇÕ´Ï´Ù. »ç¿ëÀÚ¿¡°Ô È®ÀÎÀ» ¿äÃ»ÇÕ´Ï´Ù.
-        /// </summary>
         private void DeleteNode()
         {
             if (tvMenu.SelectedNode != null)
             {
-                if (MessageBox.Show("ÀÌ ¸Ş´º¸¦ Á¤¸»·Î »èÁ¦ÇÏ½Ã°Ú½À´Ï±î?", "È®ÀÎ", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                if (XtraMessageBox.Show("ì´ ë©”ë‰´ë¥¼ ì‚­ì œí•˜ì‹œê² ìŠµë‹ˆê¹Œ?", "í™•ì¸", MessageBoxButtons.YesNo) == DialogResult.Yes)
                     tvMenu.SelectedNode.Remove();
             }
         }
 
-        /// <summary>
-        /// TreeViewÀÇ ÇöÀç ±¸¼ºÀ» SYS_MENU Å×ÀÌºí¿¡ ÀúÀåÇÕ´Ï´Ù.
-        /// ±âÁ¸ ·¹ÄÚµå´Â ¸ğµÎ »èÁ¦ÇÑ ÈÄ Àç»ğÀÔÇÕ´Ï´Ù. Æ®·£Àè¼ÇÀ¸·Î ¾ÈÀüÇÏ°Ô Ã³¸®ÇÕ´Ï´Ù.
-        /// </summary>
-        private void SaveMenu()
+        private void LbPrograms_DoubleClick(object? sender, EventArgs e)
         {
-            using (var conn = new SQLiteConnection(_dbManager.GetConnectionString()))
+            if (lbPrograms.SelectedItem is ProgramItem item && tvMenu.SelectedNode != null)
             {
-                conn.Open();
-                using (var trans = conn.BeginTransaction())
+                var data = tvMenu.SelectedNode.Tag as MenuNodeData;
+                if (data != null)
                 {
-                    try
-                    {
-                        new SQLiteCommand("DELETE FROM SYS_MENU", conn).ExecuteNonQuery();
-
-                        SaveNodesRecursive(tvMenu.Nodes, null, conn);
-
-                        trans.Commit();
-                        MessageBox.Show("¸Ş´º ±¸¼ºÀÌ ÀúÀåµÇ¾ú½À´Ï´Ù!", "¿Ï·á", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
-                    catch (Exception ex)
-                    {
-                        trans.Rollback();
-                        MessageBox.Show($"¸Ş´º ÀúÀå ½ÇÆĞ: {ex.Message}", "¿À·ù", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
+                    data.ProgId = item.ProgId;
+                    tvMenu.SelectedNode.Text = item.ProgName;
+                    tvMenu.SelectedNode.ForeColor = Color.Blue;
                 }
             }
         }
 
-        /// <summary>
-        /// Æ®¸® ³ëµå ÄÃ·º¼ÇÀ» Àç±ÍÀûÀ¸·Î ¼øÈ¸ÇÏ¸ç DB¿¡ INSERT Äõ¸®¸¦ ½ÇÇàÇÕ´Ï´Ù.
-        /// °¢ ³ëµåÀÇ Á¤·Ä ¼ø¼­´Â sort º¯¼ö·Î Á¦¾îµÇ¸ç, ÀÚ½Ä ±×·ì ³»¿¡¼­ 10 ´ÜÀ§·Î Áõ°¡ÇÕ´Ï´Ù.
-        /// </summary>
-        private void SaveNodesRecursive(TreeNodeCollection nodes, string parentId, SQLiteConnection conn)
+        private void SaveMenu()
+        {
+            try
+            {
+                _dbManager.BeginTransaction();
+                _dbManager.ExecuteNonQuery("DELETE FROM SYS_MENU");
+                SaveNodesRecursive(tvMenu.Nodes, null);
+                _dbManager.CommitTransaction();
+                XtraMessageBox.Show("ë©”ë‰´ê°€ ì €ì¥ë˜ì—ˆìŠµë‹ˆë‹¤!", "ì™„ë£Œ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                _dbManager.RollbackTransaction();
+                XtraMessageBox.Show($"ë©”ë‰´ ì €ì¥ ì‹¤íŒ¨: {ex.Message}", "ì˜¤ë¥˜", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void SaveNodesRecursive(TreeNodeCollection nodes, string? parentId)
         {
             int sort = 10;
             foreach (TreeNode node in nodes)
             {
                 var data = node.Tag as MenuNodeData;
-                string sql = @"INSERT INTO SYS_MENU (MENU_ID, PARENT_ID, MENU_NAME, PROG_ID, SORT_ORD, AUTH_LEVEL) 
+                if (data == null) continue;
+
+                string sql = @"INSERT INTO SYS_MENU (MENU_ID, PARENT_ID, MENU_NAME, PROG_ID, SORT_ORD, AUTH_LEVEL)
                                VALUES (@id, @pid, @name, @prog, @sort, @auth)";
 
-                using (var cmd = new SQLiteCommand(sql, conn))
+                var parameters = new Dictionary<string, object>
                 {
-                    cmd.Parameters.AddWithValue("@id", data.MenuId);
-                    cmd.Parameters.AddWithValue("@pid", (object)parentId ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("@name", node.Text);
-                    cmd.Parameters.AddWithValue("@prog", (object)data.ProgId ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("@sort", sort);
-                    cmd.Parameters.AddWithValue("@auth", data.AuthLevel);
-                    cmd.ExecuteNonQuery();
-                }
+                    { "@id", data.MenuId },
+                    { "@pid", (object?)parentId ?? DBNull.Value },
+                    { "@name", node.Text },
+                    { "@prog", (object?)data.ProgId ?? DBNull.Value },
+                    { "@sort", sort },
+                    { "@auth", data.AuthLevel }
+                };
 
-                SaveNodesRecursive(node.Nodes, data.MenuId, conn);
+                _dbManager.ExecuteNonQuery(sql, parameters);
+
+                SaveNodesRecursive(node.Nodes, data.MenuId);
                 sort += 10;
             }
         }
-    }
 
-    // µµ¿ì¹Ì(Helper) Å¬·¡½ºµé
-    class ProgramItem
-    {
-        public string ProgId { get; set; }
-        public string ProgName { get; set; }
-        public string ModuleId { get; set; }
-        public string IsActive { get; set; }
-        public int ProgType { get; set; }
-        public string DisplayInfo => $"[{ModuleId}] {ProgName} ({ProgId})";
-    }
-
-    class MenuNodeData
-    {
-        public string MenuId { get; set; }
-        public string ProgId { get; set; }
-        public int AuthLevel { get; set; }
-    }
-
-    public static class Prompt
-    {
-        /// <summary>
-        /// °£´ÜÇÑ ÀÔ·Â ´ëÈ­»óÀÚ¸¦ Ç¥½ÃÇÏ°í »ç¿ëÀÚ°¡ ÀÔ·ÂÇÑ ¹®ÀÚ¿­À» ¹İÈ¯ÇÕ´Ï´Ù.
-        /// Ãë¼ÒÇÏ°Å³ª ºó °ªÀÌ¸é ºó ¹®ÀÚ¿­À» ¹İÈ¯ÇÕ´Ï´Ù.
-        /// </summary>
-        public static string ShowDialog(string text, string caption)
+        class ProgramItem
         {
-            Form prompt = new Form()
-            {
-                Width = 500,
-                Height = 150,
-                FormBorderStyle = FormBorderStyle.FixedDialog,
-                Text = caption,
-                StartPosition = FormStartPosition.CenterScreen
-            };
-            Label textLabel = new Label() { Left = 50, Top = 20, Text = text };
-            TextBox textBox = new TextBox() { Left = 50, Top = 50, Width = 400 };
-            Button confirmation = new Button() { Text = "È®ÀÎ", Left = 350, Width = 100, Top = 70, DialogResult = DialogResult.OK };
-            confirmation.Click += (sender, e) => { prompt.Close(); };
-            prompt.Controls.Add(textBox);
-            prompt.Controls.Add(confirmation);
-            prompt.Controls.Add(textLabel);
-            prompt.AcceptButton = confirmation;
+            public string? ProgId { get; set; }
+            public string? ProgName { get; set; }
+            public string? ModuleId { get; set; }
+            public string? IsActive { get; set; }
+            public int ProgType { get; set; }
+            public string DisplayInfo => $"[{ModuleId}] {ProgName} ({ProgId})";
+        }
 
-            return prompt.ShowDialog() == DialogResult.OK ? textBox.Text : "";
+        class MenuNodeData
+        {
+            public string? MenuId { get; set; }
+            public string? ProgId { get; set; }
+            public int AuthLevel { get; set; }
         }
     }
 }

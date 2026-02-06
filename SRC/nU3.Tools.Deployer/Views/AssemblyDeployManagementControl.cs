@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,13 +10,16 @@ using nU3.Connectivity;
 using nU3.Connectivity.Implementations;
 using nU3.Core.Repositories;
 using nU3.Models;
+using nU3.Core.UI; // BaseWorkControl
+using DevExpress.XtraGrid.Views.Grid; // GridView
+using DevExpress.XtraGrid.Columns; // GridColumn
 
 namespace nU3.Tools.Deployer.Views
 {
     /// <summary>
     /// 프레임워크 구성요소(Component: DLL/EXE 등)의 배포를 관리하는 사용자 컨트롤입니다.
     /// </summary>
-    public partial class AssemblyDeployManagementControl : UserControl
+    public partial class AssemblyDeployManagementControl : BaseWorkControl
     {
         // 주입되는 리포지토리 및 파일전송 서비스
         private IComponentRepository _componentRepo;
@@ -24,7 +28,7 @@ namespace nU3.Tools.Deployer.Views
         // 서버 상의 컴포넌트 루트 경로 (기본: "Patch")
         private string _serverComponentPath = "Patch";
 
-        // 서버 전송 사용 여부 (설정에 따라 true/false) 
+        // 서버 전송 사용 여부 (설정에 따라 true/false)
         private bool _useServerTransfer = true;
 
         // 내부 데이터 캐시
@@ -49,10 +53,12 @@ namespace nU3.Tools.Deployer.Views
             { ComponentType.Other,           ("",                  500, false) },
         };
 
+        /// <summary>
+        /// Designer 전용 생성자입니다.
+        /// </summary>
         public AssemblyDeployManagementControl()
         {
             InitializeComponent();
-
             Dock = DockStyle.Fill;
         }
 
@@ -80,19 +86,50 @@ namespace nU3.Tools.Deployer.Views
                 }
             }
 
+            SetupGrids();
             LoadData();
         }
 
-        private void BtnRefresh_Click(object sender, EventArgs e)
+        private void SetupGrids()
+        {
+            // Main Grid
+            _gvComponents.Columns.Clear();
+            AddGridColumn(_gvComponents, "ComponentId", "ID", 150);
+            AddGridColumn(_gvComponents, "ComponentType", "Type", 100);
+            AddGridColumn(_gvComponents, "ComponentName", "Name", 150);
+            AddGridColumn(_gvComponents, "FileName", "File", 150);
+            AddGridColumn(_gvComponents, "InstallPath", "Path", 150);
+            AddGridColumn(_gvComponents, "Priority", "Priority", 60);
+            
+            _gvComponents.OptionsBehavior.Editable = false;
+            _gvComponents.OptionsView.ShowGroupPanel = false;
+            _gvComponents.SelectionChanged += DgvComponents_SelectionChanged;
+
+            // Version Grid
+            _gvVersions.Columns.Clear();
+            AddGridColumn(_gvVersions, "Version", "Version", 80);
+            AddGridColumn(_gvVersions, "FileHash", "Hash", 100);
+            AddGridColumn(_gvVersions, "FileSize", "Size", 80);
+            AddGridColumn(_gvVersions, "IsActive", "Active", 60);
+            AddGridColumn(_gvVersions, "RegDate", "Date", 120);
+
+            _gvVersions.OptionsBehavior.Editable = false;
+            _gvVersions.OptionsView.ShowGroupPanel = false;
+        }
+
+        private void AddGridColumn(GridView view, string fieldName, string caption, int width)
+        {
+            var col = view.Columns.AddVisible(fieldName, caption);
+            col.Width = width;
+        }
+
+        private void BtnRefresh_Click(object? sender, EventArgs e)
         {
             LoadData();
         }
 
         private void TxtFileName_TextChanged(object sender, EventArgs e) => UpdatePathPreview();
         private void TxtInstallPath_TextChanged(object sender, EventArgs e) => UpdatePathPreview();
-
-
-
 
         private void CboComponentType_SelectedIndexChanged(object? sender, EventArgs e)
         {
@@ -167,12 +204,14 @@ namespace nU3.Tools.Deployer.Views
             }
         }
 
-        private void DgvComponents_SelectionChanged(object? sender, EventArgs e)
+        private void DgvComponents_SelectionChanged(object? sender, DevExpress.Data.SelectionChangedEventArgs e)
         {
-            if (_dgvComponents.CurrentRow == null || _componentRepo == null || _editRows == null || _editRows.Count == 0) return;
-            if (_dgvComponents.CurrentRow.Index >= _editRows.Count) return;
+            if (_gvComponents.SelectedRowsCount <= 0 || _componentRepo == null || _editRows == null || _editRows.Count == 0) return;
+            
+            var rowHandle = _gvComponents.GetSelectedRows()[0];
+            if (rowHandle < 0 || rowHandle >= _editRows.Count) return;
 
-            var row = _editRows[_dgvComponents.CurrentRow.Index];
+            var row = _editRows[rowHandle];
             var component = _components.FirstOrDefault(c => c.ComponentId == row.ComponentId);
 
             if (component != null)
@@ -315,8 +354,6 @@ namespace nU3.Tools.Deployer.Views
 
             try
             {
-                // 하위 폴더의 모든 파일을 포함하여 배포 (재귀적 탐색)
-                // 예: nU3.Core/ko/, nU3.Core/en/ 하위 폴더 파일들도 배포됨
                 var files = Directory.GetFiles(fbd.SelectedPath, "*.*", SearchOption.AllDirectories)
                     .Where(f => f.EndsWith(".dll", StringComparison.OrdinalIgnoreCase)
                                 || f.EndsWith(".exe", StringComparison.OrdinalIgnoreCase)
@@ -333,21 +370,20 @@ namespace nU3.Tools.Deployer.Views
                     MessageBox.Show("배포할 파일이 없습니다.", "확인", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return;
                 }
-                
-                // 하위 폴더 구조 정보 표시
+
                 var rootDirectory = fbd.SelectedPath;
                 var folderInfo = $"최종 폴더: {rootDirectory}";
                 var totalFiles = $"총 파일 수: {files.Length:N0}개";
-                var fileInfo = files.Length > 0 
+                var fileInfo = files.Length > 0
                     ? $"\n예시 파일:\n{files[0]}\n{files[Math.Min(1, files.Length - 1)]}"
                     : "";
-                
+
                 var message = $"{folderInfo}\n{totalFiles}{fileInfo}\n\n계속 하시겠습니까?";
-                
+
                 if (MessageBox.Show(message, "폴더 배포 확인",
                     MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
                     return;
-                
+
                 await RunDeployAsync(files, rootDirectory);
             }
             catch (Exception ex)
@@ -360,13 +396,13 @@ namespace nU3.Tools.Deployer.Views
         {
             if (filePaths.Length == 0)
                 return;
-            
+
             ToggleUiEnabled(false);
-            
+
             try
             {
                 var result = await DeployFilesAsync(filePaths, rootDirectory);
-                
+
                 var msg = result.failed > 0 ? $"{result.success}개 성공, {result.failed}개 실패" : $"{result.success}개 파일 배포 완료!";
                 MessageBox.Show(msg, "배포 결과", MessageBoxButtons.OK, result.failed > 0 ? MessageBoxIcon.Warning : MessageBoxIcon.Information);
                 LoadData();
@@ -385,40 +421,30 @@ namespace nU3.Tools.Deployer.Views
         {
             int success = 0;
             int failed = 0;
-            
-            // 루트 폴더 경로 저장 (전역 변수 필요 시 메서드 파라미터로 추가)
-            // fbd는 이벤트 핸들러에서 접근할 수 없으므로, 
-            // BtnBulkDeploy_Click에서 전달된 rootDirectory를 저장하거나
-            // 파일 경로에서 루트 폴더를 계산할 수 있음
-            
+
             if (string.IsNullOrEmpty(rootDirectory))
             {
-                // 파일 경로에서 공통 상위 폴더 추정
                 var directories = filePaths.Select(Path.GetDirectoryName).Distinct().ToList();
                 rootDirectory = directories.Count == 1 ? directories.First() : "";
             }
-            
+
             string homeDirectory = string.Empty;
             if (_useServerTransfer && _fileTransferService != null)
             {
                 homeDirectory = await _fileTransferService.GetHomeDirectoryAsync();
                 Console.WriteLine($"Home Directory: {homeDirectory}");
             }
-            
-            // 하위 폴더 포함 배포 로깅
+
             Console.WriteLine($"Root Directory: {rootDirectory}");
             Console.WriteLine($"Deploying {filePaths.Length} files...");
-            
+
             foreach (var filePath in filePaths)
             {
                 try
                 {
-                    // 파일이 루트 폴더 외부에 있는 경우 처리 필요
-                    // (현재 코드에서는 모든 파일이 루트 폴더 내에 있다고 가정)
                     await DeployFileAsync(filePath, homeDirectory, rootDirectory);
                     success++;
-                    
-                    // 진행 상태 로그 (파일명만 표시)
+
                     var relativePath = string.IsNullOrEmpty(rootDirectory)
                         ? Path.GetFileName(filePath)
                         : filePath.Substring(rootDirectory.Length).TrimStart('\\', '/');
@@ -430,26 +456,16 @@ namespace nU3.Tools.Deployer.Views
                     System.Diagnostics.Debug.WriteLine($"Failed to deploy {filePath}: {ex.Message}");
                 }
             }
-            
+
             return (success, failed);
         }
 
-        /// <summary>
-        /// 파일 배포 - 서버로 업로드 또는 로컬 저장
-        /// 
-        /// 하위 폴더 구조 유지:
-        /// 예: "nU3.Core/ko/nU3.Core.resources.dll" 파일이 있을 때
-        ///     - ComponentId: "nU3.Core.resources.dll"
-        ///     - StoragePath: "Modules/nU3.Core/ko/nU3.Core.resources.dll"
-        ///     - 하위 폴더 경로가 그대로 보존됨
-        /// </summary>
         private async Task DeployFileAsync(string filePath, string homeDirectory, string rootDirectory = null)
         {
             var fileInfo = new FileInfo(filePath);
             var fileName = fileInfo.Name;
             var isExe = fileName.EndsWith(".exe", StringComparison.OrdinalIgnoreCase);
-            
-            // Get version
+
             string version = "1.0.0.0";
             try
             {
@@ -461,115 +477,90 @@ namespace nU3.Tools.Deployer.Views
                 var versionInfo = System.Diagnostics.FileVersionInfo.GetVersionInfo(filePath);
                 version = versionInfo.FileVersion ?? "1.0.0.0";
             }
-            
-            // ========================================
-            // ComponentId 생성 - 하위 폴더 경로 포함하여 고유성 보장
-            // ========================================
-            // 문제: 동일 파일명이 다른 폴더에 있을 때 ComponentId 중복
-            // 예: ko/nU3.Core.resources.dll, en/nU3.Core.resources.dll
-            // 해결: 하위 폴더 경로를 포함하여 ComponentId 생성
+
             string componentId;
             string relativeSubfolder = "";
-            
+
             if (!string.IsNullOrEmpty(rootDirectory) && filePath.StartsWith(rootDirectory, StringComparison.OrdinalIgnoreCase))
             {
-                // 하위 폴더 경로 추출
                 var relativePath = filePath.Substring(rootDirectory.Length);
-                
-                // 앞뒤 슬래시 제거
+
                 while (relativePath.Length > 0 && (relativePath[0] == '\\' || relativePath[0] == '/'))
                 {
                     relativePath = relativePath.Substring(1);
                 }
-                
-                // 상대 경로를 하위 폴더 + 파일명 형식으로 변환
-                // 예: "ko/nU3.Core.resources.dll"
+
                 relativePath = relativePath.Replace("\\", "/");
-                
-                // 파일명만 분리
+
                 var lastSlashIndex = relativePath.LastIndexOf('/');
                 if (lastSlashIndex >= 0)
                 {
-                    relativeSubfolder = relativePath.Substring(0, lastSlashIndex + 1); // "ko/"
-                    componentId = relativePath; // "ko/nU3.Core.resources.dll"
+                    relativeSubfolder = relativePath.Substring(0, lastSlashIndex + 1);
+                    componentId = relativePath;
                 }
                 else
                 {
-                    componentId = fileName; // 하위 폴더 없음
+                    componentId = fileName;
                 }
             }
             else
             {
-                // 루트 폴더 밖의 파일 또는 루트 폴더 지정 안됨
                 componentId = fileName;
             }
-            
+
             Console.WriteLine($"Deploying: {componentId}");
-            
-            // Determine type and defaults
+
             var componentType = DetermineComponentType(componentId, isExe);
             var defaults = ComponentTypeDefaults[componentType];
             var groupName = DetermineGroupName(componentId);
-            
+
             var hash = CalculateFileHash(filePath);
             var storagePath = string.Empty;
-            
-            // ========================================
-            // 서버로 업로드 또는 로컬 저장
-            // ========================================
+
             if (_useServerTransfer && _fileTransferService != null)
             {
                 try
                 {
-                    // 하위 폴더 경로 계산
                     var relativePath = fileName;
-                    
+
                     if (!string.IsNullOrEmpty(rootDirectory) && filePath.StartsWith(rootDirectory, StringComparison.OrdinalIgnoreCase))
                     {
-                        // 상대 경로 계산
                         relativePath = filePath.Substring(rootDirectory.Length);
-                        
-                        // 앞뒤 슬래시 제거
+
                         while (relativePath.Length > 0 && (relativePath[0] == '\\' || relativePath[0] == '/'))
                         {
                             relativePath = relativePath.Substring(1);
                         }
-                        
-                        // 슬래시를 '/'로 정규화
+
                         relativePath = relativePath.Replace("\\", "/");
                     }
-                    
-                    // 기본 InstallPath와 상대 경로 결합
+
                     var fullPath = string.IsNullOrWhiteSpace(defaults.InstallPath)
                         ? relativePath
                         : $"{defaults.InstallPath.TrimEnd('/', '\\')}/{relativePath}";
-                    
+
                     var serverPath = string.IsNullOrWhiteSpace(homeDirectory)
                         ? $"{_serverComponentPath}/{fullPath}"
                         : $"{homeDirectory.TrimEnd('/', '\\')}/{_serverComponentPath}/{fullPath}";
-                    
+
                     Console.WriteLine($"Uploading to server: {serverPath}");
                     var success = await _fileTransferService.UploadFileAsync(filePath, serverPath);
-                    
+
                     if (!success)
                     {
                         throw new InvalidOperationException($"Server upload failed: {serverPath}");
                     }
-                    
+
                     storagePath = serverPath;
                     Console.WriteLine($"Uploaded: {fileName} (path: {serverPath})");
                 }
                 catch (Exception ex)
                 {
-                    // Upload failed - fall back to local storage path
                     System.Diagnostics.Debug.WriteLine($"Upload failed for {filePath}: {ex.Message}");
                     storagePath = filePath;
                 }
             }
-            
-            // ========================================
-            // Create or update component metadata
-            // ========================================
+
             var existing = _componentRepo.GetComponent(componentId);
             if (existing == null)
             {
@@ -601,13 +592,10 @@ namespace nU3.Tools.Deployer.Views
                 {
                     existing.ComponentName = componentId;
                 }
-                
+
                 _componentRepo.SaveComponent(existing);
             }
-            
-            // ========================================
-            // Add version
-            // ========================================
+
             _componentRepo.DeactivateOldVersions(componentId);
             _componentRepo.AddVersion(new ComponentVerDto
             {
@@ -623,13 +611,9 @@ namespace nU3.Tools.Deployer.Views
 
         private static ComponentType DetermineComponentType(string componentId, bool isExe)
         {
-            // ComponentId에는 하위 폴더 경로가 포함되어 있을 수 있음
-            // 예: "ko/nU3.Core.resources.dll", "en/nU3.Core.resources.dll"
-            // 파일명만 추출하여 타입 판별
-            
-            var fileName = Path.GetFileName(componentId);  // 파일명만: "nU3.Core.resources.dll"
-            var baseName = Path.GetFileNameWithoutExtension(fileName);  // 확장자 제거: "nU3.Core.resources"
-            
+            var fileName = Path.GetFileName(componentId);
+            var baseName = Path.GetFileNameWithoutExtension(fileName);
+
             if (isExe) return ComponentType.Executable;
             if (baseName.StartsWith("nU3.Core", StringComparison.OrdinalIgnoreCase)) return ComponentType.FrameworkCore;
             if (baseName.StartsWith("nU3.Modules", StringComparison.OrdinalIgnoreCase)) return ComponentType.ScreenModule;
@@ -639,13 +623,9 @@ namespace nU3.Tools.Deployer.Views
 
         private static string DetermineGroupName(string componentId)
         {
-            // ComponentId에는 하위 폴더 경로가 포함되어 있을 수 있음
-            // 예: "ko/nU3.Core.resources.dll", "en/nU3.Core.resources.dll"
-            // 파일명만 추출하여 그룹 판별
-            
-            var fileName = Path.GetFileName(componentId);  // 파일명만: "nU3.Core.resources.dll"
-            var baseName = Path.GetFileNameWithoutExtension(fileName);  // 확장자 제거
-            
+            var fileName = Path.GetFileName(componentId);
+            var baseName = Path.GetFileNameWithoutExtension(fileName);
+
             if (baseName.StartsWith("nU3", StringComparison.OrdinalIgnoreCase)) return "Framework";
             if (baseName.StartsWith("DevExpress", StringComparison.OrdinalIgnoreCase)) return "DevExpress";
             if (baseName.StartsWith("Oracle", StringComparison.OrdinalIgnoreCase)) return "Oracle";
@@ -672,7 +652,6 @@ namespace nU3.Tools.Deployer.Views
 
             try
             {
-                // 순수 동기 호출 - UI가 잠깐 멈추지만 데드락 없이 완료되어야 함
                 Cursor = Cursors.WaitCursor;
 
                 string homeDir = _fileTransferService.GetHomeDirectory();
@@ -681,8 +660,6 @@ namespace nU3.Tools.Deployer.Views
                 _fileTransferService.SetHomeDirectory(true, "D:\\temp\\xxx");
 
                 success = _fileTransferService.UploadFile("D:\\temp\\filelist.txt.x", "D:\\temp\\filelist.txt.xx");
-
-                //_fileTransferService.CreateDirectory("TestSyncPath");
 
                 if (success)
                     MessageBox.Show("Sync 호출 성공! (데드락 없음)" + homeDir, "테스트 완료", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -709,7 +686,6 @@ namespace nU3.Tools.Deployer.Views
 
             try
             {
-                // 비동기 호출 - UI 프리징 없이 매끄럽게 동작함
                 ToggleUiEnabled(false);
                 bool success = await _fileTransferService.CreateDirectoryAsync("D:\\temp\\TestAsyncPath");
 

@@ -1,0 +1,321 @@
+using System;
+using System.Data;
+using System.IO;
+using nU3.Connectivity;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+
+namespace nU3.Server.Connectivity.Services
+{
+    /// <summary>
+    /// SQLite 스키마 초기화 서비스
+    ///
+    /// 역할:
+    /// - 구성에서 SQLite가 사용되도록 설정된 경우 데이터베이스 파일 경로를 확인하고 필요한 디렉토리를 생성합니다.
+    /// - 기본 테이블을 생성하고 초기 데이터를 시드합니다.
+    /// - 주로 서버 스타트업 시 호출되어 로컬 SQLite 파일 기반의 POC 또는 로컬 모드 환경을 준비합니다.
+    ///
+    /// 주의사항:
+    /// - 이 서비스는 SQLite 전용이며, 구성에서 Provider가 'Sqlite' 또는 'SQLite'로 설정되어 있을 때만 동작합니다.    
+    /// </summary>
+    public class SqliteSchemaService
+    {
+        private readonly IDBAccessService _db;
+        private readonly ILogger<SqliteSchemaService> _logger;
+        private readonly IConfiguration _config;
+
+        public SqliteSchemaService(IDBAccessService db, ILogger<SqliteSchemaService> logger, IConfiguration config)
+        {
+            _db = db;
+            _logger = logger;
+            _config = config;
+        }
+
+        /// <summary>
+        /// SQLite 스키마를 검증하고 필요하면 테이블을 생성한 뒤 초기 데이터를 시드합니다.
+        /// 구성 경로:
+        /// - ServerSettings:Database:Provider              : 데이터베이스 공급자
+        /// - ServerSettings:Database:Connections:Sqlite    : SQLite 연결 문자열
+        /// - ServerSettings:Database:DbDirectory           : 상대 경로일 경우 기준이 되는 디렉토리
+        /// </summary>
+        public void Initialize()
+        {
+            try
+            {
+                // 1) 구성에서 DB 공급자 확인
+                var provider = _config.GetValue<string>("ServerSettings:Database:Provider");
+                if (!string.Equals(provider, "Sqlite", StringComparison.OrdinalIgnoreCase) &&
+                    !string.Equals(provider, "SQLite", StringComparison.OrdinalIgnoreCase))
+                {
+                    _logger.LogInformation($"Current Provider is {provider}. Skipping SQLite initialization.");
+                    return;
+                }
+
+                _logger.LogInformation("Starting SQLite schema verification and initialization...");
+
+                // 2) 연결 문자열 획득
+                var connStr = _config.GetValue<string>("ServerSettings:Database:Connections:Sqlite");
+                if (string.IsNullOrEmpty(connStr))
+                {
+                    _logger.LogWarning("Sqlite connection string is missing in ServerSettings:Database:Connections.");
+                    return;
+                }
+
+                // 3) 데이터베이스 파일 경로 계산 (DbDirectory와 결합하여 절대 경로로 변환)
+                var dbDir = _config.GetValue<string>("ServerSettings:Database:DbDirectory") ?? "Server_Database";
+
+                var builder = new System.Data.Common.DbConnectionStringBuilder { ConnectionString = connStr };
+
+                if (builder.TryGetValue("Data Source", out var pathObj) && pathObj is string dbPath)
+                {
+                    // 상대 경로일 경우 ServerSettings:Database:DbDirectory 또는 AppContext.BaseDirectory를 기준으로 절대 경로 생성
+                    if (!Path.IsPathRooted(dbPath))
+                    {
+                        var basePath = Path.IsPathRooted(dbDir)
+                            ? dbDir
+                            : Path.Combine(AppContext.BaseDirectory, dbDir);
+
+                        dbPath = Path.GetFullPath(Path.Combine(basePath, dbPath));
+                        builder["Data Source"] = dbPath;
+
+                        // 참고: 여기서는 실제 _db의 연결 문자열을 직접 수정하지 않습니다.
+                        // 이 서비스의 목적은 파일/디렉토리 생성 보장에 집중합니다.
+                    }
+
+                    var dir = Path.GetDirectoryName(dbPath);
+                    if (!string.IsNullOrEmpty(dir) && !Directory.Exists(dir))
+                    {
+                        Directory.CreateDirectory(dir);
+                        _logger.LogInformation($"Created database directory: {dir}");
+                    }
+
+                    _logger.LogInformation($"Resolved Database file path: {dbPath}");
+                }
+
+                // 4) DB 연결 및 테이블 생성/시드
+                if (_db.Connect())
+                {
+                    CreateTables();
+                    _logger.LogInformation("Tables created or verified.");
+
+                    SeedInitialData();
+                    _logger.LogInformation("Initial seed data checked.");
+
+                    _logger.LogInformation("SQLite schema initialization completed successfully.");
+                }
+                else
+                {
+                    _logger.LogError("Failed to connect to SQLite database for initialization.");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error initializing SQLite schema.");
+            }
+        }
+
+        /// <summary>
+        /// 기본 데이터(역할, 관리자 계정 등)를 확인하고 없으면 삽입합니다.
+        /// 실패해도 전체 흐름을 중단하지 않도록 예외를 잡아서 경고 로그를 남깁니다.
+        /// </summary>
+        private void SeedInitialData()
+        {
+            try
+            {
+                var roleCount = Convert.ToInt32(_db.ExecuteScalarValue("SELECT COUNT(*) FROM SYS_ROLE"));
+                if (roleCount == 0)
+                {
+                    _db.ExecuteNonQuery("INSERT INTO SYS_ROLE (ROLE_CODE, ROLE_NAME, DESCRIPTION) VALUES ('ADMIN', '시스템 관리자', '전체 권한을 가진 관리자 계정')");
+                    _db.ExecuteNonQuery("INSERT INTO SYS_ROLE (ROLE_CODE, ROLE_NAME, DESCRIPTION) VALUES ('USER', '일반 사용자', '기본 기능을 사용하는 사용자')");
+                    _logger.LogInformation("Default roles seeded.");
+                }
+
+                var userCount = Convert.ToInt32(_db.ExecuteScalarValue("SELECT COUNT(*) FROM SYS_USER"));
+                if (userCount == 0)
+                {
+                    _db.ExecuteNonQuery(@"
+                        INSERT INTO SYS_USER (USER_ID, USERNAME, PASSWORD, EMAIL, ROLE_CODE, IS_ACTIVE) 
+                        VALUES ('admin', '관리자', '1234', 'admin@nu3.com', 'ADMIN', 'Y')");
+                    _logger.LogInformation("Default admin user seeded.");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning($"Failed to seed data: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// 애플리케이션이 필요로 하는 모든 테이블을 생성합니다.
+        /// 기존 테이블이 존재하면 영향을 주지 않습니다.
+        /// </summary>
+        private void CreateTables()
+        {
+            // 모듈 마스터
+            ExecuteSql(@"
+                CREATE TABLE IF NOT EXISTS SYS_MODULE_MST (
+                    MODULE_ID TEXT PRIMARY KEY,
+                    CATEGORY TEXT,
+                    SUBSYSTEM TEXT,
+                    MODULE_NAME TEXT,
+                    FILE_NAME TEXT NOT NULL,
+                    REG_DATE TEXT DEFAULT CURRENT_TIMESTAMP
+                );");
+
+            // 모듈 버전
+            ExecuteSql(@"
+                CREATE TABLE IF NOT EXISTS SYS_MODULE_VER (
+                    MODULE_ID TEXT,
+                    VERSION TEXT,
+                    FILE_HASH TEXT,
+                    FILE_SIZE INTEGER,
+                    STORAGE_PATH TEXT,
+                    DEPLOY_DESC TEXT,
+                    DEPLOY_DATE TEXT DEFAULT CURRENT_TIMESTAMP,
+                    DEPLOYER TEXT,
+                    DEL_DATE TEXT,
+                    PRIMARY KEY (MODULE_ID, VERSION)
+                );");
+
+            // 프로그램 마스터
+            ExecuteSql(@"
+                CREATE TABLE IF NOT EXISTS SYS_PROG_MST (
+                    PROG_ID TEXT PRIMARY KEY,
+                    MODULE_ID TEXT,
+                    CLASS_NAME TEXT,
+                    PROG_NAME TEXT,
+                    AUTH_LEVEL INTEGER DEFAULT 1,
+                    IS_ACTIVE TEXT DEFAULT 'N',
+                    PROG_TYPE INTEGER DEFAULT 1,
+                    FOREIGN KEY(MODULE_ID) REFERENCES SYS_MODULE_MST(MODULE_ID)
+                );");
+
+            // 메뉴 마스터
+            ExecuteSql(@"
+                CREATE TABLE IF NOT EXISTS SYS_MENU (
+                    MENU_ID TEXT PRIMARY KEY,
+                    PARENT_ID TEXT,
+                    MENU_NAME TEXT,
+                    PROG_ID TEXT,
+                    ICON_RES TEXT,
+                    SORT_ORD INTEGER,
+                    SHORTCUT TEXT,
+                    AUTH_LEVEL INTEGER DEFAULT 1,
+                    FOREIGN KEY(PROG_ID) REFERENCES SYS_PROG_MST(PROG_ID)
+                );");
+
+            // 컴포넌트 마스터
+            ExecuteSql(@"
+                CREATE TABLE IF NOT EXISTS SYS_COMPONENT_MST (
+                    COMPONENT_ID TEXT PRIMARY KEY,
+                    COMPONENT_TYPE INTEGER NOT NULL DEFAULT 0,
+                    COMPONENT_NAME TEXT NOT NULL,
+                    FILE_NAME TEXT NOT NULL,
+                    INSTALL_PATH TEXT,
+                    GROUP_NAME TEXT,
+                    IS_REQUIRED INTEGER DEFAULT 0,
+                    AUTO_UPDATE INTEGER DEFAULT 1,
+                    DESCRIPTION TEXT,
+                    PRIORITY INTEGER DEFAULT 100,
+                    DEPENDENCIES TEXT,
+                    REG_DATE TEXT DEFAULT CURRENT_TIMESTAMP,
+                    MOD_DATE TEXT,
+                    IS_ACTIVE TEXT DEFAULT 'Y'
+                );");
+
+            // 컴포넌트 버전
+            ExecuteSql(@"
+                CREATE TABLE IF NOT EXISTS SYS_COMPONENT_VER (
+                    COMPONENT_ID TEXT,
+                    VERSION TEXT,
+                    FILE_HASH TEXT,
+                    FILE_SIZE INTEGER,
+                    STORAGE_PATH TEXT,
+                    MIN_FRAMEWORK_VER TEXT,
+                    MAX_FRAMEWORK_VER TEXT,
+                    DEPLOY_DESC TEXT,
+                    RELEASE_NOTE_URL TEXT,
+                    REG_DATE TEXT DEFAULT CURRENT_TIMESTAMP,
+                    DEL_DATE TEXT,
+                    IS_ACTIVE TEXT DEFAULT 'Y',
+                    PRIMARY KEY (COMPONENT_ID, VERSION),
+                    FOREIGN KEY(COMPONENT_ID) REFERENCES SYS_COMPONENT_MST(COMPONENT_ID)
+                );");
+
+            // 클라이언트 컴포넌트
+            ExecuteSql(@"
+                CREATE TABLE IF NOT EXISTS SYS_CLIENT_COMPONENT (
+                    COMPONENT_ID TEXT PRIMARY KEY,
+                    INSTALLED_VERSION TEXT,
+                    INSTALLED_PATH TEXT,
+                    INSTALLED_DATE TEXT,
+                    FILE_HASH TEXT
+                );");
+
+            // 시스템 사용자
+            ExecuteSql(@"
+                CREATE TABLE IF NOT EXISTS SYS_USER (
+                    USER_ID TEXT PRIMARY KEY,
+                    USERNAME TEXT NOT NULL,
+                    PASSWORD TEXT,
+                    EMAIL TEXT,
+                    PERMISSION_LEVEL TEXT DEFAULT '1',
+                    CREATED_DATE TEXT DEFAULT CURRENT_TIMESTAMP,
+                    LAST_LOGIN TEXT,
+                    IS_ACTIVE TEXT DEFAULT 'Y',
+                    ROLE_CODE TEXT
+                );");
+
+            // 시스템 역할
+            ExecuteSql(@"
+                CREATE TABLE IF NOT EXISTS SYS_ROLE (
+                    ROLE_CODE TEXT PRIMARY KEY,
+                    ROLE_NAME TEXT NOT NULL,
+                    DESCRIPTION TEXT
+                );");
+
+            // 시스템 부서
+            ExecuteSql(@"
+                CREATE TABLE IF NOT EXISTS SYS_DEPT (
+                    DEPT_CODE TEXT PRIMARY KEY,
+                    DEPT_NAME TEXT NOT NULL,
+                    PARENT_CODE TEXT,
+                    SORT_ORD INTEGER DEFAULT 0
+                );");
+
+            // 사용자-부서 매핑
+            ExecuteSql(@"
+                CREATE TABLE IF NOT EXISTS SYS_USER_DEPT (
+                    USER_ID TEXT,
+                    DEPT_CODE TEXT,
+                    PRIMARY KEY (USER_ID, DEPT_CODE),
+                    FOREIGN KEY(USER_ID) REFERENCES SYS_USER(USER_ID),
+                    FOREIGN KEY(DEPT_CODE) REFERENCES SYS_DEPT(DEPT_CODE)
+                );");
+
+            // 시스템 권한
+            ExecuteSql(@"
+                CREATE TABLE IF NOT EXISTS SYS_PERMISSION (
+                    PERM_ID INTEGER PRIMARY KEY AUTOINCREMENT,
+                    TARGET_TYPE TEXT NOT NULL, -- 'USER', 'ROLE', 'DEPT'
+                    TARGET_ID TEXT NOT NULL,   -- USER_ID, ROLE_CODE, DEPT_CODE
+                    PROG_ID TEXT NOT NULL,
+                    CAN_READ INTEGER DEFAULT 1,
+                    CAN_CREATE INTEGER DEFAULT 0,
+                    CAN_UPDATE INTEGER DEFAULT 0,
+                    CAN_DELETE INTEGER DEFAULT 0,
+                    CAN_PRINT INTEGER DEFAULT 0,
+                    CAN_EXPORT INTEGER DEFAULT 0,
+                    CAN_APPROVE INTEGER DEFAULT 0,
+                    CAN_CANCEL INTEGER DEFAULT 0,
+                    CUSTOM_JSON TEXT,
+                    UNIQUE(TARGET_TYPE, TARGET_ID, PROG_ID)
+                );");
+        }
+
+        private void ExecuteSql(string sql)
+        {
+            _db.ExecuteNonQuery(sql);
+        }
+    }
+}
