@@ -132,6 +132,7 @@ namespace nU3.Tools.Deployer
                 {
                     bsiStatus.Caption = $"🟢 {_serverBaseUrl}";
                     MessageBox.Show(
+                        this,
                         $"서버 연결 성공!\n\n" +
                         $"서버: {_serverBaseUrl}\n\n" +
                         $"✅ 데이터베이스: 연결됨\n" +
@@ -159,6 +160,7 @@ namespace nU3.Tools.Deployer
                     }
 
                     MessageBox.Show(
+                        this,
                         statusMessage.ToString(),
                         "연결 테스트 결과",
                         MessageBoxButtons.OK,
@@ -173,6 +175,7 @@ namespace nU3.Tools.Deployer
                 bsiStatus.Caption = $"🔴 {_serverBaseUrl} (오류)";
 
                 MessageBox.Show(
+                    this,
                     $"연결 테스트 중 오류 발생!\n\n{ex.Message}",
                     "오류",
                     MessageBoxButtons.OK,
@@ -196,20 +199,20 @@ namespace nU3.Tools.Deployer
             tabDeploy.Controls.Add(deployControl);
 
             // 2. Framework 컴포넌트 배포 
-            var tabComponent = new XtraTabPage { Text = "어셈블리모듈 배포" };
+            var tabComponent = new XtraTabPage { Text = "프레임워크모듈 배포" };
             var componentControl = new Views.AssemblyDeployManagementControl();            
             componentControl.Initialize(_componentRepo, _configuration);
             componentControl.Dock = DockStyle.Fill;
             tabComponent.Controls.Add(componentControl);
             
             // 3. 메뉴트리 관리
-            var tabMenu = new XtraTabPage { Text = "메뉴트리 관리" };
+            var tabMenu = new XtraTabPage { Text = "메뉴 관리" };
             var menuControl = new Views.MenuTreeManagementControl();
             menuControl.Dock = DockStyle.Fill;
             tabMenu.Controls.Add(menuControl);
 
             // 4. 사용자/권한 관리
-            var tabSecurity = new XtraTabPage { Text = "사용자 권한 관리" };
+            var tabSecurity = new XtraTabPage { Text = "권한 관리" };
             var securityControl = new Views.SecurityManagementControl();
             securityControl.Dock = DockStyle.Fill;
             tabSecurity.Controls.Add(securityControl);

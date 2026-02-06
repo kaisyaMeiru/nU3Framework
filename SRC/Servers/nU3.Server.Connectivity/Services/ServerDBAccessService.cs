@@ -157,8 +157,13 @@ namespace nU3.Server.Connectivity.Services
                     case JsonValueKind.Null:
                         return DBNull.Value;
                     default:
-                        // 객체나 배열은 원문 JSON 문자열로 변환하여 처리 시도
-                        return element.GetRawText();
+                        // 객체나 배열 처리 보강
+                        var rawText = element.GetRawText();
+                        // 빈 객체 {} 가 날짜 컬럼 등에서 넘어올 때 파싱 에러 방지를 위해 DBNull 처리
+                        if (rawText == "{}" || string.IsNullOrWhiteSpace(rawText))
+                            return DBNull.Value;
+                            
+                        return rawText;
                 }
             }
             return value ?? DBNull.Value;

@@ -321,8 +321,8 @@ namespace nU3.Data.Repositories
                 Description = row["DESCRIPTION"] == DBNull.Value ? null : row["DESCRIPTION"].ToString(),
                 Priority = Convert.ToInt32(row["PRIORITY"]),
                 Dependencies = row["DEPENDENCIES"] == DBNull.Value ? null : row["DEPENDENCIES"].ToString(),
-                RegDate = Convert.ToDateTime(row["REG_DATE"]),
-                ModDate = row["MOD_DATE"] == DBNull.Value ? null : Convert.ToDateTime(row["MOD_DATE"]),
+                RegDate = ParseDate(row["REG_DATE"]) ?? DateTime.Now,
+                ModDate = ParseDate(row["MOD_DATE"]),
                 IsActive = row["IS_ACTIVE"] == DBNull.Value ? "Y" : row["IS_ACTIVE"].ToString()
             };
         }
@@ -340,8 +340,8 @@ namespace nU3.Data.Repositories
                 MaxFrameworkVersion = row["MAX_FRAMEWORK_VER"] == DBNull.Value ? null : row["MAX_FRAMEWORK_VER"].ToString(),
                 DeployDesc = row["DEPLOY_DESC"] == DBNull.Value ? null : row["DEPLOY_DESC"].ToString(),
                 ReleaseNoteUrl = row["RELEASE_NOTE_URL"] == DBNull.Value ? null : row["RELEASE_NOTE_URL"].ToString(),
-                RegDate = Convert.ToDateTime(row["REG_DATE"]),
-                DelDate = row["DEL_DATE"] == DBNull.Value ? null : Convert.ToDateTime(row["DEL_DATE"]),
+                RegDate = ParseDate(row["REG_DATE"]) ?? DateTime.Now,
+                DelDate = ParseDate(row["DEL_DATE"]),
                 IsActive = row["IS_ACTIVE"] == DBNull.Value ? "Y" : row["IS_ACTIVE"].ToString(),
                 // Joined fields
                 ComponentType = row.Table.Columns.Contains("COMPONENT_TYPE") ? (ComponentType)Convert.ToInt32(row["COMPONENT_TYPE"]) : ComponentType.Other,
@@ -349,6 +349,15 @@ namespace nU3.Data.Repositories
                 InstallPath = row.Table.Columns.Contains("INSTALL_PATH") ? row["INSTALL_PATH"] == DBNull.Value ? null : row["INSTALL_PATH"].ToString() : null,
                 GroupName = row.Table.Columns.Contains("GROUP_NAME") ? row["GROUP_NAME"] == DBNull.Value ? null : row["GROUP_NAME"].ToString() : null
             };
+        }
+
+        private static DateTime? ParseDate(object value)
+        {
+            if (value == null || value == DBNull.Value) return null;
+            string str = value.ToString();
+            if (string.IsNullOrWhiteSpace(str) || str == "{}") return null;
+            if (DateTime.TryParse(str, out var dt)) return dt;
+            return null;
         }
 
         private static int CompareVersions(string v1, string v2)
