@@ -1,7 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using nU3.Connectivity;
-using nU3.Connectivity.Implementations;
 using nU3.Core.Repositories;
 using nU3.Models;
 using nU3.Tools.Deployer.Models;
@@ -55,27 +54,14 @@ namespace nU3.Tools.Deployer.Views
             InitializeComponent();
         }
 
-        public ProgramDeployManagementControl(IModuleRepository moduleRepo, IConfiguration configuration)
+        public ProgramDeployManagementControl(IModuleRepository moduleRepo, IConfiguration configuration, IFileTransferService fileTransferService)
         {
             _moduleRepo = moduleRepo;
+            _fileTransferService = fileTransferService;
 
             var serverEnabled = configuration.GetValue<bool>("ServerConnection:Enabled", false);
-            var baseUrl = configuration.GetValue<string>("ServerConnection:BaseUrl") ?? "https://localhost:64229";
             _serverModulePath = configuration.GetValue<string>("ModuleStorage:ServerPath") ?? "Modules";
             _useServerTransfer = configuration.GetValue<bool>("ModuleStorage:UseServerTransfer", true) && serverEnabled;
-
-            if (_useServerTransfer)
-            {
-                try
-                {
-                    _fileTransferService = new HttpFileTransferClient(baseUrl);
-                }
-                catch
-                {
-                    _useServerTransfer = false;
-                    _fileTransferService = null;
-                }
-            }
 
             InitializeComponent();
 

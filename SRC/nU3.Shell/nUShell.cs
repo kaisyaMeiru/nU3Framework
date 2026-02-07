@@ -1180,7 +1180,7 @@ namespace nU3.Shell
                 }
 
                 var rootMenus = allMenus
-                    .Where(m => m.ParentId == null && m.AuthLevel <= userAuth)
+                    .Where(m => m.ParentId == null)
                     .OrderBy(m => m.SortOrd)
                     .ToList();
 
@@ -1241,38 +1241,18 @@ namespace nU3.Shell
         {
             LogManager.Info($"프로그램 열기 요청: {progId}", "Shell");
 
-            // ✅ ProgId로부터 ModuleId 획득 (Attribute 사용)
-            var attr = _moduleLoader.GetProgramAttribute(progId);
-            if (attr != null)
-            {
-                var moduleId = attr.GetModuleId();
-
-                // ✅ 버전 체크 및 자동 업데이트
-                try
-                {
-                    if (!_moduleLoader.EnsureModuleUpdated(progId, moduleId))
-                    {
-                        LogManager.Warning($"모듈 업데이트 실패: {progId}", "Shell");
-                        XtraMessageBox.Show(
-                            $"모듈 업데이트에 실패했습니다.\n프로그램: {progId}",
-                            "업데이트 실패",
-                            MessageBoxButtons.OK,
-                            MessageBoxIcon.Warning);
-                        // 계속 진행 (기존 버전으로라도 실행 시도)
-                    }
-                }
-                catch (Exception ex)
-                {
-                    LogManager.Warning($"모듈 버전 확인 오류: {ex.Message}", "Shell");
-                    // 계속 진행
-                }
-            }
-
+            // ModuleLoaderService가 내부적으로 DB 확인, 다운로드, 로드를 모두 수행함
             Type type = _moduleLoader.GetProgramType(progId);
+            
             if (type == null)
             {
-                LogManager.Warning($"프로그램을 찾을 수 없음: {progId}", "Shell");
-                XtraMessageBox.Show($"프로그램 '{progId}'을(를) 찾을 수 없습니다.\n모듈이 로드되었는지 확인하세요.", "프로그램 오류", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                LogManager.Warning($"프로그램을 로드할 수 없음: {progId}", "Shell");
+                XtraMessageBox.Show(
+                    $"프로그램 '{progId}'을(를) 실행할 수 없습니다.\n" +
+                    $"모듈이 서버에 없거나 다운로드에 실패했을 수 있습니다.", 
+                    "실행 오류", 
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Warning);
                 return;
             }
 
@@ -1582,7 +1562,7 @@ namespace nU3.Shell
         private string GetBuildDate()
         {
             var version = Assembly.GetExecutingAssembly().GetName().Version;
-            var buildDate = new DateTime(2000, 1, 1).AddDays(version.Build).AddSeconds(version.Revision * 2);
+            var buildDate = new DateTime(2026, 2, 8).AddDays(version.Build).AddSeconds(version.Revision * 2);
             return buildDate.ToString("yyyy-MM-dd");
         }
 

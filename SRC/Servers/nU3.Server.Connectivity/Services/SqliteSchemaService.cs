@@ -4,6 +4,9 @@ using System.IO;
 using nU3.Connectivity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using nU3.Core.Enums;
+using System.Reflection;
+using System.ComponentModel.DataAnnotations;
 
 namespace nU3.Server.Connectivity.Services
 {
@@ -41,7 +44,7 @@ namespace nU3.Server.Connectivity.Services
         public void Initialize()
         {
             try
-            {
+            {                                         
                 // 1) 구성에서 DB 공급자 확인
                 var provider = _config.GetValue<string>("ServerSettings:Database:Provider");
                 if (!string.Equals(provider, "Sqlite", StringComparison.OrdinalIgnoreCase) &&
@@ -122,20 +125,14 @@ namespace nU3.Server.Connectivity.Services
         {
             try
             {
-                var roleCount = Convert.ToInt32(_db.ExecuteScalarValue("SELECT COUNT(*) FROM SYS_ROLE"));
-                if (roleCount == 0)
-                {
-                    _db.ExecuteNonQuery("INSERT INTO SYS_ROLE (ROLE_CODE, ROLE_NAME, DESCRIPTION) VALUES ('ADMIN', '시스템 관리자', '전체 권한을 가진 관리자 계정')");
-                    _db.ExecuteNonQuery("INSERT INTO SYS_ROLE (ROLE_CODE, ROLE_NAME, DESCRIPTION) VALUES ('USER', '일반 사용자', '기본 기능을 사용하는 사용자')");
-                    _logger.LogInformation("Default roles seeded.");
-                }
+                SyncEnumsToDb();
 
                 var userCount = Convert.ToInt32(_db.ExecuteScalarValue("SELECT COUNT(*) FROM SYS_USER"));
                 if (userCount == 0)
                 {
                     _db.ExecuteNonQuery(@"
                         INSERT INTO SYS_USER (USER_ID, USERNAME, PASSWORD, EMAIL, ROLE_CODE, IS_ACTIVE) 
-                        VALUES ('admin', '관리자', '1234', 'admin@nu3.com', 'ADMIN', 'Y')");
+                        VALUES ('admin', '관리자', '1234', 'admin@nu3.com', 'Admin', 'Y')");
                     _logger.LogInformation("Default admin user seeded.");
                 }
             }
@@ -143,6 +140,52 @@ namespace nU3.Server.Connectivity.Services
             {
                 _logger.LogWarning($"Failed to seed data: {ex.Message}");
             }
+        }
+
+        private void SyncEnumsToDb()
+        {
+            try
+            {
+                // Sync Roles
+                foreach (UserRole role in Enum.GetValues(typeof(UserRole)))
+                {
+                    string code = role.ToString();
+                    string name = GetEnumDisplayName(role);
+                    string desc = GetEnumDescription(role);
+
+                    string sql = @"INSERT OR REPLACE INTO SYS_ROLE (ROLE_CODE, ROLE_NAME, DESCRIPTION) VALUES (@c, @n, @d)";
+                    _db.ExecuteNonQuery(sql, new Dictionary<string, object> { { "@c", code }, { "@n", name }, { "@d", desc } });
+                }
+
+                // Sync Depts
+                foreach (Department dept in Enum.GetValues(typeof(Department)))
+                {
+                    string code = dept.ToString();
+                    string name = GetEnumDisplayName(dept);
+                    string sql = @"INSERT OR REPLACE INTO SYS_DEPT (DEPT_CODE, DEPT_NAME) VALUES (@c, @n)";
+                    _db.ExecuteNonQuery(sql, new Dictionary<string, object> { { "@c", code }, { "@n", name } });
+                }
+                
+                _logger.LogInformation("Enums synced to SYS_ROLE and SYS_DEPT.");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to sync Enums to DB.");
+            }
+        }
+
+        private string GetEnumDisplayName(Enum value)
+        {
+            var field = value.GetType().GetField(value.ToString());
+            var attr = field?.GetCustomAttribute<DisplayAttribute>();
+            return attr?.Name ?? value.ToString();
+        }
+
+        private string GetEnumDescription(Enum value)
+        {
+            var field = value.GetType().GetField(value.ToString());
+            var attr = field?.GetCustomAttribute<DisplayAttribute>();
+            return attr?.Description ?? "";
         }
 
         /// <summary>
@@ -201,6 +244,8 @@ namespace nU3.Server.Connectivity.Services
                     SORT_ORD INTEGER,
                     SHORTCUT TEXT,
                     AUTH_LEVEL INTEGER DEFAULT 1,
+                    CHECK (PARENT_ID IS NULL OR PARENT_ID != ''),
+                    CHECK (PROG_ID IS NULL OR PROG_ID != ''),
                     FOREIGN KEY(PROG_ID) REFERENCES SYS_PROG_MST(PROG_ID)
                 );");
 

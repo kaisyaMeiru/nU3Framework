@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data.SQLite;
 using System.Drawing;
 using System.Windows.Forms;
-using nU3.Data;
 using nU3.Core.UI;
 using nU3.Core.UI.Controls;
 using nU3.Core.UI.Controls.Forms;
@@ -14,12 +12,16 @@ using System.Linq;
 using nU3.Core.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
+using nU3.Core.Repositories;
+using nU3.Connectivity;
 
 namespace nU3.Tools.Deployer.Views
 {
     public partial class SecurityManagementControl : BaseWorkControl
     {
-        private readonly LocalDbService _dbManager;
+        private readonly ISecurityRepository _securityRepo;
+        private readonly IProgramRepository _progRepo;
+        private readonly IModuleRepository _moduleRepo;
         
         private string _currentTargetType = ""; // "USER" or "ROLE" or "DEPT"
         private string _currentTargetId = "";
@@ -28,16 +30,18 @@ namespace nU3.Tools.Deployer.Views
 
         public SecurityManagementControl()
         {
-            _dbManager = new LocalDbService();
-            // Ensure local SQLite schema exists before any DB operations
-            // InitializeSchema logic is now in Server or implicit in LocalDbService if configured.
-            // For standalone Deployer, we rely on existing DB or Server creation.
             InitializeComponent();
+        }
+
+        public SecurityManagementControl(ISecurityRepository securityRepo, IProgramRepository progRepo, IModuleRepository moduleRepo) : this()
+        {
+            _securityRepo = securityRepo;
+            _progRepo = progRepo;
+            _moduleRepo = moduleRepo;
 
             if (!IsDesignMode())
             {
                 SetupGrids();
-                SyncEnumsToDb(); // Sync Enums to DB
                 LoadAllData();
             }
         }
@@ -85,73 +89,6 @@ namespace nU3.Tools.Deployer.Views
             col.Width = width;
         }
 
-        private void SyncEnumsToDb()
-        {
-            try
-            {
-                using (var conn = new SQLiteConnection(_dbManager.GetConnectionString()))
-                {
-                    conn.Open();
-                    using (var tx = conn.BeginTransaction())
-                    {
-                        // Sync Roles
-                        foreach (UserRole role in Enum.GetValues(typeof(UserRole)))
-                        {
-                            string code = role.ToString();
-                            string name = GetEnumDisplayName(role);
-                            string desc = GetEnumDescription(role);
-
-                            string sql = @"INSERT OR REPLACE INTO SYS_ROLE (ROLE_CODE, ROLE_NAME, DESCRIPTION) VALUES (@c, @n, @d)";
-                            using (var cmd = new SQLiteCommand(sql, conn, tx))
-                            {
-                                cmd.Parameters.AddWithValue("@c", code);
-                                cmd.Parameters.AddWithValue("@n", name);
-                                cmd.Parameters.AddWithValue("@d", desc);
-                                cmd.ExecuteNonQuery();
-                            }
-                        }
-
-                        // Sync Depts
-                        foreach (Department dept in Enum.GetValues(typeof(Department)))
-                        {
-                            string code = dept.ToString();
-                            string name = GetEnumDisplayName(dept);
-                            // Sort Order from Enum Order?
-                            // For now just insert code/name
-                            string sql = @"INSERT OR REPLACE INTO SYS_DEPT (DEPT_CODE, DEPT_NAME) VALUES (@c, @n)";
-                            using (var cmd = new SQLiteCommand(sql, conn, tx))
-                            {
-                                cmd.Parameters.AddWithValue("@c", code);
-                                cmd.Parameters.AddWithValue("@n", name);
-                                cmd.ExecuteNonQuery();
-                            }
-                        }
-
-                        tx.Commit();
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                // Silent fail or log?
-                Console.WriteLine($"Enum Sync Failed: {ex.Message}");
-            }
-        }
-
-        private string GetEnumDisplayName(Enum value)
-        {
-            var field = value.GetType().GetField(value.ToString());
-            var attr = field?.GetCustomAttribute<DisplayAttribute>();
-            return attr?.Name ?? value.ToString();
-        }
-
-        private string GetEnumDescription(Enum value)
-        {
-            var field = value.GetType().GetField(value.ToString());
-            var attr = field?.GetCustomAttribute<DisplayAttribute>();
-            return attr?.Description ?? "";
-        }
-
         private void LoadAllData()
         {
             LoadRoles();
@@ -166,56 +103,7 @@ namespace nU3.Tools.Deployer.Views
         {
             try
             {
-                var list = new List<SecurityUserDto>();
-                using (var conn = new SQLiteConnection(_dbManager.GetConnectionString()))
-                {
-                    conn.Open();
-                    // Changed RANK_CODE -> ROLE_CODE, SYS_RANK -> SYS_ROLE
-                    string sql = @"
-                        SELECT u.USER_ID, u.USERNAME, u.EMAIL, u.ROLE_CODE, r.ROLE_NAME
-                        FROM SYS_USER u
-                        LEFT JOIN SYS_ROLE r ON u.ROLE_CODE = r.ROLE_CODE
-                        WHERE u.IS_ACTIVE = 'Y'
-                        ORDER BY u.USERNAME";
-
-                    using (var cmd = new SQLiteCommand(sql, conn))
-                    using (var reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            var user = new SecurityUserDto
-                            {
-                                UserId = reader["USER_ID"]?.ToString() ?? "",
-                                Username = reader["USERNAME"]?.ToString() ?? "",
-                                Email = reader["EMAIL"]?.ToString() ?? "",
-                                RoleCode = reader["ROLE_CODE"]?.ToString() ?? "", // Was RankCode
-                                RoleName = reader["ROLE_NAME"]?.ToString() ?? ""  // Was RankName
-                            };
-                            list.Add(user);
-                        }
-                    }
-
-                    // Load Depts for each user
-                    foreach (var user in list)
-                    {
-                        sql = @"
-                            SELECT d.DEPT_NAME 
-                            FROM SYS_USER_DEPT ud
-                            JOIN SYS_DEPT d ON ud.DEPT_CODE = d.DEPT_CODE
-                            WHERE ud.USER_ID = @uid";
-                        using (var cmd = new SQLiteCommand(sql, conn))
-                        {
-                            cmd.Parameters.AddWithValue("@uid", user.UserId);
-                            using (var reader = cmd.ExecuteReader())
-                            {
-                                var depts = new List<string>();
-                                while (reader.Read()) depts.Add(reader["DEPT_NAME"].ToString());
-                                user.DeptNames = string.Join(", ", depts);
-                            }
-                        }
-                    }
-                }
-                dgvUsers.DataSource = list;
+                dgvUsers.DataSource = _securityRepo.GetAllSecurityUsers();
             }
             catch (Exception ex)
             {
@@ -227,27 +115,7 @@ namespace nU3.Tools.Deployer.Views
         {
             try
             {
-                var list = new List<SecurityRoleDto>();
-                using (var conn = new SQLiteConnection(_dbManager.GetConnectionString()))
-                {
-                    conn.Open();
-                    string sql = "SELECT ROLE_CODE, ROLE_NAME, DESCRIPTION FROM SYS_ROLE ORDER BY ROLE_CODE";
-
-                    using (var cmd = new SQLiteCommand(sql, conn))
-                    using (var reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            list.Add(new SecurityRoleDto
-                            {
-                                RoleCode = reader["ROLE_CODE"]?.ToString() ?? "",
-                                RoleName = reader["ROLE_NAME"]?.ToString() ?? "",
-                                Description = reader["DESCRIPTION"]?.ToString() ?? ""
-                            });
-                        }
-                    }
-                }
-                dgvRoles.DataSource = list;
+                dgvRoles.DataSource = _securityRepo.GetAllRoles();
             }
             catch (Exception ex)
             {
@@ -259,26 +127,7 @@ namespace nU3.Tools.Deployer.Views
         {
             try
             {
-                var list = new List<SecurityDeptDto>();
-                using (var conn = new SQLiteConnection(_dbManager.GetConnectionString()))
-                {
-                    conn.Open();
-                    string sql = "SELECT DEPT_CODE, DEPT_NAME FROM SYS_DEPT ORDER BY DEPT_NAME";
-
-                    using (var cmd = new SQLiteCommand(sql, conn))
-                    using (var reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            list.Add(new SecurityDeptDto
-                            {
-                                DeptCode = reader["DEPT_CODE"]?.ToString() ?? "",
-                                DeptName = reader["DEPT_NAME"]?.ToString() ?? ""
-                            });
-                        }
-                    }
-                }
-                dgvDepts.DataSource = list;
+                dgvDepts.DataSource = _securityRepo.GetAllDepartments();
             }
             catch (Exception ex)
             {
@@ -291,29 +140,19 @@ namespace nU3.Tools.Deployer.Views
             try
             {
                 var list = new List<SecurityProgDto>();
-                using (var conn = new SQLiteConnection(_dbManager.GetConnectionString()))
-                {
-                    conn.Open();
-                    string sql = @"
-                        SELECT p.PROG_ID, p.PROG_NAME, m.MODULE_NAME
-                        FROM SYS_PROG_MST p
-                        LEFT JOIN SYS_MODULE_MST m ON p.MODULE_ID = m.MODULE_ID
-                        WHERE p.IS_ACTIVE = 'Y'
-                        ORDER BY p.PROG_NAME";
+                var programs = _progRepo.GetAllPrograms();
+                var modules = _moduleRepo.GetAllModules();
+                var moduleMap = modules.ToDictionary(m => m.ModuleId, m => m.ModuleName, StringComparer.OrdinalIgnoreCase);
 
-                    using (var cmd = new SQLiteCommand(sql, conn))
-                    using (var reader = cmd.ExecuteReader())
+                foreach (var p in programs)
+                {
+                    if (p.IsActive != "Y") continue;
+                    list.Add(new SecurityProgDto
                     {
-                        while (reader.Read())
-                        {
-                            list.Add(new SecurityProgDto
-                            {
-                                ProgId = reader["PROG_ID"]?.ToString() ?? "",
-                                ProgName = reader["PROG_NAME"]?.ToString() ?? "",
-                                ModuleName = reader["MODULE_NAME"]?.ToString() ?? ""
-                            });
-                        }
-                    }
+                        ProgId = p.ProgId,
+                        ProgName = p.ProgName,
+                        ModuleName = moduleMap.TryGetValue(p.ModuleId ?? "", out var mName) ? mName : p.ModuleId
+                    });
                 }
                 dgvModules.DataSource = list;
             }
@@ -337,52 +176,20 @@ namespace nU3.Tools.Deployer.Views
             {
                 try
                 {
-                    using (var conn = new SQLiteConnection(_dbManager.GetConnectionString()))
+                    if (_securityRepo.IsUserIdExists(form.UserId))
                     {
-                        conn.Open();
-                        
-                        // Check duplicate ID
-                        using (var checkCmd = new SQLiteCommand("SELECT COUNT(*) FROM SYS_USER WHERE USER_ID = @id", conn))
-                        {
-                            checkCmd.Parameters.AddWithValue("@id", form.UserId);
-                            if (Convert.ToInt32(checkCmd.ExecuteScalar()) > 0)
-                            {
-                                XtraMessageBox.Show("이미 존재하는 ID입니다.");
-                                return;
-                            }
-                        }
-
-                        using (var tx = conn.BeginTransaction())
-                        {
-                            // Insert User
-                            string sql = @"
-                                INSERT INTO SYS_USER (USER_ID, USERNAME, PASSWORD, EMAIL, ROLE_CODE, IS_ACTIVE)
-                                VALUES (@id, @name, @pwd, @email, @role, 'Y')";
-                            using (var cmd = new SQLiteCommand(sql, conn, tx))
-                            {
-                                cmd.Parameters.AddWithValue("@id", form.UserId); // Input ID
-                                cmd.Parameters.AddWithValue("@name", form.Username);
-                                cmd.Parameters.AddWithValue("@pwd", form.Password);
-                                cmd.Parameters.AddWithValue("@email", form.Email);
-                                cmd.Parameters.AddWithValue("@role", form.SelectedRoleCode);
-                                cmd.ExecuteNonQuery();
-                            }
-
-                            // Insert Depts
-                            foreach (var deptCode in form.SelectedDeptCodes)
-                            {
-                                string sqlDept = "INSERT INTO SYS_USER_DEPT (USER_ID, DEPT_CODE) VALUES (@uid, @dcode)";
-                                using (var cmd = new SQLiteCommand(sqlDept, conn, tx))
-                                {
-                                    cmd.Parameters.AddWithValue("@uid", form.UserId);
-                                    cmd.Parameters.AddWithValue("@dcode", deptCode);
-                                    cmd.ExecuteNonQuery();
-                                }
-                            }
-
-                            tx.Commit();
-                        }
+                        XtraMessageBox.Show("이미 존재하는 ID입니다.");
+                        return;
                     }
+
+                    _securityRepo.AddSecurityUser(new SecurityUserDto 
+                    { 
+                        UserId = form.UserId,
+                        Username = form.Username,
+                        Email = form.Email,
+                        RoleCode = form.SelectedRoleCode
+                    }, form.Password, form.SelectedDeptCodes);
+
                     LoadUsers();
                 }
                 catch (Exception ex)
@@ -400,67 +207,20 @@ namespace nU3.Tools.Deployer.Views
             var roles = (List<SecurityRoleDto>)dgvRoles.DataSource ?? new List<SecurityRoleDto>();
             var depts = (List<SecurityDeptDto>)dgvDepts.DataSource ?? new List<SecurityDeptDto>();
 
-            // Get current user depts
-            List<string> userDeptCodes = new List<string>();
-            try
-            {
-                using (var conn = new SQLiteConnection(_dbManager.GetConnectionString()))
-                {
-                    conn.Open();
-                    string sql = "SELECT DEPT_CODE FROM SYS_USER_DEPT WHERE USER_ID = @uid";
-                    using (var cmd = new SQLiteCommand(sql, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@uid", user.UserId);
-                        using (var reader = cmd.ExecuteReader())
-                        {
-                            while(reader.Read()) userDeptCodes.Add(reader["DEPT_CODE"].ToString());
-                        }
-                    }
-                }
-            }
-            catch { }
+            List<string> userDeptCodes = _securityRepo.GetUserDeptCodes(user.UserId);
 
             using var form = new EditUserForm(user, roles, depts, userDeptCodes);
             if (form.ShowDialog() == DialogResult.OK)
             {
                  try
                 {
-                    using (var conn = new SQLiteConnection(_dbManager.GetConnectionString()))
+                    _securityRepo.UpdateSecurityUser(new SecurityUserDto
                     {
-                        conn.Open();
-                        using (var tx = conn.BeginTransaction())
-                        {
-                            // Update User
-                            string sql = @"UPDATE SYS_USER SET EMAIL = @email, ROLE_CODE = @role WHERE USER_ID = @id";
-                            using (var cmd = new SQLiteCommand(sql, conn, tx))
-                            {
-                                cmd.Parameters.AddWithValue("@email", form.Email);
-                                cmd.Parameters.AddWithValue("@role", form.SelectedRoleCode);
-                                cmd.Parameters.AddWithValue("@id", user.UserId);
-                                cmd.ExecuteNonQuery();
-                            }
+                        UserId = user.UserId,
+                        Email = form.Email,
+                        RoleCode = form.SelectedRoleCode
+                    }, form.SelectedDeptCodes);
 
-                            // Update Depts (Delete all & Insert)
-                            string sqlDel = "DELETE FROM SYS_USER_DEPT WHERE USER_ID = @uid";
-                            using (var cmd = new SQLiteCommand(sqlDel, conn, tx))
-                            {
-                                cmd.Parameters.AddWithValue("@uid", user.UserId);
-                                cmd.ExecuteNonQuery();
-                            }
-
-                            foreach (var deptCode in form.SelectedDeptCodes)
-                            {
-                                string sqlDept = "INSERT INTO SYS_USER_DEPT (USER_ID, DEPT_CODE) VALUES (@uid, @dcode)";
-                                using (var cmd = new SQLiteCommand(sqlDept, conn, tx))
-                                {
-                                    cmd.Parameters.AddWithValue("@uid", user.UserId);
-                                    cmd.Parameters.AddWithValue("@dcode", deptCode);
-                                    cmd.ExecuteNonQuery();
-                                }
-                            }
-                            tx.Commit();
-                        }
-                    }
                     LoadUsers();
                 }
                 catch (Exception ex)
@@ -479,16 +239,7 @@ namespace nU3.Tools.Deployer.Views
             {
                 try
                 {
-                    using (var conn = new SQLiteConnection(_dbManager.GetConnectionString()))
-                    {
-                        conn.Open();
-                        string sql = "UPDATE SYS_USER SET IS_ACTIVE = 'N' WHERE USER_ID = @id";
-                        using (var cmd = new SQLiteCommand(sql, conn))
-                        {
-                            cmd.Parameters.AddWithValue("@id", user.UserId);
-                            cmd.ExecuteNonQuery();
-                        }
-                    }
+                    _securityRepo.DeleteSecurityUser(user.UserId);
                     LoadUsers();
                 }
                 catch (Exception ex)
@@ -508,43 +259,24 @@ namespace nU3.Tools.Deployer.Views
                 var roles = Enum.GetNames(typeof(UserRole));
                 var depts = Enum.GetNames(typeof(Department));
 
-                using (var conn = new SQLiteConnection(_dbManager.GetConnectionString()))
+                for (int i = 1; i <= 20; i++)
                 {
-                    conn.Open();
-                    using (var tx = conn.BeginTransaction())
+                    string userId = $"TEST_USER_{i:00}";
+                    string name = $"테스트유저_{i:00}";
+                    string role = roles[rand.Next(roles.Length)];
+                    string dept = depts[rand.Next(depts.Length)];
+
+                    var user = new SecurityUserDto
                     {
-                        for (int i = 1; i <= 20; i++)
-                        {
-                            string userId = $"TEST_USER_{i:00}";
-                            string name = $"테스트유저_{i:00}";
-                            string role = roles[rand.Next(roles.Length)];
-                            string dept = depts[rand.Next(depts.Length)];
+                        UserId = userId,
+                        Username = name,
+                        Email = $"user{i}@test.com",
+                        RoleCode = role
+                    };
 
-                            // Insert User
-                            string sql = @"
-                                INSERT OR REPLACE INTO SYS_USER (USER_ID, USERNAME, PASSWORD, EMAIL, ROLE_CODE, IS_ACTIVE)
-                                VALUES (@id, @name, '1234', @email, @role, 'Y')";
-                            using (var cmd = new SQLiteCommand(sql, conn, tx))
-                            {
-                                cmd.Parameters.AddWithValue("@id", userId);
-                                cmd.Parameters.AddWithValue("@name", name);
-                                cmd.Parameters.AddWithValue("@email", $"user{i}@test.com");
-                                cmd.Parameters.AddWithValue("@role", role);
-                                cmd.ExecuteNonQuery();
-                            }
-
-                            // Insert Dept
-                            string sqlDept = @"INSERT OR REPLACE INTO SYS_USER_DEPT (USER_ID, DEPT_CODE) VALUES (@uid, @dcode)";
-                            using (var cmd = new SQLiteCommand(sqlDept, conn, tx))
-                            {
-                                cmd.Parameters.AddWithValue("@uid", userId);
-                                cmd.Parameters.AddWithValue("@dcode", dept);
-                                cmd.ExecuteNonQuery();
-                            }
-                        }
-                        tx.Commit();
-                    }
+                    _securityRepo.AddSecurityUser(user, "1234", new List<string> { dept });
                 }
+                
                 LoadUsers();
                 XtraMessageBox.Show("테스트 데이터 생성 완료");
             }
@@ -653,39 +385,22 @@ namespace nU3.Tools.Deployer.Views
 
             try
             {
-                using (var conn = new SQLiteConnection(_dbManager.GetConnectionString()))
-                {
-                    conn.Open();
-                    string sql = @"
-                        SELECT CAN_READ, CAN_CREATE, CAN_UPDATE, CAN_DELETE, CAN_PRINT, CAN_EXPORT, CAN_APPROVE, CAN_CANCEL
-                        FROM SYS_PERMISSION
-                        WHERE TARGET_TYPE = @type AND TARGET_ID = @id AND PROG_ID = @prog";
+                var perm = _securityRepo.GetPermission(_currentTargetType, _currentTargetId, _currentProgId);
 
-                    using (var cmd = new SQLiteCommand(sql, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@type", _currentTargetType);
-                        cmd.Parameters.AddWithValue("@id", _currentTargetId);
-                        cmd.Parameters.AddWithValue("@prog", _currentProgId);
-                        
-                        using (var reader = cmd.ExecuteReader())
-                        {
-                            if (reader.Read())
-                            {
-                                chkRead.Checked = Convert.ToInt32(reader["CAN_READ"]) == 1;
-                                chkCreate.Checked = Convert.ToInt32(reader["CAN_CREATE"]) == 1;
-                                chkUpdate.Checked = Convert.ToInt32(reader["CAN_UPDATE"]) == 1;
-                                chkDelete.Checked = Convert.ToInt32(reader["CAN_DELETE"]) == 1;
-                                chkPrint.Checked = Convert.ToInt32(reader["CAN_PRINT"]) == 1;
-                                chkExport.Checked = Convert.ToInt32(reader["CAN_EXPORT"]) == 1;
-                                chkApprove.Checked = Convert.ToInt32(reader["CAN_APPROVE"]) == 1;
-                                chkCancel.Checked = Convert.ToInt32(reader["CAN_CANCEL"]) == 1;
-                            }
-                            else
-                            {
-                                ClearChecks();
-                            }
-                        }
-                    }
+                if (perm != null)
+                {
+                    chkRead.Checked = perm.CanRead;
+                    chkCreate.Checked = perm.CanCreate;
+                    chkUpdate.Checked = perm.CanUpdate;
+                    chkDelete.Checked = perm.CanDelete;
+                    chkPrint.Checked = perm.CanPrint;
+                    chkExport.Checked = perm.CanExport;
+                    chkApprove.Checked = perm.CanApprove;
+                    chkCancel.Checked = perm.CanCancel;
+                }
+                else
+                {
+                    ClearChecks();
                 }
             }
             catch (Exception ex)
@@ -704,38 +419,21 @@ namespace nU3.Tools.Deployer.Views
 
             try
             {
-                using (var conn = new SQLiteConnection(_dbManager.GetConnectionString()))
+                _securityRepo.SavePermission(new SecurityPermissionDto
                 {
-                    conn.Open();
-                    string sql = @"
-                        INSERT INTO SYS_PERMISSION (TARGET_TYPE, TARGET_ID, PROG_ID, CAN_READ, CAN_CREATE, CAN_UPDATE, CAN_DELETE, CAN_PRINT, CAN_EXPORT, CAN_APPROVE, CAN_CANCEL)
-                        VALUES (@type, @id, @prog, @r, @c, @u, @d, @p, @e, @a, @x)
-                        ON CONFLICT(TARGET_TYPE, TARGET_ID, PROG_ID) DO UPDATE SET
-                            CAN_READ = @r,
-                            CAN_CREATE = @c,
-                            CAN_UPDATE = @u,
-                            CAN_DELETE = @d,
-                            CAN_PRINT = @p,
-                            CAN_EXPORT = @e,
-                            CAN_APPROVE = @a,
-                            CAN_CANCEL = @x";
+                    TargetType = _currentTargetType,
+                    TargetId = _currentTargetId,
+                    ProgId = _currentProgId,
+                    CanRead = chkRead.Checked,
+                    CanCreate = chkCreate.Checked,
+                    CanUpdate = chkUpdate.Checked,
+                    CanDelete = chkDelete.Checked,
+                    CanPrint = chkPrint.Checked,
+                    CanExport = chkExport.Checked,
+                    CanApprove = chkApprove.Checked,
+                    CanCancel = chkCancel.Checked
+                });
 
-                    using (var cmd = new SQLiteCommand(sql, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@type", _currentTargetType);
-                        cmd.Parameters.AddWithValue("@id", _currentTargetId);
-                        cmd.Parameters.AddWithValue("@prog", _currentProgId);
-                        cmd.Parameters.AddWithValue("@r", chkRead.Checked ? 1 : 0);
-                        cmd.Parameters.AddWithValue("@c", chkCreate.Checked ? 1 : 0);
-                        cmd.Parameters.AddWithValue("@u", chkUpdate.Checked ? 1 : 0);
-                        cmd.Parameters.AddWithValue("@d", chkDelete.Checked ? 1 : 0);
-                        cmd.Parameters.AddWithValue("@p", chkPrint.Checked ? 1 : 0);
-                        cmd.Parameters.AddWithValue("@e", chkExport.Checked ? 1 : 0);
-                        cmd.Parameters.AddWithValue("@a", chkApprove.Checked ? 1 : 0);
-                        cmd.Parameters.AddWithValue("@x", chkCancel.Checked ? 1 : 0);
-                        cmd.ExecuteNonQuery();
-                    }
-                }
                 XtraMessageBox.Show("권한이 저장되었습니다.");
             }
             catch (Exception ex)
@@ -747,38 +445,6 @@ namespace nU3.Tools.Deployer.Views
         #endregion
 
         #region DTOs & Forms
-
-        public class SecurityUserDto
-        {
-            public string UserId { get; set; }
-            public string Username { get; set; }
-            public string Email { get; set; }
-            public string RoleCode { get; set; }
-            public string RoleName { get; set; }
-            public string DeptNames { get; set; }
-        }
-
-        public class SecurityRoleDto
-        {
-            public string RoleCode { get; set; }
-            public string RoleName { get; set; }
-            public string Description { get; set; }
-            public override string ToString() => RoleName;
-        }
-
-        public class SecurityDeptDto
-        {
-            public string DeptCode { get; set; }
-            public string DeptName { get; set; }
-            public override string ToString() => DeptName;
-        }
-
-        public class SecurityProgDto
-        {
-            public string ProgId { get; set; }
-            public string ProgName { get; set; }
-            public string ModuleName { get; set; }
-        }
 
         public class AddUserForm : BaseWorkForm
         {

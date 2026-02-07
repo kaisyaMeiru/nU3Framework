@@ -1,3 +1,5 @@
+using System;
+
 namespace nU3.Tools.Deployer.Views
 {
     partial class MenuTreeManagementControl
@@ -12,6 +14,7 @@ namespace nU3.Tools.Deployer.Views
         private nU3.Core.UI.Controls.nU3SimpleButton btnAddRoot;
         private nU3.Core.UI.Controls.nU3SimpleButton btnAddChild;
         private nU3.Core.UI.Controls.nU3SimpleButton btnDeleteNode;
+        private nU3.Core.UI.Controls.nU3SimpleButton btnRefreshPrograms;
         private nU3.Core.UI.Controls.nU3SimpleButton btnSave;
         private nU3.Core.UI.Controls.nU3LabelControl lblAuthLevel;
         private nU3.Core.UI.Controls.nU3SpinEdit numAuthLevel;
@@ -41,6 +44,7 @@ namespace nU3.Tools.Deployer.Views
             btnAddRoot = new nU3.Core.UI.Controls.nU3SimpleButton();
             btnAddChild = new nU3.Core.UI.Controls.nU3SimpleButton();
             btnDeleteNode = new nU3.Core.UI.Controls.nU3SimpleButton();
+            btnRefreshPrograms = new nU3.Core.UI.Controls.nU3SimpleButton();
             lblAuthLevel = new nU3.Core.UI.Controls.nU3LabelControl();
             numAuthLevel = new nU3.Core.UI.Controls.nU3SpinEdit();
             btnSave = new nU3.Core.UI.Controls.nU3SimpleButton();
@@ -130,6 +134,7 @@ namespace nU3.Tools.Deployer.Views
             pnlBottom.Controls.Add(btnAddRoot);
             pnlBottom.Controls.Add(btnAddChild);
             pnlBottom.Controls.Add(btnDeleteNode);
+            pnlBottom.Controls.Add(btnRefreshPrograms);
             pnlBottom.Controls.Add(lblAuthLevel);
             pnlBottom.Controls.Add(numAuthLevel);
             pnlBottom.Controls.Add(btnSave);
@@ -170,6 +175,16 @@ namespace nU3.Tools.Deployer.Views
             btnDeleteNode.TabIndex = 2;
             btnDeleteNode.Text = "삭제";
             btnDeleteNode.Click += BtnDeleteNode_Click;
+            // 
+            // btnRefreshPrograms
+            // 
+            btnRefreshPrograms.AuthId = "";
+            btnRefreshPrograms.Location = new System.Drawing.Point(700, 13);
+            btnRefreshPrograms.Name = "btnRefreshPrograms";
+            btnRefreshPrograms.Size = new System.Drawing.Size(120, 30);
+            btnRefreshPrograms.TabIndex = 6;
+            btnRefreshPrograms.Text = "프로그램 새로고침";
+            btnRefreshPrograms.Click += BtnRefreshPrograms_Click;
             // 
             // lblAuthLevel
             // 
@@ -233,6 +248,7 @@ namespace nU3.Tools.Deployer.Views
 
         }
 
+     
         #endregion
     }
 }

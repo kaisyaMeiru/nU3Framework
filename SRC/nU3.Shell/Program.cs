@@ -33,11 +33,13 @@ namespace nU3.Shell
             services.AddSingleton<IConfiguration>(configuration);
             
             // Repositories
-            services.AddSingleton<IMenuRepository, SQLiteMenuRepository>();
-            services.AddSingleton<IModuleRepository, SQLiteModuleRepository>();
-            services.AddScoped<IUserRepository, SQLiteUserRepository>(); // Add IUserRepository
-            services.AddSingleton<nU3.Core.Services.ModuleLoaderService>(); 
-            
+            services.AddSingleton<IMenuRepository, SQLiteMenuRepository>();        // Menu Repository
+            services.AddSingleton<IModuleRepository, SQLiteModuleRepository>();    // DLL Module Repository
+            services.AddScoped<IComponentRepository, SQLiteComponentRepository>(); // Frameork Component Repository
+            services.AddScoped<IProgramRepository, SQLiteProgramRepository>();     // Program Repository
+            services.AddScoped<IUserRepository, SQLiteUserRepository>();           // User Repository
+            services.AddSingleton<nU3.Core.Services.ModuleLoaderService>();        // DLL Module Loader Service
+
             // Biz Logic Factory
             services.AddSingleton<nU3.Core.Logic.IBizLogicFactory, nU3.Core.Logic.BizLogicFactory>();
             

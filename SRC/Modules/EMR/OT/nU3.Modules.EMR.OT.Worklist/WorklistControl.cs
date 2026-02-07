@@ -5,6 +5,7 @@ using nU3.Connectivity;
 using nU3.Core.Attributes;
 using nU3.Core.Context;
 using nU3.Core.Contracts.Models; // New
+using nU3.Core.Events;
 using nU3.Core.Events.Contracts;
 using nU3.Core.Logic;
 using nU3.Core.UI;
@@ -65,6 +66,60 @@ namespace nU3.Modules.EMR.OT.Worklist
 
             // 행 선택 변경 이벤트 핸들러 등록
             _gridView.FocusedRowChanged += _gridView_FocusedRowChanged;
+
+            _gridView.DoubleClick += _gridView_DoubleClick;
+        }
+
+        private void _gridView_DoubleClick(object? sender, EventArgs e)
+        {
+            if (_gridView.GetFocusedRow() is DataRowView rowView)
+            {
+                // 데이터 테이블 컬럼명이 변경되어 있을 수 있으므로 안전하게 컬럼 존재 여부를 확인해서 사용
+                var row = rowView.Row;
+                string patientId = string.Empty;
+                string patientName = string.Empty;
+
+                if (row.Table.Columns.Contains("PatientId"))
+                {
+                    patientId = row["PatientId"]?.ToString() ?? string.Empty;
+                }
+                else if (row.Table.Columns.Contains("MODULE_ID"))
+                {
+                    // 레거시/다른 데이터 소스용 행동
+                    patientId = row["MODULE_ID"]?.ToString() ?? string.Empty;
+                }
+
+                if (row.Table.Columns.Contains("PatientName"))
+                {
+                    patientName = row["PatientName"]?.ToString() ?? string.Empty;
+                }
+                else if (row.Table.Columns.Contains("MODULE_NAME"))
+                {
+                    // 레거시/다른 데이터 소스용 행동
+                    patientName = row["MODULE_NAME"]?.ToString() ?? string.Empty;
+                }
+
+                if (!string.IsNullOrEmpty(patientId))
+                {
+
+                    // 환자 상세 화면 열기 요청
+                    var context = Context.Clone();
+                    context.CurrentPatient = new Models.PatientInfoDto() {  PatientId = patientId , PatientName = patientName };
+                    context.SetParameter("Mode", "View");
+
+
+                    EventBus?.GetEvent<NavigationRequestEvent>()
+                    .Publish(new NavigationRequestEventPayload
+                    {
+                        TargetScreenId = "EMR_IN_00002",
+                        Context = context,
+                        Source = ProgramID
+                    });
+
+                    
+                    Logger.Information($"환자 선택: {patientName} ({patientId})", ProgramID);
+                }
+            }
         }
 
         // 그리드에서 포커스된 행이 변경되었을 때 호출
@@ -101,7 +156,7 @@ namespace nU3.Modules.EMR.OT.Worklist
                 {
                     // 강타입 이벤트 발행
                     var context = new PatientContext(patientId, patientName, "VISIT_TEST");
-                    EventBus?.GetEvent<PatientSelectedEvent>().Publish(context);
+                    EventBus?.GetEvent<Core.Events.PatientSelectedEvent>().Publish(context);
 
                     Logger.Information($"환자 선택: {patientName} ({patientId})", ProgramID);
                 }

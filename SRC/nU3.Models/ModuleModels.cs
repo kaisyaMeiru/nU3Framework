@@ -1,27 +1,28 @@
 using System;
+using System.Collections.Generic;
 
 namespace nU3.Models
 {
     public class ModuleMstDto
     {
-        public string ModuleId { get; set; }
-        public string Category { get; set; }
-        public string SubSystem { get; set; }
-        public string ModuleName { get; set; }
-        public string FileName { get; set; }
+        public string ModuleId { get; set; } = string.Empty;
+        public string Category { get; set; } = string.Empty;
+        public string SubSystem { get; set; } = string.Empty;
+        public string ModuleName { get; set; } = string.Empty;
+        public string FileName { get; set; } = string.Empty;
         public DateTime RegDate { get; set; }
     }
 
     public class ModuleVerDto
     {
-        public string ModuleId { get; set; }
-        public string Version { get; set; }
-        public string FileHash { get; set; }
+        public string ModuleId { get; set; } = string.Empty;
+        public string Version { get; set; } = string.Empty;
+        public string FileHash { get; set; } = string.Empty;
         public long FileSize { get; set; }
-        public string StoragePath { get; set; }
-        public string DeployDesc { get; set; }
+        public string StoragePath { get; set; } = string.Empty;
+        public string DeployDesc { get; set; } = string.Empty;
         public DateTime? DelDate { get; set; }
-        public string Category { get; set; } // Joined from MST
+        public string Category { get; set; } = string.Empty; // Joined from MST
     }
 
     /// <summary>
@@ -29,25 +30,25 @@ namespace nU3.Models
     /// </summary>
     public enum ComponentType
     {
-        /// <summary>È­¸é ¸ğµâ DLL (±âÁ¸ ¹æ½Ä)</summary>
+        /// <summary>í™”ë©´ ëª¨ë“ˆ DLL (ìë™ ë¡œë“œ)</summary>
         ScreenModule = 0,
         
-        /// <summary>Framework ÇÙ½É DLL (nU3.Core.dll µî)</summary>
+        /// <summary>Framework í•µì‹¬ DLL (nU3.Core.dll ë“±)</summary>
         FrameworkCore = 1,
         
-        /// <summary>°ø¿ë ¶óÀÌºê·¯¸® DLL (DevExpress, Oracle.ManagedDataAccess µî)</summary>
+        /// <summary>ê³µí†µ ë¼ì´ë¸ŒëŸ¬ë¦¬ DLL (DevExpress, Oracle ë“±)</summary>
         SharedLibrary = 2,
         
-        /// <summary>½ÇÇà ÆÄÀÏ (nU3.Shell.exe, nU3.Bootstrapper.exe µî)</summary>
+        /// <summary>ì‹¤í–‰ íŒŒì¼ (nU3.Shell.exe, nU3.Bootstrapper.exe ë“±)</summary>
         Executable = 3,
         
-        /// <summary>¼³Á¤ ÆÄÀÏ (appsettings.json µî)</summary>
+        /// <summary>ì„¤ì • íŒŒì¼ (appsettings.json ë“±)</summary>
         Configuration = 4,
         
-        /// <summary>¸®¼Ò½º ÆÄÀÏ (ÀÌ¹ÌÁö, ¾ÆÀÌÄÜ µî)</summary>
+        /// <summary>ë¦¬ì†ŒìŠ¤ íŒŒì¼ (ì´ë¯¸ì§€, ì•„ì´ì½˜ ë“±)</summary>
         Resource = 5,
         
-        /// <summary>ÇÃ·¯±×ÀÎ DLL</summary>
+        /// <summary>í”ŒëŸ¬ê·¸ì¸ DLL</summary>
         Plugin = 6,
 
         /// <summary>json</summary>
@@ -56,59 +57,31 @@ namespace nU3.Models
         /// <summary>xml</summary>
         Xml = 8,
 
-        /// <summary>json</summary>
+        /// <summary>image</summary>
         Image = 9,
 
-        /// <summary>±âÅ¸</summary>
+        /// <summary>ê¸°íƒ€</summary>
         Other = 99
     }
 
     /// <summary>
     /// Framework Component Master DTO
-    /// È­¸é ¸ğµâÀÌ ¾Æ´Ñ Framework DLL, °ø¿ë ¶óÀÌºê·¯¸®, ½ÇÇàÆÄÀÏ µîÀ» °ü¸®
     /// </summary>
     public class ComponentMstDto
     {
-        /// <summary>ÄÄÆ÷³ÍÆ® °íÀ¯ ID (¿¹: "nU3.Core", "DevExpress.XtraEditors", "nU3.Shell")</summary>
-        public string ComponentId { get; set; }
-        
-        /// <summary>ÄÄÆ÷³ÍÆ® À¯Çü</summary>
+        public string ComponentId { get; set; } = string.Empty;
         public ComponentType ComponentType { get; set; }
-        
-        /// <summary>ÄÄÆ÷³ÍÆ® ÀÌ¸§ (Ç¥½Ã¿ë)</summary>
-        public string ComponentName { get; set; }
-        
-        /// <summary>ÆÄÀÏ¸í (¿¹: "nU3.Core.dll", "nU3.Shell.exe")</summary>
-        public string FileName { get; set; }
-        
-        /// <summary>¼³Ä¡ °æ·Î (»ó´ë °æ·Î, ¿¹: "", "plugins", "resources/images")</summary>
-        public string InstallPath { get; set; }
-        
-        /// <summary>±×·ì/Ä«Å×°í¸® (¿¹: "Framework", "DevExpress", "Oracle")</summary>
-        public string GroupName { get; set; }
-        
-        /// <summary>ÇÊ¼ö ¿©ºÎ (ÇÊ¼ö ÄÄÆ÷³ÍÆ®´Â Ç×»ó ÃÖ½Å ¹öÀü À¯Áö)</summary>
+        public string ComponentName { get; set; } = string.Empty;
+        public string FileName { get; set; } = string.Empty;
+        public string InstallPath { get; set; } = string.Empty;
+        public string GroupName { get; set; } = string.Empty;
         public bool IsRequired { get; set; }
-        
-        /// <summary>ÀÚµ¿ ¾÷µ¥ÀÌÆ® ¿©ºÎ</summary>
         public bool AutoUpdate { get; set; } = true;
-        
-        /// <summary>¼³¸í</summary>
-        public string Description { get; set; }
-        
-        /// <summary>¿ì¼±¼øÀ§ (³·À»¼ö·Ï ¸ÕÀú ¼³Ä¡, ÀÇÁ¸¼º ¼ø¼­)</summary>
+        public string Description { get; set; } = string.Empty;
         public int Priority { get; set; }
-        
-        /// <summary>ÀÇÁ¸ ÄÄÆ÷³ÍÆ® ID ¸ñ·Ï (½°Ç¥ ±¸ºĞ)</summary>
-        public string Dependencies { get; set; }
-        
-        /// <summary>µî·ÏÀÏ</summary>
+        public string Dependencies { get; set; } = string.Empty;
         public DateTime RegDate { get; set; }
-        
-        /// <summary>¼öÁ¤ÀÏ</summary>
         public DateTime? ModDate { get; set; }
-        
-        /// <summary>È°¼º ¿©ºÎ</summary>
         public string IsActive { get; set; } = "Y";
     }
 
@@ -117,74 +90,105 @@ namespace nU3.Models
     /// </summary>
     public class ComponentVerDto
     {
-        /// <summary>ÄÄÆ÷³ÍÆ® ID</summary>
-        public string ComponentId { get; set; }
-        
-        /// <summary>¹öÀü (¿¹: "1.0.0.0", "23.2.9")</summary>
-        public string Version { get; set; }
-        
-        /// <summary>ÆÄÀÏ ÇØ½Ã (SHA256)</summary>
-        public string FileHash { get; set; }
-        
-        /// <summary>ÆÄÀÏ Å©±â (bytes)</summary>
+        public string ComponentId { get; set; } = string.Empty;
+        public string Version { get; set; } = string.Empty;
+        public string FileHash { get; set; } = string.Empty;
         public long FileSize { get; set; }
-        
-        /// <summary>¼­¹ö ÀúÀå °æ·Î (Àı´ë °æ·Î)</summary>
-        public string StoragePath { get; set; }
-        
-        /// <summary>ÃÖ¼Ò Áö¿ø Framework ¹öÀü</summary>
-        public string MinFrameworkVersion { get; set; }
-        
-        /// <summary>ÃÖ´ë Áö¿ø Framework ¹öÀü (null = Á¦ÇÑ ¾øÀ½)</summary>
-        public string MaxFrameworkVersion { get; set; }
-        
-        /// <summary>¹èÆ÷ ¼³¸í</summary>
-        public string DeployDesc { get; set; }
-        
-        /// <summary>¸±¸®Áî ³ëÆ® URL</summary>
-        public string ReleaseNoteUrl { get; set; }
-        
-        /// <summary>µî·ÏÀÏ</summary>
+        public string StoragePath { get; set; } = string.Empty;
+        public string MinFrameworkVersion { get; set; } = string.Empty;
+        public string MaxFrameworkVersion { get; set; } = string.Empty;
+        public string DeployDesc { get; set; } = string.Empty;
+        public string ReleaseNoteUrl { get; set; } = string.Empty;
         public DateTime RegDate { get; set; }
-        
-        /// <summary>»èÁ¦ÀÏ (soft delete)</summary>
         public DateTime? DelDate { get; set; }
-        
-        /// <summary>È°¼º ¹öÀü ¿©ºÎ (¹èÆ÷ ´ë»ó)</summary>
         public string IsActive { get; set; } = "Y";
 
         // Joined fields
-        /// <summary>ÄÄÆ÷³ÍÆ® À¯Çü (Join)</summary>
         public ComponentType ComponentType { get; set; }
-        
-        /// <summary>ÄÄÆ÷³ÍÆ® ÀÌ¸§ (Join)</summary>
-        public string ComponentName { get; set; }
-        
-        /// <summary>¼³Ä¡ °æ·Î (Join)</summary>
-        public string InstallPath { get; set; }
-        
-        /// <summary>±×·ì¸í (Join)</summary>
-        public string GroupName { get; set; }
+        public string ComponentName { get; set; } = string.Empty;
+        public string InstallPath { get; set; } = string.Empty;
+        public string GroupName { get; set; } = string.Empty;
     }
 
     /// <summary>
-    /// Å¬¶óÀÌ¾ğÆ® ÄÄÆ÷³ÍÆ® ¼³Ä¡ ÇöÈ²
+    /// í´ë¼ì´ì–¸íŠ¸ ì»´í¬ë„ŒíŠ¸ ì„¤ì¹˜ í˜„í™©
     /// </summary>
     public class ClientComponentDto
     {
-        /// <summary>ÄÄÆ÷³ÍÆ® ID</summary>
-        public string ComponentId { get; set; }
-        
-        /// <summary>¼³Ä¡µÈ ¹öÀü</summary>
-        public string InstalledVersion { get; set; }
-        
-        /// <summary>¼³Ä¡ °æ·Î</summary>
-        public string InstalledPath { get; set; }
-        
-        /// <summary>¼³Ä¡ÀÏ</summary>
+        public string ComponentId { get; set; } = string.Empty;
+        public string InstalledVersion { get; set; } = string.Empty;
+        public string InstalledPath { get; set; } = string.Empty;
         public DateTime InstalledDate { get; set; }
-        
-        /// <summary>ÆÄÀÏ ÇØ½Ã (¹«°á¼º È®ÀÎ¿ë)</summary>
-        public string FileHash { get; set; }
+        public string FileHash { get; set; } = string.Empty;
     }
+
+    #region Update Models (Moved from ComponentLoader)
+
+    /// <summary>
+    /// ì—…ë°ì´íŠ¸ ìœ í˜• (ì‹ ê·œ ì„¤ì¹˜ ë˜ëŠ” êµì²´ ì—…ë°ì´íŠ¸)
+    /// </summary>
+    public enum UpdateType
+    {
+        NewInstall,
+        Update
+    }
+
+    /// <summary>
+    /// ì—…ë°ì´íŠ¸ ì§„í–‰ ë‹¨ê³„
+    /// </summary>
+    public enum UpdatePhase
+    {
+        Checking,
+        Downloading,
+        Installing,
+        Completed,
+        Failed
+    }
+
+    /// <summary>
+    /// ì—…ë°ì´íŠ¸ ì»´í¬ë„ŒíŠ¸ ì •ë³´ ì „ì†¡ìš© DTO
+    /// </summary>
+    public class ComponentUpdateInfo
+    {
+        public string ComponentId { get; set; } = "";
+        public string ComponentName { get; set; } = "";
+        public ComponentType ComponentType { get; set; }
+        public string FileName { get; set; } = "";
+        public string? LocalVersion { get; set; }
+        public string ServerVersion { get; set; } = "";
+        public long FileSize { get; set; }
+        public UpdateType UpdateType { get; set; }
+        public bool IsRequired { get; set; }
+        public int Priority { get; set; }
+        public string InstallPath { get; set; } = "";
+        public string? StoragePath { get; set; }
+        public string GroupName { get; set; } = "Other";
+    }
+
+    /// <summary>
+    /// ì—…ë°ì´íŠ¸ ì§„í–‰ ì´ë²¤íŠ¸ ì¸ì
+    /// </summary>
+    public class ComponentUpdateEventArgs : EventArgs
+    {
+        public UpdatePhase Phase { get; set; }
+        public string ComponentId { get; set; } = "";
+        public string? ComponentName { get; set; }
+        public int CurrentIndex { get; set; }
+        public int TotalCount { get; set; }
+        public int PercentComplete { get; set; }
+        public string? ErrorMessage { get; set; }
+    }
+
+    /// <summary>
+    /// ì—…ë°ì´íŠ¸ ê²°ê³¼ ëª©ë¡
+    /// </summary>
+    public class ComponentUpdateResult
+    {
+        public bool Success { get; set; }
+        public string Message { get; set; } = "";
+        public List<string> UpdatedComponents { get; set; } = new();
+        public List<(string ComponentId, string Error)> FailedComponents { get; set; } = new();
+    }
+
+    #endregion
 }

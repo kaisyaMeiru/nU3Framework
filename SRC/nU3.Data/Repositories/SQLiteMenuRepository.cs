@@ -51,9 +51,9 @@ namespace nU3.Data.Repositories
             var parameters = new Dictionary<string, object>
             {
                 { "@id", menu.MenuId },
-                { "@pid", (object)menu.ParentId ?? DBNull.Value },
+                { "@pid", string.IsNullOrEmpty(menu.ParentId) ? (object)DBNull.Value : menu.ParentId },
                 { "@name", menu.MenuName },
-                { "@prog", (object)menu.ProgId ?? DBNull.Value },
+                { "@prog", string.IsNullOrEmpty(menu.ProgId) ? (object)DBNull.Value : menu.ProgId },
                 { "@sort", menu.SortOrd },
                 { "@auth", menu.AuthLevel }
             };

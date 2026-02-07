@@ -1,53 +1,72 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using Microsoft.Extensions.Configuration;
 using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
 using nU3.Core.Attributes;
 using nU3.Core.Repositories;
 using nU3.Models;
+using nU3.Connectivity;
+using nU3.Core.Configuration;
 
 namespace nU3.Core.Services
 {
     /// <summary>
-    /// ¸ğµâ ·Î´õ ¼­ºñ½º´Â ·±Å¸ÀÓ¿¡ ¸ğµâ(DLL)À» Å½»öÇÏ°í ·ÎµåÇÏ¿© ÇÁ·Î±×·¥ ÀÎ½ºÅÏ½º¸¦ »ı¼ºÇÏ´Â Ã¥ÀÓÀ» °¡Áı´Ï´Ù.
-    /// 
-    /// ÁÖ¿ä ±â´É:
-    /// - ¼­¹ö ¶Ç´Â ½ºÅ×ÀÌÂ¡ ¿µ¿ª¿¡¼­ ¸ğµâ ÆÄÀÏÀ» Ä³½Ã·Î ´Ù¿î·ÎµåÇÏ°í ·±Å¸ÀÓ °æ·Î·Î ¹èÆ÷
-    /// - DLLÀ» ·ÎµåÇÏ¿© nU3ProgramInfoAttribute°¡ ºÙÀº Å¸ÀÔµéÀ» µî·Ï(ProgId -> Type)
-    /// - ¸ğµâ ¹öÀü °ü¸®¸¦ ¼öÇàÇÏ¿© ÇÊ¿äÇÑ °æ¿ì ÃÖ½Å ¹öÀüÀ¸·Î ¾÷µ¥ÀÌÆ®
-    /// - µ¿Àû ·Îµù ¹× ÀÎ½ºÅÏ½º »ı¼º Áö¿ø(¹öÀü Ã¼Å© ¿É¼Ç Æ÷ÇÔ)
-    /// 
-    /// ¼³°è ³ëÆ®:
-    /// - Ä³½Ã, ½ºÅ×ÀÌÂ¡, ·±Å¸ÀÓ °æ·Î¸¦ º°µµ·Î °ü¸®ÇÏ¿© ¹èÆ÷ ¹× ·Ñ¹éÀ» ´Ü¼øÈ­ÇÕ´Ï´Ù.
-    /// - ÆÄÀÏ ¹«°á¼ºÀº SHA256 ÇØ½Ã·Î °ËÁõÇÕ´Ï´Ù.
-    /// - ½ÇÁ¦ ¼­¹ö ´Ù¿î·Îµå´Â ÇöÀç ½ºÅ×ÀÌÂ¡ Æú´õ º¹»ç·Î ±¸ÇöµÇ¾î ÀÖÀ¸³ª ÇÊ¿ä ½Ã ¿ø°İ Àü¼Û ·ÎÁ÷À¸·Î ´ëÃ¼ °¡´É
+    /// ëª¨ë“ˆ ë¡œë” ì„œë¹„ìŠ¤ëŠ” ëŸ°íƒ€ì„ì— ëª¨ë“ˆ(DLL)ì„ íƒìƒ‰í•˜ê³  ë¡œë“œí•˜ë©°, í”„ë¡œê·¸ë¨ ì¸ìŠ¤í„´ìŠ¤ë¥¼ ìƒì„±í•˜ëŠ” ì±…ì„ì„ ìˆ˜í–‰í•©ë‹ˆë‹¤.
+    /// ë¡œì»¬ì— íŒŒì¼ì´ ì—†ê±°ë‚˜ ì—…ë°ì´íŠ¸ê°€ í•„ìš”í•œ ê²½ìš° ì„œë²„ì—ì„œ ìë™ìœ¼ë¡œ ë‹¤ìš´ë¡œë“œí•©ë‹ˆë‹¤.
     /// </summary>
     public class ModuleLoaderService
     {
         private readonly IModuleRepository _moduleRepo;
+        private readonly IComponentRepository _compRepo;
+        private readonly IProgramRepository _progRepo;
+        private readonly IFileTransferService _fileTransfer;
+        private readonly bool _useServerTransfer;
+        private readonly string _serverModulePath;
+
+        /// <summary>
+        /// ì»´í¬ë„ŒíŠ¸ ë¡œë“œ ìƒíƒœë¥¼ ì™¸ë¶€ë¡œ ì•Œë¦¬ê¸° ìœ„í•œ ì´ë²¤íŠ¸ì…ë‹ˆë‹¤.
+        /// </summary>
+        public event EventHandler<ComponentUpdateEventArgs>? UpdateProgress;
+
         private readonly Dictionary<string, Type> _progRegistry;
         private readonly Dictionary<string, nU3ProgramInfoAttribute> _progAttributeCache;
         private readonly Dictionary<string, string> _loadedModuleVersions; // ModuleId -> Version
         private readonly string _cachePath;
-        private readonly string _stagingPath;
         private readonly string _runtimePath;
 
-        public ModuleLoaderService(IModuleRepository moduleRepo)
+        public ModuleLoaderService(
+            IModuleRepository moduleRepo, 
+            IComponentRepository compRepo,
+            IProgramRepository progRepo,
+            IFileTransferService fileTransfer,
+            IConfiguration configuration)
         {
             _moduleRepo = moduleRepo;
+            _compRepo = compRepo;
+            _progRepo = progRepo;
+            _fileTransfer = fileTransfer;
+
             _progRegistry = new Dictionary<string, Type>(StringComparer.OrdinalIgnoreCase);
             _progAttributeCache = new Dictionary<string, nU3ProgramInfoAttribute>(StringComparer.OrdinalIgnoreCase);
             _loadedModuleVersions = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-            
-            var baseDir = AppDomain.CurrentDomain.BaseDirectory;
-            _runtimePath = Path.Combine(baseDir, "Modules");
-            _cachePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), 
-                "nU3.Framework", "Cache");
-            _stagingPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), 
-                "nU3.Framework", "ServerStorage");
 
+            // ì¤‘ì•™ ì§‘ì¤‘ì‹ ê²½ë¡œ ìƒìˆ˜ ì‚¬ìš©
+            _runtimePath = configuration?.GetValue<string>("RuntimeDirectory");
+            if (string.IsNullOrEmpty(_runtimePath))
+                _runtimePath = AppDomain.CurrentDomain.BaseDirectory;
+
+            _cachePath = PathConstants.CacheDirectory;
+            
+            // ì„œë²„ ì„¤ì • ë¡œë“œ
+            var serverEnabled = configuration.GetValue<bool>("ServerConnection:Enabled", false);
+            _serverModulePath = configuration.GetValue<string>("ModuleStorage:ServerPath") ?? "Modules";
+            _useServerTransfer = configuration.GetValue<bool>("ModuleStorage:UseServerTransfer", true) && serverEnabled;
+
+            Debug.WriteLine($"[ModuleLoader] Service Initialized. ServerEnabled: {serverEnabled}, UseTransfer: {_useServerTransfer}");
             EnsureDirectories();
         }
 
@@ -55,135 +74,240 @@ namespace nU3.Core.Services
         {
             if (!Directory.Exists(_runtimePath)) Directory.CreateDirectory(_runtimePath);
             if (!Directory.Exists(_cachePath)) Directory.CreateDirectory(_cachePath);
-            if (!Directory.Exists(_stagingPath)) Directory.CreateDirectory(_stagingPath);
         }
 
         public Dictionary<string, Type> GetProgramRegistry() => _progRegistry;
         
         /// <summary>
-        /// DB¿¡¼­ ÀĞ¾î¿Â nU3ProgramInfoAttribute Ä³½Ã¸¦ ¹İÈ¯ÇÕ´Ï´Ù.
+        /// DBì—ì„œ ì½ì–´ì˜¨ nU3ProgramInfoAttribute ìºì‹œë¥¼ ë°˜í™˜í•©ë‹ˆë‹¤.
         /// </summary>
         public Dictionary<string, nU3ProgramInfoAttribute> GetProgramAttributes() => _progAttributeCache;
 
         /// <summary>
-        /// Ä³½Ã ¹× ·±Å¸ÀÓÀÇ ¸ğµâÀ» È®ÀÎÇÏ°í ÇÊ¿äÇÑ °æ¿ì ¾÷µ¥ÀÌÆ® ¹× ·Îµå¸¦ ¼öÇàÇÕ´Ï´Ù.
+        /// ëª¨ë“  ëª¨ë“ˆì„ ê²€ì‚¬í•˜ê³  ë¡œë“œí•©ë‹ˆë‹¤.
+        /// (Bootstrapperê°€ ì´ë¯¸ ìµœì‹ í™”ë¥¼ ìˆ˜í–‰í–ˆë‹¤ê³  ê°€ì •í•˜ê³ , ë¡œì»¬ ë¡œë“œë§Œ ìˆ˜í–‰)
         /// </summary>
         public void LoadAllModules()
         {
-            CheckAndUpdateModules();
+            Debug.WriteLine("[ModuleLoader] LoadAllModules started.");
             LoadModulesFromRuntime();
         }
 
         /// <summary>
-        /// DB(¶Ç´Â ½ºÅ×ÀÌÂ¡)¿¡ ÀÖ´Â ¸ğµâ ÆÄÀÏ°ú Ä³½Ã/·±Å¸ÀÓ ÆÄÀÏÀ» ºñ±³ÇÏ¿©
-        /// º¯°æ»çÇ×ÀÌ ÀÖÀ¸¸é Ä³½Ã·Î ´Ù¿î·ÎµåÇÏ°í ·±Å¸ÀÓ¿¡ ¹èÆ÷ÇÕ´Ï´Ù.
+        /// ì—…ë°ì´íŠ¸ê°€ í•„ìš”í•œ í•­ëª© ëª©ë¡ì„ ë°˜í™˜í•©ë‹ˆë‹¤.
         /// </summary>
-        public void CheckAndUpdateModules()
+        public List<ComponentUpdateInfo> CheckForUpdates(string syncMode)
         {
-            var modules = _moduleRepo.GetAllModules();
-            var activeVersions = _moduleRepo.GetActiveVersions();
-            int updateCount = 0;
+            var updates = new List<ComponentUpdateInfo>();
 
-            foreach (var module in modules)
+            // 1. ì»´í¬ë„ŒíŠ¸ ì²´í¬ (SYS_COMPONENT_MST)
+            var activeComponents = _compRepo?.GetActiveVersions() ?? new List<ComponentVerDto>();
+            foreach (var ver in activeComponents)
             {
-                var activeVersion = activeVersions.FirstOrDefault(v => 
-                    string.Equals(v.ModuleId, module.ModuleId, StringComparison.OrdinalIgnoreCase));
+                var comp = _compRepo?.GetComponent(ver.ComponentId);
+                if (comp == null) continue;
+
+                string relativePath = comp.FileName;
+                //if (!string.IsNullOrEmpty(comp.GroupName)) 
+                //    relativePath = Path.Combine(comp.GroupName, relativePath);
                 
-                if (activeVersion == null) continue;
+                // ì‹¤í–‰ íŒŒì¼ ê¸°ì¤€ ê²½ë¡œ ê³„ì‚° (ì»´í¬ë„ŒíŠ¸ëŠ” ë³´í†µ ë£¨íŠ¸ ë˜ëŠ” íŠ¹ì • í´ë”)
+                string installFile = Path.Combine(_runtimePath, comp.ComponentId);
+                
+                // í™”ë©´ ëª¨ë“ˆ íƒ€ì…ì¸ ê²½ìš° Modules í´ë”ë¡œ ê°•ì œ
+                if (comp.ComponentType == ComponentType.ScreenModule)
+                    installFile = Path.Combine(_runtimePath, comp.FileName);
 
-                string relativePath = Path.Combine(
-                    module.Category ?? "Common", 
-                    module.SubSystem ?? "Common", 
-                    module.FileName);
-
-                string cacheFile = Path.Combine(_cachePath, relativePath);
-                string runtimeFile = Path.Combine(_runtimePath, relativePath);
-                string serverFile = Path.Combine(_stagingPath, relativePath);
-
-                bool needsUpdate = false;
-
-                // 1. Ä³½Ã¿¡ ¼­¹ö ÆÄÀÏÀÌ ¾øÀ¸¸é ¶Ç´Â ÇØ½Ã°¡ ´Ù¸£¸é ¼­¹ö¿¡¼­ Ä³½Ã·Î º¹»ç
-                if (!File.Exists(cacheFile) && File.Exists(serverFile))
+                if (!File.Exists(installFile) || CalculateFileHash(installFile) != ver.FileHash)
                 {
-                    DownloadToCache(serverFile, cacheFile, module.ModuleName, activeVersion.Version);
-                    needsUpdate = true;
+                    updates.Add(new ComponentUpdateInfo
+                    {
+                        ComponentId = comp.ComponentId,
+                        ComponentName = comp.ComponentName,
+                        ComponentType = comp.ComponentType,
+                        FileName = comp.FileName,
+                        ServerVersion = ver.Version,
+                        FileSize = ver.FileSize,
+                        IsRequired = comp.IsRequired,
+                        Priority = comp.Priority,
+                        InstallPath = installFile,
+                        StoragePath = ver.StoragePath,
+                        GroupName = comp.GroupName ?? "Framework"
+                    });
                 }
-                else if (File.Exists(cacheFile) && File.Exists(serverFile))
-                {
-                    string cacheHash = CalculateFileHash(cacheFile);
-                    string serverHash = CalculateFileHash(serverFile);
-                    
-                    if (cacheHash != serverHash)
-                    {
-                        DownloadToCache(serverFile, cacheFile, module.ModuleName, activeVersion.Version);
-                        needsUpdate = true;
-                    }
-                }
+            }
 
-                // 2. Ä³½Ã°¡ Á¸ÀçÇÏ¸é ·±Å¸ÀÓ¿¡ ¹èÆ÷ ÇÊ¿ä ¿©ºÎ °Ë»ç
-                if (File.Exists(cacheFile))
+            // 2. ëª¨ë“ˆ ì²´í¬ (SYS_MODULE_MST) - Full ëª¨ë“œì¸ ê²½ìš°
+            if (string.Equals(syncMode, "Full", StringComparison.OrdinalIgnoreCase))
+            {
+                var targetModules = _moduleRepo.GetAllModules();
+                var activeModuleVers = _moduleRepo.GetActiveVersions();
+
+                foreach (var module in targetModules)
                 {
-                    if (!File.Exists(runtimeFile))
+                    var ver = activeModuleVers.FirstOrDefault(v => v.ModuleId == module.ModuleId);
+                    if (ver == null) continue;
+
+                    string relativePath = module.FileName;
+                    if (!string.IsNullOrEmpty(module.Category))
                     {
-                        needsUpdate = true;
-                    }
-                    else
-                    {
-                        string cacheHash = CalculateFileHash(cacheFile);
-                        string runtimeHash = CalculateFileHash(runtimeFile);
-                        
-                        if (cacheHash != runtimeHash)
+                        relativePath = Path.Combine(module.Category, relativePath);
+                        if (!string.IsNullOrEmpty(module.SubSystem))
                         {
-                            needsUpdate = true;
+                            var dir = Path.GetDirectoryName(relativePath) ?? "";
+                            relativePath = Path.Combine(dir, module.SubSystem, module.FileName);
                         }
                     }
+                    string installFile = Path.Combine(_runtimePath, relativePath);
 
-                    if (needsUpdate)
+                    if (!File.Exists(installFile) || CalculateFileHash(installFile) != ver.FileHash)
                     {
-                        DeployToRuntime(cacheFile, runtimeFile, module.ModuleName, activeVersion.Version);
-                        _loadedModuleVersions[module.ModuleId] = activeVersion.Version;
-                        updateCount++;
+                        updates.Add(new ComponentUpdateInfo
+                        {
+                            ComponentId = module.ModuleId,
+                            ComponentName = module.ModuleName,
+                            ComponentType = ComponentType.ScreenModule,
+                            FileName = module.FileName,
+                            ServerVersion = ver.Version,
+                            FileSize = ver.FileSize,
+                            IsRequired = false,
+                            Priority = 100, // ëª¨ë“ˆì€ ì»´í¬ë„ŒíŠ¸ ì´í›„ì—
+                            InstallPath = installFile,
+                            StoragePath = ver.StoragePath,
+                            GroupName = module.Category ?? "Modules"
+                        });
                     }
                 }
             }
 
-            if (updateCount > 0)
-            {
-                Console.WriteLine($"[ModuleLoader] {updateCount} modules updated.");
-            }
+            return updates.OrderBy(u => u.Priority).ToList();
         }
 
         /// <summary>
-        /// Æ¯Á¤ ProgId/ModuleId¿¡ ´ëÇØ DBÀÇ È°¼º ¹öÀü°ú ·ÎµåµÈ ¹öÀüÀ» ºñ±³ÇÏ¿©
-        /// ÇÊ¿äÇÏ¸é ¾÷µ¥ÀÌÆ® ¼öÇà ÈÄ true¸¦ ¹İÈ¯ÇÕ´Ï´Ù.
+        /// ì„œë²„ì™€ ë™ê¸°í™”ë¥¼ ìˆ˜í–‰í•©ë‹ˆë‹¤. (Bootstrapper í†µí•©)
+        /// </summary>
+        public ComponentUpdateResult SyncWithServer(string syncMode = "Minimum")
+        {
+            var result = new ComponentUpdateResult();
+            if (!_useServerTransfer || _fileTransfer == null)
+            {
+                result.Success = true;
+                result.Message = "Server transfer disabled.";
+                return result;
+            }
+
+            Debug.WriteLine($"[ModuleLoader] Starting sync. Mode: {syncMode}");
+            RaiseProgress(new ComponentUpdateEventArgs { Phase = UpdatePhase.Checking });
+
+            var updates = CheckForUpdates(syncMode);
+            if (!updates.Any())
+            {
+                result.Success = true;
+                result.Message = "ëª¨ë“  í•­ëª©ì´ ìµœì‹  ìƒíƒœì…ë‹ˆë‹¤.";
+                RaiseProgress(new ComponentUpdateEventArgs { Phase = UpdatePhase.Completed, PercentComplete = 100 });
+                return result;
+            }
+
+            int total = updates.Count;
+            int current = 0;
+
+            foreach (var update in updates)
+            {
+                current++;
+                RaiseProgress(new ComponentUpdateEventArgs
+                {
+                    Phase = UpdatePhase.Downloading,
+                    ComponentId = update.ComponentId,
+                    ComponentName = update.ComponentName,
+                    CurrentIndex = current,
+                    TotalCount = total,
+                    PercentComplete = (int)((current - 0.5) / (double)total * 100)
+                });
+
+                try
+                {
+                    string serverUrlPath = update.StoragePath ?? "";
+                    string cacheFile = Path.Combine(_cachePath, update.FileName);
+                    
+                    if (DownloadToCache(serverUrlPath, cacheFile, update.ComponentName, update.ServerVersion))
+                    {
+                        RaiseProgress(new ComponentUpdateEventArgs
+                        {
+                            Phase = UpdatePhase.Installing,
+                            ComponentId = update.ComponentId,
+                            ComponentName = update.ComponentName,
+                            CurrentIndex = current,
+                            TotalCount = total,
+                            PercentComplete = (int)(current / (double)total * 100)
+                        });
+
+                        DeployToRuntime(cacheFile, update.InstallPath, update.ComponentName, update.ServerVersion);
+                        result.UpdatedComponents.Add(update.ComponentId);
+                    }
+                    else
+                    {
+                        throw new Exception("Download failed");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    result.FailedComponents.Add((update.ComponentId, ex.Message));
+                    RaiseProgress(new ComponentUpdateEventArgs
+                    {
+                        Phase = UpdatePhase.Failed,
+                        ComponentId = update.ComponentId,
+                        ComponentName = update.ComponentName,
+                        ErrorMessage = ex.Message
+                    });
+                }
+                System.Threading.Thread.Sleep(50);
+            }
+
+            result.Success = !result.FailedComponents.Any();
+            result.Message = result.Success ? $"{result.UpdatedComponents.Count}ê°œ í•­ëª© ì—…ë°ì´íŠ¸ ì™„ë£Œ" : "ì—…ë°ì´íŠ¸ ì¤‘ ì˜¤ë¥˜ ë°œìƒ";
+            
+            RaiseProgress(new ComponentUpdateEventArgs { Phase = UpdatePhase.Completed, PercentComplete = 100 });
+            return result;
+        }
+
+        private void RaiseProgress(ComponentUpdateEventArgs args)
+        {
+            UpdateProgress?.Invoke(this, args);
+        }
+
+        /// <summary>
+        /// íŠ¹ì • ëª¨ë“ˆì´ ìµœì‹  ìƒíƒœì¸ì§€ í™•ì¸í•˜ê³  í•„ìš” ì‹œ ì—…ë°ì´íŠ¸í•©ë‹ˆë‹¤.
         /// </summary>
         public bool EnsureModuleUpdated(string progId, string moduleId)
         {
-            // 1. DB¿¡¼­ È°¼º ¹öÀü Á¤º¸ Á¶È¸
+            Debug.WriteLine($"[ModuleLoader] EnsureModuleUpdated: ModuleId={moduleId}");
+            
             var activeVersion = _moduleRepo.GetActiveVersions()
                 .FirstOrDefault(v => string.Equals(v.ModuleId, moduleId, StringComparison.OrdinalIgnoreCase));
             
             if (activeVersion == null)
             {
-                Console.WriteLine($"[ModuleLoader] No active version found for module: {moduleId}");
+                Debug.WriteLine($"[ModuleLoader] !!! No active version found in DB for module: {moduleId}");
                 return false;
             }
 
-            // 2. ÇöÀç ·ÎµåµÈ ¹öÀü°ú ºñ±³
             if (_loadedModuleVersions.TryGetValue(moduleId, out var loadedVersion))
             {
                 if (string.Equals(loadedVersion, activeVersion.Version, StringComparison.OrdinalIgnoreCase))
                 {
-                    // ÀÌ¹Ì ÃÖ½Å ¹öÀü
+                    Debug.WriteLine($"[ModuleLoader] Module {moduleId} already up to date (v{loadedVersion})");
                     return true;
                 }
             }
 
-            // 3. ¾÷µ¥ÀÌÆ® ÇÊ¿ä
             var module = _moduleRepo.GetAllModules()
                 .FirstOrDefault(m => string.Equals(m.ModuleId, moduleId, StringComparison.OrdinalIgnoreCase));
             
-            if (module == null) return false;
+            if (module == null)
+            {
+                Debug.WriteLine($"[ModuleLoader] !!! Module definition not found in DB: {moduleId}");
+                return false;
+            }
 
             return UpdateSingleModule(module, activeVersion);
         }
@@ -197,52 +321,77 @@ namespace nU3.Core.Services
 
             string cacheFile = Path.Combine(_cachePath, relativePath);
             string runtimeFile = Path.Combine(_runtimePath, relativePath);
-            string serverFile = Path.Combine(_stagingPath, relativePath);
+            
+            // ì„œë²„ ê²½ë¡œ êµ¬ì„±
+            string serverCategoryPath = module.Category ?? "";
+            if (!string.IsNullOrEmpty(module.SubSystem))
+            {
+                serverCategoryPath = $"{serverCategoryPath}/{module.SubSystem}".TrimStart('/');
+            }
+            
+            string serverRelativePath = string.IsNullOrEmpty(serverCategoryPath) 
+                ? module.FileName 
+                : $"{serverCategoryPath}/{module.FileName}";
+
+            string serverUrlPath = $"{_serverModulePath}/{serverRelativePath}";
+
+            Debug.WriteLine($"[ModuleLoader] Checking module: {module.ModuleName} (Hash={version.FileHash})");
 
             try
             {
-                // Ä³½Ã¿¡¼­ ´Ù¿î·Îµå ÇÊ¿ä ¿©ºÎ ÆÇ´Ü
-                if (!File.Exists(cacheFile) || NeedsDownload(cacheFile, serverFile, version))
-                {
-                    if (File.Exists(serverFile))
-                    {
-                        DownloadToCache(serverFile, cacheFile, module.ModuleName, version.Version);
-                    }
-                    else
-                    {
-                        Console.WriteLine($"[ModuleLoader] Server file not found: {serverFile}");
-                        return false;
-                    }
-                }
+                // 1. ëŸ°íƒ€ì„(ì‹¤í–‰) DLLì„ ìµœìš°ì„ ìœ¼ë¡œ ê²€ì‚¬ (DB í•´ì‹œì™€ ë¹„êµ)
+                bool isRuntimeValid = File.Exists(runtimeFile) && 
+                                      string.Equals(CalculateFileHash(runtimeFile), version.FileHash, StringComparison.OrdinalIgnoreCase);
 
-                // Ä³½Ã¿¡¼­ ·±Å¸ÀÓÀ¸·Î ¹èÆ÷
-                if (File.Exists(cacheFile))
+                if (isRuntimeValid)
                 {
-                    DeployToRuntime(cacheFile, runtimeFile, module.ModuleName, version.Version);
-                    
-                    // ¸ğµâ ´Ù½Ã ·Îµå
-                    ReloadModule(runtimeFile, module.ModuleId, version.Version);
+                    Debug.WriteLine($"[ModuleLoader] Runtime file is valid: {runtimeFile}");
+                    if (!_loadedModuleVersions.ContainsKey(module.ModuleId))
+                    {
+                         ReloadModule(runtimeFile, module.ModuleId, version.Version);
+                    }
                     return true;
                 }
+
+                // 2. ëŸ°íƒ€ì„ì´ ìœ íš¨í•˜ì§€ ì•Šìœ¼ë©´ ë¬´ì¡°ê±´ ë‹¤ìš´ë¡œë“œ ì‹œë„ (ìºì‹œëŠ” ì„ì‹œ ì €ì¥ì†Œ)
+                bool downloaded = false;
+                if (_useServerTransfer && _fileTransfer != null)
+                {
+                    bool isCacheValid = File.Exists(cacheFile) &&
+                                        string.Equals(CalculateFileHash(cacheFile), version.FileHash, StringComparison.OrdinalIgnoreCase);
+                    
+                    if (isCacheValid)
+                    {
+                        Debug.WriteLine($"[ModuleLoader] Valid cache file found: {cacheFile}");
+                        downloaded = true;
+                    }
+                    else if (DownloadToCache(serverUrlPath, cacheFile, module.ModuleName, version.Version))
+                    {
+                        downloaded = true;
+                    }
+                }
+                
+                if (!downloaded)
+                {
+                    Debug.WriteLine($"[ModuleLoader] !!! Failed to download update for {module.ModuleName}");
+                    return false; 
+                }
+
+                // 3. ìµœì‹ í™”ëœ ìºì‹œë¥¼ ëŸ°íƒ€ì„ìœ¼ë¡œ ë°°í¬ ì‹œë„
+                DeployToRuntime(cacheFile, runtimeFile, module.ModuleName, version.Version);
+                ReloadModule(runtimeFile, module.ModuleId, version.Version);
+                
+                return true;
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"[ModuleLoader] Error updating module {module.ModuleId}: {ex.Message}");
+                Debug.WriteLine($"[ModuleLoader] !!! Error updating module {module.ModuleId}: {ex.Message}");
             }
 
             return false;
         }
 
-        private bool NeedsDownload(string cacheFile, string serverFile, ModuleVerDto version)
-        {
-            if (!File.Exists(serverFile)) return false;
-            
-            // ÆÄÀÏ ÇØ½Ã ºñ±³
-            string cacheHash = CalculateFileHash(cacheFile);
-            return !string.Equals(cacheHash, version.FileHash, StringComparison.OrdinalIgnoreCase);
-        }
-
-        private void DownloadToCache(string serverFile, string cacheFile, string moduleName, string version)
+        private bool DownloadToCache(string serverUrlPath, string cacheFile, string moduleName, string version)
         {
             try
             {
@@ -250,13 +399,18 @@ namespace nU3.Core.Services
                 if (!Directory.Exists(cacheDir)) 
                     Directory.CreateDirectory(cacheDir);
 
-                File.Copy(serverFile, cacheFile, true);
-                Console.WriteLine($"[ModuleLoader] Downloaded to cache: {moduleName} v{version}");
+                Debug.WriteLine($"[ModuleLoader] Downloading from server: {serverUrlPath}");
+                if (_fileTransfer.DownloadFile(serverUrlPath, cacheFile))
+                {
+                    Debug.WriteLine($"[ModuleLoader] Downloaded to cache: {moduleName} v{version}");
+                    return true;
+                }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"[ModuleLoader] Error downloading {moduleName}: {ex.Message}");
+                Debug.WriteLine($"[ModuleLoader] !!! Error downloading {moduleName}: {ex.Message}");
             }
+            return false;
         }
 
         private void DeployToRuntime(string cacheFile, string runtimeFile, string moduleName, string version)
@@ -268,33 +422,39 @@ namespace nU3.Core.Services
                     Directory.CreateDirectory(runtimeDir);
 
                 File.Copy(cacheFile, runtimeFile, true);
-                Console.WriteLine($"[ModuleLoader] Deployed to runtime: {moduleName} v{version}");
+                Debug.WriteLine($"[ModuleLoader] Deployed to runtime: {moduleName} v{version}");
             }
-            catch (IOException ex)
+            catch (IOException)
             {
-                Console.WriteLine($"[ModuleLoader] Module {moduleName} is locked (in use). Update will apply on restart.");
-                throw; // Re-throw to handle at higher level
+                Debug.WriteLine($"[ModuleLoader] !!! Module {moduleName} is locked. Update will apply on restart.");
+                throw; 
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"[ModuleLoader] Error deploying {moduleName}: {ex.Message}");
+                Debug.WriteLine($"[ModuleLoader] !!! Error deploying {moduleName}: {ex.Message}");
                 throw;
             }
         }
 
         private void LoadModulesFromRuntime()
         {
+            return;
+
             if (!Directory.Exists(_runtimePath)) 
+            {
+                Debug.WriteLine($"[ModuleLoader] Runtime path does not exist: {_runtimePath}");
                 return;
+            }
 
             var dlls = Directory.GetFiles(_runtimePath, "*.dll", SearchOption.AllDirectories);
+            Debug.WriteLine($"[ModuleLoader] Found {dlls.Length} assemblies in runtime path.");
             
             foreach (var dll in dlls)
             {
                 LoadAssembly(dll, null, null);
             }
 
-            Console.WriteLine($"[ModuleLoader] Loaded {_progRegistry.Count} programs from {dlls.Length} assemblies.");
+            Debug.WriteLine($"[ModuleLoader] Total Registered: {_progRegistry.Count} programs.");
         }
 
         private void LoadAssembly(string dllPath, string moduleId, string version)
@@ -303,7 +463,6 @@ namespace nU3.Core.Services
             {
                 var assembly = Assembly.LoadFile(dllPath);
                 
-                // Á¦°øµÇÁö ¾ÊÀº °æ¿ì ¾î¼Àºí¸® ¹öÀü °¡Á®¿À±â
                 if (string.IsNullOrEmpty(version))
                 {
                     version = assembly.GetName().Version?.ToString() ?? "Unknown";
@@ -317,25 +476,23 @@ namespace nU3.Core.Services
                         _progRegistry[attr.ProgramId] = type;
                         _progAttributeCache[attr.ProgramId] = attr;
                         
-                        // ¸ğµâ ¹öÀü ÃßÀû
                         if (!string.IsNullOrEmpty(moduleId))
                         {
                             _loadedModuleVersions[moduleId] = version;
                         }
                         else
                         {
-                            // Æ¯¼º¿¡¼­ moduleId »ı¼º
                             var autoModuleId = attr.GetModuleId();
                             _loadedModuleVersions[autoModuleId] = version;
                         }
                         
-                        Console.WriteLine($"[ModuleLoader] Registered: {attr.ProgramId} -> {type.FullName} (v{version})");
+                        Debug.WriteLine($"[ModuleLoader] Registered: {attr.ProgramId} -> {type.FullName} (v{version})");
                     }
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"[ModuleLoader] Error loading {Path.GetFileName(dllPath)}: {ex.Message}");
+                Debug.WriteLine($"[ModuleLoader] !!! Error loading {Path.GetFileName(dllPath)}: {ex.Message}");
             }
         }
 
@@ -353,41 +510,78 @@ namespace nU3.Core.Services
                         _progRegistry[attr.ProgramId] = type;
                         _progAttributeCache[attr.ProgramId] = attr;
                         _loadedModuleVersions[moduleId] = version;
-                        Console.WriteLine($"[ModuleLoader] Reloaded: {attr.ProgramId} (v{version})");
+                        Debug.WriteLine($"[ModuleLoader] Reloaded: {attr.ProgramId} (v{version})");
                     }
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"[ModuleLoader] Error reloading {Path.GetFileName(dllPath)}: {ex.Message}");
+                Debug.WriteLine($"[ModuleLoader] !!! Error reloading {Path.GetFileName(dllPath)}: {ex.Message}");
             }
         }
 
         private string CalculateFileHash(string filePath)
         {
-            using (var sha256 = SHA256.Create())
-            using (var stream = File.OpenRead(filePath))
+            if (!File.Exists(filePath)) return string.Empty;
+            
+            try
             {
-                var hash = sha256.ComputeHash(stream);
-                return BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
+                using (var sha256 = SHA256.Create())
+                using (var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                {
+                    var hash = sha256.ComputeHash(stream);
+                    return BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[ModuleLoader] !!! Error calculating hash for {filePath}: {ex.Message}");
+                return string.Empty;
             }
         }
 
-        /// <summary>
-        /// ProgId¿¡ ÇØ´çÇÏ´Â TypeÀ» ¹İÈ¯ÇÕ´Ï´Ù. Ä³½Ã¿¡ ¾øÀ¸¸é nullÀ» ¹İÈ¯ÇÕ´Ï´Ù.
-        /// </summary>
         public Type GetProgramType(string progId)
         {
+            // 1. ë©”ëª¨ë¦¬ì— ì´ë¯¸ ìˆë‹¤ë©´ ì¦‰ì‹œ ë°˜í™˜
             if (_progRegistry.TryGetValue(progId, out Type type))
                 return type;
             
+            // 2. ë©”ëª¨ë¦¬ì— ì—†ìœ¼ë©´ DB ì¡°íšŒ ì‹œë„ (On-Demand ë¡œë”©)
+            Debug.WriteLine($"[ModuleLoader] Type for '{progId}' not found in registry. Checking DB...");
+            
+            if (_progRepo == null)
+            {
+                Debug.WriteLine("[ModuleLoader] !!! Error: _progRepo is NULL.");
+                return null;
+            }
+
+            var progDto = _progRepo.GetProgramByProgId(progId);
+            if (progDto != null && !string.IsNullOrEmpty(progDto.ModuleId))
+            {
+                Debug.WriteLine($"[ModuleLoader] Found mapping in DB: {progId} -> {progDto.ModuleId}");
+                
+                if (EnsureModuleUpdated(progId, progDto.ModuleId))
+                {
+                    if (_progRegistry.TryGetValue(progId, out type))
+                    {
+                        Debug.WriteLine($"[ModuleLoader] Successfully loaded type for {progId}");
+                        return type;
+                    }
+                    else
+                    {
+                        var attr = GetProgramAttribute(progId);
+                        if (attr != null) return LoadProgramByAttribute(attr);
+                    }
+                }
+            }
+            else
+            {
+                Debug.WriteLine($"[ModuleLoader] !!! Program '{progId}' not found in DB.");
+            }
+
             return null;
         }
         
-        /// <summary>
-        /// ProgId¿¡ ÇØ´çÇÏ´Â nU3ProgramInfoAttribute¸¦ ¹İÈ¯ÇÕ´Ï´Ù.
-        /// DB¿¡¼­ Á¶È¸ÇÑ ¼Ó¼º Ä³½Ã¸¦ È®ÀÎÇÕ´Ï´Ù.
-        /// </summary>
         public nU3ProgramInfoAttribute GetProgramAttribute(string progId)
         {
             if (_progAttributeCache.TryGetValue(progId, out var attr))
@@ -396,22 +590,16 @@ namespace nU3.Core.Services
             return null;
         }
         
-        /// <summary>
-        /// nU3ProgramInfoAttribute·ÎºÎÅÍ DLLÀ» Ã£¾Æ Å¸ÀÔÀ» µ¿ÀûÀ¸·Î ·ÎµåÇÏ°í ¹İÈ¯ÇÕ´Ï´Ù.
-        /// µ¿Àû ·Îµå ½Ã ·ÎµåµÈ Å¸ÀÔÀ» Ä³½Ã¿¡ ÀúÀåÇÕ´Ï´Ù.
-        /// </summary>
         public Type LoadProgramByAttribute(nU3ProgramInfoAttribute attr)
         {
-            // Check cache first
             if (_progRegistry.TryGetValue(attr.ProgramId, out var cachedType))
                 return cachedType;
             
-            // Construct dll path in runtime folder
             var dllPath = Path.Combine(_runtimePath, attr.SystemType, attr.SubSystem ?? string.Empty, $"{attr.DllName}.dll");
             
             if (!File.Exists(dllPath))
             {
-                Console.WriteLine($"[ModuleLoader] DLL not found: {dllPath}");
+                Debug.WriteLine($"[ModuleLoader] DLL not found: {dllPath}");
                 return null;
             }
             
@@ -424,81 +612,31 @@ namespace nU3.Core.Services
                 {
                     _progRegistry[attr.ProgramId] = type;
                     _progAttributeCache[attr.ProgramId] = attr;
-                    Console.WriteLine($"[ModuleLoader] Dynamically loaded: {attr.ProgramId} from {attr.FullClassName}");
+                    Debug.WriteLine($"[ModuleLoader] Dynamically loaded: {attr.ProgramId} from {attr.FullClassName}");
                     return type;
-                }
-                else
-                {
-                    Console.WriteLine($"[ModuleLoader] Type not found: {attr.FullClassName} in {dllPath}");
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"[ModuleLoader] Error loading {attr.FullClassName}: {ex.Message}");
+                Debug.WriteLine($"[ModuleLoader] !!! Error loading {attr.FullClassName}: {ex.Message}");
             }
             
             return null;
         }
         
-        /// <summary>
-        /// ProgId, ModuleId, Version Ã¼Å© ÈÄ ÇÁ·Î±×·¥ ÀÎ½ºÅÏ½º¸¦ »ı¼ºÇÕ´Ï´Ù.
-        /// ÇÊ¿ä ½Ã ¸ğµâÀ» ¾÷µ¥ÀÌÆ®ÇÏ°í ÀÎ½ºÅÏ½º¸¦ »ı¼ºÇÕ´Ï´Ù.
-        /// </summary>
         public object CreateProgramInstanceWithVersionCheck(string progId, string moduleId)
         {
-            // 1. ¸ğµâ ¾÷µ¥ÀÌÆ® È®ÀÎ
             if (!EnsureModuleUpdated(progId, moduleId))
             {
-                Console.WriteLine($"[ModuleLoader] Failed to update module for ProgId: {progId}");
+                Debug.WriteLine($"[ModuleLoader] !!! Failed to update module for ProgId: {progId}");
                 return null;
             }
 
-            // 2. Å¸ÀÔ Á¶È¸
             var type = GetProgramType(progId);
-            
             if (type == null)
             {
-                // µ¿Àû ·Îµå ½Ãµµ
                 var attr = GetProgramAttribute(progId);
-                if (attr != null)
-                {
-                    type = LoadProgramByAttribute(attr);
-                }
-            }
-            
-            // 3. ÀÎ½ºÅÏ½º »ı¼º
-            if (type != null)
-            {
-                try
-                {
-                    var instance = Activator.CreateInstance(type);
-                    Console.WriteLine($"[ModuleLoader] Created instance: {progId} (Module: {moduleId})");
-                    return instance;
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"[ModuleLoader] Error creating instance of {type.FullName}: {ex.Message}");
-                }
-            }
-            
-            return null;
-        }
-        
-        /// <summary>
-        /// ProgId·Î µî·ÏµÈ ÇÁ·Î±×·¥ ÀÎ½ºÅÏ½º¸¦ »ı¼ºÇÕ´Ï´Ù. (¹öÀü Ã¼Å© ¹Ì½ÇÇà)
-        /// </summary>
-        public object CreateProgramInstance(string progId)
-        {
-            var type = GetProgramType(progId);
-            
-            if (type == null)
-            {
-                // Ä³½ÃµÈ ¼Ó¼º Á¤º¸·Î µ¿Àû ·Îµå ½Ãµµ
-                var attr = GetProgramAttribute(progId);
-                if (attr != null)
-                {
-                    type = LoadProgramByAttribute(attr);
-                }
+                if (attr != null) type = LoadProgramByAttribute(attr);
             }
             
             if (type != null)
@@ -509,16 +647,63 @@ namespace nU3.Core.Services
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"[ModuleLoader] Error creating instance of {type.FullName}: {ex.Message}");
+                    Debug.WriteLine($"[ModuleLoader] !!! Error creating instance of {type.FullName}: {ex.Message}");
                 }
             }
             
             return null;
         }
         
-        /// <summary>
-        /// ·ÎµåµÈ ¸ğµâÀÇ ¹öÀüÀ» ¹İÈ¯ÇÕ´Ï´Ù. ¾øÀ¸¸é null
-        /// </summary>
+        public object CreateProgramInstance(string progId)
+        {
+            Debug.WriteLine($"[ModuleLoader] >>> CreateProgramInstance Requested: {progId}");
+
+            var type = GetProgramType(progId);
+            if (type != null)
+            {
+                try
+                {
+                    return Activator.CreateInstance(type);
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"[ModuleLoader] !!! Error creating instance: {ex.Message}");
+                    return null;
+                }
+            }
+
+            var attr = GetProgramAttribute(progId);
+            if (attr != null)
+            {
+                type = LoadProgramByAttribute(attr);
+                if (type != null) return Activator.CreateInstance(type);
+            }
+
+            if (_progRepo == null) return null;
+
+            var progDto = _progRepo.GetProgramByProgId(progId);
+            if (progDto != null && !string.IsNullOrEmpty(progDto.ModuleId))
+            {
+                if (EnsureModuleUpdated(progId, progDto.ModuleId))
+                {
+                    type = GetProgramType(progId);
+                    if (type == null)
+                    {
+                        attr = GetProgramAttribute(progId);
+                        if (attr != null) type = LoadProgramByAttribute(attr);
+                    }
+
+                    if (type != null)
+                    {
+                        try { return Activator.CreateInstance(type); }
+                        catch { }
+                    }
+                }
+            }
+            
+            return null;
+        }
+
         public string GetLoadedModuleVersion(string moduleId)
         {
             return _loadedModuleVersions.TryGetValue(moduleId, out var version) ? version : null;

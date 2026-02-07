@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.Extensions.Configuration;
 using nU3.Connectivity;
-using nU3.Connectivity.Implementations;
 using nU3.Core.Repositories;
 using nU3.Models;
 using nU3.Core.UI; // BaseWorkControl
@@ -62,29 +61,15 @@ namespace nU3.Tools.Deployer.Views
             Dock = DockStyle.Fill;
         }
 
-        public void Initialize(IComponentRepository componentRepo, IConfiguration configuration)
+        public void Initialize(IComponentRepository componentRepo, IConfiguration configuration, IFileTransferService fileTransferService)
         {
             _componentRepo = componentRepo;
+            _fileTransferService = fileTransferService;
 
             // 서버 연결 설정 로드
             var serverEnabled = configuration.GetValue<bool>("ServerConnection:Enabled", false);
-            var baseUrl = configuration.GetValue<string>("ServerConnection:BaseUrl") ?? "https://localhost:64229";
             _serverComponentPath = configuration.GetValue<string>("ComponentStorage:ServerPath") ?? "Components";
             _useServerTransfer = serverEnabled;
-
-            // FileTransferService 초기화 (HTTP 클라이언트 구현 사용)
-            if (_useServerTransfer)
-            {
-                try
-                {
-                    _fileTransferService = new HttpFileTransferClient(baseUrl);
-                }
-                catch
-                {
-                    _useServerTransfer = false;
-                    _fileTransferService = null;
-                }
-            }
 
             SetupGrids();
             LoadData();

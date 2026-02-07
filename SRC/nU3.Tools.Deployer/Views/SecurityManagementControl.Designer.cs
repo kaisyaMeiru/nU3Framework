@@ -350,7 +350,7 @@ namespace nU3.Tools.Deployer.Views
             pnlChecks.Controls.Add(chkApprove);
             pnlChecks.Controls.Add(chkCancel);
             pnlChecks.Dock = System.Windows.Forms.DockStyle.Fill;
-            pnlChecks.Location = new System.Drawing.Point(0, 46);
+            pnlChecks.Location = new System.Drawing.Point(0, 65);
             pnlChecks.Name = "pnlChecks";
             pnlChecks.Padding = new System.Windows.Forms.Padding(10);
             pnlChecks.Size = new System.Drawing.Size(0, 0);
@@ -361,63 +361,63 @@ namespace nU3.Tools.Deployer.Views
             chkRead.Location = new System.Drawing.Point(13, 13);
             chkRead.Name = "chkRead";
             chkRead.Properties.Caption = "조회 (Read)";
-            chkRead.Size = new System.Drawing.Size(120, 20);
+            chkRead.Size = new System.Drawing.Size(120, 27);
             chkRead.TabIndex = 0;
             // 
             // chkCreate
             // 
-            chkCreate.Location = new System.Drawing.Point(13, 39);
+            chkCreate.Location = new System.Drawing.Point(13, 46);
             chkCreate.Name = "chkCreate";
             chkCreate.Properties.Caption = "생성 (Create)";
-            chkCreate.Size = new System.Drawing.Size(120, 20);
+            chkCreate.Size = new System.Drawing.Size(120, 27);
             chkCreate.TabIndex = 1;
             // 
             // chkUpdate
             // 
-            chkUpdate.Location = new System.Drawing.Point(13, 65);
+            chkUpdate.Location = new System.Drawing.Point(13, 79);
             chkUpdate.Name = "chkUpdate";
             chkUpdate.Properties.Caption = "수정 (Update)";
-            chkUpdate.Size = new System.Drawing.Size(120, 20);
+            chkUpdate.Size = new System.Drawing.Size(120, 27);
             chkUpdate.TabIndex = 2;
             // 
             // chkDelete
             // 
-            chkDelete.Location = new System.Drawing.Point(13, 91);
+            chkDelete.Location = new System.Drawing.Point(13, 112);
             chkDelete.Name = "chkDelete";
             chkDelete.Properties.Caption = "삭제 (Delete)";
-            chkDelete.Size = new System.Drawing.Size(120, 20);
+            chkDelete.Size = new System.Drawing.Size(120, 27);
             chkDelete.TabIndex = 3;
             // 
             // chkPrint
             // 
-            chkPrint.Location = new System.Drawing.Point(13, 117);
+            chkPrint.Location = new System.Drawing.Point(13, 145);
             chkPrint.Name = "chkPrint";
             chkPrint.Properties.Caption = "출력 (Print)";
-            chkPrint.Size = new System.Drawing.Size(120, 20);
+            chkPrint.Size = new System.Drawing.Size(120, 27);
             chkPrint.TabIndex = 4;
             // 
             // chkExport
             // 
-            chkExport.Location = new System.Drawing.Point(13, 143);
+            chkExport.Location = new System.Drawing.Point(13, 178);
             chkExport.Name = "chkExport";
             chkExport.Properties.Caption = "내보내기 (Export)";
-            chkExport.Size = new System.Drawing.Size(120, 20);
+            chkExport.Size = new System.Drawing.Size(120, 27);
             chkExport.TabIndex = 5;
             // 
             // chkApprove
             // 
-            chkApprove.Location = new System.Drawing.Point(13, 169);
+            chkApprove.Location = new System.Drawing.Point(13, 211);
             chkApprove.Name = "chkApprove";
             chkApprove.Properties.Caption = "승인 (Approve)";
-            chkApprove.Size = new System.Drawing.Size(120, 20);
+            chkApprove.Size = new System.Drawing.Size(120, 27);
             chkApprove.TabIndex = 6;
             // 
             // chkCancel
             // 
-            chkCancel.Location = new System.Drawing.Point(13, 195);
+            chkCancel.Location = new System.Drawing.Point(13, 244);
             chkCancel.Name = "chkCancel";
             chkCancel.Properties.Caption = "취소 (Cancel)";
-            chkCancel.Size = new System.Drawing.Size(120, 20);
+            chkCancel.Size = new System.Drawing.Size(120, 27);
             chkCancel.TabIndex = 7;
             // 
             // btnSavePermission
@@ -435,10 +435,10 @@ namespace nU3.Tools.Deployer.Views
             // 
             lblCurrentTarget.Dock = System.Windows.Forms.DockStyle.Top;
             lblCurrentTarget.IsRequiredMarker = false;
-            lblCurrentTarget.Location = new System.Drawing.Point(0, 22);
+            lblCurrentTarget.Location = new System.Drawing.Point(0, 33);
             lblCurrentTarget.Name = "lblCurrentTarget";
             lblCurrentTarget.Padding = new System.Windows.Forms.Padding(10, 5, 5, 5);
-            lblCurrentTarget.Size = new System.Drawing.Size(93, 24);
+            lblCurrentTarget.Size = new System.Drawing.Size(118, 32);
             lblCurrentTarget.TabIndex = 2;
             lblCurrentTarget.Text = "선택된 대상 없음";
             // 

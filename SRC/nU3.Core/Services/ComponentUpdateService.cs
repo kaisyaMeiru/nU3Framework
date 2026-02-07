@@ -11,20 +11,7 @@ using nU3.Models;
 namespace nU3.Core.Services
 {
     /// <summary>
-    /// Å¬¶óÀÌ¾ğÆ® Ãø ÄÄÆ÷³ÍÆ® ¾÷µ¥ÀÌÆ® ¼­ºñ½ºÀÔ´Ï´Ù.
-    /// 
-    /// ±â´É:
-    /// - ·ÎÄÃ¿¡ ¼³Ä¡µÈ ÄÄÆ÷³ÍÆ® ¸ñ·ÏÀ» °Ë»çÇÏ°í ¼­¹ö(Repository)¿¡ µî·ÏµÈ È°¼º ¹öÀü°ú ºñ±³ÇÏ¿© ¾÷µ¥ÀÌÆ®°¡ ÇÊ¿äÇÑ Ç×¸ñÀ» ½Äº°ÇÕ´Ï´Ù.
-    /// - ´©¶ôµÈ(¹Ì¼³Ä¡) ÇÊ¼ö ÄÄÆ÷³ÍÆ®¸¦ È®ÀÎÇÕ´Ï´Ù.
-    /// - ÄÄÆ÷³ÍÆ®¸¦ ´Ù¿î·Îµå(Ä³½Ã)ÇÏ°í ¼³Ä¡(¹èÆ÷)ÇÕ´Ï´Ù.
-    /// - ¼³Ä¡ ¹«°á¼º °ËÁõ(ÆÄÀÏ ÇØ½Ã ºñ±³)À» ¼öÇàÇÕ´Ï´Ù.
-    /// - ÀüÃ¼ ¾÷µ¥ÀÌÆ® ÀÛ¾÷ÀÇ ÁøÇà·ü ÀÌº¥Æ®¿Í °³º° ÄÄÆ÷³ÍÆ® ¾÷µ¥ÀÌÆ® ¿Ï·á ÀÌº¥Æ®¸¦ ¹ßÇàÇÕ´Ï´Ù.
-    /// 
-    /// ¼³°è °í·Á»çÇ×:
-    /// - ´Ù¿î·Îµå´Â ÇöÀç ´Ü¼ø ÆÄÀÏ º¹»ç·Î ±¸ÇöµÇ¾î ÀÖÀ¸³ª, ÇÊ¿ä ½Ã HTTP/ÆÄÀÏÀü¼Û Å¬¶óÀÌ¾ğÆ®·Î ´ëÃ¼ °¡´ÉÇÕ´Ï´Ù.
-    /// - ÆÄÀÏ ÇØ½Ã(SHA256)¸¦ »ç¿ëÇÏ¿© Àü¼Û ¹«°á¼ºÀ» °ËÁõÇÕ´Ï´Ù.
-    /// - ¼³Ä¡ Áß ÆÄÀÏ »ç¿ë Áß ¹®Á¦°¡ ¹ß»ıÇÏ¸é Àç½Ãµµ ·ÎÁ÷À» Àû¿ëÇÕ´Ï´Ù.
-    /// - UI¿Í ÅëÇÕ ½Ã IProgress<T>¿Í ÀÌº¥Æ®¸¦ ÅëÇØ ÁøÇà·üÀ» Àü´ŞÇÕ´Ï´Ù.
+    /// ì»´í¬ë„ŒíŠ¸ ì—…ë°ì´íŠ¸ ì„œë¹„ìŠ¤ (ë ˆê±°ì‹œ/ë…ë¦½í˜•)
     /// </summary>
     public class ComponentUpdateService
     {
@@ -32,79 +19,29 @@ namespace nU3.Core.Services
         private readonly string _installBasePath;
         private readonly string _downloadCachePath;
 
-        /// <summary>
-        /// ¼³Ä¡ ±âº» °æ·Î(¿¹: ¾ÖÇÃ¸®ÄÉÀÌ¼Ç ½ÇÇà °æ·Î)
-        /// </summary>
         public string InstallBasePath => _installBasePath;
-
-        /// <summary>
-        /// ´Ù¿î·Îµå ÀÓ½Ã Ä³½Ã °æ·Î
-        /// </summary>
         public string DownloadCachePath => _downloadCachePath;
 
-        /// <summary>
-        /// ¾÷µ¥ÀÌÆ® ÁøÇà·ü º¯°æ ½Ã ¹ß»ıÇÏ´Â ÀÌº¥Æ®
-        /// </summary>
         public event EventHandler<ComponentUpdateProgressEventArgs>? ProgressChanged;
-
-        /// <summary>
-        /// °³º° ÄÄÆ÷³ÍÆ® ¾÷µ¥ÀÌÆ® ¿Ï·á(¶Ç´Â ½ÇÆĞ) ½Ã ¹ß»ıÇÏ´Â ÀÌº¥Æ®
-        /// </summary>
         public event EventHandler<ComponentUpdatedEventArgs>? ComponentUpdated;
 
-        /// <summary>
-        /// »ı¼ºÀÚ
-        /// </summary>
-        /// <param name="componentRepo">ÄÄÆ÷³ÍÆ® ¸ŞÅ¸µ¥ÀÌÅÍ¿¡ Á¢±ÙÇÏ´Â ¸®Æ÷ÁöÅä¸®</param>
-        /// <param name="installBasePath">¼³Ä¡ ±âº» °æ·Î(»ı·« ½Ã AppDomain.CurrentDomain.BaseDirectory)</param>
         public ComponentUpdateService(IComponentRepository componentRepo, string? installBasePath = null)
         {
             _componentRepo = componentRepo ?? throw new ArgumentNullException(nameof(componentRepo));
-
-            // BaseInstallPath = ½ÇÇà ÆÄÀÏÀÌ ÀÖ´Â ·çÆ® µğ·ºÅä¸®
             _installBasePath = installBasePath ?? AppDomain.CurrentDomain.BaseDirectory;
-
-            _downloadCachePath = Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                "nU3.Framework", "Cache", "Components");
+            _downloadCachePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "nU3.Framework", "Cache", "Components");
 
             if (!Directory.Exists(_downloadCachePath))
                 Directory.CreateDirectory(_downloadCachePath);
         }
 
-        /// <summary>
-        /// ÄÄÆ÷³ÍÆ®ÀÇ ¼³Ä¡ ´ë»ó ÀüÃ¼ °æ·Î¸¦ °è»êÇÏ¿© ¹İÈ¯ÇÕ´Ï´Ù.
-        /// InstallPath°¡ ºñ¾îÀÖÀ¸¸é ÆÄÀÏ¸í¸¸ »ç¿ëÇÏ°í, ÀÖÀ¸¸é base + installPath + fileNameÀ» Á¶ÇÕÇÕ´Ï´Ù.
-        /// </summary>
-        /// <param name="component">ÄÄÆ÷³ÍÆ® ¸ŞÅ¸µ¥ÀÌÅÍ</param>
-        /// <returns>¼³Ä¡µÉ ÀüÃ¼ ÆÄÀÏ °æ·Î</returns>
         public string GetInstallPath(ComponentMstDto component)
         {
-            if (component == null)
-                throw new ArgumentNullException(nameof(component));
-
-            var relativePath = string.IsNullOrEmpty(component.InstallPath)
-                ? component.FileName
-                : Path.Combine(component.InstallPath, component.FileName);
-
+            if (component == null) throw new ArgumentNullException(nameof(component));
+            var relativePath = string.IsNullOrEmpty(component.InstallPath) ? component.FileName : Path.Combine(component.InstallPath, component.FileName);
             return Path.Combine(_installBasePath, relativePath);
         }
 
-        /// <summary>
-        /// ¼³Ä¡ °æ·Î ¹Ì¸®º¸±â »ı¼º (UI¿¡¼­ »ç¿ë)
-        /// </summary>
-        public string GetInstallPathPreview(string installPath, string fileName)
-        {
-            var relativePath = string.IsNullOrEmpty(installPath)
-                ? fileName
-                : Path.Combine(installPath, fileName);
-            return Path.Combine(_installBasePath, relativePath);
-        }
-
-        /// <summary>
-        /// ÇöÀç ½Ã½ºÅÛ¿¡ ¼³Ä¡µÇ¾î ÀÖ´Â ÄÄÆ÷³ÍÆ® ¸ñ·ÏÀ» ¹İÈ¯ÇÕ´Ï´Ù.
-        /// °¢ Ç×¸ñ¿¡´Â ¼³Ä¡µÈ °æ·Î, ¹öÀü, ÆÄÀÏ ÇØ½Ã µîÀÌ Æ÷ÇÔµË´Ï´Ù.
-        /// </summary>
         public List<ClientComponentDto> GetInstalledComponents()
         {
             var installed = new List<ClientComponentDto>();
@@ -126,39 +63,16 @@ namespace nU3.Core.Services
                     });
                 }
             }
-
             return installed;
         }
 
-        /// <summary>
-        /// ¾÷µ¥ÀÌÆ®°¡ ÇÊ¿äÇÑ ÄÄÆ÷³ÍÆ® ¸ñ·ÏÀ» ¹İÈ¯ÇÕ´Ï´Ù. (¼­¹öÀÇ È°¼º ¹öÀü°ú ºñ±³)
-        /// </summary>
         public List<ComponentVerDto> CheckForUpdates()
         {
             var installed = GetInstalledComponents();
             return _componentRepo.CheckForUpdates(installed);
         }
 
-        /// <summary>
-        /// ´©¶ôµÈ ÇÊ¼ö ÄÄÆ÷³ÍÆ® ¸ñ·ÏÀ» ¹İÈ¯ÇÕ´Ï´Ù.
-        /// ¼­¹ö¿¡ µî·ÏµÇ¾î ÀÖ°í Å¬¶óÀÌ¾ğÆ®¿¡ ¾øÀ¸¸ç IsRequired°¡ trueÀÎ Ç×¸ñ¸¸ ÇÊÅÍ¸µÇÕ´Ï´Ù.
-        /// </summary>
-        public List<ComponentVerDto> GetMissingComponents()
-        {
-            var installed = GetInstalledComponents();
-            return _componentRepo.GetMissingComponents(installed)
-                .Where(c => _componentRepo.GetComponent(c.ComponentId)?.IsRequired == true)
-                .ToList();
-        }
-
-        /// <summary>
-        /// ¸ğµç ¾÷µ¥ÀÌÆ®¸¦ ´Ù¿î·ÎµåÇÏ¿© ¼³Ä¡ÇÕ´Ï´Ù.
-        /// - progress: ÀüÃ¼ ÁøÇà·ü ¸®Æ÷Æ®
-        /// - cancellationToken: Ãë¼Ò Áö¿ø
-        /// </summary>
-        public async Task<ComponentUpdateResult> UpdateAllAsync(
-            IProgress<ComponentUpdateProgressEventArgs>? progress = null,
-            CancellationToken cancellationToken = default)
+        public async Task<ComponentUpdateResult> UpdateAllAsync(IProgress<ComponentUpdateProgressEventArgs>? progress = null, CancellationToken cancellationToken = default)
         {
             var result = new ComponentUpdateResult();
             var updates = CheckForUpdates();
@@ -166,7 +80,7 @@ namespace nU3.Core.Services
             if (updates.Count == 0)
             {
                 result.Success = true;
-                result.Message = "¸ğµç ÄÄÆ÷³ÍÆ®°¡ ÃÖ½Å ¹öÀüÀÔ´Ï´Ù.";
+                result.Message = "ëª¨ë“  ì»´í¬ë„ŒíŠ¸ê°€ ìµœì‹ ì…ë‹ˆë‹¤.";
                 return result;
             }
 
@@ -197,7 +111,6 @@ namespace nU3.Core.Services
                     ComponentUpdated?.Invoke(this, new ComponentUpdatedEventArgs
                     {
                         ComponentId = update.ComponentId,
-                        OldVersion = GetInstalledVersion(update.ComponentId),
                         NewVersion = update.Version,
                         Success = true
                     });
@@ -205,155 +118,39 @@ namespace nU3.Core.Services
                 catch (Exception ex)
                 {
                     result.FailedComponents.Add((update.ComponentId, ex.Message));
-
-                    ComponentUpdated?.Invoke(this, new ComponentUpdatedEventArgs
-                    {
-                        ComponentId = update.ComponentId,
-                        Success = false,
-                        Error = ex.Message
-                    });
+                    ComponentUpdated?.Invoke(this, new ComponentUpdatedEventArgs { ComponentId = update.ComponentId, Success = false, Error = ex.Message });
                 }
-
                 completed++;
             }
 
             result.Success = result.FailedComponents.Count == 0;
-            result.Message = result.Success 
-                ? $"{result.UpdatedComponents.Count}°³ ÄÄÆ÷³ÍÆ® ¾÷µ¥ÀÌÆ® ¿Ï·á"
-                : $"{result.UpdatedComponents.Count}°³ ¾÷µ¥ÀÌÆ®, {result.FailedComponents.Count}°³ ½ÇÆĞ";
-
+            result.Message = result.Success ? $"{result.UpdatedComponents.Count}ê°œ ì™„ë£Œ" : "ì˜¤ë¥˜ ë°œìƒ";
             return result;
         }
 
-        /// <summary>
-        /// ´ÜÀÏ ÄÄÆ÷³ÍÆ®¸¦ ´Ù¿î·ÎµåÇÏ°í ¼³Ä¡ÇÕ´Ï´Ù.
-        /// - ÀúÀå¼ÒÀÇ StoragePath¿¡¼­ Ä³½Ã·Î ´Ù¿î·Îµå
-        /// - ÇØ½Ã °ËÁõ
-        /// - ½ÇÁ¦ ¼³Ä¡(´ë»ó À§Ä¡·Î º¹»ç)
-        /// </summary>
         public async Task UpdateComponentAsync(ComponentVerDto version, CancellationToken cancellationToken = default)
         {
             var component = _componentRepo.GetComponent(version.ComponentId);
-            if (component == null)
-                throw new InvalidOperationException($"Component not found: {version.ComponentId}");
+            if (component == null) throw new InvalidOperationException($"Component not found: {version.ComponentId}");
 
-            // Download to cache
             string cacheFile = Path.Combine(_downloadCachePath, component.GroupName ?? "Other", component.FileName);
-            await DownloadToCacheAsync(version.StoragePath, cacheFile, cancellationToken);
+            
+            var directory = Path.GetDirectoryName(cacheFile);
+            if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory)) Directory.CreateDirectory(directory);
 
-            // Verify hash
-            string downloadedHash = CalculateFileHash(cacheFile);
-            if (!string.Equals(downloadedHash, version.FileHash, StringComparison.OrdinalIgnoreCase))
-            {
-                File.Delete(cacheFile);
-                throw new InvalidOperationException("File hash mismatch - download may be corrupted");
-            }
+            if (File.Exists(version.StoragePath)) File.Copy(version.StoragePath, cacheFile, true);
+            else throw new FileNotFoundException($"Source file not found: {version.StoragePath}");
 
-            // Install to target path
             string installPath = GetInstallPath(component);
-            await InstallFromCacheAsync(cacheFile, installPath, cancellationToken);
-        }
-
-        /// <summary>
-        /// ¼³Ä¡µÈ ÄÄÆ÷³ÍÆ®µéÀÇ ¹«°á¼ºÀ» °Ë»çÇÏ°í ¹®Á¦(´©¶ô ¶Ç´Â ÇØ½Ã ºÒÀÏÄ¡)¸¦ ¹İÈ¯ÇÕ´Ï´Ù.
-        /// </summary>
-        public List<(string ComponentId, string Issue)> VerifyIntegrity()
-        {
-            var issues = new List<(string, string)>();
-            var serverVersions = _componentRepo.GetActiveVersions();
-
-            foreach (var version in serverVersions)
-            {
-                var component = _componentRepo.GetComponent(version.ComponentId);
-                if (component == null) continue;
-
-                var installPath = GetInstallPath(component);
-
-                if (!File.Exists(installPath))
-                {
-                    if (component.IsRequired)
-                        issues.Add((version.ComponentId, "Required component missing"));
-                    continue;
-                }
-
-                var localHash = CalculateFileHash(installPath);
-                if (!string.Equals(localHash, version.FileHash, StringComparison.OrdinalIgnoreCase))
-                {
-                    issues.Add((version.ComponentId, "File hash mismatch"));
-                }
-            }
-
-            return issues;
-        }
-
-        #region Private Methods
-
-        private string? GetInstalledVersion(string componentId)
-        {
-            var component = _componentRepo.GetComponent(componentId);
-            if (component == null) return null;
-
-            var installPath = GetInstallPath(component);
-            if (!File.Exists(installPath)) return null;
-
-            return GetFileVersion(installPath);
+            var instDir = Path.GetDirectoryName(installPath);
+            if (!string.IsNullOrEmpty(instDir) && !Directory.Exists(instDir)) Directory.CreateDirectory(instDir);
+            File.Copy(cacheFile, installPath, true);
         }
 
         private static string GetFileVersion(string filePath)
         {
-            try
-            {
-                var assemblyName = System.Reflection.AssemblyName.GetAssemblyName(filePath);
-                return assemblyName.Version?.ToString() ?? "1.0.0.0";
-            }
-            catch
-            {
-                var versionInfo = System.Diagnostics.FileVersionInfo.GetVersionInfo(filePath);
-                return versionInfo.FileVersion ?? "1.0.0.0";
-            }
-        }
-
-        private async Task DownloadToCacheAsync(string sourcePath, string cachePath, CancellationToken cancellationToken)
-        {
-            var directory = Path.GetDirectoryName(cachePath);
-            if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
-                Directory.CreateDirectory(directory);
-
-            // For now, simple file copy (can be replaced with HTTP download)
-            if (File.Exists(sourcePath))
-            {
-                await Task.Run(() => File.Copy(sourcePath, cachePath, true), cancellationToken);
-            }
-            else
-            {
-                // TODO: Download from server using ConnectivityManager
-                throw new FileNotFoundException($"Source file not found: {sourcePath}");
-            }
-        }
-
-        private async Task InstallFromCacheAsync(string cacheFile, string installPath, CancellationToken cancellationToken)
-        {
-            var directory = Path.GetDirectoryName(installPath);
-            if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
-                Directory.CreateDirectory(directory);
-
-            // Handle file in use
-            int retries = 3;
-            while (retries > 0)
-            {
-                try
-                {
-                    await Task.Run(() => File.Copy(cacheFile, installPath, true), cancellationToken);
-                    return;
-                }
-                catch (IOException) when (retries > 1)
-                {
-                    retries--;
-                    await Task.Delay(500, cancellationToken);
-                }
-            }
-
-            throw new IOException($"Cannot install {Path.GetFileName(installPath)} - file may be in use");
+            try { return System.Reflection.AssemblyName.GetAssemblyName(filePath).Version?.ToString() ?? "1.0.0.0"; }
+            catch { return System.Diagnostics.FileVersionInfo.GetVersionInfo(filePath).FileVersion ?? "1.0.0.0"; }
         }
 
         private static string CalculateFileHash(string filePath)
@@ -363,15 +160,8 @@ namespace nU3.Core.Services
             var hash = sha256.ComputeHash(stream);
             return BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
         }
-
-        #endregion
     }
 
-    #region Event Args and Result Models
-
-    /// <summary>
-    /// ÄÄÆ÷³ÍÆ® ¾÷µ¥ÀÌÆ® ÁøÇà·ü ÀÌº¥Æ® ÀÎÀÚ
-    /// </summary>
     public class ComponentUpdateProgressEventArgs : EventArgs
     {
         public int TotalComponents { get; set; }
@@ -382,9 +172,6 @@ namespace nU3.Core.Services
         public int PercentComplete { get; set; }
     }
 
-    /// <summary>
-    /// °³º° ÄÄÆ÷³ÍÆ® ¾÷µ¥ÀÌÆ® °á°ú ÀÌº¥Æ® ÀÎÀÚ
-    /// </summary>
     public class ComponentUpdatedEventArgs : EventArgs
     {
         public string? ComponentId { get; set; }
@@ -393,17 +180,4 @@ namespace nU3.Core.Services
         public bool Success { get; set; }
         public string? Error { get; set; }
     }
-
-    /// <summary>
-    /// ÄÄÆ÷³ÍÆ® ¾÷µ¥ÀÌÆ® ÀüÃ¼ ÀÛ¾÷ °á°ú ¸ğµ¨
-    /// </summary>
-    public class ComponentUpdateResult
-    {
-        public bool Success { get; set; }
-        public string? Message { get; set; }
-        public List<string> UpdatedComponents { get; set; } = new();
-        public List<(string ComponentId, string Error)> FailedComponents { get; set; } = new();
-    }
-
-    #endregion
 }

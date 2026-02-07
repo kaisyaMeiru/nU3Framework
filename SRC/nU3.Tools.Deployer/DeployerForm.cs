@@ -9,13 +9,19 @@ using nU3.Core.Services;
 using nU3.Core.UI;
 using DevExpress.XtraTab;
 using DevExpress.XtraBars;
+using nU3.Connectivity;
 
 namespace nU3.Tools.Deployer
 {
     public partial class DeployerForm : BaseWorkForm
     {
+        private readonly IDBAccessService _db;
+        private readonly IFileTransferService _fileTransfer;
         private readonly IModuleRepository _moduleRepo;
         private readonly IComponentRepository _componentRepo;
+        private readonly IMenuRepository _menuRepo;
+        private readonly IProgramRepository _progRepo;
+        private readonly ISecurityRepository _securityRepo;
         private readonly IConfiguration _configuration;
         private string _serverStoragePath;
         private string? _serverBaseUrl;
@@ -31,10 +37,15 @@ namespace nU3.Tools.Deployer
             InitializeComponent();
         }
 
-        public DeployerForm(IModuleRepository moduleRepo, IComponentRepository componentRepo, IConfiguration configuration)
+        public DeployerForm(IDBAccessService db, IFileTransferService fileTransfer, IModuleRepository moduleRepo, IComponentRepository componentRepo, IMenuRepository menuRepo, IProgramRepository progRepo, ISecurityRepository securityRepo, IConfiguration configuration)
         {
+            _db = db;
+            _fileTransfer = fileTransfer;
             _moduleRepo = moduleRepo;
             _componentRepo = componentRepo;
+            _menuRepo = menuRepo;
+            _progRepo = progRepo;
+            _securityRepo = securityRepo;
             _configuration = configuration;
 
             InitializeComponent();
@@ -194,26 +205,26 @@ namespace nU3.Tools.Deployer
 
             // 1. 화면 모듈 배포
             var tabDeploy = new XtraTabPage { Text = "프로그램모듈 배포" };
-            var deployControl = new Views.ProgramDeployManagementControl(_moduleRepo, _configuration);
+            var deployControl = new Views.ProgramDeployManagementControl(_moduleRepo, _configuration, _fileTransfer);
             deployControl.Dock = DockStyle.Fill;
             tabDeploy.Controls.Add(deployControl);
 
             // 2. Framework 컴포넌트 배포 
             var tabComponent = new XtraTabPage { Text = "프레임워크모듈 배포" };
             var componentControl = new Views.AssemblyDeployManagementControl();            
-            componentControl.Initialize(_componentRepo, _configuration);
+            componentControl.Initialize(_componentRepo, _configuration, _fileTransfer);
             componentControl.Dock = DockStyle.Fill;
             tabComponent.Controls.Add(componentControl);
             
             // 3. 메뉴트리 관리
             var tabMenu = new XtraTabPage { Text = "메뉴 관리" };
-            var menuControl = new Views.MenuTreeManagementControl();
+            var menuControl = new Views.MenuTreeManagementControl(_db, _menuRepo, _progRepo);
             menuControl.Dock = DockStyle.Fill;
             tabMenu.Controls.Add(menuControl);
 
             // 4. 사용자/권한 관리
             var tabSecurity = new XtraTabPage { Text = "권한 관리" };
-            var securityControl = new Views.SecurityManagementControl();
+            var securityControl = new Views.SecurityManagementControl(_securityRepo, _progRepo, _moduleRepo);
             securityControl.Dock = DockStyle.Fill;
             tabSecurity.Controls.Add(securityControl);
             

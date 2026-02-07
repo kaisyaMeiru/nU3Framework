@@ -4,10 +4,13 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
-using nU3.Data;
 using nU3.Core.UI;
 using nU3.Core.UI.Controls;
 using DevExpress.XtraEditors;
+using nU3.Connectivity;
+using nU3.Core.Repositories;
+using nU3.Models;
+using System.Linq;
 
 namespace nU3.Tools.Deployer.Views
 {
@@ -20,15 +23,23 @@ namespace nU3.Tools.Deployer.Views
     /// </summary>
     public partial class MenuTreeManagementControl : BaseWorkControl
     {
-        private readonly LocalDbService _dbManager;
+        private readonly IDBAccessService _db;
+        private readonly IMenuRepository _menuRepo;
+        private readonly IProgramRepository _progRepo;
 
         /// <summary>
         /// Designer 전용 생성자
         /// </summary>
         public MenuTreeManagementControl()
         {
-            _dbManager = new LocalDbService();
             InitializeComponent();
+        }
+
+        public MenuTreeManagementControl(IDBAccessService db, IMenuRepository menuRepo, IProgramRepository progRepo) : this()
+        {
+            _db = db;
+            _menuRepo = menuRepo;
+            _progRepo = progRepo;
 
             if (!IsDesignMode())
             {
@@ -98,50 +109,58 @@ namespace nU3.Tools.Deployer.Views
             lbPrograms.Items.Clear();
             lbPrograms.DisplayMember = "DisplayInfo";
 
-            string sql = "SELECT PROG_ID, PROG_NAME, MODULE_ID, IS_ACTIVE, PROG_TYPE FROM SYS_PROG_MST WHERE IFNULL(IS_ACTIVE,'Y') = 'Y' ORDER BY PROG_NAME";
-            using (var dt = _dbManager.ExecuteDataTable(sql))
+            var programs = _progRepo.GetAllPrograms();
+            foreach (var p in programs)
             {
-                foreach (DataRow reader in dt.Rows)
-                {
-                    var item = new ProgramItem();
-                    item.ProgId = reader["PROG_ID"].ToString();
-                    item.ProgName = reader["PROG_NAME"]?.ToString();
-                    item.ModuleId = reader["MODULE_ID"].ToString();
-                    item.IsActive = reader["IS_ACTIVE"] == DBNull.Value ? "Y" : reader["IS_ACTIVE"].ToString();
-                    item.ProgType = reader["PROG_TYPE"] == DBNull.Value ? 1 : Convert.ToInt32(reader["PROG_TYPE"]);
-                    lbPrograms.Items.Add(item);
-                }
+                if (p.IsActive != "Y") continue;
+
+                var item = new ProgramItem();
+                item.ProgId = p.ProgId;
+                item.ProgName = p.ProgName;
+                item.ModuleId = p.ModuleId;
+                item.IsActive = p.IsActive;
+                item.ProgType = p.ProgType;
+                lbPrograms.Items.Add(item);
             }
         }
 
         private void LoadMenuTree()
         {
             tvMenu.Nodes.Clear();
-            string sql = "SELECT * FROM SYS_MENU ORDER BY PARENT_ID, SORT_ORD";
-            using (var dt = _dbManager.ExecuteDataTable(sql))
-            {
-                AddTreeNodes(dt, null, tvMenu.Nodes);
-            }
+            var allMenus = _menuRepo.GetAllMenus();
+            AddTreeNodes(allMenus, null, tvMenu.Nodes);
             tvMenu.ExpandAll();
         }
 
-        private void AddTreeNodes(DataTable dt, string? parentId, TreeNodeCollection nodes)
+        private void BtnRefreshPrograms_Click(object sender, EventArgs e)
         {
-            string filter = parentId == null ? "PARENT_ID IS NULL" : $"PARENT_ID = '{parentId}'";
-            foreach (DataRow row in dt.Select(filter, "SORT_ORD"))
+            LoadPrograms();
+            LoadMenuTree();
+
+        }
+
+
+        private void AddTreeNodes(List<MenuDto> allMenus, string? parentId, TreeNodeCollection nodes)
+        {
+            var children = allMenus
+                .Where(m => m.ParentId == parentId)
+                .OrderBy(m => m.SortOrd)
+                .ToList();
+
+            foreach (var menu in children)
             {
-                string id = row["MENU_ID"].ToString() ?? string.Empty;
-                string name = row["MENU_NAME"].ToString() ?? string.Empty;
-                string progId = row["PROG_ID"].ToString() ?? string.Empty;
-                int auth = row["AUTH_LEVEL"] == DBNull.Value ? 1 : Convert.ToInt32(row["AUTH_LEVEL"]);
+                var data = new MenuNodeData 
+                { 
+                    MenuId = menu.MenuId, 
+                    ProgId = menu.ProgId, 
+                    AuthLevel = menu.AuthLevel 
+                };
+                var node = new TreeNode(menu.MenuName) { Tag = data };
 
-                var data = new MenuNodeData { MenuId = id, ProgId = progId, AuthLevel = auth };
-                var node = new TreeNode(name) { Tag = data };
-
-                if (!string.IsNullOrEmpty(progId)) node.ForeColor = Color.Blue;
+                if (!string.IsNullOrEmpty(menu.ProgId)) node.ForeColor = Color.Blue;
 
                 nodes.Add(node);
-                AddTreeNodes(dt, id, node.Nodes);
+                AddTreeNodes(allMenus, menu.MenuId, node.Nodes);
             }
         }
 
@@ -225,15 +244,17 @@ namespace nU3.Tools.Deployer.Views
         {
             try
             {
-                _dbManager.BeginTransaction();
-                _dbManager.ExecuteNonQuery("DELETE FROM SYS_MENU");
+                //_db.BeginTransaction();
+                
+                _menuRepo.DeleteAllMenus();
                 SaveNodesRecursive(tvMenu.Nodes, null);
-                _dbManager.CommitTransaction();
+                
+                //_db.CommitTransaction();
                 XtraMessageBox.Show("메뉴가 저장되었습니다!", "완료", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
-                _dbManager.RollbackTransaction();
+                //_db.RollbackTransaction();
                 XtraMessageBox.Show($"메뉴 저장 실패: {ex.Message}", "오류", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -246,20 +267,17 @@ namespace nU3.Tools.Deployer.Views
                 var data = node.Tag as MenuNodeData;
                 if (data == null) continue;
 
-                string sql = @"INSERT INTO SYS_MENU (MENU_ID, PARENT_ID, MENU_NAME, PROG_ID, SORT_ORD, AUTH_LEVEL)
-                               VALUES (@id, @pid, @name, @prog, @sort, @auth)";
-
-                var parameters = new Dictionary<string, object>
+                var dto = new MenuDto
                 {
-                    { "@id", data.MenuId },
-                    { "@pid", (object?)parentId ?? DBNull.Value },
-                    { "@name", node.Text },
-                    { "@prog", (object?)data.ProgId ?? DBNull.Value },
-                    { "@sort", sort },
-                    { "@auth", data.AuthLevel }
+                    MenuId = data.MenuId ?? string.Empty,
+                    ParentId = string.IsNullOrEmpty(parentId) ? null : parentId,
+                    MenuName = node.Text,
+                    ProgId = string.IsNullOrEmpty(data.ProgId) ? null : data.ProgId,
+                    SortOrd = sort,
+                    AuthLevel = data.AuthLevel
                 };
 
-                _dbManager.ExecuteNonQuery(sql, parameters);
+                _menuRepo.AddMenu(dto);
 
                 SaveNodesRecursive(node.Nodes, data.MenuId);
                 sort += 10;
