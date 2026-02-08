@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>nU3.Modules.OCS.IN.OrderEntry</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DevExpress.Win" Version="23.2.9" />
+    <PackageReference Include="DevExpress.Win.Design" Version="23.2.9" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\nU3.Core.UI\nU3.Core.UI.csproj" />
+    <ProjectReference Include="..\..\..\..\nU3.Core\nU3.Core.csproj" />
+    <ProjectReference Include="..\..\..\..\nU3.Models\nU3.Models.csproj" />
+  </ItemGroup>
+
+</Project>
