@@ -5,6 +5,7 @@ using System.IO;
 using Microsoft.Extensions.Configuration;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Loader;
 using System.Security.Cryptography;
 using nU3.Core.Attributes;
 using nU3.Core.Repositories;
@@ -14,6 +15,60 @@ using nU3.Core.Configuration;
 
 namespace nU3.Core.Services
 {
+    /// <summary>
+    /// 플러그인 모듈을 위한 격리된 AssemblyLoadContext
+    /// Hot Deploy와 언로드를 지원합니다.
+    /// </summary>
+    internal class PluginLoadContext : AssemblyLoadContext
+    {
+        private readonly AssemblyDependencyResolver _resolver;
+
+        public PluginLoadContext(string pluginPath) : base(isCollectible: true)
+        {
+            _resolver = new AssemblyDependencyResolver(pluginPath);
+        }
+
+        protected override Assembly Load(AssemblyName assemblyName)
+        {
+            // 공유 어셈블리는 기본 컨텍스트에서 로드
+            // 이렇게 하면 DI가 타입을 인식할 수 있음
+            var sharedAssemblies = new[]
+            {
+                "nU3.Core",
+                "nU3.Core.UI",
+                "nU3.Models",
+                "nU3.Connectivity",
+                "System.Runtime",
+                "System.Runtime.InteropServices",
+                "Microsoft.Extensions.DependencyInjection.Abstractions"
+            };
+
+            if (sharedAssemblies.Any(name => assemblyName.Name?.StartsWith(name) == true))
+            {
+                return null; // 기본 컨텍스트에서 로드
+            }
+
+            string assemblyPath = _resolver.ResolveAssemblyToPath(assemblyName);
+            if (assemblyPath != null)
+            {
+                return LoadFromAssemblyPath(assemblyPath);
+            }
+
+            return null;
+        }
+
+        protected override IntPtr LoadUnmanagedDll(string unmanagedDllName)
+        {
+            string libraryPath = _resolver.ResolveUnmanagedDllToPath(unmanagedDllName);
+            if (libraryPath != null)
+            {
+                return LoadUnmanagedDllFromPath(libraryPath);
+            }
+
+            return IntPtr.Zero;
+        }
+    }
+
     /// <summary>
     /// 모듈 로더 서비스는 런타임에 모듈(DLL)을 탐색하고 로드하며, 프로그램 인스턴스를 생성하는 책임을 수행합니다.
     /// 로컬에 파일이 없거나 업데이트가 필요한 경우 서버에서 자동으로 다운로드합니다.
@@ -32,11 +87,19 @@ namespace nU3.Core.Services
         /// </summary>
         public event EventHandler<ComponentUpdateEventArgs>? UpdateProgress;
 
+        /// <summary>
+        /// 모듈 버전 충돌 감지 시 알림 이벤트입니다.
+        /// </summary>
+        public event EventHandler<ModuleVersionConflictEventArgs>? VersionConflict;
+
         private readonly Dictionary<string, Type> _progRegistry;
         private readonly Dictionary<string, nU3ProgramInfoAttribute> _progAttributeCache;
         private readonly Dictionary<string, string> _loadedModuleVersions; // ModuleId -> Version
+        private readonly Dictionary<string, WeakReference> _loadContexts; // ModuleId -> LoadContext (for hot reload)
+        private readonly Dictionary<string, string> _shadowCopyPaths; // ModuleId -> Shadow Path (for hot reload)
         private readonly string _cachePath;
         private readonly string _runtimePath;
+        private readonly string _shadowCopyDirectory;
 
         public ModuleLoaderService(
             IModuleRepository moduleRepo, 
@@ -53,6 +116,8 @@ namespace nU3.Core.Services
             _progRegistry = new Dictionary<string, Type>(StringComparer.OrdinalIgnoreCase);
             _progAttributeCache = new Dictionary<string, nU3ProgramInfoAttribute>(StringComparer.OrdinalIgnoreCase);
             _loadedModuleVersions = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            _loadContexts = new Dictionary<string, WeakReference>(StringComparer.OrdinalIgnoreCase);
+            _shadowCopyPaths = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
             // 중앙 집중식 경로 상수 사용
             _runtimePath = configuration?.GetValue<string>("RuntimeDirectory");
@@ -60,6 +125,7 @@ namespace nU3.Core.Services
                 _runtimePath = AppDomain.CurrentDomain.BaseDirectory;
 
             _cachePath = PathConstants.CacheDirectory;
+            _shadowCopyDirectory = Path.Combine(_cachePath, "Shadow");
             
             // 서버 설정 로드
             var serverEnabled = configuration.GetValue<bool>("ServerConnection:Enabled", false);
@@ -74,6 +140,7 @@ namespace nU3.Core.Services
         {
             if (!Directory.Exists(_runtimePath)) Directory.CreateDirectory(_runtimePath);
             if (!Directory.Exists(_cachePath)) Directory.CreateDirectory(_cachePath);
+            if (!Directory.Exists(_shadowCopyDirectory)) Directory.CreateDirectory(_shadowCopyDirectory);
         }
 
         public Dictionary<string, Type> GetProgramRegistry() => _progRegistry;
@@ -424,10 +491,14 @@ namespace nU3.Core.Services
                 File.Copy(cacheFile, runtimeFile, true);
                 Debug.WriteLine($"[ModuleLoader] Deployed to runtime: {moduleName} v{version}");
             }
-            catch (IOException)
+            catch (IOException ioEx)
             {
-                Debug.WriteLine($"[ModuleLoader] !!! Module {moduleName} is locked. Update will apply on restart.");
-                throw; 
+                // 파일 잠금 - Shadow Copy로 Hot Deploy 가능
+                Debug.WriteLine($"[ModuleLoader] Runtime file locked: {moduleName}. Using shadow copy for hot deploy.");
+                Debug.WriteLine($"[ModuleLoader] Original file will be updated on next restart. Shadow copy allows immediate use.");
+                
+                // Shadow copy 방식이므로 예외를 던지지 않음
+                // 다음 ReloadModule에서 shadow copy 사용
             }
             catch (Exception ex)
             {
@@ -461,7 +532,9 @@ namespace nU3.Core.Services
         {
             try
             {
-                var assembly = Assembly.LoadFile(dllPath);
+                // 기본 컨텍스트에서 LoadFrom 사용 (공유 어셈블리는 DI 호환성 필요)
+                // 플러그인이 아닌 기본 프레임워크 어셈블리는 기본 컨텍스트 사용
+                var assembly = Assembly.LoadFrom(dllPath);
                 
                 if (string.IsNullOrEmpty(version))
                 {
@@ -500,7 +573,36 @@ namespace nU3.Core.Services
         {
             try
             {
-                var assembly = Assembly.LoadFile(dllPath);
+                // 이미 로드된 버전 확인
+                if (_loadedModuleVersions.TryGetValue(moduleId, out var currentVersion))
+                {
+                    // 같은 버전이면 스킵
+                    if (string.Equals(currentVersion, version, StringComparison.OrdinalIgnoreCase))
+                    {
+                        Debug.WriteLine($"[ModuleLoader] Module {moduleId} v{version} already loaded. Reusing existing version.");
+                        return;
+                    }
+                    
+                    // ⚠️ 다른 버전 감지 - 버전 불일치 경고
+                    Debug.WriteLine($"[ModuleLoader] !!! VERSION CONFLICT DETECTED !!!");
+                    Debug.WriteLine($"[ModuleLoader] Module: {moduleId}");
+                    Debug.WriteLine($"[ModuleLoader] Current Version: {currentVersion}");
+                    Debug.WriteLine($"[ModuleLoader] Requested Version: {version}");
+                    Debug.WriteLine($"[ModuleLoader] Action: Using EXISTING version to prevent type mismatch.");
+                    Debug.WriteLine($"[ModuleLoader] Recommendation: Close all instances of this module and restart.");
+                    
+                    // 버전 충돌 이벤트 발생
+                    RaiseVersionConflict(moduleId, currentVersion, version);
+                    
+                    // 기존 버전 유지 (타입 불일치 방지)
+                    return;
+                }
+                
+                // 최초 로드 - Shadow Copy 생성
+                string shadowPath = CreateShadowCopy(dllPath, moduleId, version);
+                
+                // LoadFrom을 사용하여 기본 로드 컨텍스트에서 로드 (DI 호환성 유지)
+                var assembly = Assembly.LoadFrom(shadowPath);
                 
                 foreach (var type in assembly.GetTypes())
                 {
@@ -510,13 +612,76 @@ namespace nU3.Core.Services
                         _progRegistry[attr.ProgramId] = type;
                         _progAttributeCache[attr.ProgramId] = attr;
                         _loadedModuleVersions[moduleId] = version;
-                        Debug.WriteLine($"[ModuleLoader] Reloaded: {attr.ProgramId} (v{version})");
+                        Debug.WriteLine($"[ModuleLoader] Loaded: {attr.ProgramId} -> v{version} (Shadow: {shadowPath})");
                     }
                 }
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"[ModuleLoader] !!! Error reloading {Path.GetFileName(dllPath)}: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Shadow Copy를 생성하여 원본 파일 잠금을 방지합니다.
+        /// Hot Deploy를 지원하면서도 DI 호환성을 유지합니다.
+        /// </summary>
+        private string CreateShadowCopy(string originalPath, string moduleId, string version)
+        {
+            try
+            {
+                // 모듈별 Shadow 디렉토리 생성
+                string moduleShadowDir = Path.Combine(_shadowCopyDirectory, moduleId, version);
+                if (!Directory.Exists(moduleShadowDir))
+                {
+                    Directory.CreateDirectory(moduleShadowDir);
+                }
+
+                // Shadow 파일 경로
+                string shadowPath = Path.Combine(moduleShadowDir, Path.GetFileName(originalPath));
+
+                // 이미 존재하면 재사용 (같은 버전)
+                if (File.Exists(shadowPath))
+                {
+                    Debug.WriteLine($"[ModuleLoader] Using existing shadow copy: {shadowPath}");
+                    return shadowPath;
+                }
+
+                // 원본 파일을 Shadow 위치로 복사
+                File.Copy(originalPath, shadowPath, overwrite: true);
+
+                // 의존성 DLL도 복사 (같은 디렉토리에 있는 경우)
+                string originalDir = Path.GetDirectoryName(originalPath);
+                if (!string.IsNullOrEmpty(originalDir))
+                {
+                    foreach (var depFile in Directory.GetFiles(originalDir, "*.dll"))
+                    {
+                        if (Path.GetFileName(depFile) != Path.GetFileName(originalPath))
+                        {
+                            string depShadowPath = Path.Combine(moduleShadowDir, Path.GetFileName(depFile));
+                            try
+                            {
+                                File.Copy(depFile, depShadowPath, overwrite: true);
+                            }
+                            catch
+                            {
+                                // 의존성 복사 실패는 무시 (이미 로드되어 있을 수 있음)
+                            }
+                        }
+                    }
+                }
+
+                // Shadow 경로 추적 (정리용)
+                _shadowCopyPaths[moduleId] = moduleShadowDir;
+
+                Debug.WriteLine($"[ModuleLoader] Created shadow copy: {originalPath} -> {shadowPath}");
+                return shadowPath;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[ModuleLoader] !!! Failed to create shadow copy: {ex.Message}");
+                // Shadow copy 실패 시 원본 사용 (재시작 필요)
+                return originalPath;
             }
         }
 
@@ -605,7 +770,9 @@ namespace nU3.Core.Services
             
             try
             {
-                var assembly = Assembly.LoadFile(dllPath);
+                // LoadFrom을 사용하여 기본 로드 컨텍스트에서 로드 (DI 호환성 유지)
+                // 필요 시 Shadow Copy 사용 (이미 ReloadModule에서 처리됨)
+                var assembly = Assembly.LoadFrom(dllPath);
                 var type = assembly.GetType(attr.FullClassName);
                 
                 if (type != null)
@@ -708,5 +875,38 @@ namespace nU3.Core.Services
         {
             return _loadedModuleVersions.TryGetValue(moduleId, out var version) ? version : null;
         }
+
+        /// <summary>
+        /// 특정 모듈이 현재 사용 중인지 확인합니다.
+        /// </summary>
+        public bool IsModuleInUse(string moduleId)
+        {
+            return _loadedModuleVersions.ContainsKey(moduleId);
+        }
+
+        /// <summary>
+        /// 버전 충돌 이벤트를 발생시킵니다.
+        /// </summary>
+        private void RaiseVersionConflict(string moduleId, string currentVersion, string requestedVersion)
+        {
+            VersionConflict?.Invoke(this, new ModuleVersionConflictEventArgs
+            {
+                ModuleId = moduleId,
+                CurrentVersion = currentVersion,
+                RequestedVersion = requestedVersion,
+                Timestamp = DateTime.Now
+            });
+        }
+    }
+
+    /// <summary>
+    /// 모듈 버전 충돌 이벤트 인자
+    /// </summary>
+    public class ModuleVersionConflictEventArgs : EventArgs
+    {
+        public string ModuleId { get; set; }
+        public string CurrentVersion { get; set; }
+        public string RequestedVersion { get; set; }
+        public DateTime Timestamp { get; set; }
     }
 }

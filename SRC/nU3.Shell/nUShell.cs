@@ -78,6 +78,9 @@ namespace nU3.Shell
             this.FormClosing += MainShellForm_FormClosing;
             this.Load += MainShellForm_Load;
 
+            // 모듈 버전 충돌 이벤트 구독
+            _moduleLoader.VersionConflict += OnModuleVersionConflict;
+
             LogManager.Info("메인 셸 초기화됨", "Shell");
         }
 
@@ -486,6 +489,47 @@ namespace nU3.Shell
 
             UpdateStatusMessage($"[계약 기반 데이터 흐름] 환자 선택: {context.PatientName} ({context.PatientId})");
             LogManager.Info($"제네릭 이벤트로 글로벌 컨텍스트 업데이트: {context.PatientId}", "Shell");
+        }
+
+        /// <summary>
+        /// 모듈 버전 충돌 이벤트 처리
+        /// </summary>
+        private void OnModuleVersionConflict(object sender, nU3.Core.Services.ModuleVersionConflictEventArgs e)
+        {
+            // UI 스레드에서 실행
+            if (this.InvokeRequired)
+            {
+                this.Invoke(new Action(() => OnModuleVersionConflict(sender, e)));
+                return;
+            }
+
+            // 로그 기록
+            LogManager.Warning(
+                $"모듈 버전 충돌 감지 - Module: {e.ModuleId}, " +
+                $"Current: v{e.CurrentVersion}, Requested: v{e.RequestedVersion}", 
+                "Shell");
+
+            // 사용자에게 알림
+            var result = XtraMessageBox.Show(
+                $"⚠️ 모듈 버전 불일치 감지\n\n" +
+                $"모듈: {e.ModuleId}\n" +
+                $"현재 로드된 버전: v{e.CurrentVersion}\n" +
+                $"요청된 버전: v{e.RequestedVersion}\n\n" +
+                $"타입 불일치를 방지하기 위해 현재 버전을 계속 사용합니다.\n\n" +
+                $"권장 사항:\n" +
+                $"- 이 모듈의 모든 인스턴스(탭)를 닫으세요.\n" +
+                $"- 프로그램을 재시작하세요.\n\n" +
+                $"프로그램을 지금 재시작하시겠습니까?",
+                "모듈 버전 충돌",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning);
+
+            if (result == DialogResult.Yes)
+            {
+                LogManager.Info("사용자가 버전 충돌 해결을 위해 재시작 선택", "Shell");
+                Application.Restart();
+                Environment.Exit(0);
+            }
         }
 
         private void OnNavigationRequest(object payload)

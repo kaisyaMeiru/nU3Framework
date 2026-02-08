@@ -11,23 +11,22 @@
 ### Build Commands
 ```bash
 # Build entire solution
-dotnet build nU3.Framework.sln --configuration Release
-dotnet build nU3.Framework.sln --configuration Debug
+dotnet build SRC/nU3.Framework.sln --configuration Release
+dotnet build SRC/nU3.Framework.sln --configuration Debug
 
 # Build specific project
-dotnet build nU3.Core/nU3.Core.csproj
+dotnet build SRC/nU3.Core/nU3.Core.csproj
 
 # Restore packages / Clean
-dotnet restore nU3.Framework.sln
-dotnet clean nU3.Framework.sln
+dotnet restore SRC/nU3.Framework.sln
+dotnet clean SRC/nU3.Framework.sln
 ```
 
 ### Test Commands
 ```bash
 # NOTE: Only DbTest project exists (no xUnit/NUnit yet)
-
 # Run DbTest project
-dotnet build Tools/DbTest/DbTest.csproj
+dotnet build SRC/Tools/DbTest/DbTest.csproj
 
 # Run specific test (when test framework added)
 dotnet test --filter "FullyQualified.TestMethodName"
@@ -133,10 +132,7 @@ EventBus?.GetEvent<PatientSelectedEvent>()
     .Publish(new PatientSelectedEventPayload { Patient = patient, Source = ScreenId });
 
 // Subscribe (avoid circular dependencies)
-protected override void OnScreenActivated()
-{
-    EventBus?.GetEvent<PatientSelectedEvent>().Subscribe(OnPatientSelected);
-}
+EventBus?.GetEvent<PatientSelectedEvent>().Subscribe(OnPatientSelected);
 
 private void OnPatientSelected(object payload)
 {
@@ -162,16 +158,6 @@ public MyView(IService service) : BaseWorkControl
 }
 ```
 
-### Database & UI Development
-```csharp
-// Always use repository pattern with async/await
-// Use parameterized queries to prevent SQL injection
-
-// Use nU3 controls (wrapped DevExpress, namespace: nU3.Core.UI.Controls)
-// Inherit from BaseWorkControl, use RegisterDisposable() for resources
-RegisterDisposable(_httpClient);
-```
-
 ---
 
 ## Important Notes
@@ -194,21 +180,9 @@ RegisterDisposable(_httpClient);
 // ✅ Constants, Path.Combine(), await Task.Delay(), log+rethrow, DI container
 ```
 
-### Thread Safety & Disposables
-```csharp
-private readonly ConcurrentDictionary<int, HttpClient> _httpClientPool;
-private readonly object _lock = new object();
-
-public MyControl()
-{
-    _timer = new Timer();
-    RegisterDisposable(_timer);  // Auto-cleanup in BaseWorkControl
-}
-```
-
 ---
 
-## Project Structure & Dependencies
+## Project Structure
 
 ```
 SRC/
@@ -251,29 +225,7 @@ SRC/
 - 윈폼 디자이너에서 디자인 가능하도록 디자인 코드를 분리해야 한다
 - 디자인 코드에는 람다식이 들어가면 안된다
 
-
-
-### Devexpress MCP 
-description: 'Answer questions about DevExpress UI Components and their API using the dxdocs server'
----
-You are a .NET programmer and DevExpress product expert.
-Your task is to answer questions about DevExpress components and their APIs using dxdocs MCP server tools.
-
-When replying to **ANY** question about DevExpress components, use the dxdocs server to construct your answer.
-
-## Workflow:
-1. **Call devexpress_docs_search** to obtain help topics related to the user's question
-2. **Call devexpress_docs_get_content** to fetch and read the most relevant help topics
-3. **Reflect on the obtained content** and how it relates to the question
-4. **Provide a comprehensive answer** based solely on retrieved information
-
-## Constraints:
-- **Use devexpress_docs_search only once** per question to avoid redundant queries
-- **Answer questions based solely** on information obtained from MCP server tools
-- If relevant code examples are available in documentation, **include those code examples**
-- **Reference specific DevExpress controls and properties** mentioned in the docs
-- If a user specifies a version (such as v24.2 or 24.2), invoke MCP server tools corresponding to that version (for example, "dxdocs24_2")
-
+- GITHUB를 마음대로 사용하지 말것. 
 ---
 
-**Last Updated**: 2026-02-05
+**Last Updated**: 2026-02-08

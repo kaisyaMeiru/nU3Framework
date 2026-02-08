@@ -80,18 +80,59 @@ namespace nU3.Core.UI
         /// <summary>
         /// 연결성 매니저 (전역 싱글톤)
         /// DB, 파일 전송, 로그 업로드 등을 관리합니다.
+        /// 디자인 모드에서는 null을 반환합니다.
         /// </summary>
-        protected ConnectivityManager Connectivity => ConnectivityManager.Instance;
+        protected ConnectivityManager Connectivity
+        {
+            get
+            {
+                if (System.ComponentModel.LicenseManager.UsageMode == System.ComponentModel.LicenseUsageMode.Designtime)
+                    return null;
+                return ConnectivityManager.Instance;
+            }
+        }
 
         /// <summary>
         /// 로거
+        /// 디자인 모드에서는 null을 반환합니다.
         /// </summary>
-        protected ILogger Logger => LogManager.Instance.Logger;
+        protected ILogger Logger
+        {
+            get
+            {
+                if (System.ComponentModel.LicenseManager.UsageMode == System.ComponentModel.LicenseUsageMode.Designtime)
+                    return null;
+                try
+                {
+                    return LogManager.Instance.Logger;
+                }
+                catch
+                {
+                    return null;
+                }
+            }
+        }
 
         /// <summary>
         /// 감사 로거
+        /// 디자인 모드에서는 null을 반환합니다.
         /// </summary>
-        protected IAuditLogger AuditLogger => LogManager.Instance.AuditLogger;
+        protected IAuditLogger AuditLogger
+        {
+            get
+            {
+                if (System.ComponentModel.LicenseManager.UsageMode == System.ComponentModel.LicenseUsageMode.Designtime)
+                    return null;
+                try
+                {
+                    return LogManager.Instance.AuditLogger;
+                }
+                catch
+                {
+                    return null;
+                }
+            }
+        }
 
         /// <summary>
         /// 취소 토큰
@@ -109,6 +150,10 @@ namespace nU3.Core.UI
 
         public BaseWorkControl()
         {
+            // 디자인 모드에서는 초기화 스킵
+            if (System.ComponentModel.LicenseManager.UsageMode == System.ComponentModel.LicenseUsageMode.Designtime)
+                return;
+
             this.Dock = DockStyle.Fill;
             _disposables = new List<IDisposable>();
             _cancellationTokenSource = new CancellationTokenSource();
@@ -130,6 +175,10 @@ namespace nU3.Core.UI
         /// </summary>
         public virtual void InitializeContext(WorkContext context)
         {
+            // 디자인 모드에서는 스킵
+            if (System.ComponentModel.LicenseManager.UsageMode == System.ComponentModel.LicenseUsageMode.Designtime)
+                return;
+
             if (context == null)
             {
                 LogWarning("Attempted to initialize with null context");
@@ -148,6 +197,10 @@ namespace nU3.Core.UI
         /// </summary>
         public virtual void UpdateContext(WorkContext context)
         {
+            // 디자인 모드에서는 스킵
+            if (System.ComponentModel.LicenseManager.UsageMode == System.ComponentModel.LicenseUsageMode.Designtime)
+                return;
+
             if (context == null)
             {
                 LogWarning("Attempted to update with null context");
@@ -166,6 +219,10 @@ namespace nU3.Core.UI
         /// </summary>
         public WorkContext GetContext()
         {
+            // 디자인 모드에서는 새 인스턴스 반환
+            if (System.ComponentModel.LicenseManager.UsageMode == System.ComponentModel.LicenseUsageMode.Designtime)
+                return new WorkContext();
+
             return _workContext?.Clone();
         }
 
@@ -192,6 +249,10 @@ namespace nU3.Core.UI
         /// </summary>
         public virtual void OnActivated()
         {
+            // 디자인 모드에서는 스킵
+            if (System.ComponentModel.LicenseManager.UsageMode == System.ComponentModel.LicenseUsageMode.Designtime)
+                return;
+
             if (_isActivated)
                 return;
 
@@ -213,6 +274,10 @@ namespace nU3.Core.UI
         /// </summary>
         public virtual void OnDeactivated()
         {
+            // 디자인 모드에서는 스킵
+            if (System.ComponentModel.LicenseManager.UsageMode == System.ComponentModel.LicenseUsageMode.Designtime)
+                return;
+
             if (!_isActivated)
                 return;
 
@@ -234,6 +299,10 @@ namespace nU3.Core.UI
         /// </summary>
         public virtual bool CanClose()
         {
+            // 디자인 모드에서는 항상 true
+            if (System.ComponentModel.LicenseManager.UsageMode == System.ComponentModel.LicenseUsageMode.Designtime)
+                return true;
+
             try
             {
                 return OnBeforeClose();
@@ -276,6 +345,10 @@ namespace nU3.Core.UI
         /// </summary>
         public virtual void ReleaseResources()
         {
+            // 디자인 모드에서는 스킵
+            if (System.ComponentModel.LicenseManager.UsageMode == System.ComponentModel.LicenseUsageMode.Designtime)
+                return;
+
             if (_isDisposed)
                 return;
 
