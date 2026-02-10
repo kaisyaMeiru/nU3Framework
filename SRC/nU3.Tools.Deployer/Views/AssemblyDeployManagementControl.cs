@@ -6,12 +6,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.Extensions.Configuration;
+using DevExpress.XtraGrid.Views.Grid; // GridView
 using nU3.Connectivity;
 using nU3.Core.Repositories;
 using nU3.Models;
 using nU3.Core.UI; // BaseWorkControl
-using DevExpress.XtraGrid.Views.Grid; // GridView
-using DevExpress.XtraGrid.Columns; // GridColumn
 
 namespace nU3.Tools.Deployer.Views
 {
@@ -25,7 +24,7 @@ namespace nU3.Tools.Deployer.Views
         private IFileTransferService? _fileTransferService;
 
         // 서버 상의 컴포넌트 루트 경로 (기본: "Patch")
-        private string _serverComponentPath = "Patch";
+        private string _serverComponentPath = nU3.Core.Services.ModuleLoaderService.FRAMEWORKS_DIR;
 
         // 서버 전송 사용 여부 (설정에 따라 true/false)
         private bool _useServerTransfer = true;
@@ -53,7 +52,7 @@ namespace nU3.Tools.Deployer.Views
         };
 
         /// <summary>
-        /// Designer 전용 생성자입니다.
+        /// 디자이너 전용 생성자입니다.
         /// </summary>
         public AssemblyDeployManagementControl()
         {
@@ -67,8 +66,8 @@ namespace nU3.Tools.Deployer.Views
             _fileTransferService = fileTransferService;
 
             // 서버 연결 설정 로드
-            var serverEnabled = configuration.GetValue<bool>("ServerConnection:Enabled", false);
-            _serverComponentPath = configuration.GetValue<string>("ComponentStorage:ServerPath") ?? "Components";
+            var serverEnabled = true;
+            _serverComponentPath = nU3.Core.Services.ModuleLoaderService.FRAMEWORKS_DIR;
             _useServerTransfer = serverEnabled;
 
             SetupGrids();
@@ -77,26 +76,26 @@ namespace nU3.Tools.Deployer.Views
 
         private void SetupGrids()
         {
-            // Main Grid
+            // 메인 그리드
             _gvComponents.Columns.Clear();
-            AddGridColumn(_gvComponents, "ComponentId", "ID", 150);
-            AddGridColumn(_gvComponents, "ComponentType", "Type", 100);
-            AddGridColumn(_gvComponents, "ComponentName", "Name", 150);
-            AddGridColumn(_gvComponents, "FileName", "File", 150);
-            AddGridColumn(_gvComponents, "InstallPath", "Path", 150);
-            AddGridColumn(_gvComponents, "Priority", "Priority", 60);
+            AddGridColumn(_gvComponents, "ComponentId", "아이디", 150);
+            AddGridColumn(_gvComponents, "ComponentType", "유형", 100);
+            AddGridColumn(_gvComponents, "ComponentName", "이름", 150);
+            AddGridColumn(_gvComponents, "FileName", "파일", 150);
+            AddGridColumn(_gvComponents, "InstallPath", "경로", 150);
+            AddGridColumn(_gvComponents, "Priority", "우선순위", 60);
             
             _gvComponents.OptionsBehavior.Editable = false;
             _gvComponents.OptionsView.ShowGroupPanel = false;
             _gvComponents.SelectionChanged += DgvComponents_SelectionChanged;
 
-            // Version Grid
+            // 버전 그리드
             _gvVersions.Columns.Clear();
-            AddGridColumn(_gvVersions, "Version", "Version", 80);
-            AddGridColumn(_gvVersions, "FileHash", "Hash", 100);
-            AddGridColumn(_gvVersions, "FileSize", "Size", 80);
-            AddGridColumn(_gvVersions, "IsActive", "Active", 60);
-            AddGridColumn(_gvVersions, "RegDate", "Date", 120);
+            AddGridColumn(_gvVersions, "Version", "버전", 80);
+            AddGridColumn(_gvVersions, "FileHash", "해시", 100);
+            AddGridColumn(_gvVersions, "FileSize", "크기", 80);
+            AddGridColumn(_gvVersions, "IsActive", "활성", 60);
+            AddGridColumn(_gvVersions, "RegDate", "등록일", 120);
 
             _gvVersions.OptionsBehavior.Editable = false;
             _gvVersions.OptionsView.ShowGroupPanel = false;
@@ -148,12 +147,7 @@ namespace nU3.Tools.Deployer.Views
                 control.BackColor = originalBackColor;
             }
         }
-
-        private static string GetInstallPathDefaultsText()
-        {
-            return "Core/Lib/Exe→루트, Plugin→plugins, Resource→resources";
-        }
-
+        
         private void BtnNewComponent_Click(object? sender, EventArgs e)
         {
             ClearDetailFields();
@@ -319,7 +313,7 @@ namespace nU3.Tools.Deployer.Views
 
             using var ofd = new OpenFileDialog
             {
-                Filter = "DLL/EXE/JSON Files (*.dll;*.exe;*.json;*.xml)|*.dll;*.exe;*.json;*.xml|All Files (*.*)|*.*",
+                Filter = "DLL/EXE/JSON 파일 (*.dll;*.exe;*.json;*.xml)|*.dll;*.exe;*.json;*.xml|모든 파일 (*.*)|*.*",
                 Title = "배포할 파일 선택",
                 Multiselect = true
             };
@@ -417,11 +411,11 @@ namespace nU3.Tools.Deployer.Views
             if (_useServerTransfer && _fileTransferService != null)
             {
                 homeDirectory = await _fileTransferService.GetHomeDirectoryAsync();
-                Console.WriteLine($"Home Directory: {homeDirectory}");
+                Console.WriteLine($"홈 디렉터리: {homeDirectory}");
             }
 
-            Console.WriteLine($"Root Directory: {rootDirectory}");
-            Console.WriteLine($"Deploying {filePaths.Length} files...");
+            Console.WriteLine($"루트 디렉터리: {rootDirectory}");
+            Console.WriteLine($"{filePaths.Length}개 파일을 배포 중...");
 
             foreach (var filePath in filePaths)
             {
@@ -433,12 +427,12 @@ namespace nU3.Tools.Deployer.Views
                     var relativePath = string.IsNullOrEmpty(rootDirectory)
                         ? Path.GetFileName(filePath)
                         : filePath.Substring(rootDirectory.Length).TrimStart('\\', '/');
-                    Console.WriteLine($"Deployed: {relativePath}");
+                    Console.WriteLine($"배포됨: {relativePath}");
                 }
                 catch (Exception ex)
                 {
                     failed++;
-                    System.Diagnostics.Debug.WriteLine($"Failed to deploy {filePath}: {ex.Message}");
+                    System.Diagnostics.Debug.WriteLine($"배포 실패: {filePath}: {ex.Message}");
                 }
             }
 
@@ -493,7 +487,7 @@ namespace nU3.Tools.Deployer.Views
                 componentId = fileName;
             }
 
-            Console.WriteLine($"Deploying: {componentId}");
+            Console.WriteLine($"배포 대상: {componentId}");
 
             var componentType = DetermineComponentType(componentId, isExe);
             var defaults = ComponentTypeDefaults[componentType];
@@ -528,20 +522,20 @@ namespace nU3.Tools.Deployer.Views
                         ? $"{_serverComponentPath}/{fullPath}"
                         : $"{homeDirectory.TrimEnd('/', '\\')}/{_serverComponentPath}/{fullPath}";
 
-                    Console.WriteLine($"Uploading to server: {serverPath}");
+                    Console.WriteLine($"서버에 업로드 중: {serverPath}");
                     var success = await _fileTransferService.UploadFileAsync(filePath, serverPath);
 
                     if (!success)
                     {
-                        throw new InvalidOperationException($"Server upload failed: {serverPath}");
+                        throw new InvalidOperationException($"서버 업로드 실패: {serverPath}");
                     }
 
                     storagePath = serverPath;
-                    Console.WriteLine($"Uploaded: {fileName} (path: {serverPath})");
+                    Console.WriteLine($"업로드 완료: {fileName} (경로: {serverPath})");
                 }
                 catch (Exception ex)
                 {
-                    System.Diagnostics.Debug.WriteLine($"Upload failed for {filePath}: {ex.Message}");
+                    System.Diagnostics.Debug.WriteLine($"업로드 실패: {filePath}: {ex.Message}");
                     storagePath = filePath;
                 }
             }

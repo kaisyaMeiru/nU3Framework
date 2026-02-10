@@ -5,12 +5,13 @@ using nU3.Models;
 namespace nU3.Core.Logging
 {
     /// <summary>
-    /// ÀÏ¹Ý ·Î±× ±â·Ï±â ÀÎÅÍÆäÀÌ½º
-    /// ¾ÖÇÃ¸®ÄÉÀÌ¼Ç Àü¹Ý¿¡¼­ »ç¿ëµÇ´Â ·Î±× ¼öÁØº° ¸Þ¼­µå¸¦ Á¤ÀÇÇÕ´Ï´Ù.
-    /// ±¸ÇöÃ¼´Â ·Î±×¸¦ ÆÄÀÏ, ÄÜ¼Ö, ¿ø°Ý ¼­¹ö µî ¿øÇÏ´Â ´ë»óÀ¸·Î ±â·ÏÇÒ ¼ö ÀÖ½À´Ï´Ù.
+    /// ê¸°ë³¸ ë¡œê±° ì¸í„°íŽ˜ì´ìŠ¤ìž…ë‹ˆë‹¤.
+    /// ì• í”Œë¦¬ì¼€ì´ì…˜ ì „ë°˜ì—ì„œ ë¡œê·¸ë¥¼ ë‚¨ê¸°ëŠ” ê¸°ëŠ¥ì„ ì •ì˜í•©ë‹ˆë‹¤.
+    /// êµ¬í˜„ì²´ëŠ” ë ˆë²¨ë³„ ë¡œê·¸ ë©”ì„œë“œì™€ ì¼ë°˜ ë¡œê·¸, ë¹„ë™ê¸° Flush ê¸°ëŠ¥ì„ ì œê³µí•´ì•¼ í•©ë‹ˆë‹¤.
     /// </summary>
     public interface ILogger
     {
+        event EventHandler<string> MessageLogged;
         void Trace(string message, string category = null, Exception exception = null);
         void Debug(string message, string category = null, Exception exception = null);
         void Information(string message, string category = null, Exception exception = null);
@@ -22,8 +23,8 @@ namespace nU3.Core.Logging
     }
 
     /// <summary>
-    /// ¿Àµ÷(Audit) ·Î±× Àü¿ë ÀÎÅÍÆäÀÌ½º
-    /// µ¥ÀÌÅÍ º¯°æ/Á¶È¸ µî °¨»ç ¸ñÀûÀÇ ÀÌº¥Æ®¸¦ ±â·ÏÇÏ±â À§ÇÑ ¸Þ¼­µåµéÀ» Á¤ÀÇÇÕ´Ï´Ù.
+    /// ê°ì‚¬(Audit) ë¡œê·¸ ì¸í„°íŽ˜ì´ìŠ¤ìž…ë‹ˆë‹¤.
+    /// ìƒì„±/ì¡°íšŒ/ìˆ˜ì •/ì‚­ì œ ë“± ê°ì‚¬ ëª©ì ì˜ ë¡œê·¸ë¥¼ ê¸°ë¡í•˜ëŠ” ë©”ì„œë“œë¥¼ ì œê³µí•©ë‹ˆë‹¤.
     /// </summary>
     public interface IAuditLogger
     {
@@ -37,8 +38,8 @@ namespace nU3.Core.Logging
     }
 
     /// <summary>
-    /// ·Î±× ¾÷·Îµå ¼­ºñ½º ÀÎÅÍÆäÀÌ½º
-    /// ·ÎÄÃ ·Î±× ÆÄÀÏÀ» ¼­¹ö·Î ¾÷·ÎµåÇÏ´Â ±â´ÉÀ» Á¦°øÇÕ´Ï´Ù.
+    /// ë¡œê·¸ ì—…ë¡œë“œ ì„œë¹„ìŠ¤ ì¸í„°íŽ˜ì´ìŠ¤ìž…ë‹ˆë‹¤.
+    /// ë¡œì»¬ì— ì €ìž¥ëœ ë¡œê·¸ íŒŒì¼ì„ ì„œë²„ë¡œ ì—…ë¡œë“œí•˜ê±°ë‚˜ ìžë™ ì—…ë¡œë“œ ê¸°ëŠ¥ì„ ì œì–´í•©ë‹ˆë‹¤.
     /// </summary>
     public interface ILogUploadService
     {

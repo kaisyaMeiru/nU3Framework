@@ -10,6 +10,7 @@ using nU3.Connectivity;
 using nU3.Connectivity.Implementations;
 using nU3.Core.Services;
 using nU3.Models;
+using nU3.Bootstrapper.Services;
 
 namespace nU3.Bootstrapper
 {
@@ -17,14 +18,16 @@ namespace nU3.Bootstrapper
     /// Bootstrapper 메인 프로그램
     /// 
     /// 책임:
-    /// - 애플리케이션 설정 로드
-    /// - 로컬 DB 초기화
-    /// - 프레임워크 컴포넌트 및 모듈 동기화 (ModuleLoaderService 사용)
+    /// - 애플리케이션 설정 로드    
+    /// - 프레임워크 컴포넌트 및 모듈 업데이트 (ModuleLoaderService 사용)
+    /// - Custom URI 등록
+    /// - Legacy Module 등록 (OCX 등)
     /// - 메인 쉘(MainShell) 실행
     /// </summary>
     class Program
     {
         private static IConfiguration? _configuration;
+        private static LegacyComponentManager? _legacyComponentManager;
 
         [STAThread]
         static async Task Main(string[] args)
@@ -48,16 +51,16 @@ namespace nU3.Bootstrapper
 
                 // DB 서비스 초기화 (HTTP 클라이언트)
                 string baseUrl = _configuration.GetValue<string>("ServerConnection:BaseUrl") ?? "http://localhost:5000";
-                
+
                 // HttpClient 설정
-                var httpClient = new System.Net.Http.HttpClient 
-                { 
+                var httpClient = new System.Net.Http.HttpClient
+                {
                     BaseAddress = new Uri(baseUrl),
                     Timeout = TimeSpan.FromMinutes(10)
                 };
-                
+
                 IDBAccessService dbService = new HttpDBAccessClient(httpClient, baseUrl);
-                
+
                 // 1. DB 연결 확인 (초기화는 서버에서 수행됨)
                 FileLogger.SectionStart("데이터베이스 연결 확인");
                 bool isConnected = dbService.Connect();
@@ -71,21 +74,9 @@ namespace nU3.Bootstrapper
                 }
                 FileLogger.SectionEnd("데이터베이스 연결 확인");
 
-                // 2. Shell 실행 파일 위치 확인
-                FileLogger.SectionStart("Shell 실행 파일 위치 확인");
-                string? shellPath = FindShellPath(_configuration);
-                if (string.IsNullOrEmpty(shellPath))
-                {
-                    FileLogger.Warning("Shell 실행 파일을 찾을 수 없습니다.");
-                    MessageBox.Show("Shell 실행 파일을 찾을 수 없습니다.", "오류",  MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-                FileLogger.Info($"Shell 경로: {shellPath}");
-                FileLogger.SectionEnd("Shell 실행 파일 위치 확인");
+                // 2. 통합 업데이트 (ModuleLoaderService 사용)
+                FileLogger.SectionStart("시스템 업데이트");
 
-                // 3. 통합 동기화 (ModuleLoaderService 사용)
-                FileLogger.SectionStart("시스템 동기화");
-                
                 // 레포지토리 초기화
                 var moduleRepo = new SQLiteModuleRepository(dbService);
                 var progRepo = new SQLiteProgramRepository(dbService);
@@ -101,27 +92,48 @@ namespace nU3.Bootstrapper
 
                 if (!syncSuccess)
                 {
-                    FileLogger.Error("동기화 실패 또는 취소됨");
+                    FileLogger.Error("업데이트 실패 또는 취소됨");
                     // 필수 구성요소 실패 시 중단 로직 추가 가능
                 }
-                
-                FileLogger.Info("시스템 동기화 완료");
-                FileLogger.SectionEnd("시스템 동기화");
+
+                FileLogger.Info("시스템 업데이트 완료");
+                FileLogger.SectionEnd("시스템 업데이트");
+
+                // 2.5. Legacy 컴포넌트 등록 (OCX, ActiveX 등)
+                RegisterLegacyComponents();
+
+                // 2.6. Custom URI 등록
+                RegisterCustomUri();
+
+                // 3.1 업데이트 후에 Shell 실행 파일 위치를 확인합니다. (초기 설치 시 파일이 없을 수 있음)
+                FileLogger.SectionStart("Shell 실행 파일 위치 확인");
+                string? shellPath = FindShellPath(_configuration);
+                if (string.IsNullOrEmpty(shellPath))
+                {
+                    FileLogger.Warning("업데이트 후에도 Shell 실행 파일을 찾을 수 없습니다.");
+                    MessageBox.Show("Shell 실행 파일을 찾을 수 없습니다. 업데이트가 제대로 되었는지 확인하세요.", "오류", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                FileLogger.Info($"Shell 경로: {shellPath}");
+                FileLogger.SectionEnd("Shell 실행 파일 위치 확인");
+
+                // 3.2 실행 중인 프로세스 확인 및 종료 (이제 exeName이 존재하므로 확인 가능)
+                CheckAndKillRunningShell(_configuration);
 
                 // 4. Seeder (개발 환경용 더미 데이터)
-                #if DEBUG
+#if DEBUG
                 FileLogger.SectionStart("더미 데이터 생성");
                 var seeder = new Seeder(dbService);
                 seeder.SeedDummyData();
                 FileLogger.Info("더미 데이터 생성 완료");
                 FileLogger.SectionEnd("더미 데이터 생성");
-                #endif
+#endif
 
                 // 5. Shell 실행
                 FileLogger.Info("MainShell 실행 중...");
                 FileLogger.Info($"실행 파일: {shellPath}");
                 LaunchShell(shellPath);
-            
+
                 FileLogger.Info("=== nU3 Framework Bootstrapper 완료 ===");
             }
             catch (Exception ex)
@@ -130,6 +142,11 @@ namespace nU3.Bootstrapper
                 FileLogger.Error($"예외 타입: {ex.GetType().FullName}");
                 MessageBox.Show($"작업 중 오류 발생:\n{ex.Message}", "오류",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                // Legacy 컴포넌트 정리 (선택적)
+                // CleanupLegacyComponents();
             }
         }
 
@@ -140,7 +157,7 @@ namespace nU3.Bootstrapper
         {
             var basePath = AppDomain.CurrentDomain.BaseDirectory;
             var configPath = Path.Combine(basePath, "appsettings.json");
-            
+
             var builder = new ConfigurationBuilder().SetBasePath(basePath);
 
             // 단일 파일 배포의 경우 파일이 존재하지 않을 수 있음
@@ -163,12 +180,12 @@ namespace nU3.Bootstrapper
                     {
                         using var reader = new StreamReader(stream);
                         var jsonContent = reader.ReadToEnd();
-                        
+
                         // 임시 파일로 쓰고 로드
                         var tempConfigPath = Path.Combine(Path.GetTempPath(), $"appsettings_{Guid.NewGuid()}.json");
                         File.WriteAllText(tempConfigPath, jsonContent);
                         builder.AddJsonFile(tempConfigPath, optional: false, reloadOnChange: false);
-                        
+
                         FileLogger.Info("설정 리소스 로드: appsettings.json (임시 파일)");
                         FileLogger.Debug($"임시 경로: {tempConfigPath}");
                     }
@@ -193,21 +210,29 @@ namespace nU3.Bootstrapper
         {
             try
             {
-                return configuration?.GetValue<string>("RuntimeDirectory");
-                
+                var runtimeDir = configuration?.GetValue<string>("RuntimeDirectory");
+                var exeName = configuration?.GetValue<string>("MainExecutable");
+
+                if (string.IsNullOrEmpty(runtimeDir) || string.IsNullOrEmpty(exeName))
+                    return null;
+
+                return Path.Combine(runtimeDir, exeName);
             }
-            catch { }
-           
+            catch (Exception ex)
+            {
+                FileLogger.Error("실행 파일 경로 확인 중 오류", ex);
+            }
+
             return null;
         }
 
         /// <summary>
-        /// UI를 통해 동기화 진행 상황을 표시합니다.
+        /// UI를 통해 동기화 진행 사항을 표시합니다.
         /// </summary>
         private static bool RunSyncWithUI(ModuleLoaderService loader, string syncMode)
         {
             using var form = new UpdateProgressForm();
-            
+
             bool completed = false;
             ComponentUpdateResult? result = null;
 
@@ -226,7 +251,7 @@ namespace nU3.Bootstrapper
             loader.UpdateProgress += (s, e) =>
             {
                 form.UpdateProgress(e);
-                
+
                 if (e.Phase == UpdatePhase.Installing)
                 {
                     form.MarkComponentCompleted(e.ComponentId, true);
@@ -243,7 +268,8 @@ namespace nU3.Bootstrapper
                 if (updates.Count > 0)
                 {
                     await Task.Delay(500); // UI 렌더링 시간 확보
-                    
+
+
                     await Task.Run(() =>
                     {
                         try
@@ -253,7 +279,7 @@ namespace nU3.Bootstrapper
                         }
                         catch (Exception ex)
                         {
-                            FileLogger.Error("동기화 중 오류", ex);
+                            FileLogger.Error("업데이트 중 오류", ex);
                             completed = false;
                         }
                     });
@@ -266,9 +292,66 @@ namespace nU3.Bootstrapper
             };
 
             var dialogResult = form.ShowDialog();
-            
+
             // 성공했거나 사용자가 '실행' 등을 눌러 완료된 경우 true 반환
             return (completed && (result?.Success ?? false)) || dialogResult == DialogResult.OK;
+        }
+
+        /// <summary>
+        /// 실행 중인 Shell 프로세스가 있는지 확인하고 사용자 동의 하에 종료합니다.
+        /// </summary>
+        private static void CheckAndKillRunningShell(IConfiguration configuration)
+        {
+            var exeName = configuration.GetValue<string>("MainExecutable");
+            if (string.IsNullOrEmpty(exeName)) return;
+
+            var processName = Path.GetFileNameWithoutExtension(exeName);
+            var processes = System.Diagnostics.Process.GetProcessesByName(processName);
+
+            if (processes.Length > 0)
+            {
+                FileLogger.Warning($"실행 중인 {processName} 프로세스 감지됨 ({processes.Length}개)");
+
+                var result = MessageBox.Show(
+                    $"현재 프로그램({exeName})이 실행 중입니다.\n" +
+                    "정상적인 업데이트를 위해 실행 중인 프로그램을 종료해야 합니다.\n\n" +
+                    "지금 종료하고 업데이트를 진행하시겠습니까?",
+                    "업데이트 알림",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning);
+
+                if (result == DialogResult.Yes)
+                {
+                    foreach (var process in processes)
+                    {
+                        try
+                        {
+                            FileLogger.Info($"프로세스 종료 시도: {process.Id} ({process.ProcessName})");
+                            process.Kill();
+                            // 프로세스가 완전히 종료될 때까지 대기
+                            if (!process.WaitForExit(5000))
+                            {
+                                FileLogger.Warning($"프로세스 종료 대기 시간 초과: {process.Id}");
+                            }
+                            else
+                            {
+                                FileLogger.Info($"프로세스 종료됨: {process.Id}");
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            FileLogger.Error($"프로세스 종료 중 오류 발생: {process.Id}", ex);
+                        }
+                    }
+
+                    // 모든 프로세스 종료 후 잠시 대기 (파일 잠금 해제 시간 확보)
+                    System.Threading.Thread.Sleep(500);
+                }
+                else
+                {
+                    FileLogger.Info("사용자가 프로세스 종료를 거부함. 업데이트 중 파일 잠금 오류가 발생할 수 있습니다.");
+                }
+            }
         }
 
         /// <summary>
@@ -284,6 +367,93 @@ namespace nU3.Bootstrapper
             };
 
             System.Diagnostics.Process.Start(startInfo);
+        }
+
+        /// <summary>
+        /// Legacy 컴포넌트 (OCX, ActiveX 등)를 등록합니다.
+        /// </summary>
+        private static void RegisterLegacyComponents()
+        {
+            FileLogger.SectionStart("Legacy 컴포넌트 등록");
+
+            try
+            {
+                _legacyComponentManager = new LegacyComponentManager();
+                var (success, failed) = _legacyComponentManager.RegisterFromConfiguration(_configuration);
+
+                if (success.Count > 0)
+                {
+                    FileLogger.Info($"등록 성공한 컴포넌트: {success.Count}개");
+                    foreach (var component in success)
+                    {
+                        FileLogger.Info($"  - {component}");
+                    }
+                }
+
+                if (failed.Count > 0)
+                {
+                    FileLogger.Warning($"등록 실패한 컴포넌트: {failed.Count}개");
+                    foreach (var component in failed)
+                    {
+                        FileLogger.Warning($"  - {component}");
+                    }
+                }
+
+                if (success.Count == 0 && failed.Count == 0)
+                {
+                    FileLogger.Info("등록할 Legacy 컴포넌트가 없습니다.");
+                }
+            }
+            catch (Exception ex)
+            {
+                FileLogger.Error("Legacy 컴포넌트 등록 중 오류", ex);
+            }
+
+            FileLogger.SectionEnd("Legacy 컴포넌트 등록");
+        }
+
+        /// <summary>
+        /// Custom URI를 등록합니다.
+        /// </summary>
+        private static void RegisterCustomUri()
+        {
+            FileLogger.SectionStart("Custom URI 등록");
+
+            try
+            {
+                var success = CustomUriManager.RegisterFromConfiguration(_configuration);
+
+                if (success)
+                {
+                    var scheme = _configuration.GetValue<string>("CustomUri:Scheme");
+                    FileLogger.Info($"Custom URI 등록 성공: {scheme}://");
+                }
+                else
+                {
+                    FileLogger.Info("Custom URI 등록을 건너뜁니다.");
+                }
+            }
+            catch (Exception ex)
+            {
+                FileLogger.Error("Custom URI 등록 중 오류", ex);
+            }
+
+            FileLogger.SectionEnd("Custom URI 등록");
+        }
+
+        /// <summary>
+        /// Legacy 컴포넌트 등록을 해제합니다 (프로그램 종료 시).
+        /// </summary>
+        private static void CleanupLegacyComponents()
+        {
+            try
+            {
+                _legacyComponentManager?.CleanupAll();
+            }
+            catch (Exception ex)
+            {
+                FileLogger.Error("Legacy 컴포넌트 정리 중 오류", ex);
+            }
         }
     }
 }

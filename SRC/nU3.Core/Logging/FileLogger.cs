@@ -12,16 +12,17 @@ using nU3.Models;
 namespace nU3.Core.Logging
 {
     /// <summary>
-    /// ÆÄÀÏ ±â¹İÀÇ ·±Å¸ÀÓ ·Î°Å ±¸ÇöÃ¼ÀÔ´Ï´Ù.
+    /// íŒŒì¼ ê¸°ë°˜ ë¡œê±° êµ¬í˜„ì…ë‹ˆë‹¤.
     /// 
-    /// ÁÖ¿ä ±â´É:
-    /// - ·Î±× ¸Ş½ÃÁö¸¦ ½º·¹µå ¾ÈÀüÇÑ Å¥¿¡ ¼öÁıÇÏ°í ÁÖ±âÀûÀ¸·Î ÆÄÀÏ·Î ±â·ÏÇÕ´Ï´Ù.
-    /// - ÆÄÀÏ¸íÀº "{MachineName}_{IPAddress}_{yyyyMMdd}.log" Çü½ÄÀÔ´Ï´Ù.
-    /// - ·Î±× ¼öÁØ¿¡ µû¶ó Áï½Ã flush¸¦ ¼öÇà(¿¡·¯ ¹× Ä¡¸íÀû ¼öÁØ)ÇÕ´Ï´Ù.
-    /// - ¿À·¡µÈ ·Î±× ÆÄÀÏ ÀÚµ¿ Á¤¸® ±â´É Á¦°ø
+    /// ìš”ì•½:
+    /// - ë¡œê·¸ ë©”ì‹œì§€ë¥¼ ë‚´ë¶€ íì— ì ì¬í•˜ê³  ì£¼ê¸°ì ìœ¼ë¡œ íŒŒì¼ì— ê¸°ë¡í•©ë‹ˆë‹¤.
+    /// - ë¡œê·¸ íŒŒì¼ ì´ë¦„ì€ "{MachineName}_{IPAddress}_{yyyyMMdd}.log" í˜•ì‹ì…ë‹ˆë‹¤.
+    /// - ì—ëŸ¬ ë ˆë²¨ ì´ìƒì˜ ë¡œê·¸ê°€ ë“¤ì–´ì˜¤ë©´ ì¦‰ì‹œ flushë¥¼ ì‹œë„í•©ë‹ˆë‹¤.
+    /// - Dispose ì‹œ ë‚¨ì•„ìˆëŠ” ë¡œê·¸ë¥¼ ëª¨ë‘ flushí•©ë‹ˆë‹¤.
     /// </summary>
     public class FileLogger : ILogger, IDisposable
     {
+        public event EventHandler<string> MessageLogged;
         private readonly string _logDirectory;
         private readonly string _machineName;
         private readonly string _ipAddress;
@@ -33,9 +34,9 @@ namespace nU3.Core.Logging
         private bool _disposed;
 
         /// <summary>
-        /// »ı¼ºÀÚ: ±âº» ·Î±× µğ·ºÅä¸®´Â ApplicationData/nU3.Framework/LOG ÀÔ´Ï´Ù.
+        /// ìƒì„±ì: ê¸°ë³¸ ë¡œê·¸ ë””ë ‰í„°ë¦¬ëŠ” ApplicationData/nU3.Framework/LOG ì…ë‹ˆë‹¤.
         /// </summary>
-        /// <param name="baseDirectory">»ç¿ëÀÚ ÁöÁ¤ ·Î±× µğ·ºÅä¸®(¿É¼Ç)</param>
+        /// <param name="baseDirectory">ë¡œê·¸ íŒŒì¼ì„ ì €ì¥í•  ê¸°ë³¸ ë””ë ‰í„°ë¦¬(ì˜µì…˜)</param>
         public FileLogger(string baseDirectory = null)
         {
             _logDirectory = baseDirectory ?? Path.Combine(
@@ -56,12 +57,12 @@ namespace nU3.Core.Logging
             _currentDate = DateTime.Now.Date;
             _currentLogFile = GetLogFileName();
 
-            // 5ÃÊ¸¶´Ù Å¥¸¦ ÆÄÀÏ·Î flush
+            // 5ì´ˆë§ˆë‹¤ íë¥¼ flushí•˜ë„ë¡ íƒ€ì´ë¨¸ ì„¤ì •
             _flushTimer = new Timer(async _ => await FlushAsync(), null, TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(5));
         }
 
         /// <summary>
-        /// ·ÎÄÃ IPv4 ÁÖ¼Ò¸¦ Á¶È¸ÇÕ´Ï´Ù. ½ÇÆĞ ½Ã "127.0.0.1"À» ¹İÈ¯ÇÕ´Ï´Ù.
+        /// ë¡œì»¬ í˜¸ìŠ¤íŠ¸ì˜ IPv4 ì£¼ì†Œë¥¼ ë°˜í™˜í•©ë‹ˆë‹¤. ì‹¤íŒ¨í•˜ë©´ "127.0.0.1"ì„ ë°˜í™˜í•©ë‹ˆë‹¤.
         /// </summary>
         private string GetLocalIPAddress()
         {
@@ -84,8 +85,8 @@ namespace nU3.Core.Logging
         }
 
         /// <summary>
-        /// ÇöÀç ³¯Â¥¿¡ ÇØ´çÇÏ´Â ·Î±× ÆÄÀÏ °æ·Î¸¦ »ı¼ºÇÕ´Ï´Ù.
-        /// ÆÄÀÏ¸í: {MachineName}_{IpAddress}_{yyyyMMdd}.log
+        /// í˜„ì¬ ë‚ ì§œì— í•´ë‹¹í•˜ëŠ” ë¡œê·¸ íŒŒì¼ ê²½ë¡œë¥¼ ë°˜í™˜í•©ë‹ˆë‹¤.
+        /// í˜•ì‹: {MachineName}_{IpAddress}_{yyyyMMdd}.log
         /// </summary>
         private string GetLogFileName()
         {
@@ -112,7 +113,7 @@ namespace nU3.Core.Logging
             => Log(LogLevel.Critical, message, category, exception);
 
         /// <summary>
-        /// ·Î±× Ç×¸ñÀ» »ı¼ºÇÏ°í Å¥¿¡ Ãß°¡ÇÕ´Ï´Ù. Error ÀÌ»ó ·¹º§Àº Áï½Ã ºñµ¿±â flush¸¦ Æ®¸®°ÅÇÕ´Ï´Ù.
+        /// ë¡œê·¸ ì—”íŠ¸ë¦¬ë¥¼ íì— ì¶”ê°€í•©ë‹ˆë‹¤. Error ì´ìƒì¸ ê²½ìš° ì¦‰ì‹œ Flushë¥¼ ì‹œë„í•©ë‹ˆë‹¤.
         /// </summary>
         public void Log(LogLevel level, string message, string category = null, Exception exception = null)
         {
@@ -129,7 +130,7 @@ namespace nU3.Core.Logging
                     IpAddress = _ipAddress
                 };
 
-                // »ç¿ëÀÚ Á¤º¸ º¸°­(¿¹¿Ü ¹ß»ı ½Ã ¹«½Ã)
+                // í˜„ì¬ ë¡œê·¸ì¸ëœ ì‚¬ìš©ì ì •ë³´ë¥¼ ì‹œë„í•´ì„œ ë„£ìŠµë‹ˆë‹¤(ì‹¤íŒ¨ ì‹œ ë¬´ì‹œ)
                 try
                 {
                     var user = nU3.Core.Security.UserSession.Current;
@@ -142,7 +143,10 @@ namespace nU3.Core.Logging
 
                 _logQueue.Enqueue(entry);
 
-                // Error ÀÌ»ó ·¹º§ÀÎ °æ¿ì Áï½Ã flush ½Ãµµ
+                // UI êµ¬ë…ìì—ê²Œ ìƒíƒœ ë©”ì‹œì§€ ì „ë‹¬
+                MessageLogged?.Invoke(this, message);
+
+                // Error ì´ìƒì´ë©´ ì¦‰ì‹œ ë¹„ë™ê¸° Flush
                 if (level >= LogLevel.Error)
                 {
                     Task.Run(async () => await FlushAsync());
@@ -150,14 +154,14 @@ namespace nU3.Core.Logging
             }
             catch
             {
-                // ·Î±ë ½ÇÆĞ´Â ¾ÖÇÃ¸®ÄÉÀÌ¼Ç Èå¸§¿¡ ¿µÇâÀ» ÁÖÁö ¾Êµµ·Ï ¹«½Ã
+                // ë¡œê¹… ê³¼ì •ì—ì„œì˜ ì˜ˆì™¸ëŠ” ë¬´ì‹œí•©ë‹ˆë‹¤.
             }
         }
 
         /// <summary>
-        /// Å¥¿¡ ÀÖ´Â ·Î±×¸¦ ÆÄÀÏ¿¡ ±â·ÏÇÕ´Ï´Ù.
-        /// - ³¯Â¥ º¯°æÀÌ °¨ÁöµÇ¸é ÆÄÀÏ¸íÀ» °»½ÅÇÏ¿© ³¯Â¥º° ÆÄÀÏ·Î ÀúÀåÇÕ´Ï´Ù.
-        /// - ÆÄÀÏ ¾²±â´Â SemaphoreSlimÀ¸·Î º¸È£ÇÕ´Ï´Ù.
+        /// íì— ì €ì¥ëœ ë¡œê·¸ë¥¼ íŒŒì¼ì— ê¸°ë¡í•©ë‹ˆë‹¤.
+        /// - ë‚ ì§œê°€ ë°”ë€Œë©´ ìƒˆë¡œìš´ ë¡œê·¸ íŒŒì¼ì„ ìƒì„±í•©ë‹ˆë‹¤.
+        /// - SemaphoreSlimìœ¼ë¡œ ë™ì‹œ ì“°ê¸°ë¥¼ ì œì–´í•©ë‹ˆë‹¤.
         /// </summary>
         public async Task FlushAsync()
         {
@@ -167,7 +171,7 @@ namespace nU3.Core.Logging
             await _writeLock.WaitAsync();
             try
             {
-                // ³¯Â¥°¡ º¯°æµÇ¾úÀ¸¸é »õ ÆÄÀÏ »ç¿ë
+                // ë‚ ì§œê°€ ë³€ê²½ë˜ì—ˆìœ¼ë©´ ìƒˆë¡œìš´ íŒŒì¼ ì´ë¦„ìœ¼ë¡œ ì „í™˜
                 if (DateTime.Now.Date != _currentDate)
                 {
                     _currentDate = DateTime.Now.Date;
@@ -193,7 +197,7 @@ namespace nU3.Core.Logging
             }
             catch
             {
-                // ÆÄÀÏ ¾²±â ½ÇÆĞ´Â ¹«½Ã(·Î±× ÀÚÃ¼°¡ Àå¾Ö¸¦ À¯¹ßÇÏ¸é ¾ÈµÊ)
+                // íŒŒì¼ ì“°ê¸° ì‹¤íŒ¨ ì‹œ ë¬´ì‹œ
             }
             finally
             {
@@ -202,8 +206,8 @@ namespace nU3.Core.Logging
         }
 
         /// <summary>
-        /// ·Î±× Ç×¸ñÀ» »ç¶÷ÀÌ ÀĞ±â ÆíÇÑ ¹®ÀÚ¿­·Î Æ÷¸ËÇÕ´Ï´Ù.
-        /// Æ÷ÇÔ Á¤º¸: Å¸ÀÓ½ºÅÆÇÁ, ·¹º§, Ä«Å×°í¸®, »ç¿ëÀÚ, ÇÁ·Î±×·¥ID, ¸Ş½ÃÁö, ¿¹¿Ü, Ãß°¡ µ¥ÀÌÅÍ
+        /// ë¡œê·¸ ì—”íŠ¸ë¦¬ë¥¼ ë¼ì¸ ë¬¸ìì—´ë¡œ í¬ë§·í•©ë‹ˆë‹¤.
+        /// í¬ë§· í•­ëª©: ì‹œê°„, ë ˆë²¨, ì¹´í…Œê³ ë¦¬, ì‚¬ìš©ì, í”„ë¡œê·¸ë¨, ë©”ì‹œì§€, ì˜ˆì™¸, ì¶”ê°€ë°ì´í„°
         /// </summary>
         private string FormatLogEntry(LogEntryDto entry)
         {
@@ -227,14 +231,14 @@ namespace nU3.Core.Logging
             if (!string.IsNullOrEmpty(entry.Exception))
             {
                 sb.AppendLine();
-                sb.Append("    Exception: ");
+                sb.Append("    ì˜ˆì™¸: ");
                 sb.Append(entry.Exception.Replace("\n", "\n    "));
             }
 
             if (!string.IsNullOrEmpty(entry.AdditionalData))
             {
                 sb.AppendLine();
-                sb.Append("    Additional: ");
+                sb.Append("    ì¶”ê°€: ");
                 sb.Append(entry.AdditionalData);
             }
 
@@ -242,7 +246,7 @@ namespace nU3.Core.Logging
         }
 
         /// <summary>
-        /// ÁöÁ¤ÇÑ ÀÏ¼ö(daysToKeep) ÀÌÀüÀÇ ¿À·¡µÈ ·Î±× ÆÄÀÏÀ» »èÁ¦ÇÕ´Ï´Ù. ±âº»°ª: 30ÀÏ
+        /// ì§€ì •ëœ ì¼ìˆ˜(daysToKeep)ë³´ë‹¤ ì˜¤ë˜ëœ ë¡œê·¸ íŒŒì¼ì„ ì‚­ì œí•©ë‹ˆë‹¤. ê¸°ë³¸ê°’: 30ì¼
         /// </summary>
         public void CleanupOldLogs(int daysToKeep = 30)
         {
@@ -268,7 +272,7 @@ namespace nU3.Core.Logging
         }
 
         /// <summary>
-        /// Æ¯Á¤ ³¯Â¥ÀÇ ·Î±× ÆÄÀÏ °æ·Î¸¦ ¹İÈ¯ÇÕ´Ï´Ù. ±âº»°ª: ¿À´Ã ³¯Â¥
+        /// íŠ¹ì • ë‚ ì§œì˜ ë¡œê·¸ íŒŒì¼ ê²½ë¡œë¥¼ ë°˜í™˜í•©ë‹ˆë‹¤. ê¸°ë³¸ê°’ì€ ì˜¤ëŠ˜ ë‚ ì§œì…ë‹ˆë‹¤.
         /// </summary>
         public string GetLogFilePath(DateTime? date = null)
         {
@@ -278,8 +282,7 @@ namespace nU3.Core.Logging
         }
 
         /// <summary>
-        /// Á¸ÀçÇÏ´Â ¸ğµç ·Î±× ÆÄÀÏÀÇ °æ·Î ¹è¿­À» »ı¼ºÀÏ ³»¸²Â÷¼øÀ¸·Î ¹İÈ¯ÇÕ´Ï´Ù.
-        /// ¿¹¿Ü ¹ß»ı ½Ã ºó ¹è¿­ ¹İÈ¯
+        /// ë¡œê·¸ ë””ë ‰í„°ë¦¬ì— ìˆëŠ” ëª¨ë“  ë¡œê·¸ íŒŒì¼ ê²½ë¡œë¥¼ ë°˜í™˜í•©ë‹ˆë‹¤.
         /// </summary>
         public string[] GetAllLogFiles()
         {
@@ -296,7 +299,7 @@ namespace nU3.Core.Logging
         }
 
         /// <summary>
-        /// ¸®¼Ò½º ÇØÁ¦: Å¸ÀÌ¸Ó Á¤Áö, ³²Àº ·Î±× flush, ¶ô ÇØÁ¦
+        /// ë¦¬ì†ŒìŠ¤ ì •ë¦¬: íƒ€ì´ë¨¸ í•´ì œ, í flush, ë½ í•´ì œ
         /// </summary>
         public void Dispose()
         {

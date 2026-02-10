@@ -5,6 +5,7 @@ using nU3.Core.Logging;
 using nU3.Core.Context;
 using nU3.Core.Attributes;
 using nU3.Core.Services;
+using nU3.Core.Events;
 using System.Collections.Generic;
 using System.Threading;
 using System.Reflection;
@@ -262,6 +263,17 @@ namespace nU3.Core.UI
             {
                 LogManager.Debug($"Screen activated: {ProgramTitle ?? this.GetType().Name}", "UI");
                 OnScreenActivated();
+
+                // 모듈 활성화 이벤트 발행 (Shell Title 등 업데이트용)
+                // 모듈에서 직접 데이터를 전달하여 정확성을 높임
+                var attr = this.GetType().GetCustomAttribute<nU3ProgramInfoAttribute>();
+                EventBus?.GetEvent<ModuleActivatedEvent>().Publish(new ModuleActivatedEventPayload
+                {
+                    ProgId = this.ProgramID,
+                    ProgramName = this.ProgramTitle,
+                    ModuleId = attr?.GetModuleId(),
+                    Version = this.GetType().Assembly.GetName().Version?.ToString()
+                });
             }
             catch (Exception ex)
             {

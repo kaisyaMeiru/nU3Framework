@@ -84,7 +84,7 @@ namespace nU3.Core.Events
     }
 
     /// <summary>
-    /// 데이터 갱신 요청 이벤트
+    /// 새로고침 요청 이벤트
     /// Payload: RefreshRequestEventPayload
     /// </summary>
     public class RefreshRequestEvent : PubSubEvent { }
@@ -98,7 +98,7 @@ namespace nU3.Core.Events
     }
 
     /// <summary>
-    /// 화면 간 네비게이션 요청 이벤트
+    /// 화면 내비게이션 요청 이벤트
     /// Payload: NavigationRequestEventPayload
     /// </summary>
     public class NavigationRequestEvent : PubSubEvent { }
@@ -124,7 +124,7 @@ namespace nU3.Core.Events
     }
 
     /// <summary>
-    /// 의료 오더 서명 이벤트
+    /// 처방 서명 완료 이벤트
     /// </summary>
     public class OrderSignedEvent : PubSubEvent { }
 
@@ -133,5 +133,18 @@ namespace nU3.Core.Events
         public string OrderId { get; set; }
         public string SignedBy { get; set; }
         public string Source { get; set; }
+    }
+
+    /// <summary>
+    /// 모듈 활성화 이벤트 (Shell Title 업데이트 등에 사용)
+    /// </summary>
+    public class ModuleActivatedEvent : PubSubEvent { }
+
+    public class ModuleActivatedEventPayload
+    {
+        public string ProgId { get; set; }
+        public string ProgramName { get; set; }
+        public string ModuleId { get; set; }
+        public string Version { get; set; }
     }
 }

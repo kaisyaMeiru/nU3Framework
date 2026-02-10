@@ -89,6 +89,11 @@ namespace nU3.Connectivity.Implementations
                     // 본문을 포함한 POST 요청 (쿼리/파라미터가 있는 경우)
                     var requestData = CreateRequestData(method, args);
                     response = await _httpClient.PostAsJsonAsync(endpoint, requestData).ConfigureAwait(false);
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        var body = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                        throw new InvalidOperationException($"HTTP {(int)response.StatusCode} {response.ReasonPhrase} from {response.RequestMessage?.RequestUri}: {body}");
+                    }
                 }
                 else
                 {
@@ -239,6 +244,7 @@ namespace nU3.Connectivity.Implementations
                     new
                     {
                         CommandText = args[0]?.ToString() ?? string.Empty,
+                        //Parameters = args.Length > 1 ? args[1] as Dictionary<string, object> ?? new Dictionary<string, object>() : new Dictionary<string, object>()
                         Parameters = args.Length > 1 ? args[1] as Dictionary<string, object> : null
                     },
 

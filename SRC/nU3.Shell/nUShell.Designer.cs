@@ -25,6 +25,7 @@ namespace nU3.Shell
             barStaticItemServer = new DevExpress.XtraBars.BarStaticItem();
             barStaticItemDatabase = new DevExpress.XtraBars.BarStaticItem();
             barStaticItemVersion = new DevExpress.XtraBars.BarStaticItem();
+            barStaticItemLogMessage = new DevExpress.XtraBars.BarStaticItem();
             barStaticItemTime = new DevExpress.XtraBars.BarStaticItem();
             barDockControlTop = new DevExpress.XtraBars.BarDockControl();
             barDockControlBottom = new DevExpress.XtraBars.BarDockControl();
@@ -58,7 +59,7 @@ namespace nU3.Shell
             barManager1.DockControls.Add(barDockControlLeft);
             barManager1.DockControls.Add(barDockControlRight);
             barManager1.Form = this;
-            barManager1.Items.AddRange(new DevExpress.XtraBars.BarItem[] { barStaticItemUser, barStaticItemTime, barStaticItemServer, barStaticItemDatabase, barStaticItemVersion });
+            barManager1.Items.AddRange(new DevExpress.XtraBars.BarItem[] { barStaticItemUser, barStaticItemTime, barStaticItemServer, barStaticItemDatabase, barStaticItemVersion, barStaticItemLogMessage });
             barManager1.MainMenu = barMainMenu;
             barManager1.MaxItemId = 10;
             barManager1.StatusBar = barStatusBar;
@@ -82,7 +83,7 @@ namespace nU3.Shell
             barStatusBar.DockCol = 0;
             barStatusBar.DockRow = 0;
             barStatusBar.DockStyle = DevExpress.XtraBars.BarDockStyle.Bottom;
-            barStatusBar.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] { new DevExpress.XtraBars.LinkPersistInfo(barStaticItemUser, true), new DevExpress.XtraBars.LinkPersistInfo(barStaticItemServer, true), new DevExpress.XtraBars.LinkPersistInfo(barStaticItemDatabase, true), new DevExpress.XtraBars.LinkPersistInfo(barStaticItemVersion, true), new DevExpress.XtraBars.LinkPersistInfo(DevExpress.XtraBars.BarLinkUserDefines.PaintStyle, barStaticItemTime, "", true, true, true, 0, null, DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph) });
+            barStatusBar.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] { new DevExpress.XtraBars.LinkPersistInfo(barStaticItemUser, true), new DevExpress.XtraBars.LinkPersistInfo(barStaticItemLogMessage, true), new DevExpress.XtraBars.LinkPersistInfo(barStaticItemServer, true), new DevExpress.XtraBars.LinkPersistInfo(barStaticItemDatabase, true), new DevExpress.XtraBars.LinkPersistInfo(barStaticItemVersion, true), new DevExpress.XtraBars.LinkPersistInfo(DevExpress.XtraBars.BarLinkUserDefines.PaintStyle, barStaticItemTime, "", true, true, true, 0, null, DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph) });
             barStatusBar.OptionsBar.AllowQuickCustomization = false;
             barStatusBar.OptionsBar.DrawDragBorder = false;
             barStatusBar.OptionsBar.UseWholeRow = true;
@@ -95,6 +96,14 @@ namespace nU3.Shell
             barStaticItemUser.ItemAppearance.Normal.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             barStaticItemUser.ItemAppearance.Normal.Options.UseFont = true;
             barStaticItemUser.Name = "barStaticItemUser";
+            // 
+            // barStaticItemLogMessage
+            // 
+            barStaticItemLogMessage.AutoSize = DevExpress.XtraBars.BarStaticItemSize.Spring;
+            barStaticItemLogMessage.Caption = "Ready";
+            barStaticItemLogMessage.Id = 11;
+            barStaticItemLogMessage.Name = "barStaticItemLogMessage";
+            barStaticItemLogMessage.ItemDoubleClick += BarStaticItemLogMessage_ItemDoubleClick;
             // 
             // barStaticItemServer
             // 
@@ -207,6 +216,7 @@ namespace nU3.Shell
         private DevExpress.XtraBars.BarStaticItem barStaticItemServer;
         private DevExpress.XtraBars.BarStaticItem barStaticItemDatabase;
         private DevExpress.XtraBars.BarStaticItem barStaticItemVersion;
+        private DevExpress.XtraBars.BarStaticItem barStaticItemLogMessage;
         private DevExpress.XtraBars.BarStaticItem barStaticItemTime;
         private System.Windows.Forms.Timer timerStatusUpdate;
         private DevExpress.Utils.ImageCollection imageCollection;

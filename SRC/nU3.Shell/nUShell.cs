@@ -8,6 +8,7 @@ using nU3.Core.Interfaces;
 using nU3.Core.Events;
 using nU3.Models;
 using System.Reflection;
+using nU3.Core.Attributes;
 using DevExpress.XtraBars;
 using DevExpress.XtraTab;
 using DevExpress.XtraTab.ViewInfo;
@@ -455,6 +456,14 @@ namespace nU3.Shell
             // EventBus 구독 (모듈 간 통신)
             SubscribeToEvents();
 
+            // LogManager 메시지 구독
+            if (LogManager.Instance.Logger != null)
+            {
+                LogManager.Instance.Logger.MessageLogged += (s, msg) => {
+                    this.Invoke(new Action(() => UpdateStatusMessage(msg)));
+                };
+            }
+
             LogManager.Info("메인 셸 로딩 완료", "Shell");
 
             // 로그인 오딧
@@ -471,11 +480,37 @@ namespace nU3.Shell
             _eventAggregator?.GetEvent<CloseScreenRequestEvent>()
                 .Subscribe(OnCloseScreenRequest);
 
+            // 모듈 활성화 이벤트 구독 (제목 표시줄 업데이트용)
+            _eventAggregator?.GetEvent<ModuleActivatedEvent>()
+                .Subscribe(OnModuleActivated);
+
             // 신규 제네릭 환자 선택 이벤트 구독 (강타입 계약 사용)
             _eventAggregator?.GetEvent<Core.Events.Contracts.PatientSelectedEvent>()
                 .Subscribe(OnPatientSelectedGeneric);
 
             LogManager.Info("메인 셸이 이벤트를 구독함", "Shell");
+        }
+
+        private void OnModuleActivated(object payload)
+        {
+            if (payload is not ModuleActivatedEventPayload evt)
+                return;
+
+            // UI 스레드에서 실행
+            if (this.InvokeRequired)
+            {
+                this.Invoke(new Action(() => OnModuleActivated(payload)));
+                return;
+            }
+
+            var defaultTitle = "nU3 Healthcare Information System";
+            
+            // 모듈에서 전달받은 데이터를 사용하여 제목 업데이트
+            // DB 조회 없이 현재 실행 중인 모듈의 실제 정보를 반영함
+            var version = evt.Version ?? "Unknown";
+            this.Text = $"{defaultTitle} - [{evt.ProgId}] v{version}";
+            
+            LogManager.Debug($"Shell Title 업데이트됨: {evt.ProgId} (v{version})", "Shell");
         }
 
         private void OnPatientSelectedGeneric(nU3.Core.Contracts.Models.PatientContext context)
@@ -1452,7 +1487,13 @@ namespace nU3.Shell
                 ActivateTabContent(e.Page);
                 UpdateStatusMessage($"'{e.Page.Text}' 활성화됨");
             }
+            else
+            {
+                // 모든 탭이 닫힌 경우 제목 초기화
+                this.Text = "nU3 Healthcare Information System";
+            }
         }
+
 
         private void CloseTab(XtraTabPage page)
         {
@@ -1612,7 +1653,37 @@ namespace nU3.Shell
 
         private void UpdateStatusMessage(string message)
         {
-            barStaticItemTime.Caption = $"{DateTime.Now:HH:mm:ss} | {message}";
+            barStaticItemLogMessage.Caption = message;
+        }
+
+        private void BarStaticItemLogMessage_ItemDoubleClick(object sender, ItemClickEventArgs e)
+        {
+            try
+            {
+                // 현재 로그 파일 경로 가져오기
+                if (LogManager.Instance.Logger is FileLogger fileLogger)
+                {
+                    string logPath = fileLogger.GetLogFilePath();
+                    if (System.IO.File.Exists(logPath))
+                    {
+                        LogManager.Info($"로그 파일 열기: {logPath}", "Shell");
+                        System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                        {
+                            FileName = logPath,
+                            UseShellExecute = true
+                        });
+                    }
+                    else
+                    {
+                        XtraMessageBox.Show("현재 로그 파일이 아직 생성되지 않았거나 찾을 수 없습니다.", "알림", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LogManager.Error("로그 파일 열기 실패", "Shell", ex);
+                XtraMessageBox.Show($"로그 파일을 열 수 없습니다: {ex.Message}", "오류", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void ShowSplashMessage(string message)

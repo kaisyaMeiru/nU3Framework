@@ -59,9 +59,10 @@ namespace nU3.Tools.Deployer.Views
             _moduleRepo = moduleRepo;
             _fileTransferService = fileTransferService;
 
-            var serverEnabled = configuration.GetValue<bool>("ServerConnection:Enabled", false);
-            _serverModulePath = configuration.GetValue<string>("ModuleStorage:ServerPath") ?? "Modules";
-            _useServerTransfer = configuration.GetValue<bool>("ModuleStorage:UseServerTransfer", true) && serverEnabled;
+            var serverEnabled = true;
+            // 코드상으로 고정: 서버 경로는 항상 'Modules'
+            _serverModulePath = nU3.Core.Services.ModuleLoaderService.MODULES_DIR;
+            _useServerTransfer = true && serverEnabled;
 
             InitializeComponent();
 

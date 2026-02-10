@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using nU3.Core.Attributes;
@@ -11,26 +12,17 @@ using nU3.Models;
 namespace nU3.Tools.Deployer.Services
 {
     /// <summary>
-    /// DLL(¸ğµâ) ÆÄÀÏÀÇ ¸ŞÅ¸µ¥ÀÌÅÍ¸¦ ÃßÃâÇÏ°í °ËÁõÇÏ´Â À¯Æ¿¸®Æ¼ Å¬·¡½ºÀÔ´Ï´Ù.
-    /// 
-    /// ÁÖ¿ä ¿ªÇÒ:
-    /// - ÆÄÀÏ¸í ±ÔÄ¢(nU3.Modules.{System}.{SubSys}.{Name}.dll) °Ë»ç
-    /// - ¾î¼Àºí¸® ·Îµå ¹× ¹öÀü, ¾î¼Àºí¸®¸í ÃßÃâ
-    /// - Å¸ÀÔÀ» ½ºÄµÇÏ¿© nU3ProgramInfoAttribute°¡ ºÙÀº È­¸é(ÇÁ·Î±×·¥)À» ½Äº°ÇÏ°í DTO·Î º¯È¯
-    /// - ³×ÀÓ½ºÆäÀÌ½º / DLL¸í / ¾îÆ®¸®ºäÆ® °£ÀÇ ÀÏ°ü¼º °ËÁõ
+    /// DLL(ëª¨ë“ˆ) ë©”íƒ€ë°ì´í„°ë¥¼ ë¶„ì„í•˜ê³  ê²€ì¦í•˜ëŠ” ìœ í‹¸ë¦¬í‹° í´ë˜ìŠ¤ì…ë‹ˆë‹¤.
     /// </summary>
     public class DllMetadataParser
     {
-        // ±Ô¾à: nU3.Modules.{System}.{SubSys}.{Name}.dll
-        // ¿¹: nU3.Modules.EMR.IN.Worklist.dll
+        // ê·œì¹™: nU3.Modules.{System}.{SubSys}.{Name}.dll
         private static readonly Regex NamingPattern = new Regex(@"^nU3\.Modules\.([^\.]+)\.([^\.]+)\.(.+)\.dll$", RegexOptions.IgnoreCase);
 
         /// <summary>
-        /// ÁöÁ¤ÇÑ DLL °æ·Î¸¦ ÆÄ½ÌÇÏ¿© ParsedModuleInfo¸¦ ¹İÈ¯ÇÕ´Ï´Ù.
-        /// ¹İÈ¯µÈ Á¤º¸¿¡´Â ÆÄÀÏ ¸ŞÅ¸µ¥ÀÌÅÍ, Æ÷ÇÔµÈ ÇÁ·Î±×·¥(ÇÁ·Î±×·¥ DTO) ¸ñ·Ï, °ËÁõ ¿À·ù ¸ñ·ÏÀÌ Æ÷ÇÔµË´Ï´Ù.
+        /// ì£¼ì–´ì§„ DLL ê²½ë¡œë¥¼ íŒŒì‹±í•˜ì—¬ ParsedModuleInfoë¥¼ ë°˜í™˜í•©ë‹ˆë‹¤.
+        /// MetadataLoadContextë¥¼ ì‚¬ìš©í•˜ì—¬ ë©”íƒ€ë°ì´í„°ë§Œ ì½ê³  ì¦‰ì‹œ ì–¸ë¡œë“œí•©ë‹ˆë‹¤.
         /// </summary>
-        /// <param name="dllPath">°Ë»çÇÒ DLL ÆÄÀÏÀÇ ÀüÃ¼ °æ·Î</param>
-        /// <returns>ÆÄ½Ì ¹× °ËÁõ °á°ú¸¦ Æ÷ÇÔÇÑ ParsedModuleInfo °´Ã¼</returns>
         public ParsedModuleInfo Parse(string dllPath)
         {
             var fileInfo = new FileInfo(dllPath);
@@ -42,56 +34,104 @@ namespace nU3.Tools.Deployer.Services
                 ValidationErrors = new List<string>()
             };
 
-            // 1. ³×ÀÌ¹Ö ±Ô¾à °Ë»ç
+            // 1. ë„¤ì´ë° ê·œì¹™ ê²€ì‚¬
             var match = NamingPattern.Match(result.FileName);
             if (match.Success)
             {
-                result.SystemType = match.Groups[1].Value.ToUpper(); // EMR
-                result.SubSystem = match.Groups[2].Value.ToUpper();  // IN
-                result.ModuleName = match.Groups[3].Value;           // Worklist
-
-                // ModuleId ±ÔÄ¢: PROG_{SystemType}_{SubSystem}_{SimpleDllName}
+                result.SystemType = match.Groups[1].Value.ToUpper();
+                result.SubSystem = match.Groups[2].Value.ToUpper();
+                result.ModuleName = match.Groups[3].Value;
                 result.ModuleId = $"PROG_{result.SystemType}_{result.SubSystem}_{result.ModuleName}";
             }
             else
             {
-                // ÆÄÀÏ¸íÀÌ ±Ô¾à¿¡ ¸ÂÁö ¾ÊÀ¸¸é ¿¹¿Ü¸¦ ´øÁı´Ï´Ù.
-                throw new ArgumentException("ÆÄÀÏ ÀÌ¸§ÀÌ ±Ô¾àÀ» µû¸£Áö ¾Ê½À´Ï´Ù: nU3.Modules.{System}.{SubSys}.{Name}.dll");
+                throw new ArgumentException("íŒŒì¼ ì´ë¦„ì´ ê·œì¹™ì— ë§ì§€ ì•ŠìŠµë‹ˆë‹¤: nU3.Modules.{System}.{SubSys}.{Name}.dll");
             }
 
-            // 2. ¾î¼Àºí¸® Á¤º¸ (¸®ÇÃ·º¼Ç)
+            // 2. MetadataLoadContextë¥¼ ì‚¬ìš©í•˜ì—¬ ë©”íƒ€ë°ì´í„°ë§Œ ë¡œë“œ (ì‹¤í–‰ ë¶ˆê°€, ë©”ëª¨ë¦¬ ê²©ë¦¬)
             try
             {
-                // Assembly.LoadFromÀ» »ç¿ëÇÏ¿© ¾î¼Àºí¸®¸¦ ·ÎµåÇÏ°í °Ë»çÇÕ´Ï´Ù.
-                var assembly = Assembly.LoadFrom(dllPath);
+                // ëŸ°íƒ€ì„ ì–´ì…ˆë¸”ë¦¬ ê²½ë¡œ ìˆ˜ì§‘ (CoreLib ë“±)
+                var runtimeAssemblies = Directory.GetFiles(RuntimeEnvironment.GetRuntimeDirectory(), "*.dll");
+                var paths = new List<string>(runtimeAssemblies);
+                
+                // ëŒ€ìƒ DLL ì¶”ê°€
+                paths.Add(dllPath);
+
+                // ì˜ì¡´ì„± ì–´ì…ˆë¸”ë¦¬ ì¶”ê°€ (DLLê³¼ ê°™ì€ í´ë”ì˜ ëª¨ë“  DLL)
+                var dllDir = Path.GetDirectoryName(dllPath);
+                if (!string.IsNullOrEmpty(dllDir))
+                {
+                    paths.AddRange(Directory.GetFiles(dllDir, "*.dll"));
+                    
+                    // ìƒìœ„ ë””ë ‰í† ë¦¬ë„ ê²€ìƒ‰ (í”„ë ˆì„ì›Œí¬ DLLì´ ìƒìœ„ì— ìˆì„ ìˆ˜ ìˆìŒ)
+                    var parentDir = Directory.GetParent(dllDir);
+                    if (parentDir != null && parentDir.Exists)
+                    {
+                        paths.AddRange(Directory.GetFiles(parentDir.FullName, "*.dll", SearchOption.TopDirectoryOnly));
+                    }
+                }
+                
+                // í˜„ì¬ ì‹¤í–‰ ì¤‘ì¸ ì–´ì…ˆë¸”ë¦¬ë“¤ì˜ ìœ„ì¹˜ë„ ì¶”ê°€
+                var executingDir = AppDomain.CurrentDomain.BaseDirectory;
+                if (!string.IsNullOrEmpty(executingDir) && Directory.Exists(executingDir))
+                {
+                    paths.AddRange(Directory.GetFiles(executingDir, "*.dll", SearchOption.TopDirectoryOnly));
+                }
+                
+                // ì¤‘ë³µ ì œê±°
+                paths = paths.Distinct(StringComparer.OrdinalIgnoreCase).ToList();
+
+                var resolver = new PathAssemblyResolver(paths);
+                using var mlc = new MetadataLoadContext(resolver);
+
+                var assembly = mlc.LoadFromAssemblyPath(dllPath);
                 var version = assembly.GetName().Version;
                 result.Version = version != null ? version.ToString() : "1.0.0.0";
                 result.AssemblyName = assembly.GetName().Name;
 
-                // 3. ¾î¼Àºí¸® ³» Å¸ÀÔÀ» ¼øÈ¸ÇÏ¸é¼­ È­¸é(ÇÁ·Î±×·¥) ¾îÆ®¸®ºäÆ® ½ºÄµ
+                // 3. ì–´ì…ˆë¸”ë¦¬ ë‚´ íƒ€ì…ì„ ìˆœíšŒí•˜ë©° í™”ë©´ ì •ë³´ ì¶”ì¶œ
                 foreach (var type in assembly.GetTypes())
                 {
-                    var attr = type.GetCustomAttribute<nU3ProgramInfoAttribute>();
-                    if (attr != null)
+                    // MetadataLoadContextì—ì„œëŠ” GetCustomAttribute<T>() ëŒ€ì‹  GetCustomAttributesData() ì‚¬ìš©
+                    var attrData = type.GetCustomAttributesData()
+                        .FirstOrDefault(a => a.AttributeType.FullName == typeof(nU3ProgramInfoAttribute).FullName);
+
+                    if (attrData != null)
                     {
-                        // ¾îÆ®¸®ºäÆ®¿Í ³×ÀÓ½ºÆäÀÌ½º/ÆÄÀÏ¸í °£ÀÇ ÀÏ°ü¼º °ËÁõ ¼öÇà
-                        var validationErrors = ValidateProgramInfo(type, attr, result);
+                        // ì†ì„± ì¸ì ì¶”ì¶œ (ìƒì„±ì íŒŒë¼ë¯¸í„°)
+                        var ctorArgs = attrData.ConstructorArguments;
+                        string progId = ctorArgs.Count > 0 ? ctorArgs[0].Value?.ToString() : null;
+                        string progName = ctorArgs.Count > 1 ? ctorArgs[1].Value?.ToString() : null;
+
+                        // Named ì†ì„± ì¶”ì¶œ
+                        var namedArgs = attrData.NamedArguments.ToDictionary(
+                            na => na.MemberName,
+                            na => na.TypedValue.Value?.ToString()
+                        );
+
+                        namedArgs.TryGetValue("AuthLevel", out var authLevelStr);
+                        namedArgs.TryGetValue("SystemType", out var systemType);
+                        namedArgs.TryGetValue("SubSystem", out var subSystem);
+                        namedArgs.TryGetValue("DllName", out var dllName);
+                        namedArgs.TryGetValue("FullClassName", out var fullClassName);
+
+                        var validationErrors = ValidateProgramInfo(type, systemType, subSystem, result);
 
                         var programDto = new ProgramDto
                         {
-                            ProgId = attr.ProgramId ?? type.Name,
-                            ProgName = attr.ProgramName,
-                            ClassName = attr.FullClassName,
-                            AuthLevel = attr.AuthLevel,
+                            ProgId = progId ?? type.Name,
+                            ProgName = progName,
+                            ClassName = fullClassName ?? type.FullName,
+                            AuthLevel = int.TryParse(authLevelStr, out var authLevel) ? authLevel : 0,
                             ModuleId = result.ModuleId,
-                            SystemType = attr.SystemType,
-                            SubSystem = attr.SubSystem,
-                            DllName = attr.DllName
+                            SystemType = systemType,
+                            SubSystem = subSystem,
+                            DllName = dllName
                         };
 
                         if (validationErrors.Count > 0)
                         {
-                            // Å¸ÀÔ ´ÜÀ§ °ËÁõ ¿À·ù¸¦ °á°ú¿¡ Ãß°¡ (Å¸ÀÔ¸í°ú ÇÔ²²)
                             result.ValidationErrors.AddRange(validationErrors.Select(e =>
                                 $"[{type.Name}] {e}"));
                         }
@@ -102,22 +142,17 @@ namespace nU3.Tools.Deployer.Services
             }
             catch (Exception ex)
             {
-                // ¾î¼Àºí¸® °Ë»ç ½ÇÆĞ½Ã ÀÇ¹ÌÀÖ´Â ¸Ş½ÃÁö·Î ·¡ÇÎÇÏ¿© ¿¹¿Ü ´øÁü
-                throw new Exception($"¾î¼Àºí¸® °Ë»ç ½ÇÆĞ: {ex.Message}");
+                throw new Exception($"ì–´ì…ˆë¸”ë¦¬ ë©”íƒ€ë°ì´í„° ê²€ì‚¬ ì‹¤íŒ¨: {ex.Message}", ex);
             }
 
             return result;
         }
 
-        /// <summary>
-        /// Å¸ÀÔÀÇ ³×ÀÓ½ºÆäÀÌ½º, DLL¿¡¼­ À¯ÃßÇÑ ½Ã½ºÅÛ/¼­ºê½Ã½ºÅÛ, ±×¸®°í ¾îÆ®¸®ºäÆ®ÀÇ °ªµéÀÌ ¼­·Î ÀÏÄ¡ÇÏ´ÂÁö °ËÁõÇÕ´Ï´Ù.
-        /// ºÒÀÏÄ¡ Ç×¸ñÀº ¹®ÀÚ¿­ ¸Ş½ÃÁö·Î ¼öÁıµÇ¾î ¹İÈ¯µË´Ï´Ù.
-        /// </summary>
-        private List<string> ValidateProgramInfo(Type type, nU3ProgramInfoAttribute attr, ParsedModuleInfo moduleInfo)
+        private List<string> ValidateProgramInfo(Type type, string attrSystemType, string attrSubSystem, ParsedModuleInfo moduleInfo)
         {
             var errors = new List<string>();
 
-            // 1. ³×ÀÓ½ºÆäÀÌ½º °ËÁõ: nU3.Modules.{SystemType}.{SubSystem}.{ModuleName}
+            // 1. ë„¤ì„ìŠ¤í˜ì´ìŠ¤ ê²€ì¦
             var namespaceParts = type.Namespace?.Split('.') ?? Array.Empty<string>();
             string nsSystemType = null;
             string nsSubSystem = null;
@@ -128,53 +163,43 @@ namespace nU3.Tools.Deployer.Services
                 nsSubSystem = namespaceParts.Length >= 4 ? namespaceParts[3] : null;
             }
 
-            // 2. DLL ÀÌ¸§À¸·ÎºÎÅÍ ÃßÃâµÈ ½Ã½ºÅÛ/¼­ºê½Ã½ºÅÛ
             var dllSystemType = moduleInfo.SystemType;
             var dllSubSystem = moduleInfo.SubSystem;
 
-            // 3. ¾îÆ®¸®ºäÆ®¿¡ ¼³Á¤µÈ ½Ã½ºÅÛ/¼­ºê½Ã½ºÅÛ
-            var attrSystemType = attr.SystemType;
-            var attrSubSystem = attr.SubSystem;
-
-            // SystemType ÀÏ°ü¼º °ËÁõ
             if (!string.Equals(nsSystemType, dllSystemType, StringComparison.OrdinalIgnoreCase))
             {
-                errors.Add($"SystemType ºÒÀÏÄ¡: ³×ÀÓ½ºÆäÀÌ½º='{nsSystemType}' vs DLL='{dllSystemType}'");
+                errors.Add($"SystemType ë¶ˆì¼ì¹˜: Namespace='{nsSystemType}' vs DLL='{dllSystemType}'");
             }
 
             if (!string.Equals(nsSystemType, attrSystemType, StringComparison.OrdinalIgnoreCase))
             {
-                errors.Add($"SystemType ºÒÀÏÄ¡: ³×ÀÓ½ºÆäÀÌ½º='{nsSystemType}' vs ¾îÆ®¸®ºäÆ®='{attrSystemType}'");
+                errors.Add($"SystemType ë¶ˆì¼ì¹˜: Namespace='{nsSystemType}' vs Attribute='{attrSystemType}'");
             }
 
             if (!string.Equals(dllSystemType, attrSystemType, StringComparison.OrdinalIgnoreCase))
             {
-                errors.Add($"SystemType ºÒÀÏÄ¡: DLL='{dllSystemType}' vs ¾îÆ®¸®ºäÆ®='{attrSystemType}'");
+                errors.Add($"SystemType ë¶ˆì¼ì¹˜: DLL='{dllSystemType}' vs Attribute='{attrSystemType}'");
             }
 
-            // SubSystem ÀÏ°ü¼º °ËÁõ
             if (!string.Equals(nsSubSystem, dllSubSystem, StringComparison.OrdinalIgnoreCase))
             {
-                errors.Add($"SubSystem ºÒÀÏÄ¡: ³×ÀÓ½ºÆäÀÌ½º='{nsSubSystem}' vs DLL='{dllSubSystem}'");
+                errors.Add($"SubSystem ë¶ˆì¼ì¹˜: Namespace='{nsSubSystem}' vs DLL='{dllSubSystem}'");
             }
 
             if (!string.Equals(nsSubSystem, attrSubSystem, StringComparison.OrdinalIgnoreCase))
             {
-                errors.Add($"SubSystem ºÒÀÏÄ¡: ³×ÀÓ½ºÆäÀÌ½º='{nsSubSystem}' vs ¾îÆ®¸®ºäÆ®='{attrSubSystem}'");
+                errors.Add($"SubSystem ë¶ˆì¼ì¹˜: Namespace='{nsSubSystem}' vs Attribute='{attrSubSystem}'");
             }
 
             if (!string.Equals(dllSubSystem, attrSubSystem, StringComparison.OrdinalIgnoreCase))
             {
-                errors.Add($"SubSystem ºÒÀÏÄ¡: DLL='{dllSubSystem}' vs ¾îÆ®¸®ºäÆ®='{attrSubSystem}'");
+                errors.Add($"SubSystem ë¶ˆì¼ì¹˜: DLL='{dllSubSystem}' vs Attribute='{attrSubSystem}'");
             }
 
             return errors;
         }
     }
 
-    /// <summary>
-    /// DLL ÆÄ½Ì °á°ú¸¦ ´ã´Â ¸ğµ¨ Å¬·¡½ºÀÔ´Ï´Ù.
-    /// </summary>
     public class ParsedModuleInfo
     {
         public string FullPath { get; set; }
@@ -182,7 +207,7 @@ namespace nU3.Tools.Deployer.Services
         public string AssemblyName { get; set; }
         public string ModuleId { get; set; }
         public string ModuleName { get; set; }
-        public string SystemType { get; set; } // Category
+        public string SystemType { get; set; } 
         public string SubSystem { get; set; }
         public string Version { get; set; }
         public long FileSize { get; set; }
@@ -193,10 +218,10 @@ namespace nU3.Tools.Deployer.Services
         
         public string GetValidationSummary()
         {
-            if (!HasValidationErrors) return "¸ğµç °ËÁõ Åë°ú";
+            if (!HasValidationErrors) return "ê²€ì¦ ì„±ê³µ";
             
             var sb = new StringBuilder();
-            sb.AppendLine($"{ValidationErrors.Count}°³ÀÇ °ËÁõ ¿À·ù:");
+            sb.AppendLine($"{ValidationErrors.Count}ê°œì˜ ê²€ì¦ ì˜¤ë¥˜:");
             foreach (var error in ValidationErrors)
             {
                 sb.AppendLine($"  - {error}");

@@ -100,7 +100,7 @@ namespace nU3.Modules.OCS.IN.MainEntry
             pnlWaitList.Location = new Point(0, 120);
             pnlWaitList.Margin = new Padding(4);
             pnlWaitList.Name = "pnlWaitList";
-            pnlWaitList.Size = new Size(300, 576);
+            pnlWaitList.Size = new Size(300, 797);
             pnlWaitList.TabIndex = 2;
             // 
             // pnlCenter
@@ -112,7 +112,7 @@ namespace nU3.Modules.OCS.IN.MainEntry
             pnlCenter.Location = new Point(310, 120);
             pnlCenter.Margin = new Padding(4);
             pnlCenter.Name = "pnlCenter";
-            pnlCenter.Size = new Size(522, 576);
+            pnlCenter.Size = new Size(522, 797);
             pnlCenter.TabIndex = 3;
             // 
             // splitterDiagProblem
@@ -137,7 +137,7 @@ namespace nU3.Modules.OCS.IN.MainEntry
             // pnlMemo
             // 
             pnlMemo.Dock = DockStyle.Bottom;
-            pnlMemo.Location = new Point(2, 439);
+            pnlMemo.Location = new Point(2, 660);
             pnlMemo.Margin = new Padding(4);
             pnlMemo.Name = "pnlMemo";
             pnlMemo.Size = new Size(518, 135);
@@ -150,7 +150,7 @@ namespace nU3.Modules.OCS.IN.MainEntry
             pnlRight.Location = new Point(842, 120);
             pnlRight.Margin = new Padding(4);
             pnlRight.Name = "pnlRight";
-            pnlRight.Size = new Size(547, 576);
+            pnlRight.Size = new Size(547, 797);
             pnlRight.TabIndex = 4;
             // 
             // tabSupport
@@ -160,7 +160,7 @@ namespace nU3.Modules.OCS.IN.MainEntry
             tabSupport.Margin = new Padding(4);
             tabSupport.Name = "tabSupport";
             tabSupport.SelectedTabPage = OrderPage;
-            tabSupport.Size = new Size(543, 572);
+            tabSupport.Size = new Size(543, 793);
             tabSupport.TabIndex = 1;
             tabSupport.TabStop = false;
             // 
@@ -169,7 +169,7 @@ namespace nU3.Modules.OCS.IN.MainEntry
             OrderPage.AuthId = "";
             OrderPage.Margin = new Padding(4);
             OrderPage.Name = "OrderPage";
-            OrderPage.Size = new Size(541, 570);
+            OrderPage.Size = new Size(541, 791);
             OrderPage.Text = "기타처방";
             // 
             // pnlBottom
@@ -179,7 +179,7 @@ namespace nU3.Modules.OCS.IN.MainEntry
             pnlBottom.Controls.Add(btnDelete);
             pnlBottom.Controls.Add(btnSender);
             pnlBottom.Dock = DockStyle.Bottom;
-            pnlBottom.Location = new Point(0, 696);
+            pnlBottom.Location = new Point(0, 917);
             pnlBottom.Margin = new Padding(4);
             pnlBottom.Name = "pnlBottom";
             pnlBottom.Size = new Size(1389, 54);
@@ -356,7 +356,7 @@ namespace nU3.Modules.OCS.IN.MainEntry
             splitterLeft.Location = new Point(300, 120);
             splitterLeft.Margin = new Padding(4);
             splitterLeft.Name = "splitterLeft";
-            splitterLeft.Size = new Size(10, 576);
+            splitterLeft.Size = new Size(10, 797);
             splitterLeft.TabIndex = 6;
             splitterLeft.TabStop = false;
             // 
@@ -366,7 +366,7 @@ namespace nU3.Modules.OCS.IN.MainEntry
             splitterRight.Location = new Point(832, 120);
             splitterRight.Margin = new Padding(4);
             splitterRight.Name = "splitterRight";
-            splitterRight.Size = new Size(10, 576);
+            splitterRight.Size = new Size(10, 797);
             splitterRight.TabIndex = 7;
             splitterRight.TabStop = false;
             // 
@@ -394,7 +394,7 @@ namespace nU3.Modules.OCS.IN.MainEntry
             Controls.Add(pnlBottom);
             Margin = new Padding(4);
             Name = "OCSINPOrderMainControl";
-            Size = new Size(1389, 750);
+            Size = new Size(1389, 971);
             ((System.ComponentModel.ISupportInitialize)pnlMain).EndInit();
             ((System.ComponentModel.ISupportInitialize)pnlPatientInfo).EndInit();
             ((System.ComponentModel.ISupportInitialize)pnlWaitList).EndInit();

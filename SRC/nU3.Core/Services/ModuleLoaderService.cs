@@ -16,7 +16,7 @@ using nU3.Core.Configuration;
 namespace nU3.Core.Services
 {
     /// <summary>
-    /// 플러그인 모듈을 위한 격리된 AssemblyLoadContext
+    /// 플러그인 모듈을 위한 격리된 AssemblyLoadContext입니다.
     /// Hot Deploy와 언로드를 지원합니다.
     /// </summary>
     internal class PluginLoadContext : AssemblyLoadContext
@@ -30,8 +30,8 @@ namespace nU3.Core.Services
 
         protected override Assembly Load(AssemblyName assemblyName)
         {
-            // 공유 어셈블리는 기본 컨텍스트에서 로드
-            // 이렇게 하면 DI가 타입을 인식할 수 있음
+            // 공유 어셈블리는 기본 컨텍스트에서 로드합니다.
+            // 이렇게 하면 DI(의존성 주입) 시스템이 타입을 올바르게 인식할 수 있습니다.
             var sharedAssemblies = new[]
             {
                 "nU3.Core",
@@ -45,7 +45,7 @@ namespace nU3.Core.Services
 
             if (sharedAssemblies.Any(name => assemblyName.Name?.StartsWith(name) == true))
             {
-                return null; // 기본 컨텍스트에서 로드
+                return null; // 기본 컨텍스트에서 로드하도록 함
             }
 
             string assemblyPath = _resolver.ResolveAssemblyToPath(assemblyName);
@@ -75,34 +75,35 @@ namespace nU3.Core.Services
     /// </summary>
     public class ModuleLoaderService
     {
+        public const string MODULES_DIR = "Modules";
+        public const string FRAMEWORKS_DIR = "Patch";
+
         private readonly IModuleRepository _moduleRepo;
         private readonly IComponentRepository _compRepo;
         private readonly IProgramRepository _progRepo;
         private readonly IFileTransferService _fileTransfer;
-        private readonly bool _useServerTransfer;
-        private readonly string _serverModulePath;
 
         /// <summary>
-        /// 컴포넌트 로드 상태를 외부로 알리기 위한 이벤트입니다.
+        /// 컴포넌트 업데이트 진행 상태를 외부로 알리기 위한 이벤트입니다.
         /// </summary>
         public event EventHandler<ComponentUpdateEventArgs>? UpdateProgress;
 
         /// <summary>
-        /// 모듈 버전 충돌 감지 시 알림 이벤트입니다.
+        /// 모듈 버전 충돌 감지 시 발생하는 이벤트입니다.
         /// </summary>
         public event EventHandler<ModuleVersionConflictEventArgs>? VersionConflict;
 
         private readonly Dictionary<string, Type> _progRegistry;
         private readonly Dictionary<string, nU3ProgramInfoAttribute> _progAttributeCache;
         private readonly Dictionary<string, string> _loadedModuleVersions; // ModuleId -> Version
-        private readonly Dictionary<string, WeakReference> _loadContexts; // ModuleId -> LoadContext (for hot reload)
-        private readonly Dictionary<string, string> _shadowCopyPaths; // ModuleId -> Shadow Path (for hot reload)
+        private readonly Dictionary<string, WeakReference> _loadContexts; // ModuleId -> LoadContext (Hot Reload용)
+        private readonly Dictionary<string, string> _shadowCopyPaths; // ModuleId -> Shadow Path (Hot Reload용)
         private readonly string _cachePath;
         private readonly string _runtimePath;
         private readonly string _shadowCopyDirectory;
 
         public ModuleLoaderService(
-            IModuleRepository moduleRepo, 
+            IModuleRepository moduleRepo,
             IComponentRepository compRepo,
             IProgramRepository progRepo,
             IFileTransferService fileTransfer,
@@ -119,20 +120,15 @@ namespace nU3.Core.Services
             _loadContexts = new Dictionary<string, WeakReference>(StringComparer.OrdinalIgnoreCase);
             _shadowCopyPaths = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
-            // 중앙 집중식 경로 상수 사용
+            // 중앙 집중식 경로 설정 사용
             _runtimePath = configuration?.GetValue<string>("RuntimeDirectory");
             if (string.IsNullOrEmpty(_runtimePath))
                 _runtimePath = AppDomain.CurrentDomain.BaseDirectory;
 
             _cachePath = PathConstants.CacheDirectory;
             _shadowCopyDirectory = Path.Combine(_cachePath, "Shadow");
-            
-            // 서버 설정 로드
-            var serverEnabled = configuration.GetValue<bool>("ServerConnection:Enabled", false);
-            _serverModulePath = configuration.GetValue<string>("ModuleStorage:ServerPath") ?? "Modules";
-            _useServerTransfer = configuration.GetValue<bool>("ModuleStorage:UseServerTransfer", true) && serverEnabled;
 
-            Debug.WriteLine($"[ModuleLoader] Service Initialized. ServerEnabled: {serverEnabled}, UseTransfer: {_useServerTransfer}");
+            Debug.WriteLine($"[ModuleLoader] 서비스 초기화됨. 실행 경로: {_runtimePath}");
             EnsureDirectories();
         }
 
@@ -144,7 +140,7 @@ namespace nU3.Core.Services
         }
 
         public Dictionary<string, Type> GetProgramRegistry() => _progRegistry;
-        
+
         /// <summary>
         /// DB에서 읽어온 nU3ProgramInfoAttribute 캐시를 반환합니다.
         /// </summary>
@@ -152,11 +148,11 @@ namespace nU3.Core.Services
 
         /// <summary>
         /// 모든 모듈을 검사하고 로드합니다.
-        /// (Bootstrapper가 이미 최신화를 수행했다고 가정하고, 로컬 로드만 수행)
+        /// (Bootstrapper가 이미 최신화를 수행했다고 가정하고, 로컬 로드만 수행합니다)
         /// </summary>
         public void LoadAllModules()
         {
-            Debug.WriteLine("[ModuleLoader] LoadAllModules started.");
+            Debug.WriteLine("[ModuleLoader] 모든 모듈 로드 시작.");
             LoadModulesFromRuntime();
         }
 
@@ -175,13 +171,11 @@ namespace nU3.Core.Services
                 if (comp == null) continue;
 
                 string relativePath = comp.FileName;
-                //if (!string.IsNullOrEmpty(comp.GroupName)) 
-                //    relativePath = Path.Combine(comp.GroupName, relativePath);
-                
+
                 // 실행 파일 기준 경로 계산 (컴포넌트는 보통 루트 또는 특정 폴더)
                 string installFile = Path.Combine(_runtimePath, comp.ComponentId);
-                
-                // 화면 모듈 타입인 경우 Modules 폴더로 강제
+
+                // 화면 모듈 타입인 경우 Modules 폴더로 경로 강제 설정
                 if (comp.ComponentType == ComponentType.ScreenModule)
                     installFile = Path.Combine(_runtimePath, comp.FileName);
 
@@ -204,7 +198,7 @@ namespace nU3.Core.Services
                 }
             }
 
-            // 2. 모듈 체크 (SYS_MODULE_MST) - Full 모드인 경우
+            // 2. 모듈 체크 (SYS_MODULE_MST) - Full 모드인 경우 실행
             if (string.Equals(syncMode, "Full", StringComparison.OrdinalIgnoreCase))
             {
                 var targetModules = _moduleRepo.GetAllModules();
@@ -225,7 +219,7 @@ namespace nU3.Core.Services
                             relativePath = Path.Combine(dir, module.SubSystem, module.FileName);
                         }
                     }
-                    string installFile = Path.Combine(_runtimePath, relativePath);
+                    string installFile = Path.Combine(_runtimePath, MODULES_DIR, relativePath);
 
                     if (!File.Exists(installFile) || CalculateFileHash(installFile) != ver.FileHash)
                     {
@@ -238,7 +232,7 @@ namespace nU3.Core.Services
                             ServerVersion = ver.Version,
                             FileSize = ver.FileSize,
                             IsRequired = false,
-                            Priority = 100, // 모듈은 컴포넌트 이후에
+                            Priority = 100, // 모듈은 컴포넌트 이후에 업데이트
                             InstallPath = installFile,
                             StoragePath = ver.StoragePath,
                             GroupName = module.Category ?? "Modules"
@@ -256,14 +250,14 @@ namespace nU3.Core.Services
         public ComponentUpdateResult SyncWithServer(string syncMode = "Minimum")
         {
             var result = new ComponentUpdateResult();
-            if (!_useServerTransfer || _fileTransfer == null)
+            if (_fileTransfer == null)
             {
-                result.Success = true;
-                result.Message = "Server transfer disabled.";
+                result.Success = false;
+                result.Message = "파일 전송 서비스를 사용할 수 없습니다.";
                 return result;
             }
 
-            Debug.WriteLine($"[ModuleLoader] Starting sync. Mode: {syncMode}");
+            Debug.WriteLine($"[ModuleLoader] 동기화 시작. 모드: {syncMode}");
             RaiseProgress(new ComponentUpdateEventArgs { Phase = UpdatePhase.Checking });
 
             var updates = CheckForUpdates(syncMode);
@@ -295,7 +289,7 @@ namespace nU3.Core.Services
                 {
                     string serverUrlPath = update.StoragePath ?? "";
                     string cacheFile = Path.Combine(_cachePath, update.FileName);
-                    
+
                     if (DownloadToCache(serverUrlPath, cacheFile, update.ComponentName, update.ServerVersion))
                     {
                         RaiseProgress(new ComponentUpdateEventArgs
@@ -313,7 +307,7 @@ namespace nU3.Core.Services
                     }
                     else
                     {
-                        throw new Exception("Download failed");
+                        throw new Exception("다운로드에 실패했습니다.");
                     }
                 }
                 catch (Exception ex)
@@ -332,7 +326,7 @@ namespace nU3.Core.Services
 
             result.Success = !result.FailedComponents.Any();
             result.Message = result.Success ? $"{result.UpdatedComponents.Count}개 항목 업데이트 완료" : "업데이트 중 오류 발생";
-            
+
             RaiseProgress(new ComponentUpdateEventArgs { Phase = UpdatePhase.Completed, PercentComplete = 100 });
             return result;
         }
@@ -347,32 +341,23 @@ namespace nU3.Core.Services
         /// </summary>
         public bool EnsureModuleUpdated(string progId, string moduleId)
         {
-            Debug.WriteLine($"[ModuleLoader] EnsureModuleUpdated: ModuleId={moduleId}");
-            
+            Debug.WriteLine($"[ModuleLoader] 모듈 업데이트 확인: ModuleId={moduleId}");
+
             var activeVersion = _moduleRepo.GetActiveVersions()
                 .FirstOrDefault(v => string.Equals(v.ModuleId, moduleId, StringComparison.OrdinalIgnoreCase));
-            
+
             if (activeVersion == null)
             {
-                Debug.WriteLine($"[ModuleLoader] !!! No active version found in DB for module: {moduleId}");
+                Debug.WriteLine($"[ModuleLoader] !!! DB에서 해당 모듈의 활성 버전을 찾을 수 없음: {moduleId}");
                 return false;
-            }
-
-            if (_loadedModuleVersions.TryGetValue(moduleId, out var loadedVersion))
-            {
-                if (string.Equals(loadedVersion, activeVersion.Version, StringComparison.OrdinalIgnoreCase))
-                {
-                    Debug.WriteLine($"[ModuleLoader] Module {moduleId} already up to date (v{loadedVersion})");
-                    return true;
-                }
             }
 
             var module = _moduleRepo.GetAllModules()
                 .FirstOrDefault(m => string.Equals(m.ModuleId, moduleId, StringComparison.OrdinalIgnoreCase));
-            
+
             if (module == null)
             {
-                Debug.WriteLine($"[ModuleLoader] !!! Module definition not found in DB: {moduleId}");
+                Debug.WriteLine($"[ModuleLoader] !!! DB에서 모듈 정의를 찾을 수 없음: {moduleId}");
                 return false;
             }
 
@@ -382,54 +367,57 @@ namespace nU3.Core.Services
         private bool UpdateSingleModule(ModuleMstDto module, ModuleVerDto version)
         {
             string relativePath = Path.Combine(
-                module.Category ?? "Common", 
-                module.SubSystem ?? "Common", 
+                module.Category ?? "Common",
+                module.SubSystem ?? "Common",
                 module.FileName);
 
-            string cacheFile = Path.Combine(_cachePath, relativePath);
-            string runtimeFile = Path.Combine(_runtimePath, relativePath);
-            
+            // runtime / cache에는 "Modules" 루트를 포함하도록 구성
+            string relativePathWithModules = Path.Combine(MODULES_DIR, relativePath);
+
+            string cacheFile = Path.Combine(_cachePath, relativePathWithModules);
+            string runtimeFile = Path.Combine(_runtimePath, relativePathWithModules);
+
             // 서버 경로 구성
             string serverCategoryPath = module.Category ?? "";
             if (!string.IsNullOrEmpty(module.SubSystem))
             {
                 serverCategoryPath = $"{serverCategoryPath}/{module.SubSystem}".TrimStart('/');
             }
-            
-            string serverRelativePath = string.IsNullOrEmpty(serverCategoryPath) 
-                ? module.FileName 
+
+            string serverRelativePath = string.IsNullOrEmpty(serverCategoryPath)
+                ? module.FileName
                 : $"{serverCategoryPath}/{module.FileName}";
 
-            string serverUrlPath = $"{_serverModulePath}/{serverRelativePath}";
+            string serverUrlPath = $"{MODULES_DIR}/{serverRelativePath}";
 
-            Debug.WriteLine($"[ModuleLoader] Checking module: {module.ModuleName} (Hash={version.FileHash})");
+            Debug.WriteLine($"[ModuleLoader] 모듈 검사 중: {module.ModuleName} (Hash={version.FileHash})");
 
             try
             {
                 // 1. 런타임(실행) DLL을 최우선으로 검사 (DB 해시와 비교)
-                bool isRuntimeValid = File.Exists(runtimeFile) && 
+                bool isRuntimeValid = File.Exists(runtimeFile) &&
                                       string.Equals(CalculateFileHash(runtimeFile), version.FileHash, StringComparison.OrdinalIgnoreCase);
 
                 if (isRuntimeValid)
                 {
-                    Debug.WriteLine($"[ModuleLoader] Runtime file is valid: {runtimeFile}");
+                    Debug.WriteLine($"[ModuleLoader] 런타임 파일이 유효함: {runtimeFile}");
                     if (!_loadedModuleVersions.ContainsKey(module.ModuleId))
                     {
-                         ReloadModule(runtimeFile, module.ModuleId, version.Version);
+                        ReloadModule(runtimeFile, module.ModuleId, version.Version);
                     }
                     return true;
                 }
 
-                // 2. 런타임이 유효하지 않으면 무조건 다운로드 시도 (캐시는 임시 저장소)
+                // 2. 런타임이 유효하지 않으면 다운로드 시도 (캐시는 임시 저장소 역할)
                 bool downloaded = false;
-                if (_useServerTransfer && _fileTransfer != null)
+                if (_fileTransfer != null)
                 {
                     bool isCacheValid = File.Exists(cacheFile) &&
                                         string.Equals(CalculateFileHash(cacheFile), version.FileHash, StringComparison.OrdinalIgnoreCase);
-                    
+
                     if (isCacheValid)
                     {
-                        Debug.WriteLine($"[ModuleLoader] Valid cache file found: {cacheFile}");
+                        Debug.WriteLine($"[ModuleLoader] 유효한 캐시 파일 발견: {cacheFile}");
                         downloaded = true;
                     }
                     else if (DownloadToCache(serverUrlPath, cacheFile, module.ModuleName, version.Version))
@@ -437,22 +425,22 @@ namespace nU3.Core.Services
                         downloaded = true;
                     }
                 }
-                
+
                 if (!downloaded)
                 {
-                    Debug.WriteLine($"[ModuleLoader] !!! Failed to download update for {module.ModuleName}");
-                    return false; 
+                    Debug.WriteLine($"[ModuleLoader] !!! {module.ModuleName} 업데이트 다운로드 실패");
+                    return false;
                 }
 
                 // 3. 최신화된 캐시를 런타임으로 배포 시도
                 DeployToRuntime(cacheFile, runtimeFile, module.ModuleName, version.Version);
                 ReloadModule(runtimeFile, module.ModuleId, version.Version);
-                
+
                 return true;
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"[ModuleLoader] !!! Error updating module {module.ModuleId}: {ex.Message}");
+                Debug.WriteLine($"[ModuleLoader] !!! 모듈 {module.ModuleId} 업데이트 중 오류 발생: {ex.Message}");
             }
 
             return false;
@@ -463,19 +451,19 @@ namespace nU3.Core.Services
             try
             {
                 string cacheDir = Path.GetDirectoryName(cacheFile);
-                if (!Directory.Exists(cacheDir)) 
+                if (!Directory.Exists(cacheDir))
                     Directory.CreateDirectory(cacheDir);
 
-                Debug.WriteLine($"[ModuleLoader] Downloading from server: {serverUrlPath}");
+                Debug.WriteLine($"[ModuleLoader] 서버에서 다운로드 시도: {serverUrlPath}");
                 if (_fileTransfer.DownloadFile(serverUrlPath, cacheFile))
                 {
-                    Debug.WriteLine($"[ModuleLoader] Downloaded to cache: {moduleName} v{version}");
+                    Debug.WriteLine($"[ModuleLoader] 캐시 다운로드 완료: {moduleName} v{version}");
                     return true;
                 }
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"[ModuleLoader] !!! Error downloading {moduleName}: {ex.Message}");
+                Debug.WriteLine($"[ModuleLoader] !!! {moduleName} 다운로드 중 오류 발생: {ex.Message}");
             }
             return false;
         }
@@ -485,62 +473,59 @@ namespace nU3.Core.Services
             try
             {
                 string runtimeDir = Path.GetDirectoryName(runtimeFile);
-                if (!Directory.Exists(runtimeDir)) 
+                if (!Directory.Exists(runtimeDir))
                     Directory.CreateDirectory(runtimeDir);
 
                 File.Copy(cacheFile, runtimeFile, true);
-                Debug.WriteLine($"[ModuleLoader] Deployed to runtime: {moduleName} v{version}");
+                Debug.WriteLine($"[ModuleLoader] 런타임으로 배포 완료: {moduleName} v{version}");
             }
-            catch (IOException ioEx)
+            catch (IOException)
             {
-                // 파일 잠금 - Shadow Copy로 Hot Deploy 가능
-                Debug.WriteLine($"[ModuleLoader] Runtime file locked: {moduleName}. Using shadow copy for hot deploy.");
-                Debug.WriteLine($"[ModuleLoader] Original file will be updated on next restart. Shadow copy allows immediate use.");
-                
-                // Shadow copy 방식이므로 예외를 던지지 않음
-                // 다음 ReloadModule에서 shadow copy 사용
+                // 파일 잠금 발생 시 - Shadow Copy를 통해 Hot Deploy 가능
+                Debug.WriteLine($"[ModuleLoader] 런타임 파일 잠김: {moduleName}. Hot Deploy를 위해 섀도 복사본을 사용합니다.");
+                Debug.WriteLine($"[ModuleLoader] 원본 파일은 다음 재시작 시 업데이트됩니다. 섀도 복사본을 통해 즉시 사용 가능합니다.");
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"[ModuleLoader] !!! Error deploying {moduleName}: {ex.Message}");
+                Debug.WriteLine($"[ModuleLoader] !!! {moduleName} 배포 중 오류 발생: {ex.Message}");
                 throw;
             }
         }
 
         private void LoadModulesFromRuntime()
         {
+            // 실제 구현은 필요에 따라 활성화
             return;
 
-            if (!Directory.Exists(_runtimePath)) 
+            if (!Directory.Exists(_runtimePath))
             {
-                Debug.WriteLine($"[ModuleLoader] Runtime path does not exist: {_runtimePath}");
+                Debug.WriteLine($"[ModuleLoader] 런타임 경로가 존재하지 않음: {_runtimePath}");
                 return;
             }
 
             var dlls = Directory.GetFiles(_runtimePath, "*.dll", SearchOption.AllDirectories);
-            Debug.WriteLine($"[ModuleLoader] Found {dlls.Length} assemblies in runtime path.");
-            
+            Debug.WriteLine($"[ModuleLoader] 런타임 경로에서 {dlls.Length}개의 어셈블리를 발견함.");
+
             foreach (var dll in dlls)
             {
                 LoadAssembly(dll, null, null);
             }
 
-            Debug.WriteLine($"[ModuleLoader] Total Registered: {_progRegistry.Count} programs.");
+            Debug.WriteLine($"[ModuleLoader] 총 등록된 프로그램 수: {_progRegistry.Count}개.");
         }
 
         private void LoadAssembly(string dllPath, string moduleId, string version)
         {
             try
             {
-                // 기본 컨텍스트에서 LoadFrom 사용 (공유 어셈블리는 DI 호환성 필요)
-                // 플러그인이 아닌 기본 프레임워크 어셈블리는 기본 컨텍스트 사용
+                // 기본 컨텍스트에서 LoadFrom 사용 (공유 어셈블리는 DI 호환성이 필요하므로)
                 var assembly = Assembly.LoadFrom(dllPath);
-                
+
                 if (string.IsNullOrEmpty(version))
                 {
                     version = assembly.GetName().Version?.ToString() ?? "Unknown";
                 }
-                
+
                 foreach (var type in assembly.GetTypes())
                 {
                     var attr = type.GetCustomAttribute<nU3ProgramInfoAttribute>();
@@ -548,7 +533,7 @@ namespace nU3.Core.Services
                     {
                         _progRegistry[attr.ProgramId] = type;
                         _progAttributeCache[attr.ProgramId] = attr;
-                        
+
                         if (!string.IsNullOrEmpty(moduleId))
                         {
                             _loadedModuleVersions[moduleId] = version;
@@ -558,14 +543,14 @@ namespace nU3.Core.Services
                             var autoModuleId = attr.GetModuleId();
                             _loadedModuleVersions[autoModuleId] = version;
                         }
-                        
-                        Debug.WriteLine($"[ModuleLoader] Registered: {attr.ProgramId} -> {type.FullName} (v{version})");
+
+                        Debug.WriteLine($"[ModuleLoader] 등록됨: {attr.ProgramId} -> {type.FullName} (v{version})");
                     }
                 }
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"[ModuleLoader] !!! Error loading {Path.GetFileName(dllPath)}: {ex.Message}");
+                Debug.WriteLine($"[ModuleLoader] !!! {Path.GetFileName(dllPath)} 로드 중 오류 발생: {ex.Message}");
             }
         }
 
@@ -573,37 +558,36 @@ namespace nU3.Core.Services
         {
             try
             {
-                // 이미 로드된 버전 확인
+                // 이미 로드된 버전이 있는지 확인합니다.
                 if (_loadedModuleVersions.TryGetValue(moduleId, out var currentVersion))
                 {
-                    // 같은 버전이면 스킵
+                    // 동일한 버전이면 다시 로드하지 않고 건너뜁니다.
                     if (string.Equals(currentVersion, version, StringComparison.OrdinalIgnoreCase))
                     {
-                        Debug.WriteLine($"[ModuleLoader] Module {moduleId} v{version} already loaded. Reusing existing version.");
+                        Debug.WriteLine($"[ModuleLoader] 모듈 {moduleId} v{version}이 이미 로드되어 있습니다. 기존 버전을 재사용합니다.");
                         return;
                     }
-                    
-                    // ⚠️ 다른 버전 감지 - 버전 불일치 경고
-                    Debug.WriteLine($"[ModuleLoader] !!! VERSION CONFLICT DETECTED !!!");
-                    Debug.WriteLine($"[ModuleLoader] Module: {moduleId}");
-                    Debug.WriteLine($"[ModuleLoader] Current Version: {currentVersion}");
-                    Debug.WriteLine($"[ModuleLoader] Requested Version: {version}");
-                    Debug.WriteLine($"[ModuleLoader] Action: Using EXISTING version to prevent type mismatch.");
-                    Debug.WriteLine($"[ModuleLoader] Recommendation: Close all instances of this module and restart.");
-                    
+
+                    // ⚠️ 다른 버전이 감지된 경우 - 버전 불일치 경고 발생
+                    Debug.WriteLine($"[ModuleLoader] !!! 버전 충돌 감지 !!!");
+                    Debug.WriteLine($"[ModuleLoader] 모듈: {moduleId}");
+                    Debug.WriteLine($"[ModuleLoader] 현재 버전: {currentVersion}");
+                    Debug.WriteLine($"[ModuleLoader] 요청 버전: {version}");
+                    Debug.WriteLine($"[ModuleLoader] 조치: 타입 불일치 방지를 위해 기존(현재) 버전을 유지합니다.");
+                    Debug.WriteLine($"[ModuleLoader] 권장 사항: 이 모듈의 모든 인스턴스를 닫고 프로그램을 재시작하십시오.");
+
                     // 버전 충돌 이벤트 발생
                     RaiseVersionConflict(moduleId, currentVersion, version);
-                    
-                    // 기존 버전 유지 (타입 불일치 방지)
+
                     return;
                 }
-                
-                // 최초 로드 - Shadow Copy 생성
+
+                // 최초 로드 시 - Shadow Copy(섀도 복사본) 생성
                 string shadowPath = CreateShadowCopy(dllPath, moduleId, version);
-                
+
                 // LoadFrom을 사용하여 기본 로드 컨텍스트에서 로드 (DI 호환성 유지)
                 var assembly = Assembly.LoadFrom(shadowPath);
-                
+
                 foreach (var type in assembly.GetTypes())
                 {
                     var attr = type.GetCustomAttribute<nU3ProgramInfoAttribute>();
@@ -612,45 +596,45 @@ namespace nU3.Core.Services
                         _progRegistry[attr.ProgramId] = type;
                         _progAttributeCache[attr.ProgramId] = attr;
                         _loadedModuleVersions[moduleId] = version;
-                        Debug.WriteLine($"[ModuleLoader] Loaded: {attr.ProgramId} -> v{version} (Shadow: {shadowPath})");
+                        Debug.WriteLine($"[ModuleLoader] 로드됨: {attr.ProgramId} -> v{version} (Shadow: {shadowPath})");
                     }
                 }
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"[ModuleLoader] !!! Error reloading {Path.GetFileName(dllPath)}: {ex.Message}");
+                Debug.WriteLine($"[ModuleLoader] !!! {Path.GetFileName(dllPath)} 다시 로드 중 오류 발생: {ex.Message}");
             }
         }
 
         /// <summary>
-        /// Shadow Copy를 생성하여 원본 파일 잠금을 방지합니다.
-        /// Hot Deploy를 지원하면서도 DI 호환성을 유지합니다.
+        /// Shadow Copy(섀도 복사본)를 생성하여 원본 파일 잠금을 방지합니다.
+        /// Hot Deploy를 지원하면서도 DI 호환성을 유지할 수 있게 합니다.
         /// </summary>
         private string CreateShadowCopy(string originalPath, string moduleId, string version)
         {
             try
             {
-                // 모듈별 Shadow 디렉토리 생성
+                // 모듈별 섀도 디렉토리 생성
                 string moduleShadowDir = Path.Combine(_shadowCopyDirectory, moduleId, version);
                 if (!Directory.Exists(moduleShadowDir))
                 {
                     Directory.CreateDirectory(moduleShadowDir);
                 }
 
-                // Shadow 파일 경로
+                // 섀도 파일 경로 설정
                 string shadowPath = Path.Combine(moduleShadowDir, Path.GetFileName(originalPath));
 
-                // 이미 존재하면 재사용 (같은 버전)
+                // 동일 버전의 파일이 이미 존재하면 재사용
                 if (File.Exists(shadowPath))
                 {
-                    Debug.WriteLine($"[ModuleLoader] Using existing shadow copy: {shadowPath}");
+                    Debug.WriteLine($"[ModuleLoader] 기존 섀도 복사본 사용: {shadowPath}");
                     return shadowPath;
                 }
 
-                // 원본 파일을 Shadow 위치로 복사
+                // 원본 파일을 섀도 위치로 복사
                 File.Copy(originalPath, shadowPath, overwrite: true);
 
-                // 의존성 DLL도 복사 (같은 디렉토리에 있는 경우)
+                // 같은 디렉토리에 있는 의존성 DLL들도 함께 복사 시도
                 string originalDir = Path.GetDirectoryName(originalPath);
                 if (!string.IsNullOrEmpty(originalDir))
                 {
@@ -665,22 +649,22 @@ namespace nU3.Core.Services
                             }
                             catch
                             {
-                                // 의존성 복사 실패는 무시 (이미 로드되어 있을 수 있음)
+                                // 의존성 복사 실패는 무시 (이미 사용 중이거나 불필요할 수 있음)
                             }
                         }
                     }
                 }
 
-                // Shadow 경로 추적 (정리용)
+                // 섀도 경로 추적 (향후 정리용)
                 _shadowCopyPaths[moduleId] = moduleShadowDir;
 
-                Debug.WriteLine($"[ModuleLoader] Created shadow copy: {originalPath} -> {shadowPath}");
+                Debug.WriteLine($"[ModuleLoader] 섀도 복사본 생성 완료: {originalPath} -> {shadowPath}");
                 return shadowPath;
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"[ModuleLoader] !!! Failed to create shadow copy: {ex.Message}");
-                // Shadow copy 실패 시 원본 사용 (재시작 필요)
+                Debug.WriteLine($"[ModuleLoader] !!! 섀도 복사본 생성 실패: {ex.Message}");
+                // 실패 시 최후의 수단으로 원본 경로 반환 (재시작 시에만 업데이트 가능하게 됨)
                 return originalPath;
             }
         }
@@ -688,7 +672,7 @@ namespace nU3.Core.Services
         private string CalculateFileHash(string filePath)
         {
             if (!File.Exists(filePath)) return string.Empty;
-            
+
             try
             {
                 using (var sha256 = SHA256.Create())
@@ -700,40 +684,37 @@ namespace nU3.Core.Services
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"[ModuleLoader] !!! Error calculating hash for {filePath}: {ex.Message}");
+                Debug.WriteLine($"[ModuleLoader] !!! {filePath}의 해시 계산 중 오류 발생: {ex.Message}");
                 return string.Empty;
             }
         }
 
         public Type GetProgramType(string progId)
         {
-            // 1. 메모리에 이미 있다면 즉시 반환
-            if (_progRegistry.TryGetValue(progId, out Type type))
-                return type;
-            
-            // 2. 메모리에 없으면 DB 조회 시도 (On-Demand 로딩)
-            Debug.WriteLine($"[ModuleLoader] Type for '{progId}' not found in registry. Checking DB...");
-            
+            // 단순히 캐시를 반환하지 않고, DB를 통해 실시간 업데이트 여부를 먼저 확인합니다.
+            // Shell이 기동 중인 상태에서도 새로 배포된 DLL(해시 변경)을 즉시 인지하기 위함입니다.
+
             if (_progRepo == null)
             {
-                Debug.WriteLine("[ModuleLoader] !!! Error: _progRepo is NULL.");
-                return null;
+                Debug.WriteLine("[ModuleLoader] !!! 오류: _progRepo가 NULL입니다.");
+                return _progRegistry.TryGetValue(progId, out var cachedType) ? cachedType : null;
             }
 
             var progDto = _progRepo.GetProgramByProgId(progId);
             if (progDto != null && !string.IsNullOrEmpty(progDto.ModuleId))
             {
-                Debug.WriteLine($"[ModuleLoader] Found mapping in DB: {progId} -> {progDto.ModuleId}");
-                
+                // 1. 업데이트 및 로컬 정합성 체크 수행
+                // 해시가 다르면 새 DLL을 다운로드하고 ReloadModule을 호출합니다.
                 if (EnsureModuleUpdated(progId, progDto.ModuleId))
                 {
-                    if (_progRegistry.TryGetValue(progId, out type))
+                    // 2. 체크 완료 후 레지스트리에서 최신 타입을 반환합니다.
+                    if (_progRegistry.TryGetValue(progId, out Type type))
                     {
-                        Debug.WriteLine($"[ModuleLoader] Successfully loaded type for {progId}");
                         return type;
                     }
                     else
                     {
+                        // 3. 레지스트리에 없는 경우 특성(Attribute) 기반으로 직접 로드 시도
                         var attr = GetProgramAttribute(progId);
                         if (attr != null) return LoadProgramByAttribute(attr);
                     }
@@ -741,61 +722,62 @@ namespace nU3.Core.Services
             }
             else
             {
-                Debug.WriteLine($"[ModuleLoader] !!! Program '{progId}' not found in DB.");
+                // DB 매핑 정보가 없는 경우 기존 레지스트리를 확인합니다.
+                if (_progRegistry.TryGetValue(progId, out var type)) return type;
+                Debug.WriteLine($"[ModuleLoader] !!! 프로그램 '{progId}'를 DB나 레지스트리에서 찾을 수 없습니다.");
             }
 
             return null;
         }
-        
+
         public nU3ProgramInfoAttribute GetProgramAttribute(string progId)
         {
             if (_progAttributeCache.TryGetValue(progId, out var attr))
                 return attr;
-            
+
             return null;
         }
-        
+
         public Type LoadProgramByAttribute(nU3ProgramInfoAttribute attr)
         {
             if (_progRegistry.TryGetValue(attr.ProgramId, out var cachedType))
                 return cachedType;
-            
-            var dllPath = Path.Combine(_runtimePath, attr.SystemType, attr.SubSystem ?? string.Empty, $"{attr.DllName}.dll");
-            
+
+            var dllPath = Path.Combine(_runtimePath, MODULES_DIR, attr.SystemType, attr.SubSystem ?? string.Empty, $"{attr.DllName}.dll");
+
             if (!File.Exists(dllPath))
             {
-                Debug.WriteLine($"[ModuleLoader] DLL not found: {dllPath}");
+                Debug.WriteLine($"[ModuleLoader] DLL을 찾을 수 없음: {dllPath}");
                 return null;
             }
-            
+
             try
             {
-                // LoadFrom을 사용하여 기본 로드 컨텍스트에서 로드 (DI 호환성 유지)
-                // 필요 시 Shadow Copy 사용 (이미 ReloadModule에서 처리됨)
+                // 기본 로드 컨텍스트에서 로드 (DI 호환성 유지)
                 var assembly = Assembly.LoadFrom(dllPath);
                 var type = assembly.GetType(attr.FullClassName);
-                
+
                 if (type != null)
                 {
                     _progRegistry[attr.ProgramId] = type;
                     _progAttributeCache[attr.ProgramId] = attr;
-                    Debug.WriteLine($"[ModuleLoader] Dynamically loaded: {attr.ProgramId} from {attr.FullClassName}");
+                    Debug.WriteLine($"[ModuleLoader] 동적 로드 완료: {attr.ProgramId} (From: {attr.FullClassName})");
                     return type;
                 }
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"[ModuleLoader] !!! Error loading {attr.FullClassName}: {ex.Message}");
+                Debug.WriteLine($"[ModuleLoader] !!! {attr.FullClassName} 로드 중 오류 발생: {ex.Message}");
             }
-            
+
             return null;
         }
-        
+
         public object CreateProgramInstanceWithVersionCheck(string progId, string moduleId)
         {
             if (!EnsureModuleUpdated(progId, moduleId))
             {
-                Debug.WriteLine($"[ModuleLoader] !!! Failed to update module for ProgId: {progId}");
+                Debug.WriteLine($"[ModuleLoader] !!! ProgId: {progId}에 대한 모듈 업데이트 실패");
                 return null;
             }
 
@@ -805,7 +787,7 @@ namespace nU3.Core.Services
                 var attr = GetProgramAttribute(progId);
                 if (attr != null) type = LoadProgramByAttribute(attr);
             }
-            
+
             if (type != null)
             {
                 try
@@ -814,16 +796,16 @@ namespace nU3.Core.Services
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine($"[ModuleLoader] !!! Error creating instance of {type.FullName}: {ex.Message}");
+                    Debug.WriteLine($"[ModuleLoader] !!! {type.FullName}의 인스턴스 생성 중 오류 발생: {ex.Message}");
                 }
             }
-            
+
             return null;
         }
-        
+
         public object CreateProgramInstance(string progId)
         {
-            Debug.WriteLine($"[ModuleLoader] >>> CreateProgramInstance Requested: {progId}");
+            Debug.WriteLine($"[ModuleLoader] >>> 프로그램 인스턴스 생성 요청됨: {progId}");
 
             var type = GetProgramType(progId);
             if (type != null)
@@ -834,7 +816,7 @@ namespace nU3.Core.Services
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine($"[ModuleLoader] !!! Error creating instance: {ex.Message}");
+                    Debug.WriteLine($"[ModuleLoader] !!! 인스턴스 생성 중 오류 발생: {ex.Message}");
                     return null;
                 }
             }
@@ -867,7 +849,7 @@ namespace nU3.Core.Services
                     }
                 }
             }
-            
+
             return null;
         }
 
@@ -877,7 +859,7 @@ namespace nU3.Core.Services
         }
 
         /// <summary>
-        /// 특정 모듈이 현재 사용 중인지 확인합니다.
+        /// 특정 모듈이 현재 사용 중(로드됨)인지 확인합니다.
         /// </summary>
         public bool IsModuleInUse(string moduleId)
         {
@@ -900,13 +882,13 @@ namespace nU3.Core.Services
     }
 
     /// <summary>
-    /// 모듈 버전 충돌 이벤트 인자
+    /// 모듈 버전 충돌 이벤트의 인자 클래스입니다.
     /// </summary>
     public class ModuleVersionConflictEventArgs : EventArgs
     {
-        public string ModuleId { get; set; }
-        public string CurrentVersion { get; set; }
-        public string RequestedVersion { get; set; }
+        public string ModuleId { get; set; } = string.Empty;
+        public string CurrentVersion { get; set; } = string.Empty;
+        public string RequestedVersion { get; set; } = string.Empty;
         public DateTime Timestamp { get; set; }
     }
 }

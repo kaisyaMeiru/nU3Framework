@@ -5,7 +5,7 @@ using System.Text;
 namespace nU3.Bootstrapper
 {
     /// <summary>
-    /// 파일 기반 로거입니다. LOG 디렉토리에 날짜별 로그 파일을 생성합니다.
+    /// 파일 기반 로거입니다. LOG 폴더에 날짜별 로그 파일을 생성합니다.
     /// </summary>
     public static class FileLogger
     {
@@ -42,11 +42,11 @@ namespace nU3.Bootstrapper
 
                     if (ex != null)
                     {
-                        sb.AppendLine($"  Exception Type: {ex.GetType().Name}");
-                        sb.AppendLine($"  Exception Message: {ex.Message}");
+                        sb.AppendLine($"  예외 타입: {ex.GetType().Name}");
+                        sb.AppendLine($"  예외 메시지: {ex.Message}");
                         if (ex.StackTrace != null)
                         {
-                            sb.AppendLine($"  Stack Trace:");
+                            sb.AppendLine($"  스택 트레이스:");
                             foreach (var line in ex.StackTrace.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries))
                             {
                                 sb.AppendLine($"    {line}");
@@ -54,15 +54,15 @@ namespace nU3.Bootstrapper
                         }
                         if (ex.InnerException != null)
                         {
-                            sb.AppendLine($"  Inner Exception: {ex.InnerException.Message}");
+                            sb.AppendLine($"  내부 예외: {ex.InnerException.Message}");
                         }
                     }
 
-                    File.AppendAllText(logFilePath, sb.ToString());
+                    File.AppendAllText(logFilePath, sb.ToString(), Encoding.UTF8);
                 }
                 catch
                 {
-                    // 로그 기록 실패시 무시 (무한 루프 방지)
+                    // 로그 기록 실패 시 무시 (무한 루프 방지)
                 }
             }
         }
@@ -70,29 +70,29 @@ namespace nU3.Bootstrapper
         public static void Info(string message)
         {
             WriteLog("INFO", message);
-            Console.WriteLine($"[INFO] {message}");
+            Console.WriteLine($"[정보] {message}");
         }
 
         public static void Warning(string message, Exception? ex = null)
-        {            
+        {
             WriteLog("WARNING", message, ex);
-            Console.WriteLine($"[WARNING] {message}");
+            Console.WriteLine($"[경고] {message}");
             if (ex != null)
             {
-                Console.WriteLine($"  Exception: {ex.Message}");
+                Console.WriteLine($"  예외: {ex.Message}");
             }
             Console.ResetColor();
         }
 
-        
+
         public static void Error(string message, Exception? ex = null)
         {
             WriteLog("ERROR", message, ex);
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"[ERROR] {message}");
+            Console.WriteLine($"[오류] {message}");
             if (ex != null)
             {
-                Console.WriteLine($"  Exception: {ex.Message}");
+                Console.WriteLine($"  예외: {ex.Message}");
             }
             Console.ResetColor();
         }
@@ -101,7 +101,7 @@ namespace nU3.Bootstrapper
         {
 #if DEBUG
             WriteLog("DEBUG", message);
-            Console.WriteLine($"[DEBUG] {message}");
+            Console.WriteLine($"[디버그] {message}");
 #endif
         }
 
@@ -117,12 +117,12 @@ namespace nU3.Bootstrapper
 
         public static void ComponentOperation(string componentId, string operation, string details)
         {
-            Info($"[Component: {componentId}] {operation} - {details}");
+            Info($"[컴포넌트: {componentId}] {operation} - {details}");
         }
 
         public static void ModuleOperation(string moduleId, string moduleName, string operation, string details)
         {
-            Info($"[Module: {moduleId} ({moduleName})] {operation} - {details}");
+            Info($"[모듈: {moduleId} ({moduleName})] {operation} - {details}");
         }
     }
 }
