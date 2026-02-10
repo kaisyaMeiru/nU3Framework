@@ -35,21 +35,21 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
         private void InitializeComponent()
         {
             grpDiagCode = new nU3GroupControl();
-            pnlButtons = new nU3PanelControl();
-            btnDeleteDiag = new nU3SimpleButton();
-            btnAddDiag = new nU3SimpleButton();
             gridControl = new nU3GridControl();
             gridView = new nU3GridView();
             colDiagCode = new nU3GridColumn();
             colDiagName = new nU3GridColumn();
             colDiagType = new nU3GridColumn();
             colMainYn = new nU3GridColumn();
+            pnlButtons = new nU3PanelControl();
+            btnDeleteDiag = new nU3SimpleButton();
+            btnAddDiag = new nU3SimpleButton();
             ((ISupportInitialize)grpDiagCode).BeginInit();
             grpDiagCode.SuspendLayout();
-            ((ISupportInitialize)pnlButtons).BeginInit();
-            pnlButtons.SuspendLayout();
             ((ISupportInitialize)gridControl).BeginInit();
             ((ISupportInitialize)gridView).BeginInit();
+            ((ISupportInitialize)pnlButtons).BeginInit();
+            pnlButtons.SuspendLayout();
             SuspendLayout();
             // 
             // grpDiagCode
@@ -63,41 +63,6 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             grpDiagCode.Size = new Size(1305, 852);
             grpDiagCode.TabIndex = 0;
             grpDiagCode.Text = "진단코드";
-            // 
-            // pnlButtons
-            // 
-            pnlButtons.Controls.Add(btnDeleteDiag);
-            pnlButtons.Controls.Add(btnAddDiag);
-            pnlButtons.Dock = DockStyle.Top;
-            pnlButtons.Location = new Point(2, 23);
-            pnlButtons.Margin = new Padding(4);
-            pnlButtons.Name = "pnlButtons";
-            pnlButtons.Size = new Size(1301, 38);
-            pnlButtons.TabIndex = 1;
-            // 
-            // btnDeleteDiag
-            // 
-            btnDeleteDiag.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnDeleteDiag.AuthId = "";
-            btnDeleteDiag.Location = new Point(1205, 4);
-            btnDeleteDiag.Margin = new Padding(4);
-            btnDeleteDiag.Name = "btnDeleteDiag";
-            btnDeleteDiag.Size = new Size(88, 29);
-            btnDeleteDiag.TabIndex = 1;
-            btnDeleteDiag.Text = "삭제";
-            btnDeleteDiag.Click += btnDeleteDiag_Click;
-            // 
-            // btnAddDiag
-            // 
-            btnAddDiag.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnAddDiag.AuthId = "";
-            btnAddDiag.Location = new Point(1111, 4);
-            btnAddDiag.Margin = new Padding(4);
-            btnAddDiag.Name = "btnAddDiag";
-            btnAddDiag.Size = new Size(88, 29);
-            btnAddDiag.TabIndex = 0;
-            btnAddDiag.Text = "추가";
-            btnAddDiag.Click += btnAddDiag_Click;
             // 
             // gridControl
             // 
@@ -180,6 +145,41 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             colMainYn.VisibleIndex = 3;
             colMainYn.Width = 47;
             // 
+            // pnlButtons
+            // 
+            pnlButtons.Controls.Add(btnDeleteDiag);
+            pnlButtons.Controls.Add(btnAddDiag);
+            pnlButtons.Dock = DockStyle.Top;
+            pnlButtons.Location = new Point(2, 23);
+            pnlButtons.Margin = new Padding(4);
+            pnlButtons.Name = "pnlButtons";
+            pnlButtons.Size = new Size(1301, 38);
+            pnlButtons.TabIndex = 1;
+            // 
+            // btnDeleteDiag
+            // 
+            btnDeleteDiag.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnDeleteDiag.AuthId = "";
+            btnDeleteDiag.Location = new Point(1205, 4);
+            btnDeleteDiag.Margin = new Padding(4);
+            btnDeleteDiag.Name = "btnDeleteDiag";
+            btnDeleteDiag.Size = new Size(88, 29);
+            btnDeleteDiag.TabIndex = 1;
+            btnDeleteDiag.Text = "삭제";
+            btnDeleteDiag.Click += btnDeleteDiag_Click;
+            // 
+            // btnAddDiag
+            // 
+            btnAddDiag.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnAddDiag.AuthId = "";
+            btnAddDiag.Location = new Point(1111, 4);
+            btnAddDiag.Margin = new Padding(4);
+            btnAddDiag.Name = "btnAddDiag";
+            btnAddDiag.Size = new Size(88, 29);
+            btnAddDiag.TabIndex = 0;
+            btnAddDiag.Text = "추가";
+            btnAddDiag.Click += btnAddDiag_Click;
+            // 
             // DiagCodeControl
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -190,10 +190,10 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             Size = new Size(1305, 852);
             ((ISupportInitialize)grpDiagCode).EndInit();
             grpDiagCode.ResumeLayout(false);
-            ((ISupportInitialize)pnlButtons).EndInit();
-            pnlButtons.ResumeLayout(false);
             ((ISupportInitialize)gridControl).EndInit();
             ((ISupportInitialize)gridView).EndInit();
+            ((ISupportInitialize)pnlButtons).EndInit();
+            pnlButtons.ResumeLayout(false);
             ResumeLayout(false);
 
         }

@@ -103,7 +103,7 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             lblDiagnosis.Appearance.Font = new Font("Tahoma", 9F, FontStyle.Bold);
             lblDiagnosis.Appearance.Options.UseFont = true;
             lblDiagnosis.IsRequiredMarker = false;
-            lblDiagnosis.Location = new Point(951, 0);
+            lblDiagnosis.Location = new Point(951, 4);
             lblDiagnosis.Margin = new Padding(4);
             lblDiagnosis.Name = "lblDiagnosis";
             lblDiagnosis.Size = new Size(30, 14);
@@ -125,7 +125,7 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             lblInDate.Appearance.Font = new Font("Tahoma", 9F, FontStyle.Bold);
             lblInDate.Appearance.Options.UseFont = true;
             lblInDate.IsRequiredMarker = false;
-            lblInDate.Location = new Point(778, 0);
+            lblInDate.Location = new Point(778, 4);
             lblInDate.Margin = new Padding(4);
             lblInDate.Name = "lblInDate";
             lblInDate.Size = new Size(40, 14);
@@ -147,7 +147,7 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             lblRoomNo.Appearance.Font = new Font("Tahoma", 9F, FontStyle.Bold);
             lblRoomNo.Appearance.Options.UseFont = true;
             lblRoomNo.IsRequiredMarker = false;
-            lblRoomNo.Location = new Point(676, 0);
+            lblRoomNo.Location = new Point(676, 4);
             lblRoomNo.Margin = new Padding(4);
             lblRoomNo.Name = "lblRoomNo";
             lblRoomNo.Size = new Size(20, 14);
@@ -169,7 +169,7 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             lblDoctorName.Appearance.Font = new Font("Tahoma", 9F, FontStyle.Bold);
             lblDoctorName.Appearance.Options.UseFont = true;
             lblDoctorName.IsRequiredMarker = false;
-            lblDoctorName.Location = new Point(526, 0);
+            lblDoctorName.Location = new Point(526, 4);
             lblDoctorName.Margin = new Padding(4);
             lblDoctorName.Name = "lblDoctorName";
             lblDoctorName.Size = new Size(40, 14);
@@ -191,7 +191,7 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             lblDeptName.Appearance.Font = new Font("Tahoma", 9F, FontStyle.Bold);
             lblDeptName.Appearance.Options.UseFont = true;
             lblDeptName.IsRequiredMarker = false;
-            lblDeptName.Location = new Point(406, 0);
+            lblDeptName.Location = new Point(406, 4);
             lblDeptName.Margin = new Padding(4);
             lblDeptName.Name = "lblDeptName";
             lblDeptName.Size = new Size(30, 14);
@@ -213,7 +213,7 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             lblAge.Appearance.Font = new Font("Tahoma", 9F, FontStyle.Bold);
             lblAge.Appearance.Options.UseFont = true;
             lblAge.IsRequiredMarker = false;
-            lblAge.Location = new Point(340, 0);
+            lblAge.Location = new Point(340, 4);
             lblAge.Margin = new Padding(4);
             lblAge.Name = "lblAge";
             lblAge.Size = new Size(20, 14);
@@ -235,7 +235,7 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             lblGender.Appearance.Font = new Font("Tahoma", 9F, FontStyle.Bold);
             lblGender.Appearance.Options.UseFont = true;
             lblGender.IsRequiredMarker = false;
-            lblGender.Location = new Point(272, 0);
+            lblGender.Location = new Point(272, 4);
             lblGender.Margin = new Padding(4);
             lblGender.Name = "lblGender";
             lblGender.Size = new Size(20, 14);
@@ -257,7 +257,7 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             lblPatName.Appearance.Font = new Font("Tahoma", 9F, FontStyle.Bold);
             lblPatName.Appearance.Options.UseFont = true;
             lblPatName.IsRequiredMarker = false;
-            lblPatName.Location = new Point(155, 0);
+            lblPatName.Location = new Point(155, 4);
             lblPatName.Margin = new Padding(4);
             lblPatName.Name = "lblPatName";
             lblPatName.Size = new Size(30, 14);
@@ -279,7 +279,7 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             lblPatId.Appearance.Font = new Font("Tahoma", 9F, FontStyle.Bold);
             lblPatId.Appearance.Options.UseFont = true;
             lblPatId.IsRequiredMarker = false;
-            lblPatId.Location = new Point(60, 0);
+            lblPatId.Location = new Point(60, 4);
             lblPatId.Margin = new Padding(4);
             lblPatId.Name = "lblPatId";
             lblPatId.Size = new Size(34, 14);
