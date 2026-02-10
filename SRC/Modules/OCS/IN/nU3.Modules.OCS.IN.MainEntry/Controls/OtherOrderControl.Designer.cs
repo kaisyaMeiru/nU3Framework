@@ -59,7 +59,7 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             tabControl.Margin = new Padding(4);
             tabControl.Name = "tabControl";
             tabControl.SelectedTabPage = tabOrder;
-            tabControl.Size = new Size(1406, 750);
+            tabControl.Size = new Size(1305, 852);
             tabControl.TabIndex = 0;
             tabControl.TabPages.AddRange(new DevExpress.XtraTab.XtraTabPage[] { tabOrder, tabSheet, tabEtc });
             // 
@@ -69,7 +69,7 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             tabOrder.Controls.Add(pnlOrder);
             tabOrder.Margin = new Padding(4);
             tabOrder.Name = "tabOrder";
-            tabOrder.Size = new Size(1404, 724);
+            tabOrder.Size = new Size(1303, 826);
             tabOrder.Text = "기타처방";
             // 
             // pnlOrder
@@ -79,7 +79,7 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             pnlOrder.Location = new Point(0, 0);
             pnlOrder.Margin = new Padding(4);
             pnlOrder.Name = "pnlOrder";
-            pnlOrder.Size = new Size(1404, 724);
+            pnlOrder.Size = new Size(1303, 826);
             pnlOrder.TabIndex = 0;
             // 
             // pnlOrderButtons
@@ -90,7 +90,7 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             pnlOrderButtons.Location = new Point(2, 2);
             pnlOrderButtons.Margin = new Padding(4);
             pnlOrderButtons.Name = "pnlOrderButtons";
-            pnlOrderButtons.Size = new Size(1400, 720);
+            pnlOrderButtons.Size = new Size(1299, 822);
             pnlOrderButtons.TabIndex = 0;
             // 
             // tabSheet
@@ -99,7 +99,7 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             tabSheet.Controls.Add(lblSheet);
             tabSheet.Margin = new Padding(4);
             tabSheet.Name = "tabSheet";
-            tabSheet.Size = new Size(1404, 724);
+            tabSheet.Size = new Size(1303, 826);
             tabSheet.Text = "시트";
             // 
             // lblSheet
@@ -114,7 +114,7 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             lblSheet.Location = new Point(0, 0);
             lblSheet.Margin = new Padding(4);
             lblSheet.Name = "lblSheet";
-            lblSheet.Size = new Size(1404, 724);
+            lblSheet.Size = new Size(1303, 826);
             lblSheet.TabIndex = 0;
             lblSheet.Text = "시트 관리 기능은 개발 중입니다.";
             // 
@@ -124,7 +124,7 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             tabEtc.Controls.Add(lblEtc);
             tabEtc.Margin = new Padding(4);
             tabEtc.Name = "tabEtc";
-            tabEtc.Size = new Size(1404, 724);
+            tabEtc.Size = new Size(1303, 826);
             tabEtc.Text = "기타";
             // 
             // lblEtc
@@ -139,7 +139,7 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             lblEtc.Location = new Point(0, 0);
             lblEtc.Margin = new Padding(4);
             lblEtc.Name = "lblEtc";
-            lblEtc.Size = new Size(1404, 724);
+            lblEtc.Size = new Size(1303, 826);
             lblEtc.TabIndex = 0;
             lblEtc.Text = "기타 처방 기능은 개발 중입니다.";
             // 
@@ -216,7 +216,7 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             Controls.Add(tabControl);
             Margin = new Padding(4);
             Name = "OtherOrderControl";
-            Size = new Size(1406, 750);
+            Size = new Size(1305, 852);
             ((System.ComponentModel.ISupportInitialize)tabControl).EndInit();
             tabControl.ResumeLayout(false);
             tabOrder.ResumeLayout(false);

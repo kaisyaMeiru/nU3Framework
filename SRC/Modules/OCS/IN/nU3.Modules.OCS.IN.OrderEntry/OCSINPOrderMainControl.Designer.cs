@@ -113,6 +113,7 @@ namespace nU3.Modules.OCS.IN.OrderEntry
             // 
             // pnlPatientInfo
             // 
+            this.PatientInfoControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlPatientInfo.Controls.Add(this.PatientInfoControl);
             this.pnlPatientInfo.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlPatientInfo.Location = new System.Drawing.Point(0, 0);
@@ -123,6 +124,7 @@ namespace nU3.Modules.OCS.IN.OrderEntry
             // 
             // pnlWaitList
             // 
+            this.PatientListControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlWaitList.Controls.Add(this.PatientListControl);
             this.pnlWaitList.Dock = System.Windows.Forms.DockStyle.Left;
             this.pnlWaitList.Location = new System.Drawing.Point(0, 68);
@@ -133,10 +135,11 @@ namespace nU3.Modules.OCS.IN.OrderEntry
             // 
             // pnlCenter
             // 
-            this.pnlCenter.Controls.Add(this.OrderCodeControl);
+            this.OrderCodeControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlCenter.Controls.Add(this.pnlMemo);
             this.pnlCenter.Controls.Add(this.pnlDiagProblem);
             this.pnlCenter.Controls.Add(this.splitterDiagProblem);
-            this.pnlCenter.Controls.Add(this.pnlMemo);
+            this.pnlCenter.Controls.Add(this.OrderCodeControl);
             this.pnlCenter.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlCenter.Location = new System.Drawing.Point(275, 68);
             this.pnlCenter.Name = "pnlCenter";
@@ -146,6 +149,8 @@ namespace nU3.Modules.OCS.IN.OrderEntry
             // 
             // pnlRight
             // 
+            this.OtherTabControl.Dock = System.Windows.Forms.DockStyle.Left;
+            this.pnlRight.Controls.Add(this.OtherTabControl);
             this.pnlRight.Controls.Add(this.tabSupport);
             this.pnlRight.Dock = System.Windows.Forms.DockStyle.Right;
             this.pnlRight.Location = new System.Drawing.Point(811, 68);
@@ -200,8 +205,10 @@ namespace nU3.Modules.OCS.IN.OrderEntry
             // 
             // pnlDiagProblem
             // 
-            this.pnlDiagProblem.Controls.Add(this.DiagCodeControl);
+            this.DiagCodeControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ProblemListControl.Dock = System.Windows.Forms.DockStyle.Left;
             this.pnlDiagProblem.Controls.Add(this.ProblemListControl);
+            this.pnlDiagProblem.Controls.Add(this.DiagCodeControl);
             this.pnlDiagProblem.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlDiagProblem.Location = new System.Drawing.Point(0, 0);
             this.pnlDiagProblem.Name = "pnlDiagProblem";
@@ -211,6 +218,7 @@ namespace nU3.Modules.OCS.IN.OrderEntry
             // 
             // pnlMemo
             // 
+            this.SendMemoControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlMemo.Controls.Add(this.SendMemoControl);
             this.pnlMemo.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.pnlMemo.Location = new System.Drawing.Point(0, 648);
@@ -366,6 +374,7 @@ namespace nU3.Modules.OCS.IN.OrderEntry
             // 
             // OrderPage
             // 
+            this.OtherOrderControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.OrderPage.Controls.Add(this.OtherOrderControl);
             this.OrderPage.Name = "OrderPage";
             this.OrderPage.Size = new System.Drawing.Size(463, 729);
@@ -412,16 +421,14 @@ namespace nU3.Modules.OCS.IN.OrderEntry
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.pnlMain);
+            this.Controls.Add(this.pnlBottom);
             this.Controls.Add(this.pnlPatientInfo);
+            this.Controls.Add(this.pnlTop);
             this.Controls.Add(this.pnlWaitList);
             this.Controls.Add(this.splitterLeft);
-            this.Controls.Add(this.pnlCenter);
-            this.Controls.Add(this.splitterRight);
             this.Controls.Add(this.pnlRight);
-            this.Controls.Add(this.splitterCenter);
-            this.Controls.Add(this.pnlTop);
-            this.Controls.Add(this.pnlBottom);
+            this.Controls.Add(this.splitterRight);
+            this.Controls.Add(this.pnlCenter);
             this.Name = "OCSINPOrderMainControl";
             this.Size = new System.Drawing.Size(1280, 865);
             ((System.ComponentModel.ISupportInitialize)(this.pnlMain)).EndInit();

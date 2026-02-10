@@ -54,13 +54,13 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             // 
             // grpDiagCode
             // 
-            grpDiagCode.Controls.Add(pnlButtons);
             grpDiagCode.Controls.Add(gridControl);
+            grpDiagCode.Controls.Add(pnlButtons);
             grpDiagCode.Dock = DockStyle.Fill;
             grpDiagCode.Location = new Point(0, 0);
             grpDiagCode.Margin = new Padding(4);
             grpDiagCode.Name = "grpDiagCode";
-            grpDiagCode.Size = new Size(1406, 750);
+            grpDiagCode.Size = new Size(1305, 852);
             grpDiagCode.TabIndex = 0;
             grpDiagCode.Text = "진단코드";
             // 
@@ -72,14 +72,14 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             pnlButtons.Location = new Point(2, 23);
             pnlButtons.Margin = new Padding(4);
             pnlButtons.Name = "pnlButtons";
-            pnlButtons.Size = new Size(1402, 38);
+            pnlButtons.Size = new Size(1301, 38);
             pnlButtons.TabIndex = 1;
             // 
             // btnDeleteDiag
             // 
             btnDeleteDiag.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnDeleteDiag.AuthId = "";
-            btnDeleteDiag.Location = new Point(1306, 4);
+            btnDeleteDiag.Location = new Point(1205, 4);
             btnDeleteDiag.Margin = new Padding(4);
             btnDeleteDiag.Name = "btnDeleteDiag";
             btnDeleteDiag.Size = new Size(88, 29);
@@ -91,7 +91,7 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             // 
             btnAddDiag.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnAddDiag.AuthId = "";
-            btnAddDiag.Location = new Point(1212, 4);
+            btnAddDiag.Location = new Point(1111, 4);
             btnAddDiag.Margin = new Padding(4);
             btnAddDiag.Name = "btnAddDiag";
             btnAddDiag.Size = new Size(88, 29);
@@ -103,11 +103,11 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             // 
             gridControl.Dock = DockStyle.Fill;
             gridControl.EmbeddedNavigator.Margin = new Padding(4);
-            gridControl.Location = new Point(2, 23);
+            gridControl.Location = new Point(2, 61);
             gridControl.MainView = gridView;
             gridControl.Margin = new Padding(4);
             gridControl.Name = "gridControl";
-            gridControl.Size = new Size(1402, 725);
+            gridControl.Size = new Size(1301, 789);
             gridControl.TabIndex = 0;
             gridControl.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] { gridView });
             // 
@@ -187,7 +187,7 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             Controls.Add(grpDiagCode);
             Margin = new Padding(4);
             Name = "DiagCodeControl";
-            Size = new Size(1406, 750);
+            Size = new Size(1305, 852);
             ((ISupportInitialize)grpDiagCode).EndInit();
             grpDiagCode.ResumeLayout(false);
             ((ISupportInitialize)pnlButtons).EndInit();

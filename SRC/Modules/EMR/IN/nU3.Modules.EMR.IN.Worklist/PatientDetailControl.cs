@@ -492,7 +492,7 @@ namespace nU3.Modules.EMR.IN.Worklist
             // PatientDetailControl
             // 
             Name = "PatientDetailControl";
-            Size = new Size(1502, 814);
+            Size = new Size(1305, 852);
             ResumeLayout(false);
 
         }

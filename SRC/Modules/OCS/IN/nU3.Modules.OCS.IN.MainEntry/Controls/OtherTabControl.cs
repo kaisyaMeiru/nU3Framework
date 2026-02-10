@@ -12,7 +12,7 @@ using nU3.Core.UI;
 
 namespace nU3.Modules.OCS.IN.MainEntry.Controls
 {
-    public partial class OtherTabControl : BaseWorkControl
+    public partial class OtherTabControl : UserControl
     {
         public OtherTabControl()
         {

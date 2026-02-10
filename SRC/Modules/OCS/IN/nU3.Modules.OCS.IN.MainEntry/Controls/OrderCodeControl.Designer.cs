@@ -58,7 +58,7 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             grpOrderCode.Location = new Point(0, 0);
             grpOrderCode.Margin = new Padding(4);
             grpOrderCode.Name = "grpOrderCode";
-            grpOrderCode.Size = new Size(1406, 750);
+            grpOrderCode.Size = new Size(1305, 852);
             grpOrderCode.TabIndex = 0;
             grpOrderCode.Text = "처방코드";
             // 
@@ -70,14 +70,14 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             pnlButtons.Location = new Point(2, 23);
             pnlButtons.Margin = new Padding(4);
             pnlButtons.Name = "pnlButtons";
-            pnlButtons.Size = new Size(1402, 38);
+            pnlButtons.Size = new Size(1301, 38);
             pnlButtons.TabIndex = 1;
             // 
             // btnDeleteOrder
             // 
             btnDeleteOrder.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnDeleteOrder.AuthId = "";
-            btnDeleteOrder.Location = new Point(1306, 4);
+            btnDeleteOrder.Location = new Point(1205, 4);
             btnDeleteOrder.Margin = new Padding(4);
             btnDeleteOrder.Name = "btnDeleteOrder";
             btnDeleteOrder.Size = new Size(88, 29);
@@ -89,7 +89,7 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             // 
             btnAddOrder.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnAddOrder.AuthId = "";
-            btnAddOrder.Location = new Point(1211, 4);
+            btnAddOrder.Location = new Point(1110, 4);
             btnAddOrder.Margin = new Padding(4);
             btnAddOrder.Name = "btnAddOrder";
             btnAddOrder.Size = new Size(88, 29);
@@ -105,7 +105,7 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             gridControl.MainView = gridView;
             gridControl.Margin = new Padding(4);
             gridControl.Name = "gridControl";
-            gridControl.Size = new Size(1402, 725);
+            gridControl.Size = new Size(1301, 827);
             gridControl.TabIndex = 0;
             gridControl.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] { gridView });
             // 
@@ -237,7 +237,7 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             Controls.Add(grpOrderCode);
             Margin = new Padding(4);
             Name = "OrderCodeControl";
-            Size = new Size(1406, 750);
+            Size = new Size(1305, 852);
             ((System.ComponentModel.ISupportInitialize)grpOrderCode).EndInit();
             grpOrderCode.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)pnlButtons).EndInit();

@@ -58,8 +58,8 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             // 
             // grpPatientList
             // 
-            grpPatientList.Controls.Add(pnlButtons);
             grpPatientList.Controls.Add(gridControl);
+            grpPatientList.Controls.Add(pnlButtons);
             grpPatientList.Dock = DockStyle.Fill;
             grpPatientList.Location = new Point(0, 0);
             grpPatientList.Margin = new Padding(4);
@@ -94,11 +94,11 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             // 
             gridControl.Dock = DockStyle.Fill;
             gridControl.EmbeddedNavigator.Margin = new Padding(4);
-            gridControl.Location = new Point(2, 23);
+            gridControl.Location = new Point(2, 61);
             gridControl.MainView = gridView;
             gridControl.Margin = new Padding(4);
             gridControl.Name = "gridControl";
-            gridControl.Size = new Size(1385, 725);
+            gridControl.Size = new Size(1385, 687);
             gridControl.TabIndex = 0;
             gridControl.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] { gridView });
             // 

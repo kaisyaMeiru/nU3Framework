@@ -13,7 +13,7 @@ using nU3.Core.UI;
 
 namespace nU3.Modules.OCS.IN.MainEntry.Controls
 {
-    public partial class OrderCodeControl : BaseWorkControl
+    public partial class OrderCodeControl : UserControl
     {
         public OrderCodeControl()
         {

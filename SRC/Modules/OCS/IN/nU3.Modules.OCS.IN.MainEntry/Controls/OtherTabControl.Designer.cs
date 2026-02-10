@@ -47,7 +47,7 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             pnlMain.Location = new Point(0, 0);
             pnlMain.Margin = new Padding(4);
             pnlMain.Name = "pnlMain";
-            pnlMain.Size = new Size(1406, 750);
+            pnlMain.Size = new Size(1305, 852);
             pnlMain.TabIndex = 0;
             // 
             // btnEtc
@@ -56,7 +56,7 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             btnEtc.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
             btnEtc.Appearance.TextOptions.VAlignment = DevExpress.Utils.VertAlignment.Center;
             btnEtc.ButtonStyle = DevExpress.XtraEditors.Controls.BorderStyles.HotFlat;
-            btnEtc.Location = new Point(2, 82);
+            btnEtc.Location = new Point(2, 181);
             btnEtc.Margin = new Padding(4);
             btnEtc.Name = "btnEtc";
             btnEtc.Size = new Size(23, 75);
@@ -70,7 +70,7 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             btnSheet.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
             btnSheet.Appearance.TextOptions.VAlignment = DevExpress.Utils.VertAlignment.Center;
             btnSheet.ButtonStyle = DevExpress.XtraEditors.Controls.BorderStyles.HotFlat;
-            btnSheet.Location = new Point(2, 42);
+            btnSheet.Location = new Point(2, 93);
             btnSheet.Margin = new Padding(4);
             btnSheet.Name = "btnSheet";
             btnSheet.Size = new Size(23, 75);
@@ -86,7 +86,7 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             btnRep.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
             btnRep.Appearance.TextOptions.VAlignment = DevExpress.Utils.VertAlignment.Center;
             btnRep.ButtonStyle = DevExpress.XtraEditors.Controls.BorderStyles.HotFlat;
-            btnRep.Location = new Point(2, 2);
+            btnRep.Location = new Point(2, 5);
             btnRep.Margin = new Padding(4);
             btnRep.Name = "btnRep";
             btnRep.Size = new Size(23, 75);
@@ -101,7 +101,7 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             Controls.Add(pnlMain);
             Margin = new Padding(4);
             Name = "OtherTabControl";
-            Size = new Size(1406, 750);
+            Size = new Size(1305, 852);
             ((System.ComponentModel.ISupportInitialize)pnlMain).EndInit();
             pnlMain.ResumeLayout(false);
             ResumeLayout(false);

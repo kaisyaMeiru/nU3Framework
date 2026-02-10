@@ -94,7 +94,7 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             grpPatientInfo.Location = new Point(0, 0);
             grpPatientInfo.Margin = new Padding(4);
             grpPatientInfo.Name = "grpPatientInfo";
-            grpPatientInfo.Size = new Size(1406, 750);
+            grpPatientInfo.Size = new Size(1305, 852);
             grpPatientInfo.TabIndex = 0;
             grpPatientInfo.Text = "환자정보";
             // 
@@ -103,7 +103,7 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             lblDiagnosis.Appearance.Font = new Font("Tahoma", 9F, FontStyle.Bold);
             lblDiagnosis.Appearance.Options.UseFont = true;
             lblDiagnosis.IsRequiredMarker = false;
-            lblDiagnosis.Location = new Point(971, 30);
+            lblDiagnosis.Location = new Point(951, 0);
             lblDiagnosis.Margin = new Padding(4);
             lblDiagnosis.Name = "lblDiagnosis";
             lblDiagnosis.Size = new Size(30, 14);
@@ -113,7 +113,7 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             // txtDiagnosis
             // 
             txtDiagnosis.IsRequired = false;
-            txtDiagnosis.Location = new Point(1071, 28);
+            txtDiagnosis.Location = new Point(989, 0);
             txtDiagnosis.Margin = new Padding(4);
             txtDiagnosis.Name = "txtDiagnosis";
             txtDiagnosis.Properties.ReadOnly = true;
@@ -125,7 +125,7 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             lblInDate.Appearance.Font = new Font("Tahoma", 9F, FontStyle.Bold);
             lblInDate.Appearance.Options.UseFont = true;
             lblInDate.IsRequiredMarker = false;
-            lblInDate.Location = new Point(737, 30);
+            lblInDate.Location = new Point(778, 0);
             lblInDate.Margin = new Padding(4);
             lblInDate.Name = "lblInDate";
             lblInDate.Size = new Size(40, 14);
@@ -135,7 +135,7 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             // txtInDate
             // 
             txtInDate.IsRequired = false;
-            txtInDate.Location = new Point(838, 28);
+            txtInDate.Location = new Point(826, 0);
             txtInDate.Margin = new Padding(4);
             txtInDate.Name = "txtInDate";
             txtInDate.Properties.ReadOnly = true;
@@ -147,7 +147,7 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             lblRoomNo.Appearance.Font = new Font("Tahoma", 9F, FontStyle.Bold);
             lblRoomNo.Appearance.Options.UseFont = true;
             lblRoomNo.IsRequiredMarker = false;
-            lblRoomNo.Location = new Point(635, 30);
+            lblRoomNo.Location = new Point(676, 0);
             lblRoomNo.Margin = new Padding(4);
             lblRoomNo.Name = "lblRoomNo";
             lblRoomNo.Size = new Size(20, 14);
@@ -157,7 +157,7 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             // txtRoomNo
             // 
             txtRoomNo.IsRequired = false;
-            txtRoomNo.Location = new Point(712, 28);
+            txtRoomNo.Location = new Point(700, 0);
             txtRoomNo.Margin = new Padding(4);
             txtRoomNo.Name = "txtRoomNo";
             txtRoomNo.Properties.ReadOnly = true;
@@ -169,7 +169,7 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             lblDoctorName.Appearance.Font = new Font("Tahoma", 9F, FontStyle.Bold);
             lblDoctorName.Appearance.Options.UseFont = true;
             lblDoctorName.IsRequiredMarker = false;
-            lblDoctorName.Location = new Point(485, 30);
+            lblDoctorName.Location = new Point(526, 0);
             lblDoctorName.Margin = new Padding(4);
             lblDoctorName.Name = "lblDoctorName";
             lblDoctorName.Size = new Size(40, 14);
@@ -179,11 +179,11 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             // txtDoctorName
             // 
             txtDoctorName.IsRequired = false;
-            txtDoctorName.Location = new Point(586, 28);
+            txtDoctorName.Location = new Point(574, 0);
             txtDoctorName.Margin = new Padding(4);
             txtDoctorName.Name = "txtDoctorName";
             txtDoctorName.Properties.ReadOnly = true;
-            txtDoctorName.Size = new Size(117, 20);
+            txtDoctorName.Size = new Size(94, 20);
             txtDoctorName.TabIndex = 10;
             // 
             // lblDeptName
@@ -191,7 +191,7 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             lblDeptName.Appearance.Font = new Font("Tahoma", 9F, FontStyle.Bold);
             lblDeptName.Appearance.Options.UseFont = true;
             lblDeptName.IsRequiredMarker = false;
-            lblDeptName.Location = new Point(392, 30);
+            lblDeptName.Location = new Point(406, 0);
             lblDeptName.Margin = new Padding(4);
             lblDeptName.Name = "lblDeptName";
             lblDeptName.Size = new Size(30, 14);
@@ -201,11 +201,11 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             // txtDeptName
             // 
             txtDeptName.IsRequired = false;
-            txtDeptName.Location = new Point(469, 28);
+            txtDeptName.Location = new Point(444, 0);
             txtDeptName.Margin = new Padding(4);
             txtDeptName.Name = "txtDeptName";
             txtDeptName.Properties.ReadOnly = true;
-            txtDeptName.Size = new Size(117, 20);
+            txtDeptName.Size = new Size(74, 20);
             txtDeptName.TabIndex = 8;
             // 
             // lblAge
@@ -213,7 +213,7 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             lblAge.Appearance.Font = new Font("Tahoma", 9F, FontStyle.Bold);
             lblAge.Appearance.Options.UseFont = true;
             lblAge.IsRequiredMarker = false;
-            lblAge.Location = new Point(299, 30);
+            lblAge.Location = new Point(340, 0);
             lblAge.Margin = new Padding(4);
             lblAge.Name = "lblAge";
             lblAge.Size = new Size(20, 14);
@@ -223,11 +223,11 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             // txtAge
             // 
             txtAge.IsRequired = false;
-            txtAge.Location = new Point(352, 28);
+            txtAge.Location = new Point(368, 0);
             txtAge.Margin = new Padding(4);
             txtAge.Name = "txtAge";
             txtAge.Properties.ReadOnly = true;
-            txtAge.Size = new Size(70, 20);
+            txtAge.Size = new Size(30, 20);
             txtAge.TabIndex = 6;
             // 
             // lblGender
@@ -235,7 +235,7 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             lblGender.Appearance.Font = new Font("Tahoma", 9F, FontStyle.Bold);
             lblGender.Appearance.Options.UseFont = true;
             lblGender.IsRequiredMarker = false;
-            lblGender.Location = new Point(243, 30);
+            lblGender.Location = new Point(272, 0);
             lblGender.Margin = new Padding(4);
             lblGender.Name = "lblGender";
             lblGender.Size = new Size(20, 14);
@@ -245,11 +245,11 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             // txtGender
             // 
             txtGender.IsRequired = false;
-            txtGender.Location = new Point(296, 28);
+            txtGender.Location = new Point(300, 0);
             txtGender.Margin = new Padding(4);
             txtGender.Name = "txtGender";
             txtGender.Properties.ReadOnly = true;
-            txtGender.Size = new Size(47, 20);
+            txtGender.Size = new Size(32, 20);
             txtGender.TabIndex = 4;
             // 
             // lblPatName
@@ -257,7 +257,7 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             lblPatName.Appearance.Font = new Font("Tahoma", 9F, FontStyle.Bold);
             lblPatName.Appearance.Options.UseFont = true;
             lblPatName.IsRequiredMarker = false;
-            lblPatName.Location = new Point(112, 30);
+            lblPatName.Location = new Point(155, 0);
             lblPatName.Margin = new Padding(4);
             lblPatName.Name = "lblPatName";
             lblPatName.Size = new Size(30, 14);
@@ -267,11 +267,11 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             // txtPatName
             // 
             txtPatName.IsRequired = false;
-            txtPatName.Location = new Point(189, 28);
+            txtPatName.Location = new Point(193, 0);
             txtPatName.Margin = new Padding(4);
             txtPatName.Name = "txtPatName";
             txtPatName.Properties.ReadOnly = true;
-            txtPatName.Size = new Size(93, 20);
+            txtPatName.Size = new Size(71, 20);
             txtPatName.TabIndex = 2;
             // 
             // lblPatId
@@ -279,7 +279,7 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             lblPatId.Appearance.Font = new Font("Tahoma", 9F, FontStyle.Bold);
             lblPatId.Appearance.Options.UseFont = true;
             lblPatId.IsRequiredMarker = false;
-            lblPatId.Location = new Point(19, 30);
+            lblPatId.Location = new Point(60, 0);
             lblPatId.Margin = new Padding(4);
             lblPatId.Name = "lblPatId";
             lblPatId.Size = new Size(34, 14);
@@ -289,11 +289,11 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             // txtPatId
             // 
             txtPatId.IsRequired = false;
-            txtPatId.Location = new Point(96, 28);
+            txtPatId.Location = new Point(102, 0);
             txtPatId.Margin = new Padding(4);
             txtPatId.Name = "txtPatId";
             txtPatId.Properties.ReadOnly = true;
-            txtPatId.Size = new Size(93, 20);
+            txtPatId.Size = new Size(45, 20);
             txtPatId.TabIndex = 0;
             // 
             // pnlButtons
@@ -305,7 +305,7 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             pnlButtons.Controls.Add(btnMedi);
             pnlButtons.Controls.Add(btnAlert);
             pnlButtons.Controls.Add(btnAlergy);
-            pnlButtons.Location = new Point(2869, 28);
+            pnlButtons.Location = new Point(2769, 0);
             pnlButtons.Margin = new Padding(4);
             pnlButtons.Name = "pnlButtons";
             pnlButtons.Size = new Size(30, 55);
@@ -314,7 +314,7 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             // btnVital
             // 
             btnVital.AuthId = "";
-            btnVital.Location = new Point(2, 40);
+            btnVital.Location = new Point(3, 0);
             btnVital.Margin = new Padding(4);
             btnVital.Name = "btnVital";
             btnVital.Size = new Size(26, 28);
@@ -325,7 +325,7 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             // btnMedi
             // 
             btnMedi.AuthId = "";
-            btnMedi.Location = new Point(2, 28);
+            btnMedi.Location = new Point(3, 0);
             btnMedi.Margin = new Padding(4);
             btnMedi.Name = "btnMedi";
             btnMedi.Size = new Size(26, 28);
@@ -336,7 +336,7 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             // btnAlert
             // 
             btnAlert.AuthId = "";
-            btnAlert.Location = new Point(2, 15);
+            btnAlert.Location = new Point(3, 0);
             btnAlert.Margin = new Padding(4);
             btnAlert.Name = "btnAlert";
             btnAlert.Size = new Size(26, 28);
@@ -347,7 +347,7 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             // btnAlergy
             // 
             btnAlergy.AuthId = "";
-            btnAlergy.Location = new Point(2, 2);
+            btnAlergy.Location = new Point(3, 0);
             btnAlergy.Margin = new Padding(4);
             btnAlergy.Name = "btnAlergy";
             btnAlergy.Size = new Size(26, 28);
@@ -363,7 +363,7 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             Controls.Add(grpPatientInfo);
             Margin = new Padding(4);
             Name = "PatientInfoControl";
-            Size = new Size(1406, 750);
+            Size = new Size(1305, 852);
             ((System.ComponentModel.ISupportInitialize)grpPatientInfo).EndInit();
             grpPatientInfo.ResumeLayout(false);
             grpPatientInfo.PerformLayout();

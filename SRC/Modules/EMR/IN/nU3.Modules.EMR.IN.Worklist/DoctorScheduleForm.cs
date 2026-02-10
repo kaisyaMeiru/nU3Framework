@@ -31,7 +31,7 @@ namespace nU3.Modules.EMR.IN.Worklist
             // 
             Controls.Add(label1);
             Name = "DoctorScheduleForm";
-            Size = new Size(1262, 723);
+            Size = new Size(1305, 852);
             ResumeLayout(false);
         }
     }

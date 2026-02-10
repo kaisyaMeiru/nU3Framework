@@ -12,7 +12,7 @@ using nU3.Core.UI;
 
 namespace nU3.Modules.OCS.IN.MainEntry.Controls
 {
-    public partial class SendMemoControl : BaseWorkControl
+    public partial class SendMemoControl : UserControl
     {
         public SendMemoControl()
         {

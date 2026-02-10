@@ -22,7 +22,7 @@ namespace nU3.Modules.EMR.OT.Worklist
 {
     [nU3ProgramInfo(
         typeof(WorklistControl),
-        "수술 워크리스트",  // 프로그램 이름 (사용자 표시)
+        "수술 워크리스트",  // 프로그램 이름
         "PROG_OT_WORKLIST", // 프로그램 ID
         "CHILD"             // 폼 타입
     )]

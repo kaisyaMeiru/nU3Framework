@@ -58,6 +58,8 @@ namespace nU3.Modules.OCS.IN.MainEntry
 
             if (EventBus == null)
                 LogWarning("EventBus가 할당되지 않았습니다.");
+
+
         }
 
         private void EnableEventListening()
@@ -65,26 +67,27 @@ namespace nU3.Modules.OCS.IN.MainEntry
             // 이벤트 수신 설정 (데모에서는 구현하지 않음)
         }
 
-protected override void OnScreenActivated()
+        protected override void OnScreenActivated()
         {
             base.OnScreenActivated();
 
             // 화면 활성화 시 초기화 로직
             LoadInitialData();
-            
+
             // 환자 선택 이벤트 핸들러 연결
-            PatientListControl.OnPatientSelected += OnPatientSelected;
-            
+            if(PatientListControl != null)            
+                PatientListControl.OnPatientSelected += OnPatientSelected;
+
             AddEventLog("OCS 입원 처방 화면 활성화");
         }
 
-protected override void OnScreenDeactivated()
+        protected override void OnScreenDeactivated()
         {
             base.OnScreenDeactivated();
-            
+
             // 환자 선택 이벤트 핸들러 해제
             PatientListControl.OnPatientSelected -= OnPatientSelected;
-            
+
             AddEventLog("OCS 입원 처방 화면 비활성화");
         }
 
@@ -303,33 +306,33 @@ protected override void OnScreenDeactivated()
                 // {
                 //     try
                 //     {
-                        // 처방코드 저장
-                        if (OrderCodeControl != null && !OrderCodeControl.SaveData(this.mInNumber, this.mOrdDate))
-                        {
-                            lErrMessage = "처방코드 저장하는데 실패하였습니다.";
-                            return false;
-                        }
+                // 처방코드 저장
+                if (OrderCodeControl != null && !OrderCodeControl.SaveData(this.mInNumber, this.mOrdDate))
+                {
+                    lErrMessage = "처방코드 저장하는데 실패하였습니다.";
+                    return false;
+                }
 
-                        // 진단코드 저장
-                        if (DiagCodeControl != null && !DiagCodeControl.SaveData(this.mInNumber, this.mOrdDate))
-                        {
-                            lErrMessage = "진단코드 저장하는데 실패하였습니다.";
-                            return false;
-                        }
+                // 진단코드 저장
+                if (DiagCodeControl != null && !DiagCodeControl.SaveData(this.mInNumber, this.mOrdDate))
+                {
+                    lErrMessage = "진단코드 저장하는데 실패하였습니다.";
+                    return false;
+                }
 
-                        // 문제리스트 저장
-                        if (ProblemListControl != null && !ProblemListControl.SaveData(this.mInNumber, this.mOrdDate))
-                        {
-                            lErrMessage = "문제리스트 저장하는데 실패하였습니다.";
-                            return false;
-                        }
+                // 문제리스트 저장
+                if (ProblemListControl != null && !ProblemListControl.SaveData(this.mInNumber, this.mOrdDate))
+                {
+                    lErrMessage = "문제리스트 저장하는데 실패하였습니다.";
+                    return false;
+                }
 
-                        // 전달메모 저장
-                        if (SendMemoControl != null && !SendMemoControl.SaveData())
-                        {
-                            lErrMessage = "전달메모 저장하는데 실패하였습니다.";
-                            return false;
-                        }
+                // 전달메모 저장
+                if (SendMemoControl != null && !SendMemoControl.SaveData())
+                {
+                    lErrMessage = "전달메모 저장하는데 실패하였습니다.";
+                    return false;
+                }
 
                 //         // 트랜잭션 커밋
                 //         transaction.Commit();

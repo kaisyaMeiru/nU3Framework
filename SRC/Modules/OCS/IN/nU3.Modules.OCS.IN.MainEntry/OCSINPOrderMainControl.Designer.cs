@@ -29,15 +29,23 @@ namespace nU3.Modules.OCS.IN.MainEntry
         private void InitializeComponent()
         {
             pnlMain = new nU3.Core.UI.Controls.nU3PanelControl();
+            OrderCodeControl = new nU3.Modules.OCS.IN.MainEntry.Controls.OrderCodeControl();
             pnlPatientInfo = new nU3.Core.UI.Controls.nU3PanelControl();
+            PatientInfoControl = new nU3.Modules.OCS.IN.MainEntry.Controls.PatientInfoControl();
             pnlWaitList = new nU3.Core.UI.Controls.nU3PanelControl();
+            PatientListControl = new nU3.Modules.OCS.IN.MainEntry.Controls.PatientListControl();
             pnlCenter = new nU3.Core.UI.Controls.nU3PanelControl();
+            ProblemListControl = new nU3.Modules.OCS.IN.MainEntry.Controls.ProblemListControl();
             splitterDiagProblem = new DevExpress.XtraEditors.SplitterControl();
             pnlDiagProblem = new nU3.Core.UI.Controls.nU3PanelControl();
+            DiagCodeControl = new nU3.Modules.OCS.IN.MainEntry.Controls.DiagCodeControl();
             pnlMemo = new nU3.Core.UI.Controls.nU3PanelControl();
+            SendMemoControl = new nU3.Modules.OCS.IN.MainEntry.Controls.SendMemoControl();
             pnlRight = new nU3.Core.UI.Controls.nU3PanelControl();
             tabSupport = new nU3.Core.UI.Controls.nU3XtraTabControl();
             OrderPage = new nU3.Core.UI.Controls.nU3XtraTabPage();
+            OtherOrderControl = new nU3.Modules.OCS.IN.MainEntry.Controls.OtherOrderControl();
+            OtherTabControl = new nU3.Modules.OCS.IN.MainEntry.Controls.OtherTabControl();
             pnlBottom = new nU3.Core.UI.Controls.nU3PanelControl();
             btnConfirm = new nU3.Core.UI.Controls.nU3SimpleButton();
             btnHolding = new nU3.Core.UI.Controls.nU3SimpleButton();
@@ -56,15 +64,22 @@ namespace nU3.Modules.OCS.IN.MainEntry
             splitterRight = new DevExpress.XtraEditors.SplitterControl();
             splitterCenter = new DevExpress.XtraEditors.SplitterControl();
             ((System.ComponentModel.ISupportInitialize)pnlMain).BeginInit();
+            pnlMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pnlPatientInfo).BeginInit();
+            pnlPatientInfo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pnlWaitList).BeginInit();
+            pnlWaitList.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pnlCenter).BeginInit();
             pnlCenter.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pnlDiagProblem).BeginInit();
+            pnlDiagProblem.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pnlMemo).BeginInit();
+            pnlMemo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pnlRight).BeginInit();
             pnlRight.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)tabSupport).BeginInit();
+            tabSupport.SuspendLayout();
+            OrderPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pnlBottom).BeginInit();
             pnlBottom.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pnlTop).BeginInit();
@@ -78,33 +93,66 @@ namespace nU3.Modules.OCS.IN.MainEntry
             // 
             // pnlMain
             // 
+            pnlMain.Controls.Add(OrderCodeControl);
             pnlMain.Dock = DockStyle.Fill;
-            pnlMain.Location = new Point(331, 120);
+            pnlMain.Location = new Point(310, 120);
             pnlMain.Margin = new Padding(4);
             pnlMain.Name = "pnlMain";
-            pnlMain.Size = new Size(508, 576);
+            pnlMain.Size = new Size(438, 678);
             pnlMain.TabIndex = 0;
+            // 
+            // OrderCodeControl
+            // 
+            OrderCodeControl.Dock = DockStyle.Fill;
+            OrderCodeControl.Location = new Point(2, 2);
+            OrderCodeControl.Margin = new Padding(4);
+            OrderCodeControl.Name = "OrderCodeControl";
+            OrderCodeControl.OrderType = "D";
+            OrderCodeControl.Size = new Size(434, 674);
+            OrderCodeControl.TabIndex = 0;
             // 
             // pnlPatientInfo
             // 
+            pnlPatientInfo.Controls.Add(PatientInfoControl);
             pnlPatientInfo.Dock = DockStyle.Top;
             pnlPatientInfo.Location = new Point(0, 35);
             pnlPatientInfo.Margin = new Padding(4);
             pnlPatientInfo.Name = "pnlPatientInfo";
-            pnlPatientInfo.Size = new Size(1389, 85);
+            pnlPatientInfo.Size = new Size(1305, 85);
             pnlPatientInfo.TabIndex = 1;
+            // 
+            // PatientInfoControl
+            // 
+            PatientInfoControl.Dock = DockStyle.Fill;
+            PatientInfoControl.EventBus = null;
+            PatientInfoControl.Location = new Point(2, 2);
+            PatientInfoControl.Margin = new Padding(4);
+            PatientInfoControl.Name = "PatientInfoControl";
+            PatientInfoControl.Size = new Size(1301, 81);
+            PatientInfoControl.TabIndex = 0;
             // 
             // pnlWaitList
             // 
+            pnlWaitList.Controls.Add(PatientListControl);
             pnlWaitList.Dock = DockStyle.Left;
             pnlWaitList.Location = new Point(0, 120);
             pnlWaitList.Margin = new Padding(4);
             pnlWaitList.Name = "pnlWaitList";
-            pnlWaitList.Size = new Size(300, 797);
+            pnlWaitList.Size = new Size(300, 678);
             pnlWaitList.TabIndex = 2;
+            // 
+            // PatientListControl
+            // 
+            PatientListControl.Dock = DockStyle.Fill;
+            PatientListControl.Location = new Point(2, 2);
+            PatientListControl.Margin = new Padding(4);
+            PatientListControl.Name = "PatientListControl";
+            PatientListControl.Size = new Size(296, 674);
+            PatientListControl.TabIndex = 0;
             // 
             // pnlCenter
             // 
+            pnlCenter.Controls.Add(ProblemListControl);
             pnlCenter.Controls.Add(splitterDiagProblem);
             pnlCenter.Controls.Add(pnlDiagProblem);
             pnlCenter.Controls.Add(pnlMemo);
@@ -112,8 +160,17 @@ namespace nU3.Modules.OCS.IN.MainEntry
             pnlCenter.Location = new Point(310, 120);
             pnlCenter.Margin = new Padding(4);
             pnlCenter.Name = "pnlCenter";
-            pnlCenter.Size = new Size(522, 797);
+            pnlCenter.Size = new Size(438, 678);
             pnlCenter.TabIndex = 3;
+            // 
+            // ProblemListControl
+            // 
+            ProblemListControl.Dock = DockStyle.Fill;
+            ProblemListControl.Location = new Point(2, 146);
+            ProblemListControl.Margin = new Padding(4, 4, 4, 4);
+            ProblemListControl.Name = "ProblemListControl";
+            ProblemListControl.Size = new Size(434, 395);
+            ProblemListControl.TabIndex = 1;
             // 
             // splitterDiagProblem
             // 
@@ -121,36 +178,56 @@ namespace nU3.Modules.OCS.IN.MainEntry
             splitterDiagProblem.Location = new Point(2, 136);
             splitterDiagProblem.Margin = new Padding(4);
             splitterDiagProblem.Name = "splitterDiagProblem";
-            splitterDiagProblem.Size = new Size(518, 10);
+            splitterDiagProblem.Size = new Size(434, 10);
             splitterDiagProblem.TabIndex = 9;
             splitterDiagProblem.TabStop = false;
             // 
             // pnlDiagProblem
             // 
+            pnlDiagProblem.Controls.Add(DiagCodeControl);
             pnlDiagProblem.Dock = DockStyle.Top;
             pnlDiagProblem.Location = new Point(2, 2);
             pnlDiagProblem.Margin = new Padding(4);
             pnlDiagProblem.Name = "pnlDiagProblem";
-            pnlDiagProblem.Size = new Size(518, 134);
+            pnlDiagProblem.Size = new Size(434, 134);
             pnlDiagProblem.TabIndex = 0;
+            // 
+            // DiagCodeControl
+            // 
+            DiagCodeControl.Dock = DockStyle.Fill;
+            DiagCodeControl.Location = new Point(2, 2);
+            DiagCodeControl.Margin = new Padding(4);
+            DiagCodeControl.Name = "DiagCodeControl";
+            DiagCodeControl.Size = new Size(430, 130);
+            DiagCodeControl.TabIndex = 0;
             // 
             // pnlMemo
             // 
+            pnlMemo.Controls.Add(SendMemoControl);
             pnlMemo.Dock = DockStyle.Bottom;
-            pnlMemo.Location = new Point(2, 660);
+            pnlMemo.Location = new Point(2, 541);
             pnlMemo.Margin = new Padding(4);
             pnlMemo.Name = "pnlMemo";
-            pnlMemo.Size = new Size(518, 135);
+            pnlMemo.Size = new Size(434, 135);
             pnlMemo.TabIndex = 1;
+            // 
+            // SendMemoControl
+            // 
+            SendMemoControl.Dock = DockStyle.Fill;
+            SendMemoControl.Location = new Point(2, 2);
+            SendMemoControl.Margin = new Padding(4);
+            SendMemoControl.Name = "SendMemoControl";
+            SendMemoControl.Size = new Size(430, 131);
+            SendMemoControl.TabIndex = 0;
             // 
             // pnlRight
             // 
             pnlRight.Controls.Add(tabSupport);
             pnlRight.Dock = DockStyle.Right;
-            pnlRight.Location = new Point(842, 120);
+            pnlRight.Location = new Point(758, 120);
             pnlRight.Margin = new Padding(4);
             pnlRight.Name = "pnlRight";
-            pnlRight.Size = new Size(547, 797);
+            pnlRight.Size = new Size(547, 678);
             pnlRight.TabIndex = 4;
             // 
             // tabSupport
@@ -160,17 +237,40 @@ namespace nU3.Modules.OCS.IN.MainEntry
             tabSupport.Margin = new Padding(4);
             tabSupport.Name = "tabSupport";
             tabSupport.SelectedTabPage = OrderPage;
-            tabSupport.Size = new Size(543, 793);
+            tabSupport.Size = new Size(543, 674);
             tabSupport.TabIndex = 1;
+            tabSupport.TabPages.AddRange(new DevExpress.XtraTab.XtraTabPage[] { OrderPage });
             tabSupport.TabStop = false;
             // 
             // OrderPage
             // 
             OrderPage.AuthId = "";
+            OrderPage.Controls.Add(OtherOrderControl);
+            OrderPage.Controls.Add(OtherTabControl);
             OrderPage.Margin = new Padding(4);
             OrderPage.Name = "OrderPage";
-            OrderPage.Size = new Size(541, 791);
+            OrderPage.Size = new Size(541, 648);
             OrderPage.Text = "기타처방";
+            // 
+            // OtherOrderControl
+            // 
+            OtherOrderControl.Dock = DockStyle.Fill;
+            OtherOrderControl.Location = new Point(0, 0);
+            OtherOrderControl.Margin = new Padding(4);
+            OtherOrderControl.Name = "OtherOrderControl";
+            OtherOrderControl.RefCodeType = MainEntry.Controls.RefCodeType.REP;
+            OtherOrderControl.Size = new Size(541, 620);
+            OtherOrderControl.TabIndex = 0;
+            // 
+            // OtherTabControl
+            // 
+            OtherTabControl.Dock = DockStyle.Bottom;
+            OtherTabControl.Location = new Point(0, 620);
+            OtherTabControl.Margin = new Padding(4);
+            OtherTabControl.Name = "OtherTabControl";
+            OtherTabControl.RefCodeType = MainEntry.Controls.RefCodeType.REP;
+            OtherTabControl.Size = new Size(541, 28);
+            OtherTabControl.TabIndex = 1;
             // 
             // pnlBottom
             // 
@@ -179,17 +279,17 @@ namespace nU3.Modules.OCS.IN.MainEntry
             pnlBottom.Controls.Add(btnDelete);
             pnlBottom.Controls.Add(btnSender);
             pnlBottom.Dock = DockStyle.Bottom;
-            pnlBottom.Location = new Point(0, 917);
+            pnlBottom.Location = new Point(0, 798);
             pnlBottom.Margin = new Padding(4);
             pnlBottom.Name = "pnlBottom";
-            pnlBottom.Size = new Size(1389, 54);
+            pnlBottom.Size = new Size(1305, 54);
             pnlBottom.TabIndex = 5;
             // 
             // btnConfirm
             // 
             btnConfirm.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnConfirm.AuthId = "";
-            btnConfirm.Location = new Point(1096, 11);
+            btnConfirm.Location = new Point(1012, 11);
             btnConfirm.Margin = new Padding(4);
             btnConfirm.Name = "btnConfirm";
             btnConfirm.Size = new Size(93, 32);
@@ -201,7 +301,7 @@ namespace nU3.Modules.OCS.IN.MainEntry
             // 
             btnHolding.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnHolding.AuthId = "";
-            btnHolding.Location = new Point(995, 11);
+            btnHolding.Location = new Point(911, 11);
             btnHolding.Margin = new Padding(4);
             btnHolding.Name = "btnHolding";
             btnHolding.Size = new Size(93, 32);
@@ -213,7 +313,7 @@ namespace nU3.Modules.OCS.IN.MainEntry
             // 
             btnDelete.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnDelete.AuthId = "";
-            btnDelete.Location = new Point(1197, 11);
+            btnDelete.Location = new Point(1113, 11);
             btnDelete.Margin = new Padding(4);
             btnDelete.Name = "btnDelete";
             btnDelete.Size = new Size(93, 32);
@@ -225,7 +325,7 @@ namespace nU3.Modules.OCS.IN.MainEntry
             // 
             btnSender.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnSender.AuthId = "";
-            btnSender.Location = new Point(1298, 11);
+            btnSender.Location = new Point(1214, 11);
             btnSender.Margin = new Padding(4);
             btnSender.Name = "btnSender";
             btnSender.Size = new Size(83, 32);
@@ -240,7 +340,7 @@ namespace nU3.Modules.OCS.IN.MainEntry
             pnlTop.Location = new Point(0, 0);
             pnlTop.Margin = new Padding(4);
             pnlTop.Name = "pnlTop";
-            pnlTop.Size = new Size(1389, 35);
+            pnlTop.Size = new Size(1305, 35);
             pnlTop.TabIndex = 6;
             // 
             // pnlTopBar
@@ -261,14 +361,14 @@ namespace nU3.Modules.OCS.IN.MainEntry
             pnlTopBar.Location = new Point(2, 2);
             pnlTopBar.Margin = new Padding(4);
             pnlTopBar.Name = "pnlTopBar";
-            pnlTopBar.Size = new Size(1385, 31);
+            pnlTopBar.Size = new Size(1301, 31);
             pnlTopBar.TabIndex = 0;
             // 
             // btnOpHistory
             // 
             btnOpHistory.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnOpHistory.AuthId = "";
-            btnOpHistory.Location = new Point(1138, 1);
+            btnOpHistory.Location = new Point(1054, 1);
             btnOpHistory.Margin = new Padding(4);
             btnOpHistory.Name = "btnOpHistory";
             btnOpHistory.Size = new Size(70, 28);
@@ -280,7 +380,7 @@ namespace nU3.Modules.OCS.IN.MainEntry
             // 
             btnFamilyHistory.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnFamilyHistory.AuthId = "";
-            btnFamilyHistory.Location = new Point(1211, 1);
+            btnFamilyHistory.Location = new Point(1127, 1);
             btnFamilyHistory.Margin = new Padding(4);
             btnFamilyHistory.Name = "btnFamilyHistory";
             btnFamilyHistory.Size = new Size(70, 28);
@@ -292,7 +392,7 @@ namespace nU3.Modules.OCS.IN.MainEntry
             // 
             btnPastHistory.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnPastHistory.AuthId = "";
-            btnPastHistory.Location = new Point(1283, 1);
+            btnPastHistory.Location = new Point(1199, 1);
             btnPastHistory.Margin = new Padding(4);
             btnPastHistory.Name = "btnPastHistory";
             btnPastHistory.Size = new Size(70, 28);
@@ -356,17 +456,17 @@ namespace nU3.Modules.OCS.IN.MainEntry
             splitterLeft.Location = new Point(300, 120);
             splitterLeft.Margin = new Padding(4);
             splitterLeft.Name = "splitterLeft";
-            splitterLeft.Size = new Size(10, 797);
+            splitterLeft.Size = new Size(10, 678);
             splitterLeft.TabIndex = 6;
             splitterLeft.TabStop = false;
             // 
             // splitterRight
             // 
             splitterRight.Dock = DockStyle.Right;
-            splitterRight.Location = new Point(832, 120);
+            splitterRight.Location = new Point(748, 120);
             splitterRight.Margin = new Padding(4);
             splitterRight.Name = "splitterRight";
-            splitterRight.Size = new Size(10, 797);
+            splitterRight.Size = new Size(10, 678);
             splitterRight.TabIndex = 7;
             splitterRight.TabStop = false;
             // 
@@ -384,6 +484,7 @@ namespace nU3.Modules.OCS.IN.MainEntry
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(pnlMain);
             Controls.Add(pnlCenter);
             Controls.Add(splitterRight);
             Controls.Add(pnlRight);
@@ -394,17 +495,24 @@ namespace nU3.Modules.OCS.IN.MainEntry
             Controls.Add(pnlBottom);
             Margin = new Padding(4);
             Name = "OCSINPOrderMainControl";
-            Size = new Size(1389, 971);
+            Size = new Size(1305, 852);
             ((System.ComponentModel.ISupportInitialize)pnlMain).EndInit();
+            pnlMain.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)pnlPatientInfo).EndInit();
+            pnlPatientInfo.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)pnlWaitList).EndInit();
+            pnlWaitList.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)pnlCenter).EndInit();
             pnlCenter.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)pnlDiagProblem).EndInit();
+            pnlDiagProblem.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)pnlMemo).EndInit();
+            pnlMemo.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)pnlRight).EndInit();
             pnlRight.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)tabSupport).EndInit();
+            tabSupport.ResumeLayout(false);
+            OrderPage.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)pnlBottom).EndInit();
             pnlBottom.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)pnlTop).EndInit();
