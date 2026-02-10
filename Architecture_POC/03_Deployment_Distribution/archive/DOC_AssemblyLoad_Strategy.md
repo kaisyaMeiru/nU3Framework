@@ -1,176 +1,176 @@
-# nU3.Framework - Assembly ·Îµå Àü·« ¹× Hot Deploy ±¸Çö
+# nU3.Framework - Assembly ë¡œë“œ ì „ëµ ë° Hot Deploy êµ¬í˜„
 
-> ÀÛ¼ºÀÏ: 2026-02-08  
-> ´ë»ó: SI ÇÁ·ÎÁ§Æ® ´Ù¼ö °³¹ßÀÚ È¯°æ  
-> ¾ÆÅ°ÅØÃ³: ÇÃ·¯±×ÀÎ ±â¹İ ¸ğµâ ½Ã½ºÅÛ (DI + EventBus)
-
----
-
-## ?? ¸ñÂ÷
-
-1. [°³¿ä](#°³¿ä)
-2. [LoadFile vs LoadFrom vs AssemblyLoadContext ºñ±³](#loadfile-vs-loadfrom-vs-assemblyloadcontext-ºñ±³)
-3. [SI ÇÁ·ÎÁ§Æ® ¿ä±¸»çÇ×](#si-ÇÁ·ÎÁ§Æ®-¿ä±¸»çÇ×)
-4. [ÃÖÁ¾ Ã¤ÅÃ Àü·«: LoadFrom + Shadow Copy](#ÃÖÁ¾-Ã¤ÅÃ-Àü·«-loadfrom--shadow-copy)
-5. [±¸Çö »ó¼¼](#±¸Çö-»ó¼¼)
-6. [¹öÀü Ãæµ¹ Ã³¸®](#¹öÀü-Ãæµ¹-Ã³¸®)
-7. [Hot Deploy ½Ã³ª¸®¿À](#hot-deploy-½Ã³ª¸®¿À)
-8. [°³¹ßÆÀ °¡ÀÌµå¶óÀÎ](#°³¹ßÆÀ-°¡ÀÌµå¶óÀÎ)
-9. [¹®Á¦ ÇØ°á °¡ÀÌµå](#¹®Á¦-ÇØ°á-°¡ÀÌµå)
+> ì‘ì„±ì¼: 2026-02-08  
+> ëŒ€ìƒ: SI í”„ë¡œì íŠ¸ ë‹¤ìˆ˜ ê°œë°œì í™˜ê²½  
+> ì•„í‚¤í…ì²˜: í”ŒëŸ¬ê·¸ì¸ ê¸°ë°˜ ëª¨ë“ˆ ì‹œìŠ¤í…œ (DI + EventBus)
 
 ---
 
-## ?? °³¿ä
+## ?? ëª©ì°¨
 
-### ÇÁ·ÎÁ§Æ® Æ¯¼º
+1. [ê°œìš”](#ê°œìš”)
+2. [LoadFile vs LoadFrom vs AssemblyLoadContext ë¹„êµ](#loadfile-vs-loadfrom-vs-assemblyloadcontext-ë¹„êµ)
+3. [SI í”„ë¡œì íŠ¸ ìš”êµ¬ì‚¬í•­](#si-í”„ë¡œì íŠ¸-ìš”êµ¬ì‚¬í•­)
+4. [ìµœì¢… ì±„íƒ ì „ëµ: LoadFrom + Shadow Copy](#ìµœì¢…-ì±„íƒ-ì „ëµ-loadfrom--shadow-copy)
+5. [êµ¬í˜„ ìƒì„¸](#êµ¬í˜„-ìƒì„¸)
+6. [ë²„ì „ ì¶©ëŒ ì²˜ë¦¬](#ë²„ì „-ì¶©ëŒ-ì²˜ë¦¬)
+7. [Hot Deploy ì‹œë‚˜ë¦¬ì˜¤](#hot-deploy-ì‹œë‚˜ë¦¬ì˜¤)
+8. [ê°œë°œíŒ€ ê°€ì´ë“œë¼ì¸](#ê°œë°œíŒ€-ê°€ì´ë“œë¼ì¸)
+9. [ë¬¸ì œ í•´ê²° ê°€ì´ë“œ](#ë¬¸ì œ-í•´ê²°-ê°€ì´ë“œ)
 
-nU3.Framework´Â **SI ÇÁ·ÎÁ§Æ® È¯°æ**¿¡¼­ **´Ù¼öÀÇ °³¹ßÆÀ**ÀÌ **µ¶¸³ÀûÀ¸·Î ¸ğµâÀ» °³¹ß**ÇÏ°í, **ShellÀ» ÅëÇØ ÅëÇÕ ½ÇÇà**ÇÏ´Â ±¸Á¶ÀÔ´Ï´Ù.
+---
+
+## ?? ê°œìš”
+
+### í”„ë¡œì íŠ¸ íŠ¹ì„±
+
+nU3.FrameworkëŠ” **SI í”„ë¡œì íŠ¸ í™˜ê²½**ì—ì„œ **ë‹¤ìˆ˜ì˜ ê°œë°œíŒ€**ì´ **ë…ë¦½ì ìœ¼ë¡œ ëª¨ë“ˆì„ ê°œë°œ**í•˜ê³ , **Shellì„ í†µí•´ í†µí•© ì‹¤í–‰**í•˜ëŠ” êµ¬ì¡°ì…ë‹ˆë‹¤.
 
 ```
-°³¹ßÆÀ A ¡æ Module A.dll (µ¶¸³ °³¹ß)
-°³¹ßÆÀ B ¡æ Module B.dll (µ¶¸³ °³¹ß)
-°³¹ßÆÀ C ¡æ Module C.dll (µ¶¸³ °³¹ß)
-         ¡é
-    EventBus + DI·Î ÅëÇÕ
-         ¡é
-      Shell ½ÇÇà
+ê°œë°œíŒ€ A â†’ Module A.dll (ë…ë¦½ ê°œë°œ)
+ê°œë°œíŒ€ B â†’ Module B.dll (ë…ë¦½ ê°œë°œ)
+ê°œë°œíŒ€ C â†’ Module C.dll (ë…ë¦½ ê°œë°œ)
+         â†“
+    EventBus + DIë¡œ í†µí•©
+         â†“
+      Shell ì‹¤í–‰
 ```
 
-### ÇÙ½É ¿ä±¸»çÇ×
+### í•µì‹¬ ìš”êµ¬ì‚¬í•­
 
-| ¿ä±¸»çÇ× | ¼³¸í | Áß¿äµµ |
+| ìš”êµ¬ì‚¬í•­ | ì„¤ëª… | ì¤‘ìš”ë„ |
 |---------|------|--------|
-| **µ¶¸³ °³¹ß** | °¢ ÆÀÀÌ ¼­·Î ¿µÇâ ¾øÀÌ °³¹ß | ??? |
-| **DI Áö¿ø** | ShellÀÇ `ActivatorUtilities.CreateInstance` | ??? |
-| **EventBus Åë½Å** | ¸ğµâ °£ ¸Ş½ÃÁö ±³È¯ | ??? |
-| **Hot Deploy** | ½ÇÇà Áß ¸ğµâ ¾÷µ¥ÀÌÆ® | ?? |
-| **¹öÀü Ãæµ¹ ¹æÁö** | Å¸ÀÔ ÀÏ°ü¼º º¸Àå | ??? |
+| **ë…ë¦½ ê°œë°œ** | ê° íŒ€ì´ ì„œë¡œ ì˜í–¥ ì—†ì´ ê°œë°œ | ??? |
+| **DI ì§€ì›** | Shellì˜ `ActivatorUtilities.CreateInstance` | ??? |
+| **EventBus í†µì‹ ** | ëª¨ë“ˆ ê°„ ë©”ì‹œì§€ êµí™˜ | ??? |
+| **Hot Deploy** | ì‹¤í–‰ ì¤‘ ëª¨ë“ˆ ì—…ë°ì´íŠ¸ | ?? |
+| **ë²„ì „ ì¶©ëŒ ë°©ì§€** | íƒ€ì… ì¼ê´€ì„± ë³´ì¥ | ??? |
 
 ---
 
-## ?? LoadFile vs LoadFrom vs AssemblyLoadContext ºñ±³
+## ?? LoadFile vs LoadFrom vs AssemblyLoadContext ë¹„êµ
 
-### Assembly ·Îµå ¹æ½Ä ºñ±³Ç¥
+### Assembly ë¡œë“œ ë°©ì‹ ë¹„êµí‘œ
 
-| ±âÁØ | LoadFrom | LoadFile | AssemblyLoadContext | ±ÇÀå |
+| ê¸°ì¤€ | LoadFrom | LoadFile | AssemblyLoadContext | ê¶Œì¥ |
 |------|----------|----------|---------------------|------|
-| **DI È£È¯¼º** | ? ¿Ïº® | ? ºÒ°¡´É | ?? Á¦ÇÑÀû | **LoadFrom** |
-| **EventBus Åë½Å** | ? ¿Ïº® | ? Å¸ÀÔ ºÒÀÏÄ¡ | ?? Á¦ÇÑÀû | **LoadFrom** |
-| **µ¶¸³ ¹öÀü °ü¸®** | ?? Á¤Ã¥ ÇÊ¿ä | ? ¿Ïº® | ? ¿Ïº® | **ALC** |
-| **Hot Deploy** | ?? Shadow Copy ÇÊ¿ä | ? °¡´É | ? °¡´É | **ALC** |
-| **°øÀ¯ ÀÇÁ¸¼º** | ? ÀÚµ¿ °øÀ¯ | ? Áßº¹ ·Îµå | ? Á¦¾î °¡´É | **LoadFrom** |
-| **ÆÄÀÏ Àá±İ** | ? ¹ß»ı | ? ¹ß»ı | ? ¹ß»ı | ¸ğµÎ µ¿ÀÏ |
-| **°İ¸®¼º** | ? ¾øÀ½ | ? ¿Ïº® | ? ¿Ïº® | **ALC** |
-| **±¸Çö º¹Àâµµ** | ? ³·À½ | ? ³·À½ | ?? ³ôÀ½ | **LoadFrom** |
-| **¸Ş¸ğ¸® »ç¿ë** | ? È¿À²Àû | ? Áßº¹ | ? È¿À²Àû | **LoadFrom** |
+| **DI í˜¸í™˜ì„±** | ? ì™„ë²½ | ? ë¶ˆê°€ëŠ¥ | ?? ì œí•œì  | **LoadFrom** |
+| **EventBus í†µì‹ ** | ? ì™„ë²½ | ? íƒ€ì… ë¶ˆì¼ì¹˜ | ?? ì œí•œì  | **LoadFrom** |
+| **ë…ë¦½ ë²„ì „ ê´€ë¦¬** | ?? ì •ì±… í•„ìš” | ? ì™„ë²½ | ? ì™„ë²½ | **ALC** |
+| **Hot Deploy** | ?? Shadow Copy í•„ìš” | ? ê°€ëŠ¥ | ? ê°€ëŠ¥ | **ALC** |
+| **ê³µìœ  ì˜ì¡´ì„±** | ? ìë™ ê³µìœ  | ? ì¤‘ë³µ ë¡œë“œ | ? ì œì–´ ê°€ëŠ¥ | **LoadFrom** |
+| **íŒŒì¼ ì ê¸ˆ** | ? ë°œìƒ | ? ë°œìƒ | ? ë°œìƒ | ëª¨ë‘ ë™ì¼ |
+| **ê²©ë¦¬ì„±** | ? ì—†ìŒ | ? ì™„ë²½ | ? ì™„ë²½ | **ALC** |
+| **êµ¬í˜„ ë³µì¡ë„** | ? ë‚®ìŒ | ? ë‚®ìŒ | ?? ë†’ìŒ | **LoadFrom** |
+| **ë©”ëª¨ë¦¬ ì‚¬ìš©** | ? íš¨ìœ¨ì  | ? ì¤‘ë³µ | ? íš¨ìœ¨ì  | **LoadFrom** |
 
-### 1?? Assembly.LoadFrom (ÇöÀç Ã¤ÅÃ)
+### 1?? Assembly.LoadFrom (í˜„ì¬ ì±„íƒ)
 
 ```csharp
-// ±âº» ·Îµå ÄÁÅØ½ºÆ®¿¡¼­ ·Îµå
+// ê¸°ë³¸ ë¡œë“œ ì»¨í…ìŠ¤íŠ¸ì—ì„œ ë¡œë“œ
 var assembly = Assembly.LoadFrom(dllPath);
 ```
 
-**ÀåÁ¡:**
-- ? DI ¿Ïº® Áö¿ø (`ActivatorUtilities.CreateInstance` Á¤»ó ÀÛµ¿)
-- ? EventBus Å¸ÀÔ È£È¯¼º (¸ğµç ¸ğµâÀÌ °°Àº Å¸ÀÔÀ¸·Î ÀÎ½Ä)
-- ? °øÀ¯ ¾î¼Àºí¸® ÀÚµ¿ °ü¸® (nU3.Core, nU3.Models µî)
-- ? ±¸Çö °£´Ü
+**ì¥ì :**
+- ? DI ì™„ë²½ ì§€ì› (`ActivatorUtilities.CreateInstance` ì •ìƒ ì‘ë™)
+- ? EventBus íƒ€ì… í˜¸í™˜ì„± (ëª¨ë“  ëª¨ë“ˆì´ ê°™ì€ íƒ€ì…ìœ¼ë¡œ ì¸ì‹)
+- ? ê³µìœ  ì–´ì…ˆë¸”ë¦¬ ìë™ ê´€ë¦¬ (nU3.Core, nU3.Models ë“±)
+- ? êµ¬í˜„ ê°„ë‹¨
 
-**´ÜÁ¡:**
-- ?? °°Àº ÆÄÀÏ °æ·Î´Â Ä³½ÌµÊ (Àç·Îµå ºÒ°¡)
-- ?? Hot Deploy¿¡ Shadow Copy ÇÊ¿ä
-- ?? ¹öÀü Ãæµ¹ ½Ã Á¤Ã¥ ÇÊ¿ä
+**ë‹¨ì :**
+- ?? ê°™ì€ íŒŒì¼ ê²½ë¡œëŠ” ìºì‹±ë¨ (ì¬ë¡œë“œ ë¶ˆê°€)
+- ?? Hot Deployì— Shadow Copy í•„ìš”
+- ?? ë²„ì „ ì¶©ëŒ ì‹œ ì •ì±… í•„ìš”
 
-**SI ÇÁ·ÎÁ§Æ® ÀûÇÕ¼º:** ? **ÃÖÀû**
+**SI í”„ë¡œì íŠ¸ ì í•©ì„±:** ? **ìµœì **
 
 ### 2?? Assembly.LoadFile
 
 ```csharp
-// ¸Å¹ø »õ·Î¿î ÀÎ½ºÅÏ½º ·Îµå
+// ë§¤ë²ˆ ìƒˆë¡œìš´ ì¸ìŠ¤í„´ìŠ¤ ë¡œë“œ
 var assembly = Assembly.LoadFile(dllPath);
 ```
 
-**ÀåÁ¡:**
-- ? ¿ÏÀüÇÑ °İ¸® (°°Àº DLL ¿©·¯ ¹öÀü ·Îµå °¡´É)
-- ? Hot Deploy °¡´É (Àç·Îµå ÀÚÀ¯)
+**ì¥ì :**
+- ? ì™„ì „í•œ ê²©ë¦¬ (ê°™ì€ DLL ì—¬ëŸ¬ ë²„ì „ ë¡œë“œ ê°€ëŠ¥)
+- ? Hot Deploy ê°€ëŠ¥ (ì¬ë¡œë“œ ììœ )
 
-**´ÜÁ¡:**
-- ? **DI ºÒ°¡´É** (Å¸ÀÔÀÌ ±âº» ÄÁÅØ½ºÆ®¿Í È£È¯µÇÁö ¾ÊÀ½)
-- ? **EventBus Å¸ÀÔ ºÒÀÏÄ¡** (°¢ ·Îµå¸¶´Ù ´Ù¸¥ Å¸ÀÔ)
-- ? °øÀ¯ ÀÇÁ¸¼º Áßº¹ ·Îµå (¸Ş¸ğ¸® ³¶ºñ)
-- ? static º¯¼ö, ½Ì±ÛÅæÀÌ °øÀ¯µÇÁö ¾ÊÀ½
+**ë‹¨ì :**
+- ? **DI ë¶ˆê°€ëŠ¥** (íƒ€ì…ì´ ê¸°ë³¸ ì»¨í…ìŠ¤íŠ¸ì™€ í˜¸í™˜ë˜ì§€ ì•ŠìŒ)
+- ? **EventBus íƒ€ì… ë¶ˆì¼ì¹˜** (ê° ë¡œë“œë§ˆë‹¤ ë‹¤ë¥¸ íƒ€ì…)
+- ? ê³µìœ  ì˜ì¡´ì„± ì¤‘ë³µ ë¡œë“œ (ë©”ëª¨ë¦¬ ë‚­ë¹„)
+- ? static ë³€ìˆ˜, ì‹±ê¸€í†¤ì´ ê³µìœ ë˜ì§€ ì•ŠìŒ
 
-**SI ÇÁ·ÎÁ§Æ® ÀûÇÕ¼º:** ? **ºÎÀûÇÕ**
+**SI í”„ë¡œì íŠ¸ ì í•©ì„±:** ? **ë¶€ì í•©**
 
 ### 3?? AssemblyLoadContext
 
 ```csharp
-// Ä¿½ºÅÒ ·Îµå ÄÁÅØ½ºÆ®
+// ì»¤ìŠ¤í…€ ë¡œë“œ ì»¨í…ìŠ¤íŠ¸
 var context = new PluginLoadContext(dllPath);
 var assembly = context.LoadFromAssemblyPath(dllPath);
 ```
 
-**ÀåÁ¡:**
-- ? ¿ÏÀüÇÑ °İ¸®
-- ? ¾ğ·Îµå °¡´É (`isCollectible: true`)
-- ? Hot Deploy ¿Ïº® Áö¿ø
-- ? ÀÇÁ¸¼º Á¦¾î °¡´É
+**ì¥ì :**
+- ? ì™„ì „í•œ ê²©ë¦¬
+- ? ì–¸ë¡œë“œ ê°€ëŠ¥ (`isCollectible: true`)
+- ? Hot Deploy ì™„ë²½ ì§€ì›
+- ? ì˜ì¡´ì„± ì œì–´ ê°€ëŠ¥
 
-**´ÜÁ¡:**
-- ? **DI Å¸ÀÔ ºÒÀÏÄ¡** (±âº» ÄÁÅØ½ºÆ®¿Í °İ¸®)
-- ? **EventBus Å¸ÀÔ ºÒÀÏÄ¡** (°¢ ÄÁÅØ½ºÆ®¸¶´Ù ´Ù¸¥ Å¸ÀÔ)
-- ?? ±¸Çö º¹Àâµµ ³ôÀ½
-- ?? °øÀ¯ ¾î¼Àºí¸® °ü¸® ÇÊ¿ä
+**ë‹¨ì :**
+- ? **DI íƒ€ì… ë¶ˆì¼ì¹˜** (ê¸°ë³¸ ì»¨í…ìŠ¤íŠ¸ì™€ ê²©ë¦¬)
+- ? **EventBus íƒ€ì… ë¶ˆì¼ì¹˜** (ê° ì»¨í…ìŠ¤íŠ¸ë§ˆë‹¤ ë‹¤ë¥¸ íƒ€ì…)
+- ?? êµ¬í˜„ ë³µì¡ë„ ë†’ìŒ
+- ?? ê³µìœ  ì–´ì…ˆë¸”ë¦¬ ê´€ë¦¬ í•„ìš”
 
-**SI ÇÁ·ÎÁ§Æ® ÀûÇÕ¼º:** ?? **Á¶°ÇºÎ ÀûÇÕ** (DI/EventBus Æ÷±â ½Ã)
+**SI í”„ë¡œì íŠ¸ ì í•©ì„±:** ?? **ì¡°ê±´ë¶€ ì í•©** (DI/EventBus í¬ê¸° ì‹œ)
 
 ---
 
-## ??? SI ÇÁ·ÎÁ§Æ® ¿ä±¸»çÇ×
+## ??? SI í”„ë¡œì íŠ¸ ìš”êµ¬ì‚¬í•­
 
-### ¾ÆÅ°ÅØÃ³ ±¸Á¶
+### ì•„í‚¤í…ì²˜ êµ¬ì¡°
 
 ```
-¦£¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¤
-¦¢              nU3.Shell (¸ŞÀÎ È£½ºÆ®)                  ¦¢
-¦¢  ¦£¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¤  ¦¢
-¦¢  ¦¢          ServiceProvider (DI Container)        ¦¢  ¦¢
-¦¢  ¦¢  - IBizLogicFactory                            ¦¢  ¦¢
-¦¢  ¦¢  - IEventAggregator (EventBus)                 ¦¢  ¦¢
-¦¢  ¦¢  - IAuthenticationService                      ¦¢  ¦¢
-¦¢  ¦¢  - IMenuRepository                             ¦¢  ¦¢
-¦¢  ¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¥  ¦¢
-¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¥
-                         ¡å
-        ¦£¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦ª¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¤
-        ¡å                                 ¡å
-¦£¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¤           ¦£¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¤
-¦¢   Module A.dll    ¦¢           ¦¢   Module B.dll    ¦¢
-¦¢  (Team A °³¹ß)     ¦¢           ¦¢  (Team B °³¹ß)     ¦¢
-¦¢                   ¦¢           ¦¢                   ¦¢
-¦¢  public class     ¦¢           ¦¢  public class     ¦¢
-¦¢  FormA :          ¦¢           ¦¢  FormB :          ¦¢
-¦¢  BaseWorkControl  ¦¢           ¦¢  BaseWorkControl  ¦¢
-¦¢  {                ¦¢           ¦¢  {                ¦¢
-¦¢    // DI »ı¼ºÀÚ   ¦¢           ¦¢    // DI »ı¼ºÀÚ   ¦¢
-¦¢    public FormA(  ¦¢           ¦¢    public FormB(  ¦¢
-¦¢      IBizLogic,   ¦¢?¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡?¦¢      IEventBus,   ¦¢
-¦¢      IEventBus)   ¦¢ EventBus  ¦¢      IBizLogic)   ¦¢
-¦¢    { }            ¦¢   Åë½Å     ¦¢    { }            ¦¢
-¦¢  }                ¦¢           ¦¢  }                ¦¢
-¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¥           ¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¥
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚              nU3.Shell (ë©”ì¸ í˜¸ìŠ¤íŠ¸)                  â”‚
+â”‚  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”  â”‚
+â”‚  â”‚          ServiceProvider (DI Container)        â”‚  â”‚
+â”‚  â”‚  - IBizLogicFactory                            â”‚  â”‚
+â”‚  â”‚  - IEventAggregator (EventBus)                 â”‚  â”‚
+â”‚  â”‚  - IAuthenticationService                      â”‚  â”‚
+â”‚  â”‚  - IMenuRepository                             â”‚  â”‚
+â”‚  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜  â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+                         â–¼
+        â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”´â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+        â–¼                                 â–¼
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”           â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚   Module A.dll    â”‚           â”‚   Module B.dll    â”‚
+â”‚  (Team A ê°œë°œ)     â”‚           â”‚  (Team B ê°œë°œ)     â”‚
+â”‚                   â”‚           â”‚                   â”‚
+â”‚  public class     â”‚           â”‚  public class     â”‚
+â”‚  FormA :          â”‚           â”‚  FormB :          â”‚
+â”‚  BaseWorkControl  â”‚           â”‚  BaseWorkControl  â”‚
+â”‚  {                â”‚           â”‚  {                â”‚
+â”‚    // DI ìƒì„±ì   â”‚           â”‚    // DI ìƒì„±ì   â”‚
+â”‚    public FormA(  â”‚           â”‚    public FormB(  â”‚
+â”‚      IBizLogic,   â”‚?â”€â”€â”€â”€â”€â”€â”€â”€â”€?â”‚      IEventBus,   â”‚
+â”‚      IEventBus)   â”‚ EventBus  â”‚      IBizLogic)   â”‚
+â”‚    { }            â”‚   í†µì‹      â”‚    { }            â”‚
+â”‚  }                â”‚           â”‚  }                â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜           â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
 ```
 
-### ÇÊ¼ö ±â´É
+### í•„ìˆ˜ ê¸°ëŠ¥
 
 #### 1. DI (Dependency Injection)
 
 ```csharp
-// Shell¿¡¼­ ¸ğµâ ÀÎ½ºÅÏ½º »ı¼º
+// Shellì—ì„œ ëª¨ë“ˆ ì¸ìŠ¤í„´ìŠ¤ ìƒì„±
 var control = (Control)ActivatorUtilities.CreateInstance(_serviceProvider, type);
 
-// ? ¸ğµâ¿¡¼­ »ı¼ºÀÚ ÁÖÀÔ
+// ? ëª¨ë“ˆì—ì„œ ìƒì„±ì ì£¼ì…
 public FormA(IBizLogicFactory logicFactory, IEventAggregator eventBus)
 {
     _logicFactory = logicFactory;
@@ -178,14 +178,14 @@ public FormA(IBizLogicFactory logicFactory, IEventAggregator eventBus)
 }
 ```
 
-**¿ä±¸»çÇ×:**
-- ShellÀÇ `ServiceProvider`°¡ ¸ğµâÀÇ Å¸ÀÔÀ» ÀÎ½ÄÇØ¾ß ÇÔ
-- ¸ğµâÀÌ **±âº» ·Îµå ÄÁÅØ½ºÆ®**¿¡ ·ÎµåµÇ¾î¾ß ÇÔ
+**ìš”êµ¬ì‚¬í•­:**
+- Shellì˜ `ServiceProvider`ê°€ ëª¨ë“ˆì˜ íƒ€ì…ì„ ì¸ì‹í•´ì•¼ í•¨
+- ëª¨ë“ˆì´ **ê¸°ë³¸ ë¡œë“œ ì»¨í…ìŠ¤íŠ¸**ì— ë¡œë“œë˜ì–´ì•¼ í•¨
 
-#### 2. EventBus (¸ğµâ °£ Åë½Å)
+#### 2. EventBus (ëª¨ë“ˆ ê°„ í†µì‹ )
 
 ```csharp
-// Module A¿¡¼­ ÀÌº¥Æ® ¹ßÇà
+// Module Aì—ì„œ ì´ë²¤íŠ¸ ë°œí–‰
 _eventAggregator.GetEvent<PatientSelectedEvent>()
     .Publish(new PatientSelectedEventPayload 
     { 
@@ -193,119 +193,119 @@ _eventAggregator.GetEvent<PatientSelectedEvent>()
         Source = "ModuleA"
     });
 
-// Module B¿¡¼­ ÀÌº¥Æ® ¼ö½Å
+// Module Bì—ì„œ ì´ë²¤íŠ¸ ìˆ˜ì‹ 
 _eventAggregator.GetEvent<PatientSelectedEvent>()
     .Subscribe(OnPatientSelected);
 
 void OnPatientSelected(PatientSelectedEventPayload payload)
 {
-    // payload Ã³¸®
+    // payload ì²˜ë¦¬
 }
 ```
 
-**¿ä±¸»çÇ×:**
-- ¸ğµç ¸ğµâÀÌ **°°Àº Å¸ÀÔ**À¸·Î ÀÎ½ÄÇØ¾ß ÇÔ
-- `PatientSelectedEventPayload` Å¸ÀÔÀÌ ¸ğµç ÄÁÅØ½ºÆ®¿¡¼­ µ¿ÀÏÇØ¾ß ÇÔ
+**ìš”êµ¬ì‚¬í•­:**
+- ëª¨ë“  ëª¨ë“ˆì´ **ê°™ì€ íƒ€ì…**ìœ¼ë¡œ ì¸ì‹í•´ì•¼ í•¨
+- `PatientSelectedEventPayload` íƒ€ì…ì´ ëª¨ë“  ì»¨í…ìŠ¤íŠ¸ì—ì„œ ë™ì¼í•´ì•¼ í•¨
 
-#### 3. °øÀ¯ ¾î¼Àºí¸®
+#### 3. ê³µìœ  ì–´ì…ˆë¸”ë¦¬
 
 ```
-°øÀ¯ ¾î¼Àºí¸® (¸ğµç ¸ğµâÀÌ °øÅë »ç¿ë):
-¦§¦¡ nU3.Core (ÇÁ·¹ÀÓ¿öÅ© ÄÚ¾î)
-¦§¦¡ nU3.Core.UI (UI ±â¹İ Å¬·¡½º)
-¦§¦¡ nU3.Models (DTO ¸ğµ¨)
-¦§¦¡ nU3.Connectivity (¼­¹ö ¿¬°á)
-¦¦¦¡ Microsoft.Extensions.DependencyInjection.Abstractions
+ê³µìœ  ì–´ì…ˆë¸”ë¦¬ (ëª¨ë“  ëª¨ë“ˆì´ ê³µí†µ ì‚¬ìš©):
+â”œâ”€ nU3.Core (í”„ë ˆì„ì›Œí¬ ì½”ì–´)
+â”œâ”€ nU3.Core.UI (UI ê¸°ë°˜ í´ë˜ìŠ¤)
+â”œâ”€ nU3.Models (DTO ëª¨ë¸)
+â”œâ”€ nU3.Connectivity (ì„œë²„ ì—°ê²°)
+â””â”€ Microsoft.Extensions.DependencyInjection.Abstractions
 ```
 
-**¿ä±¸»çÇ×:**
-- ¸ğµç ¸ğµâÀÌ **°°Àº ÀÎ½ºÅÏ½º**¸¦ °øÀ¯ÇØ¾ß ÇÔ
-- Áßº¹ ·Îµå ¹æÁö (¸Ş¸ğ¸® Àı¾à)
+**ìš”êµ¬ì‚¬í•­:**
+- ëª¨ë“  ëª¨ë“ˆì´ **ê°™ì€ ì¸ìŠ¤í„´ìŠ¤**ë¥¼ ê³µìœ í•´ì•¼ í•¨
+- ì¤‘ë³µ ë¡œë“œ ë°©ì§€ (ë©”ëª¨ë¦¬ ì ˆì•½)
 
 ---
 
-## ? ÃÖÁ¾ Ã¤ÅÃ Àü·«: LoadFrom + Shadow Copy
+## ? ìµœì¢… ì±„íƒ ì „ëµ: LoadFrom + Shadow Copy
 
-### Àü·« °³¿ä
+### ì „ëµ ê°œìš”
 
 ```
-¦£¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¤
-¦¢              LoadFrom (±âº» ·Îµå ÄÁÅØ½ºÆ®)           ¦¢
-¦¢  ¦£¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¤   ¦¢
-¦¢  ¦¢ ? DI ¿Ïº® Áö¿ø                              ¦¢   ¦¢
-¦¢  ¦¢ ? EventBus Å¸ÀÔ È£È¯                        ¦¢   ¦¢
-¦¢  ¦¢ ? °øÀ¯ ¾î¼Àºí¸® ÀÚµ¿ °ü¸®                   ¦¢   ¦¢
-¦¢  ¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¥   ¦¢
-¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¥
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚              LoadFrom (ê¸°ë³¸ ë¡œë“œ ì»¨í…ìŠ¤íŠ¸)           â”‚
+â”‚  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”   â”‚
+â”‚  â”‚ ? DI ì™„ë²½ ì§€ì›                              â”‚   â”‚
+â”‚  â”‚ ? EventBus íƒ€ì… í˜¸í™˜                        â”‚   â”‚
+â”‚  â”‚ ? ê³µìœ  ì–´ì…ˆë¸”ë¦¬ ìë™ ê´€ë¦¬                   â”‚   â”‚
+â”‚  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜   â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
                       +
-¦£¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¤
-¦¢          Shadow Copy (ÆÄÀÏ Àá±İ È¸ÇÇ)                ¦¢
-¦¢  ¦£¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¤   ¦¢
-¦¢  ¦¢ ? Hot Deploy °¡´É                           ¦¢   ¦¢
-¦¢  ¦¢ ? ¿øº» ÆÄÀÏ Àá±İ ¹æÁö                       ¦¢   ¦¢
-¦¢  ¦¢ ? ¹öÀüº° µğ·ºÅä¸® °ü¸®                      ¦¢   ¦¢
-¦¢  ¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¥   ¦¢
-¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¥
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚          Shadow Copy (íŒŒì¼ ì ê¸ˆ íšŒí”¼)                â”‚
+â”‚  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”   â”‚
+â”‚  â”‚ ? Hot Deploy ê°€ëŠ¥                           â”‚   â”‚
+â”‚  â”‚ ? ì›ë³¸ íŒŒì¼ ì ê¸ˆ ë°©ì§€                       â”‚   â”‚
+â”‚  â”‚ ? ë²„ì „ë³„ ë””ë ‰í† ë¦¬ ê´€ë¦¬                      â”‚   â”‚
+â”‚  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜   â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
                       +
-¦£¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¤
-¦¢           ¹öÀü Ãæµ¹ Á¤Ã¥ (Å¸ÀÔ ÀÏ°ü¼º)               ¦¢
-¦¢  ¦£¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¤   ¦¢
-¦¢  ¦¢ ? °°Àº ¸ğµâÀº °°Àº ¹öÀü »ç¿ë                ¦¢   ¦¢
-¦¢  ¦¢ ? ¹öÀü Ãæµ¹ °¨Áö ¹× °æ°í                    ¦¢   ¦¢
-¦¢  ¦¢ ? »ç¿ëÀÚ¿¡°Ô Àç½ÃÀÛ ±ÇÀå                    ¦¢   ¦¢
-¦¢  ¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¥   ¦¢
-¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¥
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚           ë²„ì „ ì¶©ëŒ ì •ì±… (íƒ€ì… ì¼ê´€ì„±)               â”‚
+â”‚  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”   â”‚
+â”‚  â”‚ ? ê°™ì€ ëª¨ë“ˆì€ ê°™ì€ ë²„ì „ ì‚¬ìš©                â”‚   â”‚
+â”‚  â”‚ ? ë²„ì „ ì¶©ëŒ ê°ì§€ ë° ê²½ê³                     â”‚   â”‚
+â”‚  â”‚ ? ì‚¬ìš©ìì—ê²Œ ì¬ì‹œì‘ ê¶Œì¥                    â”‚   â”‚
+â”‚  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜   â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
 ```
 
-### ¿Ö ÀÌ Àü·«ÀÎ°¡?
+### ì™œ ì´ ì „ëµì¸ê°€?
 
-| Ç×¸ñ | LoadFrom | LoadFile | ALC | ¼±ÅÃ ÀÌÀ¯ |
+| í•­ëª© | LoadFrom | LoadFile | ALC | ì„ íƒ ì´ìœ  |
 |------|----------|----------|-----|-----------|
-| **DI Áö¿ø** | ? | ? | ?? | DI´Â ÇÊ¼ö |
-| **EventBus** | ? | ? | ?? | ¸ğµâ °£ Åë½Å ÇÊ¼ö |
-| **°øÀ¯ ÀÇÁ¸¼º** | ? | ? | ?? | ¸Ş¸ğ¸® È¿À² |
-| **Hot Deploy** | ?? | ? | ? | Shadow Copy·Î ÇØ°á |
-| **±¸Çö º¹Àâµµ** | ? | ? | ? | ´Ü¼øÇÔ ¼±È£ |
+| **DI ì§€ì›** | ? | ? | ?? | DIëŠ” í•„ìˆ˜ |
+| **EventBus** | ? | ? | ?? | ëª¨ë“ˆ ê°„ í†µì‹  í•„ìˆ˜ |
+| **ê³µìœ  ì˜ì¡´ì„±** | ? | ? | ?? | ë©”ëª¨ë¦¬ íš¨ìœ¨ |
+| **Hot Deploy** | ?? | ? | ? | Shadow Copyë¡œ í•´ê²° |
+| **êµ¬í˜„ ë³µì¡ë„** | ? | ? | ? | ë‹¨ìˆœí•¨ ì„ í˜¸ |
 
-**°á·Ğ:** LoadFromÀÌ SI ÇÁ·ÎÁ§Æ®¿¡ °¡Àå ÀûÇÕ
+**ê²°ë¡ :** LoadFromì´ SI í”„ë¡œì íŠ¸ì— ê°€ì¥ ì í•©
 
 ---
 
-## ?? ±¸Çö »ó¼¼
+## ?? êµ¬í˜„ ìƒì„¸
 
-### 1. µğ·ºÅä¸® ±¸Á¶
+### 1. ë””ë ‰í† ë¦¬ êµ¬ì¡°
 
 ```
 C:\nU3Framework\
-¦§¦¡¦¡ Runtime\               # ½ÇÇà µğ·ºÅä¸®
-¦¢   ¦§¦¡¦¡ nU3.Shell.exe
-¦¢   ¦§¦¡¦¡ nU3.Core.dll       # °øÀ¯ ¾î¼Àºí¸®
-¦¢   ¦§¦¡¦¡ nU3.Models.dll     # °øÀ¯ ¾î¼Àºí¸®
-¦¢   ¦¦¦¡¦¡ Modules\
-¦¢       ¦§¦¡¦¡ OCS\
-¦¢       ¦¢   ¦¦¦¡¦¡ IN\
-¦¢       ¦¢       ¦¦¦¡¦¡ OrderEntry.dll   # ¸ğµâ DLL
-¦¢       ¦¦¦¡¦¡ EMR\
-¦¢           ¦¦¦¡¦¡ IN\
-¦¢               ¦¦¦¡¦¡ Worklist.dll
-¦¢
-¦¦¦¡¦¡ Cache\                 # Ä³½Ã µğ·ºÅä¸®
-    ¦§¦¡¦¡ Downloads\         # ´Ù¿î·Îµå ÀÓ½Ã ÀúÀå
-    ¦¦¦¡¦¡ Shadow\            # Shadow Copy µğ·ºÅä¸®
-        ¦§¦¡¦¡ OCS_IN_OrderEntry\
-        ¦¢   ¦§¦¡¦¡ 1.0.0\     # ¹öÀüº° µğ·ºÅä¸®
-        ¦¢   ¦¢   ¦§¦¡¦¡ OrderEntry.dll
-        ¦¢   ¦¢   ¦¦¦¡¦¡ Dependencies.dll
-        ¦¢   ¦¦¦¡¦¡ 1.1.0\
-        ¦¢       ¦¦¦¡¦¡ OrderEntry.dll
-        ¦¦¦¡¦¡ EMR_IN_Worklist\
-            ¦¦¦¡¦¡ 1.0.0\
-                ¦¦¦¡¦¡ Worklist.dll
+â”œâ”€â”€ Runtime\               # ì‹¤í–‰ ë””ë ‰í† ë¦¬
+â”‚   â”œâ”€â”€ nU3.Shell.exe
+â”‚   â”œâ”€â”€ nU3.Core.dll       # ê³µìœ  ì–´ì…ˆë¸”ë¦¬
+â”‚   â”œâ”€â”€ nU3.Models.dll     # ê³µìœ  ì–´ì…ˆë¸”ë¦¬
+â”‚   â””â”€â”€ Modules\
+â”‚       â”œâ”€â”€ OCS\
+â”‚       â”‚   â””â”€â”€ IN\
+â”‚       â”‚       â””â”€â”€ OrderEntry.dll   # ëª¨ë“ˆ DLL
+â”‚       â””â”€â”€ EMR\
+â”‚           â””â”€â”€ IN\
+â”‚               â””â”€â”€ Worklist.dll
+â”‚
+â””â”€â”€ Cache\                 # ìºì‹œ ë””ë ‰í† ë¦¬
+    â”œâ”€â”€ Downloads\         # ë‹¤ìš´ë¡œë“œ ì„ì‹œ ì €ì¥
+    â””â”€â”€ Shadow\            # Shadow Copy ë””ë ‰í† ë¦¬
+        â”œâ”€â”€ OCS_IN_OrderEntry\
+        â”‚   â”œâ”€â”€ 1.0.0\     # ë²„ì „ë³„ ë””ë ‰í† ë¦¬
+        â”‚   â”‚   â”œâ”€â”€ OrderEntry.dll
+        â”‚   â”‚   â””â”€â”€ Dependencies.dll
+        â”‚   â””â”€â”€ 1.1.0\
+        â”‚       â””â”€â”€ OrderEntry.dll
+        â””â”€â”€ EMR_IN_Worklist\
+            â””â”€â”€ 1.0.0\
+                â””â”€â”€ Worklist.dll
 ```
 
-### 2. ModuleLoaderService ÇÙ½É ÄÚµå
+### 2. ModuleLoaderService í•µì‹¬ ì½”ë“œ
 
-#### 2.1 ÃÊ±âÈ­
+#### 2.1 ì´ˆê¸°í™”
 
 ```csharp
 public class ModuleLoaderService
@@ -344,38 +344,38 @@ public class ModuleLoaderService
 }
 ```
 
-#### 2.2 Shadow Copy »ı¼º
+#### 2.2 Shadow Copy ìƒì„±
 
 ```csharp
 /// <summary>
-/// Shadow Copy¸¦ »ı¼ºÇÏ¿© ¿øº» ÆÄÀÏ Àá±İÀ» ¹æÁöÇÕ´Ï´Ù.
-/// Hot Deploy¸¦ Áö¿øÇÏ¸é¼­µµ DI È£È¯¼ºÀ» À¯ÁöÇÕ´Ï´Ù.
+/// Shadow Copyë¥¼ ìƒì„±í•˜ì—¬ ì›ë³¸ íŒŒì¼ ì ê¸ˆì„ ë°©ì§€í•©ë‹ˆë‹¤.
+/// Hot Deployë¥¼ ì§€ì›í•˜ë©´ì„œë„ DI í˜¸í™˜ì„±ì„ ìœ ì§€í•©ë‹ˆë‹¤.
 /// </summary>
 private string CreateShadowCopy(string originalPath, string moduleId, string version)
 {
     try
     {
-        // ¸ğµâº° Shadow µğ·ºÅä¸® »ı¼º
+        // ëª¨ë“ˆë³„ Shadow ë””ë ‰í† ë¦¬ ìƒì„±
         string moduleShadowDir = Path.Combine(_shadowCopyDirectory, moduleId, version);
         if (!Directory.Exists(moduleShadowDir))
         {
             Directory.CreateDirectory(moduleShadowDir);
         }
 
-        // Shadow ÆÄÀÏ °æ·Î
+        // Shadow íŒŒì¼ ê²½ë¡œ
         string shadowPath = Path.Combine(moduleShadowDir, Path.GetFileName(originalPath));
 
-        // ÀÌ¹Ì Á¸ÀçÇÏ¸é Àç»ç¿ë (°°Àº ¹öÀü)
+        // ì´ë¯¸ ì¡´ì¬í•˜ë©´ ì¬ì‚¬ìš© (ê°™ì€ ë²„ì „)
         if (File.Exists(shadowPath))
         {
             Debug.WriteLine($"[ModuleLoader] Using existing shadow copy: {shadowPath}");
             return shadowPath;
         }
 
-        // ¿øº» ÆÄÀÏÀ» Shadow À§Ä¡·Î º¹»ç
+        // ì›ë³¸ íŒŒì¼ì„ Shadow ìœ„ì¹˜ë¡œ ë³µì‚¬
         File.Copy(originalPath, shadowPath, overwrite: true);
 
-        // ÀÇÁ¸¼º DLLµµ º¹»ç (°°Àº µğ·ºÅä¸®¿¡ ÀÖ´Â °æ¿ì)
+        // ì˜ì¡´ì„± DLLë„ ë³µì‚¬ (ê°™ì€ ë””ë ‰í† ë¦¬ì— ìˆëŠ” ê²½ìš°)
         string originalDir = Path.GetDirectoryName(originalPath);
         if (!string.IsNullOrEmpty(originalDir))
         {
@@ -390,13 +390,13 @@ private string CreateShadowCopy(string originalPath, string moduleId, string ver
                     }
                     catch
                     {
-                        // ÀÇÁ¸¼º º¹»ç ½ÇÆĞ´Â ¹«½Ã (ÀÌ¹Ì ·ÎµåµÇ¾î ÀÖÀ» ¼ö ÀÖÀ½)
+                        // ì˜ì¡´ì„± ë³µì‚¬ ì‹¤íŒ¨ëŠ” ë¬´ì‹œ (ì´ë¯¸ ë¡œë“œë˜ì–´ ìˆì„ ìˆ˜ ìˆìŒ)
                     }
                 }
             }
         }
 
-        // Shadow °æ·Î ÃßÀû (Á¤¸®¿ë)
+        // Shadow ê²½ë¡œ ì¶”ì  (ì •ë¦¬ìš©)
         _shadowCopyPaths[moduleId] = moduleShadowDir;
 
         Debug.WriteLine($"[ModuleLoader] Created shadow copy: {originalPath} -> {shadowPath}");
@@ -405,30 +405,30 @@ private string CreateShadowCopy(string originalPath, string moduleId, string ver
     catch (Exception ex)
     {
         Debug.WriteLine($"[ModuleLoader] !!! Failed to create shadow copy: {ex.Message}");
-        // Shadow copy ½ÇÆĞ ½Ã ¿øº» »ç¿ë (Àç½ÃÀÛ ÇÊ¿ä)
+        // Shadow copy ì‹¤íŒ¨ ì‹œ ì›ë³¸ ì‚¬ìš© (ì¬ì‹œì‘ í•„ìš”)
         return originalPath;
     }
 }
 ```
 
-#### 2.3 ReloadModule (¹öÀü Ãæµ¹ °¨Áö)
+#### 2.3 ReloadModule (ë²„ì „ ì¶©ëŒ ê°ì§€)
 
 ```csharp
 private void ReloadModule(string dllPath, string moduleId, string version)
 {
     try
     {
-        // ÀÌ¹Ì ·ÎµåµÈ ¹öÀü È®ÀÎ
+        // ì´ë¯¸ ë¡œë“œëœ ë²„ì „ í™•ì¸
         if (_loadedModuleVersions.TryGetValue(moduleId, out var currentVersion))
         {
-            // °°Àº ¹öÀüÀÌ¸é ½ºÅµ
+            // ê°™ì€ ë²„ì „ì´ë©´ ìŠ¤í‚µ
             if (string.Equals(currentVersion, version, StringComparison.OrdinalIgnoreCase))
             {
                 Debug.WriteLine($"[ModuleLoader] Module {moduleId} v{version} already loaded. Reusing existing version.");
                 return;
             }
             
-            // ?? ´Ù¸¥ ¹öÀü °¨Áö - ¹öÀü ºÒÀÏÄ¡ °æ°í
+            // ?? ë‹¤ë¥¸ ë²„ì „ ê°ì§€ - ë²„ì „ ë¶ˆì¼ì¹˜ ê²½ê³ 
             Debug.WriteLine($"[ModuleLoader] !!! VERSION CONFLICT DETECTED !!!");
             Debug.WriteLine($"[ModuleLoader] Module: {moduleId}");
             Debug.WriteLine($"[ModuleLoader] Current Version: {currentVersion}");
@@ -436,17 +436,17 @@ private void ReloadModule(string dllPath, string moduleId, string version)
             Debug.WriteLine($"[ModuleLoader] Action: Using EXISTING version to prevent type mismatch.");
             Debug.WriteLine($"[ModuleLoader] Recommendation: Close all instances of this module and restart.");
             
-            // ¹öÀü Ãæµ¹ ÀÌº¥Æ® ¹ß»ı
+            // ë²„ì „ ì¶©ëŒ ì´ë²¤íŠ¸ ë°œìƒ
             RaiseVersionConflict(moduleId, currentVersion, version);
             
-            // ±âÁ¸ ¹öÀü À¯Áö (Å¸ÀÔ ºÒÀÏÄ¡ ¹æÁö)
+            // ê¸°ì¡´ ë²„ì „ ìœ ì§€ (íƒ€ì… ë¶ˆì¼ì¹˜ ë°©ì§€)
             return;
         }
         
-        // ÃÖÃÊ ·Îµå - Shadow Copy »ı¼º
+        // ìµœì´ˆ ë¡œë“œ - Shadow Copy ìƒì„±
         string shadowPath = CreateShadowCopy(dllPath, moduleId, version);
         
-        // LoadFromÀ» »ç¿ëÇÏ¿© ±âº» ·Îµå ÄÁÅØ½ºÆ®¿¡¼­ ·Îµå (DI È£È¯¼º À¯Áö)
+        // LoadFromì„ ì‚¬ìš©í•˜ì—¬ ê¸°ë³¸ ë¡œë“œ ì»¨í…ìŠ¤íŠ¸ì—ì„œ ë¡œë“œ (DI í˜¸í™˜ì„± ìœ ì§€)
         var assembly = Assembly.LoadFrom(shadowPath);
         
         foreach (var type in assembly.GetTypes())
@@ -468,7 +468,7 @@ private void ReloadModule(string dllPath, string moduleId, string version)
 }
 ```
 
-#### 2.4 DeployToRuntime (ÆÄÀÏ Àá±İ Ã³¸®)
+#### 2.4 DeployToRuntime (íŒŒì¼ ì ê¸ˆ ì²˜ë¦¬)
 
 ```csharp
 private void DeployToRuntime(string cacheFile, string runtimeFile, string moduleName, string version)
@@ -484,12 +484,12 @@ private void DeployToRuntime(string cacheFile, string runtimeFile, string module
     }
     catch (IOException ioEx)
     {
-        // ? ÆÄÀÏ Àá±İ - Shadow Copy·Î Hot Deploy °¡´É
+        // ? íŒŒì¼ ì ê¸ˆ - Shadow Copyë¡œ Hot Deploy ê°€ëŠ¥
         Debug.WriteLine($"[ModuleLoader] Runtime file locked: {moduleName}. Using shadow copy for hot deploy.");
         Debug.WriteLine($"[ModuleLoader] Original file will be updated on next restart. Shadow copy allows immediate use.");
         
-        // Shadow copy ¹æ½ÄÀÌ¹Ç·Î ¿¹¿Ü¸¦ ´øÁöÁö ¾ÊÀ½
-        // ´ÙÀ½ ReloadModule¿¡¼­ shadow copy »ç¿ë
+        // Shadow copy ë°©ì‹ì´ë¯€ë¡œ ì˜ˆì™¸ë¥¼ ë˜ì§€ì§€ ì•ŠìŒ
+        // ë‹¤ìŒ ReloadModuleì—ì„œ shadow copy ì‚¬ìš©
     }
     catch (Exception ex)
     {
@@ -501,35 +501,35 @@ private void DeployToRuntime(string cacheFile, string runtimeFile, string module
 
 ---
 
-## ?? ¹öÀü Ãæµ¹ Ã³¸®
+## ?? ë²„ì „ ì¶©ëŒ ì²˜ë¦¬
 
-### ¹®Á¦ ½Ã³ª¸®¿À
+### ë¬¸ì œ ì‹œë‚˜ë¦¬ì˜¤
 
 ```
-½Ã°£¼ø¼­:
-1. A.dll v1.0 ·Îµå ¡æ Shadow Copy »ı¼º
-2. Shell¿¡¼­ FormA ½ÇÇà (A.dll v1.0ÀÇ Å¸ÀÔ)
-3. ¼­¹ö¿¡¼­ A.dll v1.1 ´Ù¿î·Îµå
-4. FormB ½ÇÇà ¿äÃ» ¡æ A.dll v1.1ÀÇ Shadow Copy »ı¼º ¿äÃ»
-5. ?? ¹öÀü Ãæµ¹ °¨Áö!
+ì‹œê°„ìˆœì„œ:
+1. A.dll v1.0 ë¡œë“œ â†’ Shadow Copy ìƒì„±
+2. Shellì—ì„œ FormA ì‹¤í–‰ (A.dll v1.0ì˜ íƒ€ì…)
+3. ì„œë²„ì—ì„œ A.dll v1.1 ë‹¤ìš´ë¡œë“œ
+4. FormB ì‹¤í–‰ ìš”ì²­ â†’ A.dll v1.1ì˜ Shadow Copy ìƒì„± ìš”ì²­
+5. ?? ë²„ì „ ì¶©ëŒ ê°ì§€!
 ```
 
-### ¹ß»ı °¡´ÉÇÑ ¹®Á¦
+### ë°œìƒ ê°€ëŠ¥í•œ ë¬¸ì œ
 
-| ¹®Á¦ | ¼³¸í | À§Çèµµ |
+| ë¬¸ì œ | ì„¤ëª… | ìœ„í—˜ë„ |
 |------|------|--------|
-| **Å¸ÀÔ ºÒÀÏÄ¡** | FormA(v1.0)¿Í FormB(v1.1)°¡ ¼­·Î ´Ù¸¥ Assembly | ?? ³ôÀ½ |
-| **°øÀ¯ »óÅÂ ±úÁü** | static º¯¼ö, ½Ì±ÛÅæÀÌ µÎ ¹öÀü¿¡¼­ º°µµ Á¸Àç | ?? ³ôÀ½ |
-| **EventBus ¿À·ù** | Å¸ÀÔ °Ë»ç ½ÇÆĞ (`is`, `as` ¿¬»êÀÚ) | ?? ³ôÀ½ |
-| **DI Ãæµ¹** | °°Àº ÀÎÅÍÆäÀÌ½º, ´Ù¸¥ ±¸Çö ¹öÀü | ?? Áß°£ |
+| **íƒ€ì… ë¶ˆì¼ì¹˜** | FormA(v1.0)ì™€ FormB(v1.1)ê°€ ì„œë¡œ ë‹¤ë¥¸ Assembly | ?? ë†’ìŒ |
+| **ê³µìœ  ìƒíƒœ ê¹¨ì§** | static ë³€ìˆ˜, ì‹±ê¸€í†¤ì´ ë‘ ë²„ì „ì—ì„œ ë³„ë„ ì¡´ì¬ | ?? ë†’ìŒ |
+| **EventBus ì˜¤ë¥˜** | íƒ€ì… ê²€ì‚¬ ì‹¤íŒ¨ (`is`, `as` ì—°ì‚°ì) | ?? ë†’ìŒ |
+| **DI ì¶©ëŒ** | ê°™ì€ ì¸í„°í˜ì´ìŠ¤, ë‹¤ë¥¸ êµ¬í˜„ ë²„ì „ | ?? ì¤‘ê°„ |
 
-### ÇØ°á ¹æ¹ı: ¹öÀü °­Á¦ Á¤Ã¥
+### í•´ê²° ë°©ë²•: ë²„ì „ ê°•ì œ ì •ì±…
 
 ```csharp
-// ¹öÀü Ãæµ¹ ÀÌº¥Æ®
+// ë²„ì „ ì¶©ëŒ ì´ë²¤íŠ¸
 public event EventHandler<ModuleVersionConflictEventArgs>? VersionConflict;
 
-// ¹öÀü Ãæµ¹ ÀÌº¥Æ® ÀÎÀÚ
+// ë²„ì „ ì¶©ëŒ ì´ë²¤íŠ¸ ì¸ì
 public class ModuleVersionConflictEventArgs : EventArgs
 {
     public string ModuleId { get; set; }
@@ -539,45 +539,45 @@ public class ModuleVersionConflictEventArgs : EventArgs
 }
 ```
 
-#### Shell¿¡¼­ ÀÌº¥Æ® ±¸µ¶
+#### Shellì—ì„œ ì´ë²¤íŠ¸ êµ¬ë…
 
 ```csharp
-// nUShell.cs »ı¼ºÀÚ
+// nUShell.cs ìƒì„±ì
 _moduleLoader.VersionConflict += OnModuleVersionConflict;
 
 private void OnModuleVersionConflict(object sender, ModuleVersionConflictEventArgs e)
 {
-    // UI ½º·¹µå¿¡¼­ ½ÇÇà
+    // UI ìŠ¤ë ˆë“œì—ì„œ ì‹¤í–‰
     if (this.InvokeRequired)
     {
         this.Invoke(new Action(() => OnModuleVersionConflict(sender, e)));
         return;
     }
 
-    // ·Î±× ±â·Ï
+    // ë¡œê·¸ ê¸°ë¡
     LogManager.Warning(
-        $"¸ğµâ ¹öÀü Ãæµ¹ °¨Áö - Module: {e.ModuleId}, " +
+        $"ëª¨ë“ˆ ë²„ì „ ì¶©ëŒ ê°ì§€ - Module: {e.ModuleId}, " +
         $"Current: v{e.CurrentVersion}, Requested: v{e.RequestedVersion}", 
         "Shell");
 
-    // »ç¿ëÀÚ¿¡°Ô ¾Ë¸²
+    // ì‚¬ìš©ìì—ê²Œ ì•Œë¦¼
     var result = XtraMessageBox.Show(
-        $"?? ¸ğµâ ¹öÀü ºÒÀÏÄ¡ °¨Áö\n\n" +
-        $"¸ğµâ: {e.ModuleId}\n" +
-        $"ÇöÀç ·ÎµåµÈ ¹öÀü: v{e.CurrentVersion}\n" +
-        $"¿äÃ»µÈ ¹öÀü: v{e.RequestedVersion}\n\n" +
-        $"Å¸ÀÔ ºÒÀÏÄ¡¸¦ ¹æÁöÇÏ±â À§ÇØ ÇöÀç ¹öÀüÀ» °è¼Ó »ç¿ëÇÕ´Ï´Ù.\n\n" +
-        $"±ÇÀå »çÇ×:\n" +
-        $"- ÀÌ ¸ğµâÀÇ ¸ğµç ÀÎ½ºÅÏ½º(ÅÇ)¸¦ ´İÀ¸¼¼¿ä.\n" +
-        $"- ÇÁ·Î±×·¥À» Àç½ÃÀÛÇÏ¼¼¿ä.\n\n" +
-        $"ÇÁ·Î±×·¥À» Áö±İ Àç½ÃÀÛÇÏ½Ã°Ú½À´Ï±î?",
-        "¸ğµâ ¹öÀü Ãæµ¹",
+        $"?? ëª¨ë“ˆ ë²„ì „ ë¶ˆì¼ì¹˜ ê°ì§€\n\n" +
+        $"ëª¨ë“ˆ: {e.ModuleId}\n" +
+        $"í˜„ì¬ ë¡œë“œëœ ë²„ì „: v{e.CurrentVersion}\n" +
+        $"ìš”ì²­ëœ ë²„ì „: v{e.RequestedVersion}\n\n" +
+        $"íƒ€ì… ë¶ˆì¼ì¹˜ë¥¼ ë°©ì§€í•˜ê¸° ìœ„í•´ í˜„ì¬ ë²„ì „ì„ ê³„ì† ì‚¬ìš©í•©ë‹ˆë‹¤.\n\n" +
+        $"ê¶Œì¥ ì‚¬í•­:\n" +
+        $"- ì´ ëª¨ë“ˆì˜ ëª¨ë“  ì¸ìŠ¤í„´ìŠ¤(íƒ­)ë¥¼ ë‹«ìœ¼ì„¸ìš”.\n" +
+        $"- í”„ë¡œê·¸ë¨ì„ ì¬ì‹œì‘í•˜ì„¸ìš”.\n\n" +
+        $"í”„ë¡œê·¸ë¨ì„ ì§€ê¸ˆ ì¬ì‹œì‘í•˜ì‹œê² ìŠµë‹ˆê¹Œ?",
+        "ëª¨ë“ˆ ë²„ì „ ì¶©ëŒ",
         MessageBoxButtons.YesNo,
         MessageBoxIcon.Warning);
 
     if (result == DialogResult.Yes)
     {
-        LogManager.Info("»ç¿ëÀÚ°¡ ¹öÀü Ãæµ¹ ÇØ°áÀ» À§ÇØ Àç½ÃÀÛ ¼±ÅÃ", "Shell");
+        LogManager.Info("ì‚¬ìš©ìê°€ ë²„ì „ ì¶©ëŒ í•´ê²°ì„ ìœ„í•´ ì¬ì‹œì‘ ì„ íƒ", "Shell");
         Application.Restart();
         Environment.Exit(0);
     }
@@ -586,105 +586,105 @@ private void OnModuleVersionConflict(object sender, ModuleVersionConflictEventAr
 
 ---
 
-## ?? Hot Deploy ½Ã³ª¸®¿À
+## ?? Hot Deploy ì‹œë‚˜ë¦¬ì˜¤
 
-### ½Ã³ª¸®¿À 1: Á¤»ó ¾÷µ¥ÀÌÆ® (ÇÁ·Î±×·¥ ½ÇÇà ¾È µÊ)
-
-```
-1. ¼­¹ö¿¡¼­ Module A v1.1 ´Ù¿î·Îµå
-   ¦¦¦¡> Cache/Downloads/ModuleA.dll
-
-2. RuntimeÀ¸·Î º¹»ç ½Ãµµ
-   ¦§¦¡> ? ¼º°ø (ÆÄÀÏ Àá±İ ¾øÀ½)
-   ¦¦¦¡> Runtime/Modules/OCS/IN/OrderEntry.dll (v1.1)
-
-3. ReloadModule È£Ãâ
-   ¦§¦¡> Shadow Copy »ı¼º
-   ¦¢   ¦¦¦¡> Cache/Shadow/OCS_IN_OrderEntry/1.1.0/OrderEntry.dll
-   ¦§¦¡> LoadFrom(shadowPath)
-   ¦¦¦¡> ? v1.1 ·Îµå ¿Ï·á
-
-4. »ç¿ëÀÚ°¡ FormA ½ÇÇà
-   ¦¦¦¡> ? v1.1 ÀÎ½ºÅÏ½º »ç¿ë
-```
-
-### ½Ã³ª¸®¿À 2: Hot Deploy (ÇÁ·Î±×·¥ ½ÇÇà Áß)
+### ì‹œë‚˜ë¦¬ì˜¤ 1: ì •ìƒ ì—…ë°ì´íŠ¸ (í”„ë¡œê·¸ë¨ ì‹¤í–‰ ì•ˆ ë¨)
 
 ```
-1. FormA v1.0 ½ÇÇà Áß
-   ¦¦¦¡> Runtime/Modules/OCS/IN/OrderEntry.dll (v1.0) Àá±è
+1. ì„œë²„ì—ì„œ Module A v1.1 ë‹¤ìš´ë¡œë“œ
+   â””â”€> Cache/Downloads/ModuleA.dll
 
-2. ¼­¹ö¿¡¼­ Module A v1.1 ´Ù¿î·Îµå
-   ¦¦¦¡> Cache/Downloads/ModuleA.dll (v1.1)
+2. Runtimeìœ¼ë¡œ ë³µì‚¬ ì‹œë„
+   â”œâ”€> ? ì„±ê³µ (íŒŒì¼ ì ê¸ˆ ì—†ìŒ)
+   â””â”€> Runtime/Modules/OCS/IN/OrderEntry.dll (v1.1)
 
-3. RuntimeÀ¸·Î º¹»ç ½Ãµµ
-   ¦§¦¡> ? IOException (ÆÄÀÏ Àá±è)
-   ¦¦¦¡> ¿¹¿Ü ¹«½Ã (°è¼Ó ÁøÇà)
+3. ReloadModule í˜¸ì¶œ
+   â”œâ”€> Shadow Copy ìƒì„±
+   â”‚   â””â”€> Cache/Shadow/OCS_IN_OrderEntry/1.1.0/OrderEntry.dll
+   â”œâ”€> LoadFrom(shadowPath)
+   â””â”€> ? v1.1 ë¡œë“œ ì™„ë£Œ
 
-4. ReloadModule È£Ãâ
-   ¦§¦¡> ?? ¹öÀü Ãæµ¹ °¨Áö (v1.0 vs v1.1)
-   ¦§¦¡> ±âÁ¸ v1.0 À¯Áö (Å¸ÀÔ ÀÏ°ü¼º)
-   ¦¦¦¡> VersionConflict ÀÌº¥Æ® ¹ß»ı
-
-5. »ç¿ëÀÚ¿¡°Ô ¾Ë¸²
-   ¦£¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¤
-   ¦¢ ?? ¸ğµâ ¹öÀü ºÒÀÏÄ¡ °¨Áö       ¦¢
-   ¦¢ ÇöÀç: v1.0, ¿äÃ»: v1.1         ¦¢
-   ¦¢ Àç½ÃÀÛÇÏ½Ã°Ú½À´Ï±î?            ¦¢
-   ¦¢     [¿¹]    [¾Æ´Ï¿À]           ¦¢
-   ¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¥
-
-6a. »ç¿ëÀÚ°¡ [¾Æ´Ï¿À] ¼±ÅÃ
-    ¦¦¦¡> FormA °è¼Ó »ç¿ë (v1.0)
-
-6b. »ç¿ëÀÚ°¡ [¿¹] ¼±ÅÃ
-    ¦§¦¡> Application.Restart()
-    ¦¦¦¡> Àç½ÃÀÛ ÈÄ v1.1 ·Îµå
+4. ì‚¬ìš©ìê°€ FormA ì‹¤í–‰
+   â””â”€> ? v1.1 ì¸ìŠ¤í„´ìŠ¤ ì‚¬ìš©
 ```
 
-### ½Ã³ª¸®¿À 3: °°Àº ¹öÀü Àç·Îµå
+### ì‹œë‚˜ë¦¬ì˜¤ 2: Hot Deploy (í”„ë¡œê·¸ë¨ ì‹¤í–‰ ì¤‘)
 
 ```
-1. FormA v1.0 ·ÎµåµÊ
-   ¦¦¦¡> _loadedModuleVersions["OCS_IN_OrderEntry"] = "1.0.0"
+1. FormA v1.0 ì‹¤í–‰ ì¤‘
+   â””â”€> Runtime/Modules/OCS/IN/OrderEntry.dll (v1.0) ì ê¹€
 
-2. FormB ½ÇÇà ¿äÃ» (°°Àº ¸ğµâ)
-   ¦¦¦¡> ReloadModule È£Ãâ
+2. ì„œë²„ì—ì„œ Module A v1.1 ë‹¤ìš´ë¡œë“œ
+   â””â”€> Cache/Downloads/ModuleA.dll (v1.1)
 
-3. ¹öÀü È®ÀÎ
-   ¦§¦¡> currentVersion = "1.0.0"
-   ¦§¦¡> requestedVersion = "1.0.0"
-   ¦¦¦¡> ? °°Àº ¹öÀü ¡æ ½ºÅµ
+3. Runtimeìœ¼ë¡œ ë³µì‚¬ ì‹œë„
+   â”œâ”€> ? IOException (íŒŒì¼ ì ê¹€)
+   â””â”€> ì˜ˆì™¸ ë¬´ì‹œ (ê³„ì† ì§„í–‰)
 
-4. ±âÁ¸ Å¸ÀÔ Àç»ç¿ë
-   ¦¦¦¡> _progRegistry¿¡¼­ Å¸ÀÔ ¹İÈ¯
+4. ReloadModule í˜¸ì¶œ
+   â”œâ”€> ?? ë²„ì „ ì¶©ëŒ ê°ì§€ (v1.0 vs v1.1)
+   â”œâ”€> ê¸°ì¡´ v1.0 ìœ ì§€ (íƒ€ì… ì¼ê´€ì„±)
+   â””â”€> VersionConflict ì´ë²¤íŠ¸ ë°œìƒ
+
+5. ì‚¬ìš©ìì—ê²Œ ì•Œë¦¼
+   â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+   â”‚ ?? ëª¨ë“ˆ ë²„ì „ ë¶ˆì¼ì¹˜ ê°ì§€       â”‚
+   â”‚ í˜„ì¬: v1.0, ìš”ì²­: v1.1         â”‚
+   â”‚ ì¬ì‹œì‘í•˜ì‹œê² ìŠµë‹ˆê¹Œ?            â”‚
+   â”‚     [ì˜ˆ]    [ì•„ë‹ˆì˜¤]           â”‚
+   â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+
+6a. ì‚¬ìš©ìê°€ [ì•„ë‹ˆì˜¤] ì„ íƒ
+    â””â”€> FormA ê³„ì† ì‚¬ìš© (v1.0)
+
+6b. ì‚¬ìš©ìê°€ [ì˜ˆ] ì„ íƒ
+    â”œâ”€> Application.Restart()
+    â””â”€> ì¬ì‹œì‘ í›„ v1.1 ë¡œë“œ
+```
+
+### ì‹œë‚˜ë¦¬ì˜¤ 3: ê°™ì€ ë²„ì „ ì¬ë¡œë“œ
+
+```
+1. FormA v1.0 ë¡œë“œë¨
+   â””â”€> _loadedModuleVersions["OCS_IN_OrderEntry"] = "1.0.0"
+
+2. FormB ì‹¤í–‰ ìš”ì²­ (ê°™ì€ ëª¨ë“ˆ)
+   â””â”€> ReloadModule í˜¸ì¶œ
+
+3. ë²„ì „ í™•ì¸
+   â”œâ”€> currentVersion = "1.0.0"
+   â”œâ”€> requestedVersion = "1.0.0"
+   â””â”€> ? ê°™ì€ ë²„ì „ â†’ ìŠ¤í‚µ
+
+4. ê¸°ì¡´ íƒ€ì… ì¬ì‚¬ìš©
+   â””â”€> _progRegistryì—ì„œ íƒ€ì… ë°˜í™˜
 ```
 
 ---
 
-## ?? °³¹ßÆÀ °¡ÀÌµå¶óÀÎ
+## ?? ê°œë°œíŒ€ ê°€ì´ë“œë¼ì¸
 
-### 1. ¸ğµâ °³¹ß ±ÔÄ¢
+### 1. ëª¨ë“ˆ ê°œë°œ ê·œì¹™
 
-#### ³×ÀÓ½ºÆäÀÌ½º ±ÔÄ¢
+#### ë„¤ì„ìŠ¤í˜ì´ìŠ¤ ê·œì¹™
 ```csharp
 namespace nU3.Modules.{System}.{SubSystem}.{ModuleName}
 
-// ¿¹½Ã
-namespace nU3.Modules.OCS.IN.OrderEntry  // ? ¿Ã¹Ù¸¥ Çü½Ä
-namespace nU3.Modules.EMR.IN.Worklist   // ? ¿Ã¹Ù¸¥ Çü½Ä
-namespace MyModule                       // ? Àß¸øµÈ Çü½Ä
+// ì˜ˆì‹œ
+namespace nU3.Modules.OCS.IN.OrderEntry  // ? ì˜¬ë°”ë¥¸ í˜•ì‹
+namespace nU3.Modules.EMR.IN.Worklist   // ? ì˜¬ë°”ë¥¸ í˜•ì‹
+namespace MyModule                       // ? ì˜ëª»ëœ í˜•ì‹
 ```
 
-#### Attribute »ç¿ë
+#### Attribute ì‚¬ìš©
 ```csharp
-[nU3ProgramInfo(typeof(OrderEntryControl), "Ã³¹æ ÀÔ·Â", "OCS_IN_ORDER_001")]
+[nU3ProgramInfo(typeof(OrderEntryControl), "ì²˜ë°© ì…ë ¥", "OCS_IN_ORDER_001")]
 public class OrderEntryControl : BaseWorkControl
 {
     private readonly IBizLogicFactory _logicFactory;
     private readonly IEventAggregator _eventBus;
     
-    // ? DI »ı¼ºÀÚ
+    // ? DI ìƒì„±ì
     public OrderEntryControl(
         IBizLogicFactory logicFactory,
         IEventAggregator eventBus)
@@ -697,10 +697,10 @@ public class OrderEntryControl : BaseWorkControl
 }
 ```
 
-### 2. °øÀ¯ ¾î¼Àºí¸® ¹öÀü ÅëÀÏ
+### 2. ê³µìœ  ì–´ì…ˆë¸”ë¦¬ ë²„ì „ í†µì¼
 
 ```xml
-<!-- ¸ğµç ¸ğµâ ÇÁ·ÎÁ§Æ®¿¡¼­ µ¿ÀÏÇÑ ¹öÀü »ç¿ë -->
+<!-- ëª¨ë“  ëª¨ë“ˆ í”„ë¡œì íŠ¸ì—ì„œ ë™ì¼í•œ ë²„ì „ ì‚¬ìš© -->
 <ItemGroup>
   <ProjectReference Include="..\..\..\..\nU3.Core\nU3.Core.csproj" />
   <ProjectReference Include="..\..\..\..\nU3.Models\nU3.Models.csproj" />
@@ -708,16 +708,16 @@ public class OrderEntryControl : BaseWorkControl
 </ItemGroup>
 ```
 
-**Áß¿ä:** °øÀ¯ ¾î¼Àºí¸®´Â ¹İµå½Ã °°Àº ¹öÀü »ç¿ë!
+**ì¤‘ìš”:** ê³µìœ  ì–´ì…ˆë¸”ë¦¬ëŠ” ë°˜ë“œì‹œ ê°™ì€ ë²„ì „ ì‚¬ìš©!
 
-### 3. EventBus »ç¿ë ÆĞÅÏ
+### 3. EventBus ì‚¬ìš© íŒ¨í„´
 
-#### ÀÌº¥Æ® Á¤ÀÇ (nU3.Core.Events)
+#### ì´ë²¤íŠ¸ ì •ì˜ (nU3.Core.Events)
 ```csharp
-// ÀÌº¥Æ® Å¬·¡½º
+// ì´ë²¤íŠ¸ í´ë˜ìŠ¤
 public class PatientSelectedEvent : PubSubEvent<PatientSelectedEventPayload> { }
 
-// ÆäÀÌ·Îµå
+// í˜ì´ë¡œë“œ
 public class PatientSelectedEventPayload
 {
     public PatientInfoDto Patient { get; set; }
@@ -725,9 +725,9 @@ public class PatientSelectedEventPayload
 }
 ```
 
-#### ¸ğµâ¿¡¼­ ÀÌº¥Æ® ¹ßÇà
+#### ëª¨ë“ˆì—ì„œ ì´ë²¤íŠ¸ ë°œí–‰
 ```csharp
-// Module A¿¡¼­ È¯ÀÚ ¼±ÅÃ ÀÌº¥Æ® ¹ßÇà
+// Module Aì—ì„œ í™˜ì ì„ íƒ ì´ë²¤íŠ¸ ë°œí–‰
 _eventBus.GetEvent<PatientSelectedEvent>()
     .Publish(new PatientSelectedEventPayload
     {
@@ -736,61 +736,61 @@ _eventBus.GetEvent<PatientSelectedEvent>()
     });
 ```
 
-#### ¸ğµâ¿¡¼­ ÀÌº¥Æ® ±¸µ¶
+#### ëª¨ë“ˆì—ì„œ ì´ë²¤íŠ¸ êµ¬ë…
 ```csharp
-// Module B¿¡¼­ È¯ÀÚ ¼±ÅÃ ÀÌº¥Æ® ¼ö½Å
+// Module Bì—ì„œ í™˜ì ì„ íƒ ì´ë²¤íŠ¸ ìˆ˜ì‹ 
 _eventBus.GetEvent<PatientSelectedEvent>()
     .Subscribe(OnPatientSelected);
 
 private void OnPatientSelected(PatientSelectedEventPayload payload)
 {
-    // UI ½º·¹µå Ã¼Å©
+    // UI ìŠ¤ë ˆë“œ ì²´í¬
     if (this.InvokeRequired)
     {
         this.Invoke(new Action(() => OnPatientSelected(payload)));
         return;
     }
     
-    // È¯ÀÚ Á¤º¸ ¾÷µ¥ÀÌÆ®
+    // í™˜ì ì •ë³´ ì—…ë°ì´íŠ¸
     UpdatePatientInfo(payload.Patient);
 }
 ```
 
-### 4. ¹öÀü °ü¸® Á¤Ã¥
+### 4. ë²„ì „ ê´€ë¦¬ ì •ì±…
 
-#### ¸ğµâ ¹öÀü ±ÔÄ¢
+#### ëª¨ë“ˆ ë²„ì „ ê·œì¹™
 ```
-Major.Minor.Patch Çü½Ä »ç¿ë
+Major.Minor.Patch í˜•ì‹ ì‚¬ìš©
 
-- Major: È£È¯µÇÁö ¾Ê´Â º¯°æ (API º¯°æ, Å¸ÀÔ º¯°æ)
-- Minor: ÇÏÀ§ È£È¯ ±â´É Ãß°¡
-- Patch: ¹ö±× ¼öÁ¤
+- Major: í˜¸í™˜ë˜ì§€ ì•ŠëŠ” ë³€ê²½ (API ë³€ê²½, íƒ€ì… ë³€ê²½)
+- Minor: í•˜ìœ„ í˜¸í™˜ ê¸°ëŠ¥ ì¶”ê°€
+- Patch: ë²„ê·¸ ìˆ˜ì •
 
-¿¹½Ã:
-1.0.0 ¡æ ÃÊ±â ¹öÀü
-1.1.0 ¡æ »õ ±â´É Ãß°¡ (ÇÏÀ§ È£È¯)
-2.0.0 ¡æ API º¯°æ (È£È¯ ºÒ°¡)
+ì˜ˆì‹œ:
+1.0.0 â†’ ì´ˆê¸° ë²„ì „
+1.1.0 â†’ ìƒˆ ê¸°ëŠ¥ ì¶”ê°€ (í•˜ìœ„ í˜¸í™˜)
+2.0.0 â†’ API ë³€ê²½ (í˜¸í™˜ ë¶ˆê°€)
 ```
 
-#### ¹èÆ÷ ½Ã ÁÖÀÇ»çÇ×
+#### ë°°í¬ ì‹œ ì£¼ì˜ì‚¬í•­
 ```
-1. °°Àº ¸ğµâÀÇ ¿©·¯ ¹öÀüÀº µ¿½Ã »ç¿ë ºÒ°¡
-2. ¹öÀü ¾÷µ¥ÀÌÆ® ½Ã ÅëÇÕ Å×½ºÆ® ÇÊ¼ö
-3. °øÀ¯ ¾î¼Àºí¸® ¹öÀü º¯°æ ½Ã ¸ğµç ¸ğµâ Àçºôµå
-4. Hot Deploy´Â º¸Á¶ ¼ö´Ü (Àç½ÃÀÛ ±ÇÀå)
+1. ê°™ì€ ëª¨ë“ˆì˜ ì—¬ëŸ¬ ë²„ì „ì€ ë™ì‹œ ì‚¬ìš© ë¶ˆê°€
+2. ë²„ì „ ì—…ë°ì´íŠ¸ ì‹œ í†µí•© í…ŒìŠ¤íŠ¸ í•„ìˆ˜
+3. ê³µìœ  ì–´ì…ˆë¸”ë¦¬ ë²„ì „ ë³€ê²½ ì‹œ ëª¨ë“  ëª¨ë“ˆ ì¬ë¹Œë“œ
+4. Hot DeployëŠ” ë³´ì¡° ìˆ˜ë‹¨ (ì¬ì‹œì‘ ê¶Œì¥)
 ```
 
 ---
 
-## ?? DI È£È¯¼º »ó¼¼
+## ?? DI í˜¸í™˜ì„± ìƒì„¸
 
-### ShellÀÇ DI Container
+### Shellì˜ DI Container
 
 ```csharp
 // Program.cs
 var services = new ServiceCollection();
 
-// °øÀ¯ ¼­ºñ½º µî·Ï
+// ê³µìœ  ì„œë¹„ìŠ¤ ë“±ë¡
 services.AddSingleton<IBizLogicFactory, BizLogicFactory>();
 services.AddSingleton<IEventAggregator, EventAggregator>();
 services.AddScoped<IAuthenticationService, AuthenticationService>();
@@ -798,57 +798,57 @@ services.AddScoped<IAuthenticationService, AuthenticationService>();
 var serviceProvider = services.BuildServiceProvider();
 ```
 
-### ¸ğµâ ÀÎ½ºÅÏ½º »ı¼º
+### ëª¨ë“ˆ ì¸ìŠ¤í„´ìŠ¤ ìƒì„±
 
 ```csharp
 // nUShell.cs
 private Control CreateProgramContent(Type type)
 {
-    // ? ActivatorUtilities°¡ DI¸¦ ¼öÇà
+    // ? ActivatorUtilitiesê°€ DIë¥¼ ìˆ˜í–‰
     var content = (Control)ActivatorUtilities.CreateInstance(_serviceProvider, type);
     
-    // ? LoadFromÀ¸·Î ·ÎµåµÈ Å¸ÀÔµµ Á¤»ó ÀÛµ¿
-    // ? LoadFile·Î ·ÎµåµÈ Å¸ÀÔÀº Å¸ÀÔ ºÒÀÏÄ¡·Î ½ÇÆĞ
+    // ? LoadFromìœ¼ë¡œ ë¡œë“œëœ íƒ€ì…ë„ ì •ìƒ ì‘ë™
+    // ? LoadFileë¡œ ë¡œë“œëœ íƒ€ì…ì€ íƒ€ì… ë¶ˆì¼ì¹˜ë¡œ ì‹¤íŒ¨
     
     return content;
 }
 ```
 
-### ¿Ö LoadFrom¸¸ DI°¡ ÀÛµ¿ÇÏ´Â°¡?
+### ì™œ LoadFromë§Œ DIê°€ ì‘ë™í•˜ëŠ”ê°€?
 
 ```csharp
-// ActivatorUtilities ³»ºÎ µ¿ÀÛ
+// ActivatorUtilities ë‚´ë¶€ ë™ì‘
 public static object CreateInstance(IServiceProvider provider, Type instanceType, ...)
 {
-    // 1. Å¸ÀÔ °Ë»ç
+    // 1. íƒ€ì… ê²€ì‚¬
     var constructor = instanceType.GetConstructors()[0];
     var parameters = constructor.GetParameters();
     
-    // 2. ÆÄ¶ó¹ÌÅÍ Å¸ÀÔÀÌ ServiceProviderÀÇ Å¸ÀÔ°ú È£È¯µÇ´ÂÁö È®ÀÎ
+    // 2. íŒŒë¼ë¯¸í„° íƒ€ì…ì´ ServiceProviderì˜ íƒ€ì…ê³¼ í˜¸í™˜ë˜ëŠ”ì§€ í™•ì¸
     foreach (var param in parameters)
     {
         var service = provider.GetService(param.ParameterType);
         
-        // ? LoadFrom: °°Àº ·Îµå ÄÁÅØ½ºÆ® ¡æ Å¸ÀÔ ÀÏÄ¡
-        // ? LoadFile: ´Ù¸¥ ·Îµå ÄÁÅØ½ºÆ® ¡æ Å¸ÀÔ ºÒÀÏÄ¡
+        // ? LoadFrom: ê°™ì€ ë¡œë“œ ì»¨í…ìŠ¤íŠ¸ â†’ íƒ€ì… ì¼ì¹˜
+        // ? LoadFile: ë‹¤ë¥¸ ë¡œë“œ ì»¨í…ìŠ¤íŠ¸ â†’ íƒ€ì… ë¶ˆì¼ì¹˜
         
         if (service == null && !param.IsOptional)
             throw new InvalidOperationException($"No service for type '{param.ParameterType}'");
     }
     
-    // 3. ÀÎ½ºÅÏ½º »ı¼º
+    // 3. ì¸ìŠ¤í„´ìŠ¤ ìƒì„±
     return Activator.CreateInstance(instanceType, args);
 }
 ```
 
 ---
 
-## ?? EventBus È£È¯¼º »ó¼¼
+## ?? EventBus í˜¸í™˜ì„± ìƒì„¸
 
-### EventBus Å¸ÀÔ °Ë»ç
+### EventBus íƒ€ì… ê²€ì‚¬
 
 ```csharp
-// EventAggregator ³»ºÎ
+// EventAggregator ë‚´ë¶€
 public class PubSubEvent<TPayload>
 {
     private readonly List<Action<TPayload>> _subscriptions;
@@ -857,8 +857,8 @@ public class PubSubEvent<TPayload>
     {
         foreach (var handler in _subscriptions)
         {
-            // ? LoadFrom: TPayload Å¸ÀÔÀÌ ¸ğµç ¸ğµâ¿¡¼­ µ¿ÀÏ
-            // ? LoadFile: TPayload Å¸ÀÔÀÌ °¢ ·Îµå¸¶´Ù ´Ù¸§
+            // ? LoadFrom: TPayload íƒ€ì…ì´ ëª¨ë“  ëª¨ë“ˆì—ì„œ ë™ì¼
+            // ? LoadFile: TPayload íƒ€ì…ì´ ê° ë¡œë“œë§ˆë‹¤ ë‹¤ë¦„
             handler(payload);
         }
     }
@@ -870,89 +870,89 @@ public class PubSubEvent<TPayload>
 }
 ```
 
-### Å¸ÀÔ ÀÏÄ¡ ¿¹½Ã
+### íƒ€ì… ì¼ì¹˜ ì˜ˆì‹œ
 
 ```csharp
 // Module A (LoadFrom)
 _eventBus.GetEvent<PatientSelectedEvent>()
     .Publish(new PatientSelectedEventPayload { Patient = patient });
-// ? PatientSelectedEventPayload Å¸ÀÔ: Assembly "nU3.Models, Version=1.0.0"
+// ? PatientSelectedEventPayload íƒ€ì…: Assembly "nU3.Models, Version=1.0.0"
 
 // Module B (LoadFrom)
 _eventBus.GetEvent<PatientSelectedEvent>()
     .Subscribe(OnPatientSelected);
-// ? PatientSelectedEventPayload Å¸ÀÔ: Assembly "nU3.Models, Version=1.0.0"
-// ? Å¸ÀÔ ÀÏÄ¡ ¡æ Á¤»ó ¼ö½Å
+// ? PatientSelectedEventPayload íƒ€ì…: Assembly "nU3.Models, Version=1.0.0"
+// ? íƒ€ì… ì¼ì¹˜ â†’ ì •ìƒ ìˆ˜ì‹ 
 
 // Module C (LoadFile)
 _eventBus.GetEvent<PatientSelectedEvent>()
     .Subscribe(OnPatientSelected);
-// ? PatientSelectedEventPayload Å¸ÀÔ: Assembly "nU3.Models, Version=1.0.0" (´Ù¸¥ ÀÎ½ºÅÏ½º)
-// ? Å¸ÀÔ ºÒÀÏÄ¡ ¡æ ¼ö½Å ½ÇÆĞ
+// ? PatientSelectedEventPayload íƒ€ì…: Assembly "nU3.Models, Version=1.0.0" (ë‹¤ë¥¸ ì¸ìŠ¤í„´ìŠ¤)
+// ? íƒ€ì… ë¶ˆì¼ì¹˜ â†’ ìˆ˜ì‹  ì‹¤íŒ¨
 ```
 
 ---
 
-## ?? Hot Deploy ÀÛµ¿ ¿ø¸®
+## ?? Hot Deploy ì‘ë™ ì›ë¦¬
 
-### 1. Shadow Copy ¸ŞÄ¿´ÏÁò
+### 1. Shadow Copy ë©”ì»¤ë‹ˆì¦˜
 
 ```
-¿øº» ÆÄÀÏ (Runtime):
-¦§¦¡ Runtime/Modules/OCS/IN/OrderEntry.dll (v1.0) ¡ç Àá±è (½ÇÇà Áß)
+ì›ë³¸ íŒŒì¼ (Runtime):
+â”œâ”€ Runtime/Modules/OCS/IN/OrderEntry.dll (v1.0) â† ì ê¹€ (ì‹¤í–‰ ì¤‘)
 
 Shadow Copy (Cache):
-¦¦¦¡ Cache/Shadow/OCS_IN_OrderEntry/
-   ¦§¦¡¦¡ 1.0.0/
-   ¦¢   ¦¦¦¡¦¡ OrderEntry.dll ¡ç LoadFrom¿¡¼­ ·ÎµåµÊ
-   ¦¦¦¡¦¡ 1.1.0/
-       ¦¦¦¡¦¡ OrderEntry.dll ¡ç »õ ¹öÀü (´Ù¿î·ÎµåµÊ)
+â””â”€ Cache/Shadow/OCS_IN_OrderEntry/
+   â”œâ”€â”€ 1.0.0/
+   â”‚   â””â”€â”€ OrderEntry.dll â† LoadFromì—ì„œ ë¡œë“œë¨
+   â””â”€â”€ 1.1.0/
+       â””â”€â”€ OrderEntry.dll â† ìƒˆ ë²„ì „ (ë‹¤ìš´ë¡œë“œë¨)
 ```
 
-### 2. ÆÄÀÏ Àá±İ È¸ÇÇ
+### 2. íŒŒì¼ ì ê¸ˆ íšŒí”¼
 
 ```csharp
 // DeployToRuntime
 try
 {
-    File.Copy(cacheFile, runtimeFile, true);  // ¿øº» ¾÷µ¥ÀÌÆ® ½Ãµµ
+    File.Copy(cacheFile, runtimeFile, true);  // ì›ë³¸ ì—…ë°ì´íŠ¸ ì‹œë„
 }
 catch (IOException)
 {
-    // ? ÆÄÀÏ Àá±è ¡æ ¿¹¿Ü ¹«½Ã
-    // ? Shadow Copy°¡ ´ë½Å »ç¿ëµÊ
-    // ? Àç½ÃÀÛ ½Ã ¿øº» ¾÷µ¥ÀÌÆ®µÊ
+    // ? íŒŒì¼ ì ê¹€ â†’ ì˜ˆì™¸ ë¬´ì‹œ
+    // ? Shadow Copyê°€ ëŒ€ì‹  ì‚¬ìš©ë¨
+    // ? ì¬ì‹œì‘ ì‹œ ì›ë³¸ ì—…ë°ì´íŠ¸ë¨
 }
 ```
 
-### 3. ¹öÀüº° Shadow °ü¸®
+### 3. ë²„ì „ë³„ Shadow ê´€ë¦¬
 
 ```csharp
-// Shadow Copy °æ·Î
+// Shadow Copy ê²½ë¡œ
 string moduleShadowDir = Path.Combine(_shadowCopyDirectory, moduleId, version);
-// ¿¹: Cache/Shadow/OCS_IN_OrderEntry/1.1.0/
+// ì˜ˆ: Cache/Shadow/OCS_IN_OrderEntry/1.1.0/
 
-// ? ¹öÀüº°·Î µğ·ºÅä¸® ºĞ¸®
-// ? °°Àº ¹öÀüÀº Àç»ç¿ë
-// ? ´Ù¸¥ ¹öÀüÀº º°µµ °ü¸®
+// ? ë²„ì „ë³„ë¡œ ë””ë ‰í† ë¦¬ ë¶„ë¦¬
+// ? ê°™ì€ ë²„ì „ì€ ì¬ì‚¬ìš©
+// ? ë‹¤ë¥¸ ë²„ì „ì€ ë³„ë„ ê´€ë¦¬
 ```
 
 ---
 
-## ?? °³¹ßÆÀ °¡ÀÌµå¶óÀÎ
+## ?? ê°œë°œíŒ€ ê°€ì´ë“œë¼ì¸
 
-### ¸ğµâ °³¹ß Ã¼Å©¸®½ºÆ®
+### ëª¨ë“ˆ ê°œë°œ ì²´í¬ë¦¬ìŠ¤íŠ¸
 
-- [ ] **³×ÀÓ½ºÆäÀÌ½º ±ÔÄ¢ ÁØ¼ö** (`nU3.Modules.{System}.{SubSystem}.{Module}`)
-- [ ] **nU3ProgramInfoAttribute »ç¿ë** (`[nU3ProgramInfo(typeof(MyControl), ...)]`)
-- [ ] **BaseWorkControl »ó¼Ó** (¶Ç´Â BaseWorkForm)
-- [ ] **DI »ı¼ºÀÚ ±¸Çö** (ÇÊ¿äÇÑ ¼­ºñ½º ÁÖÀÔ)
-- [ ] **EventBus ±¸µ¶/¹ßÇà** (¸ğµâ °£ Åë½Å)
-- [ ] **ILifecycleAware ±¸Çö** (»ı¸íÁÖ±â °ü¸®)
-- [ ] **°øÀ¯ ¾î¼Àºí¸® ¹öÀü ÅëÀÏ** (nU3.Core, nU3.Models µî)
-- [ ] **¹öÀü °ü¸®** (Major.Minor.Patch)
+- [ ] **ë„¤ì„ìŠ¤í˜ì´ìŠ¤ ê·œì¹™ ì¤€ìˆ˜** (`nU3.Modules.{System}.{SubSystem}.{Module}`)
+- [ ] **nU3ProgramInfoAttribute ì‚¬ìš©** (`[nU3ProgramInfo(typeof(MyControl), ...)]`)
+- [ ] **BaseWorkControl ìƒì†** (ë˜ëŠ” BaseWorkForm)
+- [ ] **DI ìƒì„±ì êµ¬í˜„** (í•„ìš”í•œ ì„œë¹„ìŠ¤ ì£¼ì…)
+- [ ] **EventBus êµ¬ë…/ë°œí–‰** (ëª¨ë“ˆ ê°„ í†µì‹ )
+- [ ] **ILifecycleAware êµ¬í˜„** (ìƒëª…ì£¼ê¸° ê´€ë¦¬)
+- [ ] **ê³µìœ  ì–´ì…ˆë¸”ë¦¬ ë²„ì „ í†µì¼** (nU3.Core, nU3.Models ë“±)
+- [ ] **ë²„ì „ ê´€ë¦¬** (Major.Minor.Patch)
 
-### ¸ğµâ ÅÛÇÃ¸´
+### ëª¨ë“ˆ í…œí”Œë¦¿
 
 ```csharp
 using System;
@@ -967,14 +967,14 @@ namespace nU3.Modules.{System}.{SubSystem}.{ModuleName}
 {
     [nU3ProgramInfo(
         typeof(MyModuleControl), 
-        "¸ğµâ ÀÌ¸§", 
+        "ëª¨ë“ˆ ì´ë¦„", 
         "{SYSTEM}_{SUBSYSTEM}_MODULE_001")]
     public partial class MyModuleControl : BaseWorkControl, ILifecycleAware
     {
         private readonly IBizLogicFactory _logicFactory;
         private readonly IEventAggregator _eventBus;
         
-        // ? DI »ı¼ºÀÚ
+        // ? DI ìƒì„±ì
         public MyModuleControl(
             IBizLogicFactory logicFactory,
             IEventAggregator eventBus)
@@ -986,7 +986,7 @@ namespace nU3.Modules.{System}.{SubSystem}.{ModuleName}
             SubscribeToEvents();
         }
         
-        // ? EventBus ±¸µ¶
+        // ? EventBus êµ¬ë…
         private void SubscribeToEvents()
         {
             _eventBus?.GetEvent<PatientSelectedEvent>()
@@ -1001,29 +1001,29 @@ namespace nU3.Modules.{System}.{SubSystem}.{ModuleName}
                 return;
             }
             
-            // È¯ÀÚ Á¤º¸ ¾÷µ¥ÀÌÆ®
+            // í™˜ì ì •ë³´ ì—…ë°ì´íŠ¸
             UpdatePatientInfo(payload.Patient);
         }
         
-        // ? Lifecycle ±¸Çö
+        // ? Lifecycle êµ¬í˜„
         public void OnActivated()
         {
-            // ÅÇ È°¼ºÈ­ ½Ã
+            // íƒ­ í™œì„±í™” ì‹œ
         }
         
         public void OnDeactivated()
         {
-            // ÅÇ ºñÈ°¼ºÈ­ ½Ã
+            // íƒ­ ë¹„í™œì„±í™” ì‹œ
         }
         
         public bool CanClose()
         {
-            // ÀúÀåµÇÁö ¾ÊÀº µ¥ÀÌÅÍ È®ÀÎ
+            // ì €ì¥ë˜ì§€ ì•Šì€ ë°ì´í„° í™•ì¸
             if (HasUnsavedChanges())
             {
                 var result = MessageBox.Show(
-                    "ÀúÀåµÇÁö ¾ÊÀº µ¥ÀÌÅÍ°¡ ÀÖ½À´Ï´Ù. ´İÀ¸½Ã°Ú½À´Ï±î?",
-                    "È®ÀÎ",
+                    "ì €ì¥ë˜ì§€ ì•Šì€ ë°ì´í„°ê°€ ìˆìŠµë‹ˆë‹¤. ë‹«ìœ¼ì‹œê² ìŠµë‹ˆê¹Œ?",
+                    "í™•ì¸",
                     MessageBoxButtons.YesNo);
                 return result == DialogResult.Yes;
             }
@@ -1033,12 +1033,12 @@ namespace nU3.Modules.{System}.{SubSystem}.{ModuleName}
 }
 ```
 
-### 2. ¹öÀü °ü¸® Á¤Ã¥
+### 2. ë²„ì „ ê´€ë¦¬ ì •ì±…
 
-#### AssemblyInfo ¼³Á¤
+#### AssemblyInfo ì„¤ì •
 
 ```csharp
-// Properties/AssemblyInfo.cs ¶Ç´Â .csproj
+// Properties/AssemblyInfo.cs ë˜ëŠ” .csproj
 [assembly: AssemblyVersion("1.0.0")]
 [assembly: AssemblyFileVersion("1.0.0")]
 ```
@@ -1052,136 +1052,136 @@ namespace nU3.Modules.{System}.{SubSystem}.{ModuleName}
 </PropertyGroup>
 ```
 
-#### ¹öÀü ¾÷µ¥ÀÌÆ® ½Ã³ª¸®¿À
+#### ë²„ì „ ì—…ë°ì´íŠ¸ ì‹œë‚˜ë¦¬ì˜¤
 
 ```
-°³¹ß:
-1. ±â´É Ãß°¡/¼öÁ¤
-2. ¹öÀü Áõ°¡ (1.0.0 ¡æ 1.1.0)
-3. ºôµå
+ê°œë°œ:
+1. ê¸°ëŠ¥ ì¶”ê°€/ìˆ˜ì •
+2. ë²„ì „ ì¦ê°€ (1.0.0 â†’ 1.1.0)
+3. ë¹Œë“œ
 
-Å×½ºÆ®:
-4. ·ÎÄÃ Å×½ºÆ®
-5. ÅëÇÕ Å×½ºÆ® (´Ù¸¥ ¸ğµâ°ú ÇÔ²²)
-6. EventBus Åë½Å È®ÀÎ
+í…ŒìŠ¤íŠ¸:
+4. ë¡œì»¬ í…ŒìŠ¤íŠ¸
+5. í†µí•© í…ŒìŠ¤íŠ¸ (ë‹¤ë¥¸ ëª¨ë“ˆê³¼ í•¨ê»˜)
+6. EventBus í†µì‹  í™•ì¸
 
-¹èÆ÷:
-7. Deployer·Î ¼­¹ö¿¡ ¾÷·Îµå
-8. DB¿¡ ¹öÀü Á¤º¸ µî·Ï
-9. Å¬¶óÀÌ¾ğÆ® ÀÚµ¿ ¾÷µ¥ÀÌÆ® (Bootstrapper)
+ë°°í¬:
+7. Deployerë¡œ ì„œë²„ì— ì—…ë¡œë“œ
+8. DBì— ë²„ì „ ì •ë³´ ë“±ë¡
+9. í´ë¼ì´ì–¸íŠ¸ ìë™ ì—…ë°ì´íŠ¸ (Bootstrapper)
 ```
 
-### 3. ÀÇÁ¸¼º °ü¸®
+### 3. ì˜ì¡´ì„± ê´€ë¦¬
 
-#### ±ÇÀå ÀÇÁ¸¼º ±¸Á¶
+#### ê¶Œì¥ ì˜ì¡´ì„± êµ¬ì¡°
 
 ```
-°¢ ¸ğµâ ÇÁ·ÎÁ§Æ®:
-¦§¦¡ nU3.Core (ÇÊ¼ö) ?
-¦§¦¡ nU3.Core.UI (ÇÊ¼ö) ?
-¦§¦¡ nU3.Models (ÇÊ¼ö) ?
-¦§¦¡ nU3.Connectivity (ÇÊ¼ö) ?
-¦§¦¡ DevExpress.* (UI ¶óÀÌºê·¯¸®) ?
-¦¦¦¡ ¸ğµâ Àü¿ë ¶óÀÌºê·¯¸® (¼±ÅÃ) ??
+ê° ëª¨ë“ˆ í”„ë¡œì íŠ¸:
+â”œâ”€ nU3.Core (í•„ìˆ˜) ?
+â”œâ”€ nU3.Core.UI (í•„ìˆ˜) ?
+â”œâ”€ nU3.Models (í•„ìˆ˜) ?
+â”œâ”€ nU3.Connectivity (í•„ìˆ˜) ?
+â”œâ”€ DevExpress.* (UI ë¼ì´ë¸ŒëŸ¬ë¦¬) ?
+â””â”€ ëª¨ë“ˆ ì „ìš© ë¼ì´ë¸ŒëŸ¬ë¦¬ (ì„ íƒ) ??
 ```
 
-**ÁÖÀÇ»çÇ×:**
-- ?? ¸ğµâ Àü¿ë ¶óÀÌºê·¯¸®´Â ¹İµå½Ã °°Àº µğ·ºÅä¸®¿¡ ¹èÆ÷
-- ?? Shadow Copy ½Ã ÀÚµ¿À¸·Î º¹»çµÊ
-- ?? °øÀ¯ ¶óÀÌºê·¯¸®¿Í ÀÌ¸§ Áßº¹ ¹æÁö
+**ì£¼ì˜ì‚¬í•­:**
+- ?? ëª¨ë“ˆ ì „ìš© ë¼ì´ë¸ŒëŸ¬ë¦¬ëŠ” ë°˜ë“œì‹œ ê°™ì€ ë””ë ‰í† ë¦¬ì— ë°°í¬
+- ?? Shadow Copy ì‹œ ìë™ìœ¼ë¡œ ë³µì‚¬ë¨
+- ?? ê³µìœ  ë¼ì´ë¸ŒëŸ¬ë¦¬ì™€ ì´ë¦„ ì¤‘ë³µ ë°©ì§€
 
 ---
 
-## ??? ¹®Á¦ ÇØ°á °¡ÀÌµå
+## ??? ë¬¸ì œ í•´ê²° ê°€ì´ë“œ
 
-### ¹®Á¦ 1: DI »ı¼ºÀÚ ÁÖÀÔ ½ÇÆĞ
+### ë¬¸ì œ 1: DI ìƒì„±ì ì£¼ì… ì‹¤íŒ¨
 
-**Áõ»ó:**
+**ì¦ìƒ:**
 ```
 InvalidOperationException: No service for type 'IBizLogicFactory' has been registered.
 ```
 
-**¿øÀÎ:**
-- ShellÀÇ `ServiceProvider`¿¡ ¼­ºñ½º°¡ µî·ÏµÇÁö ¾ÊÀ½
+**ì›ì¸:**
+- Shellì˜ `ServiceProvider`ì— ì„œë¹„ìŠ¤ê°€ ë“±ë¡ë˜ì§€ ì•ŠìŒ
 
-**ÇØ°á:**
+**í•´ê²°:**
 ```csharp
-// Program.cs¿¡ ¼­ºñ½º µî·Ï
+// Program.csì— ì„œë¹„ìŠ¤ ë“±ë¡
 services.AddSingleton<IBizLogicFactory, BizLogicFactory>();
 ```
 
-### ¹®Á¦ 2: EventBus ÀÌº¥Æ® ¼ö½Å ¾È µÊ
+### ë¬¸ì œ 2: EventBus ì´ë²¤íŠ¸ ìˆ˜ì‹  ì•ˆ ë¨
 
-**Áõ»ó:**
+**ì¦ìƒ:**
 ```
-ÀÌº¥Æ®¸¦ ¹ßÇàÇØµµ ´Ù¸¥ ¸ğµâ¿¡¼­ ¼ö½ÅµÇÁö ¾ÊÀ½
+ì´ë²¤íŠ¸ë¥¼ ë°œí–‰í•´ë„ ë‹¤ë¥¸ ëª¨ë“ˆì—ì„œ ìˆ˜ì‹ ë˜ì§€ ì•ŠìŒ
 ```
 
-**¿øÀÎ:**
-- Å¸ÀÔ ºÒÀÏÄ¡ (LoadFile »ç¿ë ¶Ç´Â ¹öÀü Ãæµ¹)
+**ì›ì¸:**
+- íƒ€ì… ë¶ˆì¼ì¹˜ (LoadFile ì‚¬ìš© ë˜ëŠ” ë²„ì „ ì¶©ëŒ)
 
-**ÇØ°á:**
+**í•´ê²°:**
 ```csharp
-// 1. LoadFrom »ç¿ë È®ÀÎ
+// 1. LoadFrom ì‚¬ìš© í™•ì¸
 var assembly = Assembly.LoadFrom(shadowPath);  // ?
 
-// 2. °øÀ¯ ¾î¼Àºí¸® ¹öÀü ÅëÀÏ È®ÀÎ
-// nU3.Core, nU3.Models ¹öÀüÀÌ ¸ğµç ¸ğµâ¿¡¼­ µ¿ÀÏÇØ¾ß ÇÔ
+// 2. ê³µìœ  ì–´ì…ˆë¸”ë¦¬ ë²„ì „ í†µì¼ í™•ì¸
+// nU3.Core, nU3.Models ë²„ì „ì´ ëª¨ë“  ëª¨ë“ˆì—ì„œ ë™ì¼í•´ì•¼ í•¨
 ```
 
-### ¹®Á¦ 3: ¹öÀü Ãæµ¹ °æ°í
+### ë¬¸ì œ 3: ë²„ì „ ì¶©ëŒ ê²½ê³ 
 
-**Áõ»ó:**
+**ì¦ìƒ:**
 ```
-?? ¸ğµâ ¹öÀü ºÒÀÏÄ¡ °¨Áö
-ÇöÀç ·ÎµåµÈ ¹öÀü: v1.0.0
-¿äÃ»µÈ ¹öÀü: v1.1.0
-```
-
-**¿øÀÎ:**
-- ¸ğµâÀÌ ÀÌ¹Ì ·ÎµåµÈ »óÅÂ¿¡¼­ »õ ¹öÀü ¿äÃ»
-
-**ÇØ°á:**
-```
-1. ÇØ´ç ¸ğµâÀÇ ¸ğµç ÅÇ ´İ±â
-2. ÇÁ·Î±×·¥ Àç½ÃÀÛ
-3. »õ ¹öÀü ÀÚµ¿ ·Îµå
+?? ëª¨ë“ˆ ë²„ì „ ë¶ˆì¼ì¹˜ ê°ì§€
+í˜„ì¬ ë¡œë“œëœ ë²„ì „: v1.0.0
+ìš”ì²­ëœ ë²„ì „: v1.1.0
 ```
 
-### ¹®Á¦ 4: Hot Deploy ½ÇÆĞ
+**ì›ì¸:**
+- ëª¨ë“ˆì´ ì´ë¯¸ ë¡œë“œëœ ìƒíƒœì—ì„œ ìƒˆ ë²„ì „ ìš”ì²­
 
-**Áõ»ó:**
+**í•´ê²°:**
+```
+1. í•´ë‹¹ ëª¨ë“ˆì˜ ëª¨ë“  íƒ­ ë‹«ê¸°
+2. í”„ë¡œê·¸ë¨ ì¬ì‹œì‘
+3. ìƒˆ ë²„ì „ ìë™ ë¡œë“œ
+```
+
+### ë¬¸ì œ 4: Hot Deploy ì‹¤íŒ¨
+
+**ì¦ìƒ:**
 ```
 IOException: The process cannot access the file because it is being used by another process.
 ```
 
-**¿øÀÎ:**
-- ¿øº» ÆÄÀÏÀÌ Àá°Ü ÀÖÀ½ (Á¤»ó µ¿ÀÛ)
+**ì›ì¸:**
+- ì›ë³¸ íŒŒì¼ì´ ì ê²¨ ìˆìŒ (ì •ìƒ ë™ì‘)
 
-**ÇØ°á:**
+**í•´ê²°:**
 ```
-? Shadow Copy ÀÚµ¿ »ç¿ëµÊ
-? Àç½ÃÀÛ ½Ã ¿øº» ÆÄÀÏ ¾÷µ¥ÀÌÆ®µÊ
+? Shadow Copy ìë™ ì‚¬ìš©ë¨
+? ì¬ì‹œì‘ ì‹œ ì›ë³¸ íŒŒì¼ ì—…ë°ì´íŠ¸ë¨
 ```
 
 ---
 
-## ?? ¼º´É ¹× ¸Ş¸ğ¸® °ü¸®
+## ?? ì„±ëŠ¥ ë° ë©”ëª¨ë¦¬ ê´€ë¦¬
 
-### Shadow Copy µğ½ºÅ© »ç¿ë·®
+### Shadow Copy ë””ìŠ¤í¬ ì‚¬ìš©ëŸ‰
 
 ```
-¿¹»ó µğ½ºÅ© »ç¿ë·®:
-- ¸ğµâ 1°³´ç: ~10-50 MB
-- ¹öÀü 3°³ º¸°ü ½Ã: ~30-150 MB
-- ¸ğµâ 10°³ ¡¿ 3¹öÀü: ~300-1,500 MB
+ì˜ˆìƒ ë””ìŠ¤í¬ ì‚¬ìš©ëŸ‰:
+- ëª¨ë“ˆ 1ê°œë‹¹: ~10-50 MB
+- ë²„ì „ 3ê°œ ë³´ê´€ ì‹œ: ~30-150 MB
+- ëª¨ë“ˆ 10ê°œ Ã— 3ë²„ì „: ~300-1,500 MB
 ```
 
-### Shadow Copy Á¤¸® (¼±ÅÃ ±¸Çö)
+### Shadow Copy ì •ë¦¬ (ì„ íƒ êµ¬í˜„)
 
 ```csharp
 /// <summary>
-/// ¿À·¡µÈ Shadow Copy ¹öÀüÀ» Á¤¸®ÇÕ´Ï´Ù.
+/// ì˜¤ë˜ëœ Shadow Copy ë²„ì „ì„ ì •ë¦¬í•©ë‹ˆë‹¤.
 /// </summary>
 public void CleanupOldShadowCopies(int keepRecentVersions = 3)
 {
@@ -1206,40 +1206,40 @@ public void CleanupOldShadowCopies(int keepRecentVersions = 3)
     }
 }
 
-// Shell Á¾·á ½Ã È£Ãâ
+// Shell ì¢…ë£Œ ì‹œ í˜¸ì¶œ
 private void MainShellForm_FormClosing(object sender, FormClosingEventArgs e)
 {
     if (!e.Cancel)
     {
-        // Shadow Copy Á¤¸® (ÃÖ±Ù 3¹öÀü¸¸ À¯Áö)
+        // Shadow Copy ì •ë¦¬ (ìµœê·¼ 3ë²„ì „ë§Œ ìœ ì§€)
         _moduleLoader.CleanupOldShadowCopies(keepRecentVersions: 3);
     }
 }
 ```
 
-### ¸Ş¸ğ¸® »ç¿ë·®
+### ë©”ëª¨ë¦¬ ì‚¬ìš©ëŸ‰
 
 ```
-¿¹»ó ¸Ş¸ğ¸® »ç¿ë·®:
-- ¸ğµâ 1°³´ç: ~50-200 MB (DevExpress UI Æ÷ÇÔ)
-- LoadFrom (°øÀ¯): ~50-200 MB
-- LoadFile (°İ¸®): ~50-200 MB ¡¿ N°³
-- AssemblyLoadContext: ~50-200 MB (°øÀ¯ ¾î¼Àºí¸®´Â °øÅë)
+ì˜ˆìƒ ë©”ëª¨ë¦¬ ì‚¬ìš©ëŸ‰:
+- ëª¨ë“ˆ 1ê°œë‹¹: ~50-200 MB (DevExpress UI í¬í•¨)
+- LoadFrom (ê³µìœ ): ~50-200 MB
+- LoadFile (ê²©ë¦¬): ~50-200 MB Ã— Nê°œ
+- AssemblyLoadContext: ~50-200 MB (ê³µìœ  ì–´ì…ˆë¸”ë¦¬ëŠ” ê³µí†µ)
 
-? LoadFromÀÌ °¡Àå È¿À²Àû
+? LoadFromì´ ê°€ì¥ íš¨ìœ¨ì 
 ```
 
 ---
 
-## ?? º£½ºÆ® ÇÁ·¢Æ¼½º
+## ?? ë² ìŠ¤íŠ¸ í”„ë™í‹°ìŠ¤
 
-### 1. ¸ğµâ °³¹ß
+### 1. ëª¨ë“ˆ ê°œë°œ
 
 ```csharp
-// ? ¿Ã¹Ù¸¥ ¿¹½Ã
+// ? ì˜¬ë°”ë¥¸ ì˜ˆì‹œ
 namespace nU3.Modules.OCS.IN.OrderEntry
 {
-    [nU3ProgramInfo(typeof(OrderEntryControl), "Ã³¹æ ÀÔ·Â", "OCS_IN_ORDER_001")]
+    [nU3ProgramInfo(typeof(OrderEntryControl), "ì²˜ë°© ì…ë ¥", "OCS_IN_ORDER_001")]
     public partial class OrderEntryControl : BaseWorkControl
     {
         private readonly IBizLogicFactory _logicFactory;
@@ -1258,13 +1258,13 @@ namespace nU3.Modules.OCS.IN.OrderEntry
 ```
 
 ```csharp
-// ? Àß¸øµÈ ¿¹½Ã
-namespace MyModule  // ? ³×ÀÓ½ºÆäÀÌ½º ±ÔÄ¢ À§¹İ
+// ? ì˜ëª»ëœ ì˜ˆì‹œ
+namespace MyModule  // ? ë„¤ì„ìŠ¤í˜ì´ìŠ¤ ê·œì¹™ ìœ„ë°˜
 {
-    // ? Attribute ¾øÀ½
-    public partial class MyControl : UserControl  // ? BaseWorkControl »ó¼Ó ¾È ÇÔ
+    // ? Attribute ì—†ìŒ
+    public partial class MyControl : UserControl  // ? BaseWorkControl ìƒì† ì•ˆ í•¨
     {
-        public MyControl()  // ? DI »ı¼ºÀÚ ¾øÀ½
+        public MyControl()  // ? DI ìƒì„±ì ì—†ìŒ
         {
             InitializeComponent();
         }
@@ -1272,10 +1272,10 @@ namespace MyModule  // ? ³×ÀÓ½ºÆäÀÌ½º ±ÔÄ¢ À§¹İ
 }
 ```
 
-### 2. EventBus »ç¿ë
+### 2. EventBus ì‚¬ìš©
 
 ```csharp
-// ? ¿Ã¹Ù¸¥ ¿¹½Ã - °­Å¸ÀÔ ÀÌº¥Æ®
+// ? ì˜¬ë°”ë¥¸ ì˜ˆì‹œ - ê°•íƒ€ì… ì´ë²¤íŠ¸
 public class PatientSelectedEvent : PubSubEvent<PatientSelectedEventPayload> { }
 
 public class PatientSelectedEventPayload
@@ -1284,7 +1284,7 @@ public class PatientSelectedEventPayload
     public string Source { get; set; }
 }
 
-// ¹ßÇà
+// ë°œí–‰
 _eventBus.GetEvent<PatientSelectedEvent>()
     .Publish(new PatientSelectedEventPayload 
     { 
@@ -1292,32 +1292,32 @@ _eventBus.GetEvent<PatientSelectedEvent>()
         Source = "OrderEntry"
     });
 
-// ±¸µ¶
+// êµ¬ë…
 _eventBus.GetEvent<PatientSelectedEvent>()
     .Subscribe(OnPatientSelected);
 ```
 
 ```csharp
-// ? Àß¸øµÈ ¿¹½Ã - ¾àÅ¸ÀÔ ÀÌº¥Æ®
+// ? ì˜ëª»ëœ ì˜ˆì‹œ - ì•½íƒ€ì… ì´ë²¤íŠ¸
 _eventBus.GetEvent<GenericEvent>()
-    .Publish(new { Patient = patient });  // ? ÀÍ¸í Å¸ÀÔ
+    .Publish(new { Patient = patient });  // ? ìµëª… íƒ€ì…
 
 _eventBus.GetEvent<GenericEvent>()
     .Subscribe(obj => 
     {
-        var payload = obj as PatientInfo;  // ? Å¸ÀÔ ºÒÈ®½Ç
+        var payload = obj as PatientInfo;  // ? íƒ€ì… ë¶ˆí™•ì‹¤
     });
 ```
 
-### 3. ¹öÀü °ü¸®
+### 3. ë²„ì „ ê´€ë¦¬
 
 ```csharp
-// ? ¿Ã¹Ù¸¥ ¿¹½Ã
+// ? ì˜¬ë°”ë¥¸ ì˜ˆì‹œ
 // AssemblyInfo.cs
 [assembly: AssemblyVersion("1.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.20260208")]
 
-// ¶Ç´Â .csproj
+// ë˜ëŠ” .csproj
 <PropertyGroup>
   <AssemblyVersion>1.0.0</AssemblyVersion>
   <FileVersion>1.0.0.20260208</FileVersion>
@@ -1325,52 +1325,52 @@ _eventBus.GetEvent<GenericEvent>()
 ```
 
 ```xml
-<!-- ? Àß¸øµÈ ¿¹½Ã -->
+<!-- ? ì˜ëª»ëœ ì˜ˆì‹œ -->
 <PropertyGroup>
-  <AssemblyVersion>1.0.*</AssemblyVersion>  <!-- ? ¿ÍÀÏµåÄ«µå »ç¿ë -->
+  <AssemblyVersion>1.0.*</AssemblyVersion>  <!-- ? ì™€ì¼ë“œì¹´ë“œ ì‚¬ìš© -->
   <FileVersion>1.0.0</FileVersion>
 </PropertyGroup>
 ```
 
 ---
 
-## ?? µğ¹ö±ë ¹× ·Î±ë
+## ?? ë””ë²„ê¹… ë° ë¡œê¹…
 
-### ModuleLoaderService ·Î±× È®ÀÎ
+### ModuleLoaderService ë¡œê·¸ í™•ì¸
 
 ```csharp
-// ·Îµå ¼º°ø
+// ë¡œë“œ ì„±ê³µ
 [ModuleLoader] Loaded: OCS_IN_ORDER_001 -> v1.0.0 (Shadow: C:\...\Shadow\...)
 
-// ¹öÀü Ãæµ¹
+// ë²„ì „ ì¶©ëŒ
 [ModuleLoader] !!! VERSION CONFLICT DETECTED !!!
 [ModuleLoader] Module: OCS_IN_OrderEntry
 [ModuleLoader] Current Version: 1.0.0
 [ModuleLoader] Requested Version: 1.1.0
 [ModuleLoader] Action: Using EXISTING version to prevent type mismatch.
 
-// Shadow Copy »ı¼º
+// Shadow Copy ìƒì„±
 [ModuleLoader] Created shadow copy: Runtime/... -> Cache/Shadow/...
 
-// ÆÄÀÏ Àá±è
+// íŒŒì¼ ì ê¹€
 [ModuleLoader] Runtime file locked: OrderEntry.dll. Using shadow copy for hot deploy.
 ```
 
-### Visual Studio µğ¹ö±ë
+### Visual Studio ë””ë²„ê¹…
 
 ```csharp
-// ·ÎµåµÈ Assembly È®ÀÎ
+// ë¡œë“œëœ Assembly í™•ì¸
 foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
 {
     Debug.WriteLine($"Loaded: {assembly.FullName}");
     Debug.WriteLine($"Location: {assembly.Location}");
 }
 
-// ¸ğµâ ¹öÀü È®ÀÎ
+// ëª¨ë“ˆ ë²„ì „ í™•ì¸
 var version = _moduleLoader.GetLoadedModuleVersion("OCS_IN_OrderEntry");
 Debug.WriteLine($"Module Version: {version}");
 
-// µî·ÏµÈ ÇÁ·Î±×·¥ È®ÀÎ
+// ë“±ë¡ëœ í”„ë¡œê·¸ë¨ í™•ì¸
 var registry = _moduleLoader.GetProgramRegistry();
 foreach (var kvp in registry)
 {
@@ -1380,80 +1380,80 @@ foreach (var kvp in registry)
 
 ---
 
-## ?? ÃÖÁ¾ ±ÇÀå»çÇ×
+## ?? ìµœì¢… ê¶Œì¥ì‚¬í•­
 
-### SI ÇÁ·ÎÁ§Æ®¿¡ ÃÖÀûÈ­µÈ Àü·«
+### SI í”„ë¡œì íŠ¸ì— ìµœì í™”ëœ ì „ëµ
 
 ```
-? LoadFrom (±âº» ·Îµå ÄÁÅØ½ºÆ®)
-   ¦§¦¡> DI ¿Ïº® Áö¿ø
-   ¦§¦¡> EventBus Å¸ÀÔ È£È¯
-   ¦¦¦¡> °øÀ¯ ¾î¼Àºí¸® ÀÚµ¿ °ü¸®
+? LoadFrom (ê¸°ë³¸ ë¡œë“œ ì»¨í…ìŠ¤íŠ¸)
+   â”œâ”€> DI ì™„ë²½ ì§€ì›
+   â”œâ”€> EventBus íƒ€ì… í˜¸í™˜
+   â””â”€> ê³µìœ  ì–´ì…ˆë¸”ë¦¬ ìë™ ê´€ë¦¬
 
-? Shadow Copy (ÆÄÀÏ Àá±İ È¸ÇÇ)
-   ¦§¦¡> Hot Deploy °¡´É
-   ¦§¦¡> ¹öÀüº° µğ·ºÅä¸® °ü¸®
-   ¦¦¦¡> ÀÇÁ¸¼º ÀÚµ¿ º¹»ç
+? Shadow Copy (íŒŒì¼ ì ê¸ˆ íšŒí”¼)
+   â”œâ”€> Hot Deploy ê°€ëŠ¥
+   â”œâ”€> ë²„ì „ë³„ ë””ë ‰í† ë¦¬ ê´€ë¦¬
+   â””â”€> ì˜ì¡´ì„± ìë™ ë³µì‚¬
 
-? ¹öÀü Ãæµ¹ Á¤Ã¥ (Å¸ÀÔ ÀÏ°ü¼º)
-   ¦§¦¡> °°Àº ¸ğµâÀº °°Àº ¹öÀü »ç¿ë
-   ¦§¦¡> ¹öÀü Ãæµ¹ °¨Áö ¹× °æ°í
-   ¦¦¦¡> »ç¿ëÀÚ¿¡°Ô Àç½ÃÀÛ ±ÇÀå
+? ë²„ì „ ì¶©ëŒ ì •ì±… (íƒ€ì… ì¼ê´€ì„±)
+   â”œâ”€> ê°™ì€ ëª¨ë“ˆì€ ê°™ì€ ë²„ì „ ì‚¬ìš©
+   â”œâ”€> ë²„ì „ ì¶©ëŒ ê°ì§€ ë° ê²½ê³ 
+   â””â”€> ì‚¬ìš©ìì—ê²Œ ì¬ì‹œì‘ ê¶Œì¥
 ```
 
-### ±¸Çö ¿Ï·á »çÇ×
+### êµ¬í˜„ ì™„ë£Œ ì‚¬í•­
 
-| ±â´É | »óÅÂ | À§Ä¡ |
+| ê¸°ëŠ¥ | ìƒíƒœ | ìœ„ì¹˜ |
 |------|-----|------|
-| Shadow Copy »ı¼º | ? | `ModuleLoaderService.CreateShadowCopy()` |
-| ¹öÀü Ãæµ¹ °¨Áö | ? | `ModuleLoaderService.ReloadModule()` |
-| ÀÌº¥Æ® ¹ß»ı | ? | `ModuleLoaderService.VersionConflict` |
-| »ç¿ëÀÚ ¾Ë¸² | ? | `nUShell.OnModuleVersionConflict()` |
-| Hot Deploy Áö¿ø | ? | `ModuleLoaderService.DeployToRuntime()` |
-| ·Î±ë | ? | `Debug.WriteLine` + `LogManager` |
+| Shadow Copy ìƒì„± | ? | `ModuleLoaderService.CreateShadowCopy()` |
+| ë²„ì „ ì¶©ëŒ ê°ì§€ | ? | `ModuleLoaderService.ReloadModule()` |
+| ì´ë²¤íŠ¸ ë°œìƒ | ? | `ModuleLoaderService.VersionConflict` |
+| ì‚¬ìš©ì ì•Œë¦¼ | ? | `nUShell.OnModuleVersionConflict()` |
+| Hot Deploy ì§€ì› | ? | `ModuleLoaderService.DeployToRuntime()` |
+| ë¡œê¹… | ? | `Debug.WriteLine` + `LogManager` |
 
-### ÇâÈÄ °³¼± »çÇ× (¼±ÅÃ)
+### í–¥í›„ ê°œì„  ì‚¬í•­ (ì„ íƒ)
 
-- [ ] Shadow Copy ÀÚµ¿ Á¤¸® (µğ½ºÅ© °ø°£ °ü¸®)
-- [ ] ¸ğµâ ¾ğ·Îµå ±â´É (AssemblyLoadContext µµÀÔ)
-- [ ] ¹öÀü ·Ñ¹é ±â´É
-- [ ] ¸ğµâ ÀÇÁ¸¼º ±×·¡ÇÁ ºĞ¼®
-- [ ] ÀÚµ¿ ÅëÇÕ Å×½ºÆ®
-
----
-
-## ?? Ã¼Å©¸®½ºÆ®
-
-### °³¹ßÆÀ Ã¼Å©¸®½ºÆ®
-
-¸ğµâ °³¹ß ½Ã:
-- [ ] ³×ÀÓ½ºÆäÀÌ½º ±ÔÄ¢ ÁØ¼ö
-- [ ] nU3ProgramInfoAttribute Ãß°¡
-- [ ] BaseWorkControl »ó¼Ó
-- [ ] DI »ı¼ºÀÚ ±¸Çö
-- [ ] EventBus ±¸µ¶/¹ßÇà
-- [ ] ILifecycleAware ±¸Çö
-- [ ] ¹öÀü °ü¸® (AssemblyVersion)
-- [ ] °øÀ¯ ¾î¼Àºí¸® ¹öÀü ÅëÀÏ
-
-¹èÆ÷ ½Ã:
-- [ ] ·ÎÄÃ ºôµå ¹× Å×½ºÆ®
-- [ ] ÅëÇÕ Å×½ºÆ® (Shell ½ÇÇà)
-- [ ] EventBus Åë½Å È®ÀÎ
-- [ ] Deployer·Î ¼­¹ö ¾÷·Îµå
-- [ ] DB ¹öÀü Á¤º¸ µî·Ï
-- [ ] Å¬¶óÀÌ¾ğÆ® ¾÷µ¥ÀÌÆ® È®ÀÎ
-
-¹®Á¦ ¹ß»ı ½Ã:
-- [ ] ·Î±× È®ÀÎ (Debug.WriteLine)
-- [ ] Assembly ·Îµå °æ·Î È®ÀÎ
-- [ ] ¹öÀü Á¤º¸ È®ÀÎ
-- [ ] Shadow Copy µğ·ºÅä¸® È®ÀÎ
-- [ ] °øÀ¯ ¾î¼Àºí¸® ¹öÀü È®ÀÎ
+- [ ] Shadow Copy ìë™ ì •ë¦¬ (ë””ìŠ¤í¬ ê³µê°„ ê´€ë¦¬)
+- [ ] ëª¨ë“ˆ ì–¸ë¡œë“œ ê¸°ëŠ¥ (AssemblyLoadContext ë„ì…)
+- [ ] ë²„ì „ ë¡¤ë°± ê¸°ëŠ¥
+- [ ] ëª¨ë“ˆ ì˜ì¡´ì„± ê·¸ë˜í”„ ë¶„ì„
+- [ ] ìë™ í†µí•© í…ŒìŠ¤íŠ¸
 
 ---
 
-## ?? Âü°í ÀÚ·á
+## ?? ì²´í¬ë¦¬ìŠ¤íŠ¸
+
+### ê°œë°œíŒ€ ì²´í¬ë¦¬ìŠ¤íŠ¸
+
+ëª¨ë“ˆ ê°œë°œ ì‹œ:
+- [ ] ë„¤ì„ìŠ¤í˜ì´ìŠ¤ ê·œì¹™ ì¤€ìˆ˜
+- [ ] nU3ProgramInfoAttribute ì¶”ê°€
+- [ ] BaseWorkControl ìƒì†
+- [ ] DI ìƒì„±ì êµ¬í˜„
+- [ ] EventBus êµ¬ë…/ë°œí–‰
+- [ ] ILifecycleAware êµ¬í˜„
+- [ ] ë²„ì „ ê´€ë¦¬ (AssemblyVersion)
+- [ ] ê³µìœ  ì–´ì…ˆë¸”ë¦¬ ë²„ì „ í†µì¼
+
+ë°°í¬ ì‹œ:
+- [ ] ë¡œì»¬ ë¹Œë“œ ë° í…ŒìŠ¤íŠ¸
+- [ ] í†µí•© í…ŒìŠ¤íŠ¸ (Shell ì‹¤í–‰)
+- [ ] EventBus í†µì‹  í™•ì¸
+- [ ] Deployerë¡œ ì„œë²„ ì—…ë¡œë“œ
+- [ ] DB ë²„ì „ ì •ë³´ ë“±ë¡
+- [ ] í´ë¼ì´ì–¸íŠ¸ ì—…ë°ì´íŠ¸ í™•ì¸
+
+ë¬¸ì œ ë°œìƒ ì‹œ:
+- [ ] ë¡œê·¸ í™•ì¸ (Debug.WriteLine)
+- [ ] Assembly ë¡œë“œ ê²½ë¡œ í™•ì¸
+- [ ] ë²„ì „ ì •ë³´ í™•ì¸
+- [ ] Shadow Copy ë””ë ‰í† ë¦¬ í™•ì¸
+- [ ] ê³µìœ  ì–´ì…ˆë¸”ë¦¬ ë²„ì „ í™•ì¸
+
+---
+
+## ?? ì°¸ê³  ìë£Œ
 
 ### .NET Assembly Loading
 
@@ -1467,32 +1467,32 @@ foreach (var kvp in registry)
 - [ActivatorUtilities Class](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.dependencyinjection.activatorutilities)
 - [Dependency injection in .NET](https://learn.microsoft.com/en-us/dotnet/core/extensions/dependency-injection)
 
-### ÇÁ·¹ÀÓ¿öÅ© ³»ºÎ ¹®¼­
+### í”„ë ˆì„ì›Œí¬ ë‚´ë¶€ ë¬¸ì„œ
 
-- [nU3ProgramInfoAttribute °¡ÀÌµå](../nU3.Core/DOC_README_PROGRAM_INFO_ATTRIBUTE.md)
-- [EventBus »ç¿ë °¡ÀÌµå](../nU3.Core/Events/DOC_EventBus_Guide.md)
-- [ÇÁ·¹ÀÓ¿öÅ© °èÈ¹](../DOC/DOC_DOC_nU3.Framework%20-%20Plan.md)
-
----
-
-## ?? °á·Ğ
-
-nU3.FrameworkÀÇ Assembly ·Îµå Àü·«Àº **SI ÇÁ·ÎÁ§Æ®ÀÇ Æ¯¼ö¼º**À» °í·ÁÇÏ¿© ¼³°èµÇ¾ú½À´Ï´Ù:
-
-1. ? **LoadFrom »ç¿ë** - DI¿Í EventBus ¿Ïº® Áö¿ø
-2. ? **Shadow Copy** - Hot Deploy °¡´É
-3. ? **¹öÀü Á¤Ã¥** - Å¸ÀÔ ÀÏ°ü¼º º¸Àå
-4. ? **»ç¿ëÀÚ ¾Ë¸²** - ¸íÈ®ÇÑ UX
-
-ÀÌ Àü·«Àº **´Ù¼ö °³¹ßÀÚ È¯°æ**¿¡¼­ **µ¶¸³ÀûÀÎ ¸ğµâ °³¹ß**°ú **¾ÈÁ¤ÀûÀÎ ÅëÇÕ ½ÇÇà**À» ¸ğµÎ ¸¸Á·½ÃÅµ´Ï´Ù.
-
-**Ãß°¡ Áú¹®ÀÌ³ª °³¼± Á¦¾ÈÀº GitHub Issues¿¡ µî·ÏÇØ ÁÖ¼¼¿ä!**
+- [nU3ProgramInfoAttribute ê°€ì´ë“œ](../nU3.Core/DOC_README_PROGRAM_INFO_ATTRIBUTE.md)
+- [EventBus ì‚¬ìš© ê°€ì´ë“œ](../nU3.Core/Events/DOC_EventBus_Guide.md)
+- [í”„ë ˆì„ì›Œí¬ ê³„íš](../DOC/DOC_DOC_nU3.Framework%20-%20Plan.md)
 
 ---
 
-**¹®¼­ ¹öÀü:** 1.0  
-**ÃÖÁ¾ ¼öÁ¤ÀÏ:** 2026-02-08  
-**ÀÛ¼ºÀÚ:** nU3 Framework Team  
-**¶óÀÌ¼±½º:** MIT
+## ?? ê²°ë¡ 
+
+nU3.Frameworkì˜ Assembly ë¡œë“œ ì „ëµì€ **SI í”„ë¡œì íŠ¸ì˜ íŠ¹ìˆ˜ì„±**ì„ ê³ ë ¤í•˜ì—¬ ì„¤ê³„ë˜ì—ˆìŠµë‹ˆë‹¤:
+
+1. ? **LoadFrom ì‚¬ìš©** - DIì™€ EventBus ì™„ë²½ ì§€ì›
+2. ? **Shadow Copy** - Hot Deploy ê°€ëŠ¥
+3. ? **ë²„ì „ ì •ì±…** - íƒ€ì… ì¼ê´€ì„± ë³´ì¥
+4. ? **ì‚¬ìš©ì ì•Œë¦¼** - ëª…í™•í•œ UX
+
+ì´ ì „ëµì€ **ë‹¤ìˆ˜ ê°œë°œì í™˜ê²½**ì—ì„œ **ë…ë¦½ì ì¸ ëª¨ë“ˆ ê°œë°œ**ê³¼ **ì•ˆì •ì ì¸ í†µí•© ì‹¤í–‰**ì„ ëª¨ë‘ ë§Œì¡±ì‹œí‚µë‹ˆë‹¤.
+
+**ì¶”ê°€ ì§ˆë¬¸ì´ë‚˜ ê°œì„  ì œì•ˆì€ GitHub Issuesì— ë“±ë¡í•´ ì£¼ì„¸ìš”!**
+
+---
+
+**ë¬¸ì„œ ë²„ì „:** 1.0  
+**ìµœì¢… ìˆ˜ì •ì¼:** 2026-02-08  
+**ì‘ì„±ì:** nU3 Framework Team  
+**ë¼ì´ì„ ìŠ¤:** MIT
 
 ---
