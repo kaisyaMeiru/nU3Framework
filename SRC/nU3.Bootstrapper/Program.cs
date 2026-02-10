@@ -350,6 +350,7 @@ namespace nU3.Bootstrapper
                 else
                 {
                     FileLogger.Info("사용자가 프로세스 종료를 거부함. 업데이트 중 파일 잠금 오류가 발생할 수 있습니다.");
+                    Environment.Exit(0);
                 }
             }
         }

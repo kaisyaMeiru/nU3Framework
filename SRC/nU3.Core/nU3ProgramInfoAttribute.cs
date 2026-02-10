@@ -102,8 +102,8 @@ namespace nU3.Core.Attributes
             else
             {
                 // ±âº»°ª
-                this.SystemType = "COMMON";
-                this.SubSystem = null;
+                this.SystemType = "UnKnown";
+                this.SubSystem = "Un";
             }
         }
         

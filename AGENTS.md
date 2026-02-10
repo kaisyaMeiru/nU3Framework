@@ -2,7 +2,8 @@
 
 > **Framework**: nU3.Framework (Medical IS Framework)  
 > **Tech Stack**: .NET 8.0, WinForms, DevExpress 23.2.9, ASP.NET Core  
-> **Purpose**: Guide for AI coding agents operating in this repository.
+> **Purpose**: Guide for AI coding agents operating in this repository  
+> **Location**: `/mnt/c/Project2_OPERATION/05.Framework/nU3.Framework`
 
 ---
 
@@ -10,6 +11,8 @@
 
 ### Build Commands
 ```bash
+# Working directory: /mnt/c/Project2_OPERATION/05.Framework/nU3.Framework/SRC
+
 # Build entire solution
 dotnet build nU3.Framework.sln --configuration Release
 dotnet build nU3.Framework.sln --configuration Debug
@@ -20,29 +23,41 @@ dotnet build nU3.Core/nU3.Core.csproj
 # Restore packages / Clean
 dotnet restore nU3.Framework.sln
 dotnet clean nU3.Framework.sln
+
+# Check build warnings only
+dotnet build --verbosity quiet 2>&1 | grep -i "warning"
 ```
 
 ### Test Commands
 ```bash
-# NOTE: Only DbTest project exists (no xUnit/NUnit yet)
+# Current state: Manual test tool only (no xUnit/NUnit/MSTest)
+# The DbTest project is a console app for database integration testing
 
-# Run DbTest project
-dotnet build Tools/DbTest/DbTest.csproj
+# Run DbTest console tool
+dotnet run --project SRC/Tools/DbTest/DbTest.csproj
 
-# Run specific test (when test framework added)
-dotnet test --filter "FullyQualified.TestMethodName"
-dotnet test --filter "Category=Unit" --verbosity normal
+# When adding unit tests (recommended):
+# 1. Add test project: SRC/Tests/[ProjectName].UnitTests
+# 2. Add PackageReference: Microsoft.NET.Test.Sdk, xunit, xunit.runner.visualstudio
+# 3. Run: dotnet test
+# 4. Run specific test: dotnet test --filter "FullyQualifiedName~TestMethodName"
 ```
 
 ### Lint/Analysis Commands
 ```bash
-# Check for compiler warnings
-dotnet build --verbosity quiet 2>&1 | findstr /C /warning
+# Current state: Manual enforcement via AGENTS.md (no automated analyzers)
 
 # Check for obsolete packages
-dotnet list package --deprecated
+dotnet list package --deprecated --include-transitive
 
-# Use Visual Studio → Build → Analyze Solution for Code Clones
+# Check for vulnerable packages
+dotnet list package --vulnerable
+
+# Manual code inspection (no .editorconfig or StyleCop configured)
+# To add automated analysis:
+# 1. Add .editorconfig at repo root
+# 2. Add StyleCop.Analyzers PackageReference to Directory.Build.props
+# 3. Set <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
 ```
 
 ---

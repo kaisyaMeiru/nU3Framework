@@ -82,6 +82,8 @@ namespace nU3.Core.Services
         private readonly IComponentRepository _compRepo;
         private readonly IProgramRepository _progRepo;
         private readonly IFileTransferService _fileTransfer;
+        private readonly IConfiguration _configuration;
+        private readonly bool _skipModuleUpdates;
 
         /// <summary>
         /// 컴포넌트 업데이트 진행 상태를 외부로 알리기 위한 이벤트입니다.
@@ -113,12 +115,16 @@ namespace nU3.Core.Services
             _compRepo = compRepo;
             _progRepo = progRepo;
             _fileTransfer = fileTransfer;
+            _configuration = configuration;
 
             _progRegistry = new Dictionary<string, Type>(StringComparer.OrdinalIgnoreCase);
             _progAttributeCache = new Dictionary<string, nU3ProgramInfoAttribute>(StringComparer.OrdinalIgnoreCase);
             _loadedModuleVersions = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             _loadContexts = new Dictionary<string, WeakReference>(StringComparer.OrdinalIgnoreCase);
             _shadowCopyPaths = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
+            // 개발 환경 설정 읽기
+            _skipModuleUpdates = configuration?.GetValue<bool>("Environment:SkipModuleUpdates") ?? false;
 
             // 중앙 집중식 경로 설정 사용
             _runtimePath = configuration?.GetValue<string>("RuntimeDirectory");
@@ -129,6 +135,10 @@ namespace nU3.Core.Services
             _shadowCopyDirectory = Path.Combine(_cachePath, "Shadow");
 
             Debug.WriteLine($"[ModuleLoader] 서비스 초기화됨. 실행 경로: {_runtimePath}");
+            if (_skipModuleUpdates)
+            {
+                Debug.WriteLine($"[ModuleLoader] 개발 모드: 모듈 업데이트가 비활성화되었습니다.");
+            }
             EnsureDirectories();
         }
 
@@ -250,6 +260,17 @@ namespace nU3.Core.Services
         public ComponentUpdateResult SyncWithServer(string syncMode = "Minimum")
         {
             var result = new ComponentUpdateResult();
+
+            // 개발 환경에서 동기화 건너뛰기
+            if (_skipModuleUpdates)
+            {
+                Debug.WriteLine($"[ModuleLoader] 개발 모드: 서버 동기화 건너뜀");
+                result.Success = true;
+                result.Message = "개발 모드: 서버 동기화가 비활성화되었습니다.";
+                RaiseProgress(new ComponentUpdateEventArgs { Phase = UpdatePhase.Completed, PercentComplete = 100 });
+                return result;
+            }
+
             if (_fileTransfer == null)
             {
                 result.Success = false;
@@ -341,6 +362,52 @@ namespace nU3.Core.Services
         /// </summary>
         public bool EnsureModuleUpdated(string progId, string moduleId)
         {
+            // 개발 환경에서 모듈 업데이트 건너뛰기
+            if (_skipModuleUpdates)
+            {
+                Debug.WriteLine($"[ModuleLoader] 개발 모드: 모듈 업데이트 건너뜀 (ModuleId={moduleId})");
+                
+                // 이미 로드된 모듈이 있으면 true 반환
+                if (_loadedModuleVersions.ContainsKey(moduleId))
+                {
+                    Debug.WriteLine($"[ModuleLoader] 개발 모드: 기존 로드된 모듈 사용 (ModuleId={moduleId})");
+                    return true;
+                }
+
+                // 로컬 파일이 존재하는지 확인하고 로드 시도
+                var moduleDto = _moduleRepo.GetAllModules()
+                    .FirstOrDefault(m => string.Equals(m.ModuleId, moduleId, StringComparison.OrdinalIgnoreCase));
+
+                if (moduleDto != null)
+                {
+                    string relativePath = Path.Combine(
+                        moduleDto.Category ?? "Common",
+                        moduleDto.SubSystem ?? "Common",
+                        moduleDto.FileName);
+
+                    string relativePathWithModules = Path.Combine(MODULES_DIR, relativePath);
+                    string runtimeFile = Path.Combine(_runtimePath, relativePathWithModules);
+
+                    if (File.Exists(runtimeFile))
+                    {
+                        Debug.WriteLine($"[ModuleLoader] 개발 모드: 로컬 파일 발견, 로드 시도 (Path={runtimeFile})");
+                        try
+                        {
+                            LoadAssembly(runtimeFile, moduleId, "dev-local");
+                            return true;
+                        }
+                        catch (Exception ex)
+                        {
+                            Debug.WriteLine($"[ModuleLoader] 개발 모드: 로컬 파일 로드 실패 - {ex.Message}");
+                            return false;
+                        }
+                    }
+                }
+
+                Debug.WriteLine($"[ModuleLoader] 개발 모드: 로컬 파일이 존재하지 않음 (ModuleId={moduleId})");
+                return false;
+            }
+
             Debug.WriteLine($"[ModuleLoader] 모듈 업데이트 확인: ModuleId={moduleId}");
 
             var activeVersion = _moduleRepo.GetActiveVersions()

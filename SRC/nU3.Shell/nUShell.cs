@@ -1139,6 +1139,9 @@ namespace nU3.Shell
 
             if (!e.Cancel)
             {
+                return;
+
+
                 // 종료 처리
                 try
                 {
