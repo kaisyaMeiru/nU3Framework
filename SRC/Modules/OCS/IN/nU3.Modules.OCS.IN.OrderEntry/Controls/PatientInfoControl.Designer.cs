@@ -28,30 +28,30 @@ namespace nU3.Modules.OCS.IN.OrderEntry.Controls
         /// </summary>
         private void InitializeComponent()
         {
-            this.grpPatientInfo = new DevExpress.XtraEditors.GroupControl();
-            this.lblDiagnosis = new DevExpress.XtraEditors.LabelControl();
-            this.txtDiagnosis = new DevExpress.XtraEditors.TextEdit();
-            this.lblInDate = new DevExpress.XtraEditors.LabelControl();
-            this.txtInDate = new DevExpress.XtraEditors.TextEdit();
-            this.lblRoomNo = new DevExpress.XtraEditors.LabelControl();
-            this.txtRoomNo = new DevExpress.XtraEditors.TextEdit();
-            this.lblDoctorName = new DevExpress.XtraEditors.LabelControl();
-            this.txtDoctorName = new DevExpress.XtraEditors.TextEdit();
-            this.lblDeptName = new DevExpress.XtraEditors.LabelControl();
-            this.txtDeptName = new DevExpress.XtraEditors.TextEdit();
-            this.lblAge = new DevExpress.XtraEditors.LabelControl();
-            this.txtAge = new DevExpress.XtraEditors.TextEdit();
-            this.lblGender = new DevExpress.XtraEditors.LabelControl();
-            this.txtGender = new DevExpress.XtraEditors.TextEdit();
-            this.lblPatName = new DevExpress.XtraEditors.LabelControl();
-            this.txtPatName = new DevExpress.XtraEditors.TextEdit();
-            this.lblPatId = new DevExpress.XtraEditors.LabelControl();
-            this.txtPatId = new DevExpress.XtraEditors.TextEdit();
-            this.pnlButtons = new DevExpress.XtraEditors.PanelControl();
-            this.btnVital = new DevExpress.XtraEditors.SimpleButton();
-            this.btnMedi = new DevExpress.XtraEditors.SimpleButton();
-            this.btnAlert = new DevExpress.XtraEditors.SimpleButton();
-            this.btnAlergy = new DevExpress.XtraEditors.SimpleButton();
+            this.grpPatientInfo = new nU3.Core.UI.Controls.nU3GroupControl();
+            this.lblDiagnosis = new nU3.Core.UI.Controls.nU3LabelControl();
+            this.txtDiagnosis = new nU3.Core.UI.Controls.nU3TextEdit();
+            this.lblInDate = new nU3.Core.UI.Controls.nU3LabelControl();
+            this.txtInDate = new nU3.Core.UI.Controls.nU3TextEdit();
+            this.lblRoomNo = new nU3.Core.UI.Controls.nU3LabelControl();
+            this.txtRoomNo = new nU3.Core.UI.Controls.nU3TextEdit();
+            this.lblDoctorName = new nU3.Core.UI.Controls.nU3LabelControl();
+            this.txtDoctorName = new nU3.Core.UI.Controls.nU3TextEdit();
+            this.lblDeptName = new nU3.Core.UI.Controls.nU3LabelControl();
+            this.txtDeptName = new nU3.Core.UI.Controls.nU3TextEdit();
+            this.lblAge = new nU3.Core.UI.Controls.nU3LabelControl();
+            this.txtAge = new nU3.Core.UI.Controls.nU3TextEdit();
+            this.lblGender = new nU3.Core.UI.Controls.nU3LabelControl();
+            this.txtGender = new nU3.Core.UI.Controls.nU3TextEdit();
+            this.lblPatName = new nU3.Core.UI.Controls.nU3LabelControl();
+            this.txtPatName = new nU3.Core.UI.Controls.nU3TextEdit();
+            this.lblPatId = new nU3.Core.UI.Controls.nU3LabelControl();
+            this.txtPatId = new nU3.Core.UI.Controls.nU3TextEdit();
+            this.pnlButtons = new nU3.Core.UI.Controls.nU3PanelControl();
+            this.btnVital = new nU3.Core.UI.Controls.nU3SimpleButton();
+            this.btnMedi = new nU3.Core.UI.Controls.nU3SimpleButton();
+            this.btnAlert = new nU3.Core.UI.Controls.nU3SimpleButton();
+            this.btnAlergy = new nU3.Core.UI.Controls.nU3SimpleButton();
             ((System.ComponentModel.ISupportInitialize)(this.grpPatientInfo)).BeginInit();
             this.grpPatientInfo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtDiagnosis.Properties)).BeginInit();
@@ -100,6 +100,7 @@ namespace nU3.Modules.OCS.IN.OrderEntry.Controls
             // lblDiagnosis
             // 
             this.lblDiagnosis.Appearance.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold);
+            this.lblDiagnosis.Appearance.Options.UseFont = true;
             this.lblDiagnosis.Location = new System.Drawing.Point(832, 24);
             this.lblDiagnosis.Name = "lblDiagnosis";
             this.lblDiagnosis.Size = new System.Drawing.Size(80, 18);
@@ -117,6 +118,7 @@ namespace nU3.Modules.OCS.IN.OrderEntry.Controls
             // lblInDate
             // 
             this.lblInDate.Appearance.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold);
+            this.lblInDate.Appearance.Options.UseFont = true;
             this.lblInDate.Location = new System.Drawing.Point(632, 24);
             this.lblInDate.Name = "lblInDate";
             this.lblInDate.Size = new System.Drawing.Size(80, 18);
@@ -134,6 +136,7 @@ namespace nU3.Modules.OCS.IN.OrderEntry.Controls
             // lblRoomNo
             // 
             this.lblRoomNo.Appearance.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold);
+            this.lblRoomNo.Appearance.Options.UseFont = true;
             this.lblRoomNo.Location = new System.Drawing.Point(544, 24);
             this.lblRoomNo.Name = "lblRoomNo";
             this.lblRoomNo.Size = new System.Drawing.Size(60, 18);
@@ -151,6 +154,7 @@ namespace nU3.Modules.OCS.IN.OrderEntry.Controls
             // lblDoctorName
             // 
             this.lblDoctorName.Appearance.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold);
+            this.lblDoctorName.Appearance.Options.UseFont = true;
             this.lblDoctorName.Location = new System.Drawing.Point(416, 24);
             this.lblDoctorName.Name = "lblDoctorName";
             this.lblDoctorName.Size = new System.Drawing.Size(80, 18);
@@ -168,6 +172,7 @@ namespace nU3.Modules.OCS.IN.OrderEntry.Controls
             // lblDeptName
             // 
             this.lblDeptName.Appearance.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold);
+            this.lblDeptName.Appearance.Options.UseFont = true;
             this.lblDeptName.Location = new System.Drawing.Point(336, 24);
             this.lblDeptName.Name = "lblDeptName";
             this.lblDeptName.Size = new System.Drawing.Size(60, 18);
@@ -185,6 +190,7 @@ namespace nU3.Modules.OCS.IN.OrderEntry.Controls
             // lblAge
             // 
             this.lblAge.Appearance.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold);
+            this.lblAge.Appearance.Options.UseFont = true;
             this.lblAge.Location = new System.Drawing.Point(256, 24);
             this.lblAge.Name = "lblAge";
             this.lblAge.Size = new System.Drawing.Size(40, 18);
@@ -202,6 +208,7 @@ namespace nU3.Modules.OCS.IN.OrderEntry.Controls
             // lblGender
             // 
             this.lblGender.Appearance.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold);
+            this.lblGender.Appearance.Options.UseFont = true;
             this.lblGender.Location = new System.Drawing.Point(208, 24);
             this.lblGender.Name = "lblGender";
             this.lblGender.Size = new System.Drawing.Size(40, 18);
@@ -219,6 +226,7 @@ namespace nU3.Modules.OCS.IN.OrderEntry.Controls
             // lblPatName
             // 
             this.lblPatName.Appearance.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold);
+            this.lblPatName.Appearance.Options.UseFont = true;
             this.lblPatName.Location = new System.Drawing.Point(96, 24);
             this.lblPatName.Name = "lblPatName";
             this.lblPatName.Size = new System.Drawing.Size(60, 18);
@@ -236,6 +244,7 @@ namespace nU3.Modules.OCS.IN.OrderEntry.Controls
             // lblPatId
             // 
             this.lblPatId.Appearance.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold);
+            this.lblPatId.Appearance.Options.UseFont = true;
             this.lblPatId.Location = new System.Drawing.Point(16, 24);
             this.lblPatId.Name = "lblPatId";
             this.lblPatId.Size = new System.Drawing.Size(60, 18);
@@ -266,8 +275,6 @@ namespace nU3.Modules.OCS.IN.OrderEntry.Controls
             // 
             // btnVital
             // 
-            // this.btnVital.Appearance.Image = global::nU3.Modules.OCS.IN.OrderEntry.Properties.Resources.vital;
-            this.btnVital.Appearance.Options.UseImage = true;
             this.btnVital.Location = new System.Drawing.Point(2, 32);
             this.btnVital.Name = "btnVital";
             this.btnVital.Size = new System.Drawing.Size(22, 22);
@@ -277,8 +284,6 @@ namespace nU3.Modules.OCS.IN.OrderEntry.Controls
             // 
             // btnMedi
             // 
-            // this.btnMedi.Appearance.Image = global::nU3.Modules.OCS.IN.OrderEntry.Properties.Resources.medi;
-            this.btnMedi.Appearance.Options.UseImage = true;
             this.btnMedi.Location = new System.Drawing.Point(2, 22);
             this.btnMedi.Name = "btnMedi";
             this.btnMedi.Size = new System.Drawing.Size(22, 22);
@@ -288,8 +293,6 @@ namespace nU3.Modules.OCS.IN.OrderEntry.Controls
             // 
             // btnAlert
             // 
-            // this.btnAlert.Appearance.Image = global::nU3.Modules.OCS.IN.OrderEntry.Properties.Resources.alert;
-            this.btnAlert.Appearance.Options.UseImage = true;
             this.btnAlert.Location = new System.Drawing.Point(2, 12);
             this.btnAlert.Name = "btnAlert";
             this.btnAlert.Size = new System.Drawing.Size(22, 22);
@@ -299,8 +302,6 @@ namespace nU3.Modules.OCS.IN.OrderEntry.Controls
             // 
             // btnAlergy
             // 
-            // this.btnAlergy.Appearance.Image = global::nU3.Modules.OCS.IN.OrderEntry.Properties.Resources.alergy;
-            this.btnAlergy.Appearance.Options.UseImage = true;
             this.btnAlergy.Location = new System.Drawing.Point(2, 2);
             this.btnAlergy.Name = "btnAlergy";
             this.btnAlergy.Size = new System.Drawing.Size(22, 22);
@@ -336,29 +337,29 @@ namespace nU3.Modules.OCS.IN.OrderEntry.Controls
 
         #endregion
 
-        private DevExpress.XtraEditors.GroupControl grpPatientInfo;
-        private DevExpress.XtraEditors.LabelControl lblDiagnosis;
-        private DevExpress.XtraEditors.TextEdit txtDiagnosis;
-        private DevExpress.XtraEditors.LabelControl lblInDate;
-        private DevExpress.XtraEditors.TextEdit txtInDate;
-        private DevExpress.XtraEditors.LabelControl lblRoomNo;
-        private DevExpress.XtraEditors.TextEdit txtRoomNo;
-        private DevExpress.XtraEditors.LabelControl lblDoctorName;
-        private DevExpress.XtraEditors.TextEdit txtDoctorName;
-        private DevExpress.XtraEditors.LabelControl lblDeptName;
-        private DevExpress.XtraEditors.TextEdit txtDeptName;
-        private DevExpress.XtraEditors.LabelControl lblAge;
-        private DevExpress.XtraEditors.TextEdit txtAge;
-        private DevExpress.XtraEditors.LabelControl lblGender;
-        private DevExpress.XtraEditors.TextEdit txtGender;
-        private DevExpress.XtraEditors.LabelControl lblPatName;
-        private DevExpress.XtraEditors.TextEdit txtPatName;
-        private DevExpress.XtraEditors.LabelControl lblPatId;
-        private DevExpress.XtraEditors.TextEdit txtPatId;
-        private DevExpress.XtraEditors.PanelControl pnlButtons;
-        private DevExpress.XtraEditors.SimpleButton btnVital;
-        private DevExpress.XtraEditors.SimpleButton btnMedi;
-        private DevExpress.XtraEditors.SimpleButton btnAlert;
-        private DevExpress.XtraEditors.SimpleButton btnAlergy;
+        private nU3.Core.UI.Controls.nU3GroupControl grpPatientInfo;
+        private nU3.Core.UI.Controls.nU3LabelControl lblDiagnosis;
+        private nU3.Core.UI.Controls.nU3TextEdit txtDiagnosis;
+        private nU3.Core.UI.Controls.nU3LabelControl lblInDate;
+        private nU3.Core.UI.Controls.nU3TextEdit txtInDate;
+        private nU3.Core.UI.Controls.nU3LabelControl lblRoomNo;
+        private nU3.Core.UI.Controls.nU3TextEdit txtRoomNo;
+        private nU3.Core.UI.Controls.nU3LabelControl lblDoctorName;
+        private nU3.Core.UI.Controls.nU3TextEdit txtDoctorName;
+        private nU3.Core.UI.Controls.nU3LabelControl lblDeptName;
+        private nU3.Core.UI.Controls.nU3TextEdit txtDeptName;
+        private nU3.Core.UI.Controls.nU3LabelControl lblAge;
+        private nU3.Core.UI.Controls.nU3TextEdit txtAge;
+        private nU3.Core.UI.Controls.nU3LabelControl lblGender;
+        private nU3.Core.UI.Controls.nU3TextEdit txtGender;
+        private nU3.Core.UI.Controls.nU3LabelControl lblPatName;
+        private nU3.Core.UI.Controls.nU3TextEdit txtPatName;
+        private nU3.Core.UI.Controls.nU3LabelControl lblPatId;
+        private nU3.Core.UI.Controls.nU3TextEdit txtPatId;
+        private nU3.Core.UI.Controls.nU3PanelControl pnlButtons;
+        private nU3.Core.UI.Controls.nU3SimpleButton btnVital;
+        private nU3.Core.UI.Controls.nU3SimpleButton btnMedi;
+        private nU3.Core.UI.Controls.nU3SimpleButton btnAlert;
+        private nU3.Core.UI.Controls.nU3SimpleButton btnAlergy;
     }
 }

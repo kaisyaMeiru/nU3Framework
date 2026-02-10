@@ -15,7 +15,7 @@ using DevExpress.XtraEditors.Repository;
 using DevExpress.Utils;
 using nU3.Core.UI;
 
-namespace nU3.Modules.OCS.IN.OrderEntry.Controls
+namespace nU3.Modules.OCS.IN.MainEntry.Controls
 {
     public partial class DiagCodeControl : BaseWorkControl
     {

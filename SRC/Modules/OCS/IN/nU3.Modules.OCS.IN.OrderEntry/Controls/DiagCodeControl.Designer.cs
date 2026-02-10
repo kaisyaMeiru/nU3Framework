@@ -1,3 +1,9 @@
+using System;
+using System.ComponentModel;
+using System.Windows.Forms;
+using nU3.Core.UI.Controls;
+using DevExpress.XtraGrid.Columns;
+
 namespace nU3.Modules.OCS.IN.OrderEntry.Controls
 {
     partial class DiagCodeControl
@@ -28,12 +34,16 @@ namespace nU3.Modules.OCS.IN.OrderEntry.Controls
         /// </summary>
         private void InitializeComponent()
         {
-            this.grpDiagCode = new DevExpress.XtraEditors.GroupControl();
-            this.pnlButtons = new DevExpress.XtraEditors.PanelControl();
-            this.btnDeleteDiag = new DevExpress.XtraEditors.SimpleButton();
-            this.btnAddDiag = new DevExpress.XtraEditors.SimpleButton();
-            this.gridControl = new DevExpress.XtraGrid.GridControl();
-            this.gridView = new DevExpress.XtraGrid.Views.Grid.GridView();
+            this.grpDiagCode = new nU3GroupControl();
+            this.pnlButtons = new nU3PanelControl();
+            this.btnDeleteDiag = new nU3SimpleButton();
+            this.btnAddDiag = new nU3SimpleButton();
+            this.gridControl = new nU3GridControl();
+            this.gridView = new nU3GridView();
+            this.colDiagCode = new nU3GridColumn();
+            this.colDiagName = new nU3GridColumn();
+            this.colDiagType = new nU3GridColumn();
+            this.colMainYn = new nU3GridColumn();
             ((System.ComponentModel.ISupportInitialize)(this.grpDiagCode)).BeginInit();
             this.grpDiagCode.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pnlButtons)).BeginInit();
@@ -66,7 +76,6 @@ namespace nU3.Modules.OCS.IN.OrderEntry.Controls
             // btnDeleteDiag
             // 
             this.btnDeleteDiag.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            // this.btnDeleteDiag.Image = global::nU3.Modules.OCS.IN.OrderEntry.Properties.Resources.delete;
             this.btnDeleteDiag.Location = new System.Drawing.Point(139, 3);
             this.btnDeleteDiag.Name = "btnDeleteDiag";
             this.btnDeleteDiag.Size = new System.Drawing.Size(75, 23);
@@ -77,7 +86,6 @@ namespace nU3.Modules.OCS.IN.OrderEntry.Controls
             // btnAddDiag
             // 
             this.btnAddDiag.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            // this.btnAddDiag.Image = global::nU3.Modules.OCS.IN.OrderEntry.Properties.Resources.add;
             this.btnAddDiag.Location = new System.Drawing.Point(58, 3);
             this.btnAddDiag.Name = "btnAddDiag";
             this.btnAddDiag.Size = new System.Drawing.Size(75, 23);
@@ -98,13 +106,7 @@ namespace nU3.Modules.OCS.IN.OrderEntry.Controls
             // 
             // gridView
             // 
-            this.gridView.Appearance.HeaderPanel.Options.UseTextOptions = true;
-            this.gridView.Appearance.HeaderPanel.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
-            this.gridView.Appearance.Row.Options.UseTextOptions = true;
-            this.gridView.Appearance.Row.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Near;
-            this.gridView.Appearance.ViewCaption.Options.UseTextOptions = true;
-            this.gridView.Appearance.ViewCaption.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
-            this.gridView.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] {
+            this.gridView.Columns.AddRange(new GridColumn[] {
             this.colDiagCode,
             this.colDiagName,
             this.colDiagType,
@@ -181,15 +183,15 @@ namespace nU3.Modules.OCS.IN.OrderEntry.Controls
 
         #endregion
 
-        private DevExpress.XtraEditors.GroupControl grpDiagCode;
-        private DevExpress.XtraEditors.PanelControl pnlButtons;
-        private DevExpress.XtraEditors.SimpleButton btnDeleteDiag;
-        private DevExpress.XtraEditors.SimpleButton btnAddDiag;
-        private DevExpress.XtraGrid.GridControl gridControl;
-        private DevExpress.XtraGrid.Views.Grid.GridView gridView;
-        private DevExpress.XtraGrid.Columns.GridColumn colDiagCode;
-        private DevExpress.XtraGrid.Columns.GridColumn colDiagName;
-        private DevExpress.XtraGrid.Columns.GridColumn colDiagType;
-        private DevExpress.XtraGrid.Columns.GridColumn colMainYn;
+        private nU3GroupControl grpDiagCode;
+        private nU3PanelControl pnlButtons;
+        private nU3SimpleButton btnDeleteDiag;
+        private nU3SimpleButton btnAddDiag;
+        private nU3GridControl gridControl;
+        private nU3GridView gridView;
+        private nU3GridColumn colDiagCode;
+        private nU3GridColumn colDiagName;
+        private nU3GridColumn colDiagType;
+        private nU3GridColumn colMainYn;
     }
 }

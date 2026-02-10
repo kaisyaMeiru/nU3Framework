@@ -31,20 +31,20 @@ namespace nU3.Modules.OCS.IN.OrderEntry
             this.components = new System.ComponentModel.Container();
             
             // 메인 패널
-            this.pnlMain = new DevExpress.XtraEditors.PanelControl();
-            this.pnlPatientInfo = new DevExpress.XtraEditors.PanelControl();
-            this.pnlWaitList = new DevExpress.XtraEditors.PanelControl();
-            this.pnlCenter = new DevExpress.XtraEditors.PanelControl();
-            this.pnlRight = new DevExpress.XtraEditors.PanelControl();
-            this.pnlBottom = new DevExpress.XtraEditors.PanelControl();
+            this.pnlMain = new nU3.Core.UI.Controls.nU3PanelControl();
+            this.pnlPatientInfo = new nU3.Core.UI.Controls.nU3PanelControl();
+            this.pnlWaitList = new nU3.Core.UI.Controls.nU3PanelControl();
+            this.pnlCenter = new nU3.Core.UI.Controls.nU3PanelControl();
+            this.pnlRight = new nU3.Core.UI.Controls.nU3PanelControl();
+            this.pnlBottom = new nU3.Core.UI.Controls.nU3PanelControl();
             
             // 상단 패널
-            this.pnlTop = new DevExpress.XtraEditors.PanelControl();
-            this.pnlTopBar = new DevExpress.XtraEditors.PanelControl();
+            this.pnlTop = new nU3.Core.UI.Controls.nU3PanelControl();
+            this.pnlTopBar = new nU3.Core.UI.Controls.nU3PanelControl();
             
             // 하단 패널
-            this.pnlDiagProblem = new DevExpress.XtraEditors.PanelControl();
-            this.pnlMemo = new DevExpress.XtraEditors.PanelControl();
+            this.pnlDiagProblem = new nU3.Core.UI.Controls.nU3PanelControl();
+            this.pnlMemo = new nU3.Core.UI.Controls.nU3PanelControl();
             
             // 컨트롤들
             this.PatientInfoControl = new nU3.Modules.OCS.IN.OrderEntry.Controls.PatientInfoControl();
@@ -57,25 +57,25 @@ namespace nU3.Modules.OCS.IN.OrderEntry
             this.OtherTabControl = new nU3.Modules.OCS.IN.OrderEntry.Controls.OtherTabControl();
             
             // 탭 컨트롤
-            this.tabSupport = new DevExpress.XtraTab.XtraTabControl();
-            this.OrderPage = new DevExpress.XtraTab.XtraTabPage();
+            this.tabSupport = new nU3.Core.UI.Controls.nU3XtraTabControl();
+            this.OrderPage = new nU3.Core.UI.Controls.nU3XtraTabPage();
             
             // 버튼들
-            this.btnConfirm = new DevExpress.XtraEditors.SimpleButton();
-            this.btnHolding = new DevExpress.XtraEditors.SimpleButton();
-            this.btnDelete = new DevExpress.XtraEditors.SimpleButton();
-            this.btnSender = new DevExpress.XtraEditors.SimpleButton();
+            this.btnConfirm = new nU3.Core.UI.Controls.nU3SimpleButton();
+            this.btnHolding = new nU3.Core.UI.Controls.nU3SimpleButton();
+            this.btnDelete = new nU3.Core.UI.Controls.nU3SimpleButton();
+            this.btnSender = new nU3.Core.UI.Controls.nU3SimpleButton();
             
             // 상단 버튼들
-            this.btnOpHistory = new DevExpress.XtraEditors.SimpleButton();
-            this.btnFamilyHistory = new DevExpress.XtraEditors.SimpleButton();
-            this.btnPastHistory = new DevExpress.XtraEditors.SimpleButton();
+            this.btnOpHistory = new nU3.Core.UI.Controls.nU3SimpleButton();
+            this.btnFamilyHistory = new nU3.Core.UI.Controls.nU3SimpleButton();
+            this.btnPastHistory = new nU3.Core.UI.Controls.nU3SimpleButton();
             
             // 기타 컨트롤들
-            this.cboOrderType = new DevExpress.XtraEditors.ComboBoxEdit();
-            this.dtpOrdDate = new DevExpress.XtraEditors.DateEdit();
-            this.lblTitle = new DevExpress.XtraEditors.LabelControl();
-            this.lblOrderType = new DevExpress.XtraEditors.LabelControl();
+            this.cboOrderType = new nU3.Core.UI.Controls.nU3ComboBoxEdit();
+            this.dtpOrdDate = new nU3.Core.UI.Controls.nU3DateEdit();
+            this.lblTitle = new nU3.Core.UI.Controls.nU3LabelControl();
+            this.lblOrderType = new nU3.Core.UI.Controls.nU3LabelControl();
             
             // 스플리터
             this.splitterLeft = new DevExpress.XtraEditors.SplitterControl();
@@ -448,16 +448,16 @@ namespace nU3.Modules.OCS.IN.OrderEntry
 
         #endregion
 
-        private DevExpress.XtraEditors.PanelControl pnlMain;
-        private DevExpress.XtraEditors.PanelControl pnlPatientInfo;
-        private DevExpress.XtraEditors.PanelControl pnlWaitList;
-        private DevExpress.XtraEditors.PanelControl pnlCenter;
-        private DevExpress.XtraEditors.PanelControl pnlRight;
-        private DevExpress.XtraEditors.PanelControl pnlBottom;
-        private DevExpress.XtraEditors.PanelControl pnlTop;
-        private DevExpress.XtraEditors.PanelControl pnlTopBar;
-        private DevExpress.XtraEditors.PanelControl pnlDiagProblem;
-        private DevExpress.XtraEditors.PanelControl pnlMemo;
+        private nU3.Core.UI.Controls.nU3PanelControl pnlMain;
+        private nU3.Core.UI.Controls.nU3PanelControl pnlPatientInfo;
+        private nU3.Core.UI.Controls.nU3PanelControl pnlWaitList;
+        private nU3.Core.UI.Controls.nU3PanelControl pnlCenter;
+        private nU3.Core.UI.Controls.nU3PanelControl pnlRight;
+        private nU3.Core.UI.Controls.nU3PanelControl pnlBottom;
+        private nU3.Core.UI.Controls.nU3PanelControl pnlTop;
+        private nU3.Core.UI.Controls.nU3PanelControl pnlTopBar;
+        private nU3.Core.UI.Controls.nU3PanelControl pnlDiagProblem;
+        private nU3.Core.UI.Controls.nU3PanelControl pnlMemo;
         private nU3.Modules.OCS.IN.OrderEntry.Controls.PatientInfoControl PatientInfoControl;
         private nU3.Modules.OCS.IN.OrderEntry.Controls.PatientListControl PatientListControl;
         private nU3.Modules.OCS.IN.OrderEntry.Controls.OrderCodeControl OrderCodeControl;
@@ -466,19 +466,19 @@ namespace nU3.Modules.OCS.IN.OrderEntry
         private nU3.Modules.OCS.IN.OrderEntry.Controls.OtherOrderControl OtherOrderControl;
         private nU3.Modules.OCS.IN.OrderEntry.Controls.SendMemoControl SendMemoControl;
         private nU3.Modules.OCS.IN.OrderEntry.Controls.OtherTabControl OtherTabControl;
-        private DevExpress.XtraTab.XtraTabControl tabSupport;
-        private DevExpress.XtraTab.XtraTabPage OrderPage;
-        private DevExpress.XtraEditors.SimpleButton btnConfirm;
-        private DevExpress.XtraEditors.SimpleButton btnHolding;
-        private DevExpress.XtraEditors.SimpleButton btnDelete;
-        private DevExpress.XtraEditors.SimpleButton btnSender;
-        private DevExpress.XtraEditors.SimpleButton btnOpHistory;
-        private DevExpress.XtraEditors.SimpleButton btnFamilyHistory;
-        private DevExpress.XtraEditors.SimpleButton btnPastHistory;
-        private DevExpress.XtraEditors.ComboBoxEdit cboOrderType;
-        private DevExpress.XtraEditors.DateEdit dtpOrdDate;
-        private DevExpress.XtraEditors.LabelControl lblTitle;
-        private DevExpress.XtraEditors.LabelControl lblOrderType;
+        private nU3.Core.UI.Controls.nU3XtraTabControl tabSupport;
+        private nU3.Core.UI.Controls.nU3XtraTabPage OrderPage;
+        private nU3.Core.UI.Controls.nU3SimpleButton btnConfirm;
+        private nU3.Core.UI.Controls.nU3SimpleButton btnHolding;
+        private nU3.Core.UI.Controls.nU3SimpleButton btnDelete;
+        private nU3.Core.UI.Controls.nU3SimpleButton btnSender;
+        private nU3.Core.UI.Controls.nU3SimpleButton btnOpHistory;
+        private nU3.Core.UI.Controls.nU3SimpleButton btnFamilyHistory;
+        private nU3.Core.UI.Controls.nU3SimpleButton btnPastHistory;
+        private nU3.Core.UI.Controls.nU3ComboBoxEdit cboOrderType;
+        private nU3.Core.UI.Controls.nU3DateEdit dtpOrdDate;
+        private nU3.Core.UI.Controls.nU3LabelControl lblTitle;
+        private nU3.Core.UI.Controls.nU3LabelControl lblOrderType;
         private DevExpress.XtraEditors.SplitterControl splitterLeft;
         private DevExpress.XtraEditors.SplitterControl splitterRight;
         private DevExpress.XtraEditors.SplitterControl splitterCenter;

@@ -1,3 +1,9 @@
+using System;
+using System.ComponentModel;
+using System.Windows.Forms;
+using nU3.Core.UI.Controls;
+using DevExpress.XtraGrid.Columns;
+
 namespace nU3.Modules.OCS.IN.OrderEntry.Controls
 {
     partial class PatientListControl
@@ -28,20 +34,20 @@ namespace nU3.Modules.OCS.IN.OrderEntry.Controls
         /// </summary>
         private void InitializeComponent()
         {
-            this.grpPatientList = new DevExpress.XtraEditors.GroupControl();
-            this.pnlButtons = new DevExpress.XtraEditors.PanelControl();
-            this.btnRefresh = new DevExpress.XtraEditors.SimpleButton();
-            this.gridControl = new DevExpress.XtraGrid.GridControl();
-            this.gridView = new DevExpress.XtraGrid.Views.Grid.GridView();
-            this.colInNumber = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.colPatiNumber = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.colPatiName = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.colGender = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.colAge = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.colDeptName = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.colDoctorName = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.colRoomNo = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.colAdmDate = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.grpPatientList = new nU3GroupControl();
+            this.pnlButtons = new nU3PanelControl();
+            this.btnRefresh = new nU3SimpleButton();
+            this.gridControl = new nU3GridControl();
+            this.gridView = new nU3GridView();
+            this.colInNumber = new nU3GridColumn();
+            this.colPatiNumber = new nU3GridColumn();
+            this.colPatiName = new nU3GridColumn();
+            this.colGender = new nU3GridColumn();
+            this.colAge = new nU3GridColumn();
+            this.colDeptName = new nU3GridColumn();
+            this.colDoctorName = new nU3GridColumn();
+            this.colRoomNo = new nU3GridColumn();
+            this.colAdmDate = new nU3GridColumn();
             ((System.ComponentModel.ISupportInitialize)(this.grpPatientList)).BeginInit();
             this.grpPatientList.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pnlButtons)).BeginInit();
@@ -73,7 +79,6 @@ namespace nU3.Modules.OCS.IN.OrderEntry.Controls
             // btnRefresh
             // 
             this.btnRefresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            // this.btnRefresh.Image = global::nU3.Modules.OCS.IN.OrderEntry.Properties.Resources.refresh;
             this.btnRefresh.Location = new System.Drawing.Point(189, 3);
             this.btnRefresh.Name = "btnRefresh";
             this.btnRefresh.Size = new System.Drawing.Size(75, 23);
@@ -94,13 +99,7 @@ namespace nU3.Modules.OCS.IN.OrderEntry.Controls
             // 
             // gridView
             // 
-            this.gridView.Appearance.HeaderPanel.Options.UseTextOptions = true;
-            this.gridView.Appearance.HeaderPanel.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
-            this.gridView.Appearance.Row.Options.UseTextOptions = true;
-            this.gridView.Appearance.Row.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Near;
-            this.gridView.Appearance.ViewCaption.Options.UseTextOptions = true;
-            this.gridView.Appearance.ViewCaption.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
-            this.gridView.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] {
+            this.gridView.Columns.AddRange(new GridColumn[] {
             this.colInNumber,
             this.colPatiNumber,
             this.colPatiName,
@@ -229,19 +228,19 @@ namespace nU3.Modules.OCS.IN.OrderEntry.Controls
 
         #endregion
 
-        private DevExpress.XtraEditors.GroupControl grpPatientList;
-        private DevExpress.XtraEditors.PanelControl pnlButtons;
-        private DevExpress.XtraEditors.SimpleButton btnRefresh;
-        private DevExpress.XtraGrid.GridControl gridControl;
-        private DevExpress.XtraGrid.Views.Grid.GridView gridView;
-        private DevExpress.XtraGrid.Columns.GridColumn colInNumber;
-        private DevExpress.XtraGrid.Columns.GridColumn colPatiNumber;
-        private DevExpress.XtraGrid.Columns.GridColumn colPatiName;
-        private DevExpress.XtraGrid.Columns.GridColumn colGender;
-        private DevExpress.XtraGrid.Columns.GridColumn colAge;
-        private DevExpress.XtraGrid.Columns.GridColumn colDeptName;
-        private DevExpress.XtraGrid.Columns.GridColumn colDoctorName;
-        private DevExpress.XtraGrid.Columns.GridColumn colRoomNo;
-        private DevExpress.XtraGrid.Columns.GridColumn colAdmDate;
+        private nU3GroupControl grpPatientList;
+        private nU3PanelControl pnlButtons;
+        private nU3SimpleButton btnRefresh;
+        private nU3GridControl gridControl;
+        private nU3GridView gridView;
+        private nU3GridColumn colInNumber;
+        private nU3GridColumn colPatiNumber;
+        private nU3GridColumn colPatiName;
+        private nU3GridColumn colGender;
+        private nU3GridColumn colAge;
+        private nU3GridColumn colDeptName;
+        private nU3GridColumn colDoctorName;
+        private nU3GridColumn colRoomNo;
+        private nU3GridColumn colAdmDate;
     }
 }

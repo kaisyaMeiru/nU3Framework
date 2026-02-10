@@ -28,20 +28,20 @@ namespace nU3.Modules.OCS.IN.OrderEntry.Controls
         /// </summary>
         private void InitializeComponent()
         {
-            this.grpOrderCode = new DevExpress.XtraEditors.GroupControl();
-            this.pnlButtons = new DevExpress.XtraEditors.PanelControl();
-            this.btnDeleteOrder = new DevExpress.XtraEditors.SimpleButton();
-            this.btnAddOrder = new DevExpress.XtraEditors.SimpleButton();
-            this.gridControl = new DevExpress.XtraGrid.GridControl();
-            this.gridView = new DevExpress.XtraGrid.Views.Grid.GridView();
-            this.colOrderCode = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.colOrderName = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.colOrderType = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.colQty = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.colDays = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.colDose = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.colRoute = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.colFrequency = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.grpOrderCode = new nU3.Core.UI.Controls.nU3GroupControl();
+            this.pnlButtons = new nU3.Core.UI.Controls.nU3PanelControl();
+            this.btnDeleteOrder = new nU3.Core.UI.Controls.nU3SimpleButton();
+            this.btnAddOrder = new nU3.Core.UI.Controls.nU3SimpleButton();
+            this.gridControl = new nU3.Core.UI.Controls.nU3GridControl();
+            this.gridView = new nU3.Core.UI.Controls.nU3GridView();
+            this.colOrderCode = new nU3.Core.UI.Controls.nU3GridColumn();
+            this.colOrderName = new nU3.Core.UI.Controls.nU3GridColumn();
+            this.colOrderType = new nU3.Core.UI.Controls.nU3GridColumn();
+            this.colQty = new nU3.Core.UI.Controls.nU3GridColumn();
+            this.colDays = new nU3.Core.UI.Controls.nU3GridColumn();
+            this.colDose = new nU3.Core.UI.Controls.nU3GridColumn();
+            this.colRoute = new nU3.Core.UI.Controls.nU3GridColumn();
+            this.colFrequency = new nU3.Core.UI.Controls.nU3GridColumn();
             ((System.ComponentModel.ISupportInitialize)(this.grpOrderCode)).BeginInit();
             this.grpOrderCode.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pnlButtons)).BeginInit();
@@ -108,7 +108,7 @@ namespace nU3.Modules.OCS.IN.OrderEntry.Controls
             this.gridView.Appearance.HeaderPanel.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
             this.gridView.Appearance.Row.Options.UseTextOptions = true;
             this.gridView.Appearance.Row.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Near;
-            this.gridView.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] {
+            this.gridView.Columns.AddRange(new nU3.Core.UI.Controls.nU3GridColumn[] {
             this.colOrderCode,
             this.colOrderName,
             this.colOrderType,
@@ -228,15 +228,15 @@ namespace nU3.Modules.OCS.IN.OrderEntry.Controls
         private DevExpress.XtraEditors.PanelControl pnlButtons;
         private DevExpress.XtraEditors.SimpleButton btnDeleteOrder;
         private DevExpress.XtraEditors.SimpleButton btnAddOrder;
-        private DevExpress.XtraGrid.GridControl gridControl;
-        private DevExpress.XtraGrid.Views.Grid.GridView gridView;
-        private DevExpress.XtraGrid.Columns.GridColumn colOrderCode;
-        private DevExpress.XtraGrid.Columns.GridColumn colOrderName;
-        private DevExpress.XtraGrid.Columns.GridColumn colOrderType;
-        private DevExpress.XtraGrid.Columns.GridColumn colQty;
-        private DevExpress.XtraGrid.Columns.GridColumn colDays;
-        private DevExpress.XtraGrid.Columns.GridColumn colDose;
-        private DevExpress.XtraGrid.Columns.GridColumn colRoute;
-        private DevExpress.XtraGrid.Columns.GridColumn colFrequency;
+        private nU3.Core.UI.Controls.nU3GridControl gridControl;
+        private nU3.Core.UI.Controls.nU3GridView gridView;
+        private nU3.Core.UI.Controls.nU3GridColumn colOrderCode;
+        private nU3.Core.UI.Controls.nU3GridColumn colOrderName;
+        private nU3.Core.UI.Controls.nU3GridColumn colOrderType;
+        private nU3.Core.UI.Controls.nU3GridColumn colQty;
+        private nU3.Core.UI.Controls.nU3GridColumn colDays;
+        private nU3.Core.UI.Controls.nU3GridColumn colDose;
+        private nU3.Core.UI.Controls.nU3GridColumn colRoute;
+        private nU3.Core.UI.Controls.nU3GridColumn colFrequency;
     }
 }

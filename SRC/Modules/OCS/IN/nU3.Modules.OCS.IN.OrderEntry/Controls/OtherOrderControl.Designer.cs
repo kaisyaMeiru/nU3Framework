@@ -28,20 +28,20 @@ namespace nU3.Modules.OCS.IN.OrderEntry.Controls
         /// </summary>
         private void InitializeComponent()
         {
-            this.tabControl = new DevExpress.XtraTab.XtraTabControl();
-            this.tabOrder = new DevExpress.XtraTab.XtraTabPage();
-            this.pnlOrder = new DevExpress.XtraEditors.PanelControl();
-            this.pnlOrderButtons = new DevExpress.XtraEditors.PanelControl();
-            this.btnDietOrder = new DevExpress.XtraEditors.SimpleButton();
-            this.btnPhysicalOrder = new DevExpress.XtraEditors.SimpleButton();
-            this.btnNurseOrder = new DevExpress.XtraEditors.SimpleButton();
-            this.btnSurgeryOrder = new DevExpress.XtraEditors.SimpleButton();
-            this.btnRadOrder = new DevExpress.XtraEditors.SimpleButton();
-            this.btnLabOrder = new DevExpress.XtraEditors.SimpleButton();
-            this.tabSheet = new DevExpress.XtraTab.XtraTabPage();
-            this.lblSheet = new DevExpress.XtraEditors.LabelControl();
-            this.tabEtc = new DevExpress.XtraTab.XtraTabPage();
-            this.lblEtc = new DevExpress.XtraEditors.LabelControl();
+            this.tabControl = new nU3.Core.UI.Controls.nU3XtraTabControl();
+            this.tabOrder = new nU3.Core.UI.Controls.nU3XtraTabPage();
+            this.pnlOrder = new nU3.Core.UI.Controls.nU3PanelControl();
+            this.pnlOrderButtons = new nU3.Core.UI.Controls.nU3PanelControl();
+            this.btnDietOrder = new nU3.Core.UI.Controls.nU3SimpleButton();
+            this.btnPhysicalOrder = new nU3.Core.UI.Controls.nU3SimpleButton();
+            this.btnNurseOrder = new nU3.Core.UI.Controls.nU3SimpleButton();
+            this.btnSurgeryOrder = new nU3.Core.UI.Controls.nU3SimpleButton();
+            this.btnRadOrder = new nU3.Core.UI.Controls.nU3SimpleButton();
+            this.btnLabOrder = new nU3.Core.UI.Controls.nU3SimpleButton();
+            this.tabSheet = new nU3.Core.UI.Controls.nU3XtraTabPage();
+            this.lblSheet = new nU3.Core.UI.Controls.nU3LabelControl();
+            this.tabEtc = new nU3.Core.UI.Controls.nU3XtraTabPage();
+            this.lblEtc = new nU3.Core.UI.Controls.nU3LabelControl();
             ((System.ComponentModel.ISupportInitialize)(this.tabControl)).BeginInit();
             this.tabControl.SuspendLayout();
             this.tabOrder.SuspendLayout();
@@ -92,9 +92,7 @@ namespace nU3.Modules.OCS.IN.OrderEntry.Controls
             // 
             // btnDietOrder
             // 
-            // this.btnDietOrder.Appearance.Image = global::nU3.Modules.OCS.IN.OrderEntry.Properties.Resources.diet;
-            this.btnDietOrder.Appearance.Options.UseImage = true;
-            this.btnDietOrder.ImageLocation = DevExpress.XtraEditors.ImageLocation.TopCenter;
+            this.btnDietOrder.ImageOptions.Location = DevExpress.XtraEditors.ImageLocation.TopCenter;
             this.btnDietOrder.Location = new System.Drawing.Point(300, 420);
             this.btnDietOrder.Name = "btnDietOrder";
             this.btnDietOrder.Size = new System.Drawing.Size(120, 80);
@@ -104,9 +102,7 @@ namespace nU3.Modules.OCS.IN.OrderEntry.Controls
             // 
             // btnPhysicalOrder
             // 
-            // this.btnPhysicalOrder.Appearance.Image = global::nU3.Modules.OCS.IN.OrderEntry.Properties.Resources.physical;
-            this.btnPhysicalOrder.Appearance.Options.UseImage = true;
-            this.btnPhysicalOrder.ImageLocation = DevExpress.XtraEditors.ImageLocation.TopCenter;
+            this.btnPhysicalOrder.ImageOptions.Location = DevExpress.XtraEditors.ImageLocation.TopCenter;
             this.btnPhysicalOrder.Location = new System.Drawing.Point(174, 420);
             this.btnPhysicalOrder.Name = "btnPhysicalOrder";
             this.btnPhysicalOrder.Size = new System.Drawing.Size(120, 80);
@@ -116,9 +112,7 @@ namespace nU3.Modules.OCS.IN.OrderEntry.Controls
             // 
             // btnNurseOrder
             // 
-            // this.btnNurseOrder.Appearance.Image = global::nU3.Modules.OCS.IN.OrderEntry.Properties.Resources.nurse;
-            this.btnNurseOrder.Appearance.Options.UseImage = true;
-            this.btnNurseOrder.ImageLocation = DevExpress.XtraEditors.ImageLocation.TopCenter;
+            this.btnNurseOrder.ImageOptions.Location = DevExpress.XtraEditors.ImageLocation.TopCenter;
             this.btnNurseOrder.Location = new System.Drawing.Point(300, 334);
             this.btnNurseOrder.Name = "btnNurseOrder";
             this.btnNurseOrder.Size = new System.Drawing.Size(120, 80);
@@ -128,9 +122,7 @@ namespace nU3.Modules.OCS.IN.OrderEntry.Controls
             // 
             // btnSurgeryOrder
             // 
-            // this.btnSurgeryOrder.Appearance.Image = global::nU3.Modules.OCS.IN.OrderEntry.Properties.Resources.surgery;
-            this.btnSurgeryOrder.Appearance.Options.UseImage = true;
-            this.btnSurgeryOrder.ImageLocation = DevExpress.XtraEditors.ImageLocation.TopCenter;
+            this.btnSurgeryOrder.ImageOptions.Location = DevExpress.XtraEditors.ImageLocation.TopCenter;
             this.btnSurgeryOrder.Location = new System.Drawing.Point(174, 334);
             this.btnSurgeryOrder.Name = "btnSurgeryOrder";
             this.btnSurgeryOrder.Size = new System.Drawing.Size(120, 80);
@@ -140,9 +132,7 @@ namespace nU3.Modules.OCS.IN.OrderEntry.Controls
             // 
             // btnRadOrder
             // 
-            // this.btnRadOrder.Appearance.Image = global::nU3.Modules.OCS.IN.OrderEntry.Properties.Resources.radiation;
-            this.btnRadOrder.Appearance.Options.UseImage = true;
-            this.btnRadOrder.ImageLocation = DevExpress.XtraEditors.ImageLocation.TopCenter;
+            this.btnRadOrder.ImageOptions.Location = DevExpress.XtraEditors.ImageLocation.TopCenter;
             this.btnRadOrder.Location = new System.Drawing.Point(300, 248);
             this.btnRadOrder.Name = "btnRadOrder";
             this.btnRadOrder.Size = new System.Drawing.Size(120, 80);
@@ -152,9 +142,7 @@ namespace nU3.Modules.OCS.IN.OrderEntry.Controls
             // 
             // btnLabOrder
             // 
-            // this.btnLabOrder.Appearance.Image = global::nU3.Modules.OCS.IN.OrderEntry.Properties.Resources.lab;
-            this.btnLabOrder.Appearance.Options.UseImage = true;
-            this.btnLabOrder.ImageLocation = DevExpress.XtraEditors.ImageLocation.TopCenter;
+            this.btnLabOrder.ImageOptions.Location = DevExpress.XtraEditors.ImageLocation.TopCenter;
             this.btnLabOrder.Location = new System.Drawing.Point(174, 248);
             this.btnLabOrder.Name = "btnLabOrder";
             this.btnLabOrder.Size = new System.Drawing.Size(120, 80);
@@ -172,6 +160,8 @@ namespace nU3.Modules.OCS.IN.OrderEntry.Controls
             // lblSheet
             // 
             this.lblSheet.Appearance.Font = new System.Drawing.Font("Tahoma", 12F);
+            this.lblSheet.Appearance.Options.UseFont = true;
+            this.lblSheet.Appearance.Options.UseTextOptions = true;
             this.lblSheet.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
             this.lblSheet.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
             this.lblSheet.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -191,6 +181,8 @@ namespace nU3.Modules.OCS.IN.OrderEntry.Controls
             // lblEtc
             // 
             this.lblEtc.Appearance.Font = new System.Drawing.Font("Tahoma", 12F);
+            this.lblEtc.Appearance.Options.UseFont = true;
+            this.lblEtc.Appearance.Options.UseTextOptions = true;
             this.lblEtc.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
             this.lblEtc.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
             this.lblEtc.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -220,19 +212,19 @@ namespace nU3.Modules.OCS.IN.OrderEntry.Controls
 
         #endregion
 
-        private DevExpress.XtraTab.XtraTabControl tabControl;
-        private DevExpress.XtraTab.XtraTabPage tabOrder;
-        private DevExpress.XtraEditors.PanelControl pnlOrder;
-        private DevExpress.XtraEditors.PanelControl pnlOrderButtons;
-        private DevExpress.XtraEditors.SimpleButton btnDietOrder;
-        private DevExpress.XtraEditors.SimpleButton btnPhysicalOrder;
-        private DevExpress.XtraEditors.SimpleButton btnNurseOrder;
-        private DevExpress.XtraEditors.SimpleButton btnSurgeryOrder;
-        private DevExpress.XtraEditors.SimpleButton btnRadOrder;
-        private DevExpress.XtraEditors.SimpleButton btnLabOrder;
-        private DevExpress.XtraTab.XtraTabPage tabSheet;
-        private DevExpress.XtraEditors.LabelControl lblSheet;
-        private DevExpress.XtraTab.XtraTabPage tabEtc;
-        private DevExpress.XtraEditors.LabelControl lblEtc;
+        private nU3.Core.UI.Controls.nU3XtraTabControl tabControl;
+        private nU3.Core.UI.Controls.nU3XtraTabPage tabOrder;
+        private nU3.Core.UI.Controls.nU3PanelControl pnlOrder;
+        private nU3.Core.UI.Controls.nU3PanelControl pnlOrderButtons;
+        private nU3.Core.UI.Controls.nU3SimpleButton btnDietOrder;
+        private nU3.Core.UI.Controls.nU3SimpleButton btnPhysicalOrder;
+        private nU3.Core.UI.Controls.nU3SimpleButton btnNurseOrder;
+        private nU3.Core.UI.Controls.nU3SimpleButton btnSurgeryOrder;
+        private nU3.Core.UI.Controls.nU3SimpleButton btnRadOrder;
+        private nU3.Core.UI.Controls.nU3SimpleButton btnLabOrder;
+        private nU3.Core.UI.Controls.nU3XtraTabPage tabSheet;
+        private nU3.Core.UI.Controls.nU3LabelControl lblSheet;
+        private nU3.Core.UI.Controls.nU3XtraTabPage tabEtc;
+        private nU3.Core.UI.Controls.nU3LabelControl lblEtc;
     }
 }

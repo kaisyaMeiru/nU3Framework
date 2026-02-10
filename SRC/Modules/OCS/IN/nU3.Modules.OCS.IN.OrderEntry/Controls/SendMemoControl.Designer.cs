@@ -28,12 +28,12 @@ namespace nU3.Modules.OCS.IN.OrderEntry.Controls
         /// </summary>
         private void InitializeComponent()
         {
-            this.grpSendMemo = new DevExpress.XtraEditors.GroupControl();
-            this.pnlButtons = new DevExpress.XtraEditors.PanelControl();
-            this.btnMemoResv = new DevExpress.XtraEditors.SimpleButton();
-            this.btnSave = new DevExpress.XtraEditors.SimpleButton();
-            this.btnClear = new DevExpress.XtraEditors.SimpleButton();
-            this.memoEdit = new DevExpress.XtraEditors.MemoEdit();
+            this.grpSendMemo = new nU3.Core.UI.Controls.nU3GroupControl();
+            this.pnlButtons = new nU3.Core.UI.Controls.nU3PanelControl();
+            this.btnMemoResv = new nU3.Core.UI.Controls.nU3SimpleButton();
+            this.btnSave = new nU3.Core.UI.Controls.nU3SimpleButton();
+            this.btnClear = new nU3.Core.UI.Controls.nU3SimpleButton();
+            this.memoEdit = new nU3.Core.UI.Controls.nU3MemoEdit();
             ((System.ComponentModel.ISupportInitialize)(this.grpSendMemo)).BeginInit();
             this.grpSendMemo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pnlButtons)).BeginInit();
@@ -125,11 +125,11 @@ namespace nU3.Modules.OCS.IN.OrderEntry.Controls
 
         #endregion
 
-        private DevExpress.XtraEditors.GroupControl grpSendMemo;
-        private DevExpress.XtraEditors.PanelControl pnlButtons;
-        private DevExpress.XtraEditors.SimpleButton btnMemoResv;
-        private DevExpress.XtraEditors.SimpleButton btnSave;
-        private DevExpress.XtraEditors.SimpleButton btnClear;
-        private DevExpress.XtraEditors.MemoEdit memoEdit;
+        private nU3.Core.UI.Controls.nU3GroupControl grpSendMemo;
+        private nU3.Core.UI.Controls.nU3PanelControl pnlButtons;
+        private nU3.Core.UI.Controls.nU3SimpleButton btnMemoResv;
+        private nU3.Core.UI.Controls.nU3SimpleButton btnSave;
+        private nU3.Core.UI.Controls.nU3SimpleButton btnClear;
+        private nU3.Core.UI.Controls.nU3MemoEdit memoEdit;
     }
 }

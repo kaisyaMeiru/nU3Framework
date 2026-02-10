@@ -13,9 +13,9 @@ using nU3.Core.Events;
 using nU3.Models;
 using nU3.Core.Attributes;
 using nU3.Core.UI.Controls;
-using nU3.Modules.OCS.IN.OrderEntry.Controls;
+using nU3.Modules.OCS.IN.MainEntry.Controls;
 
-namespace nU3.Modules.OCS.IN.OrderEntry
+namespace nU3.Modules.OCS.IN.MainEntry
 {
     /// <summary>
     /// OCS 입원 처방 메인 화면

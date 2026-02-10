@@ -1,0 +1,14 @@
+<Project>
+  <PropertyGroup>
+    <!-- Module version is read from version.txt in this directory -->
+    <ModuleVersionFile>$(MSBuildThisFileDirectory)version.txt</ModuleVersionFile>
+    <ModuleVersion Condition="Exists('$(ModuleVersionFile)')">$([System.IO.File]::ReadAllText('$(ModuleVersionFile)').Trim())</ModuleVersion>
+
+    <!-- Apply to assembly/package versions -->
+    <Version Condition="'$(ModuleVersion)' != ''">$(ModuleVersion)</Version>
+    <AssemblyVersion Condition="'$(ModuleVersion)' != ''">$(ModuleVersion)</AssemblyVersion>
+    <FileVersion Condition="'$(ModuleVersion)' != ''">$(ModuleVersion)</FileVersion>
+    <InformationalVersion Condition="'$(ModuleVersion)' != ''">$(ModuleVersion)</InformationalVersion>
+	<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+</Project>

@@ -1,4 +1,4 @@
-namespace nU3.Modules.OCS.IN.OrderEntry.Controls
+namespace nU3.Modules.OCS.IN.MainEntry.Controls
 {
     partial class ProblemListControl
     {
