@@ -259,46 +259,80 @@ private void HandleUnhandledException(Exception exception, string source)
 }
 ```
 
+### 4. 배치 작업 (Batch Operations)
+
+대량의 쿼리나 파일 전송을 병렬로 처리할 때 사용합니다. `MaxConcurrentConnections` 설정에 따라 세마포어로 동시 실행 수가 제한됩니다.
+
+```csharp
+// 병렬 쿼리 실행
+var queries = new[]
+{
+    new BatchQueryRequest { QueryId = "Q1", CommandText = "SELECT * FROM Users" },
+    new BatchQueryRequest { QueryId = "Q2", CommandText = "SELECT * FROM Patients" }
+};
+
+var results = await ConnectivityManager.Instance.ExecuteBatchQueriesAsync(queries);
+
+foreach (var result in results)
+{
+    if (result.Success)
+        Console.WriteLine($"{result.QueryId} 성공: {result.Data.Rows.Count}행");
+}
+
+// 병렬 파일 업로드
+var uploadFiles = new[]
+{
+    new BatchFileRequest { FileId = "F1", LocalPath = "C:\\a.txt", ServerPath = "doc/a.txt" },
+    new BatchFileRequest { FileId = "F2", LocalPath = "C:\\b.txt", ServerPath = "doc/b.txt" }
+};
+
+var fileResults = await ConnectivityManager.Instance.UploadFilesAsync(uploadFiles);
+```
+
+### 5. 연결 테스트 (Connection Health Check)
+
+서버 상태와 개별 서비스(DB, File, Log)의 연결 상태를 종합적으로 점검합니다.
+
+```csharp
+// 모든 서비스 연결 테스트
+var testResult = await ConnectivityManager.Instance.TestAllConnectionsAsync();
+
+// 결과 출력 (ToString() 재정의됨)
+Console.WriteLine(testResult.ToString());
+
+/* 출력 예시:
+Connectivity Test Results (2026-02-10 14:00:00)
+Overall: ✅ All Connected
+
+Database:      ✅ Connected
+File Transfer: ✅ Connected
+Log Upload:    ✅ Connected
+*/
+```
+
 ---
 
 ## ?? 주요 기능
 
-### 1. 싱글톤 인스턴스
+### 1. 싱글톤 인스턴스 및 초기화
 
 ```csharp
-// 어디서든 접근 가능
-var manager = ConnectivityManager.Instance;
+// 초기화 (서버 주소, 로그 압축 여부, 최대 동시 연결 수)
+ConnectivityManager.Instance.Initialize("https://api.nu3.com", true, 20);
 ```
 
-### 2. Lazy Initialization
+### 2. HttpClient 풀링 및 리소스 관리
+
+`ConnectivityManager`는 내부적으로 `ConcurrentDictionary`와 `SemaphoreSlim`을 사용하여 `HttpClient` 인스턴스를 관리합니다. 
+- **DB/File/Log**: 단순 작업용 전용 클라이언트를 싱글톤으로 제공합니다.
+- **Pooled Client**: 동시성이 높은 작업은 `CreateDBClientAsync()`를 통해 풀에서 클라이언트를 빌려와 사용 후 `Dispose` 시 풀에 반환합니다.
 
 ```csharp
-// 처음 사용할 때만 생성
-var dt = await ConnectivityManager.Instance.DB.ExecuteDataTableAsync(...);
-// ↑ 여기서 HttpDBAccessClient 생성됨
-```
-
-### 3. 자동 리소스 관리
-
-```csharp
-// 모듈에서 Dispose 구현 불필요!
-// ConnectivityManager가 알아서 관리
-```
-
-### 4. 연결 테스트
-
-```csharp
-if (await ConnectivityManager.Instance.TestConnectionAsync())
+// 병렬 작업을 위한 풀링된 클라이언트 사용 예시
+using (var pooledClient = await ConnectivityManager.Instance.CreateDBClientAsync())
 {
-    Console.WriteLine("서버 연결됨");
-}
-```
-
-### 5. 자동 로그 업로드
-
-```csharp
-// 매일 오전 2시 자동 업로드
-ConnectivityManager.Instance.EnableAutoLogUpload(true);
+    var dt = await pooledClient.Client.ExecuteDataTableAsync("SELECT ...");
+} // Dispose 시 세마포어 Release 및 HttpClient 정리
 ```
 
 ---

@@ -141,7 +141,7 @@ namespace nU3.Bootstrapper
 
         /// <summary>
         /// 전체 업데이트 작업의 최종 결과를 화면에 표시합니다.
-        /// 성공 시 Shell 실행 버튼으로 변경, 실패 시 실패 항목을 강조합니다.
+        /// 성공 시 자동으로 폼을 닫아 Shell이 실행되도록 합니다.
         /// </summary>
         /// <param name="result">업데이트 결과 객체</param>
         public void ShowResult(ComponentUpdateResult result)
@@ -160,7 +160,19 @@ namespace nU3.Bootstrapper
             {
                 _lblStatus.Text = $"성공: {result.Message}";
                 _lblStatus.ForeColor = Color.Green;
-                _btnCancel.Text = "Shell 실행";
+                _btnCancel.Text = "Shell 실행 중...";
+                
+                // 성공 시 자동으로 폼 닫기 (1초 후)
+                var autoCloseTimer = new System.Windows.Forms.Timer();
+                autoCloseTimer.Interval = 1000; // 1초 대기
+                autoCloseTimer.Tick += (s, e) =>
+                {
+                    autoCloseTimer.Stop();
+                    autoCloseTimer.Dispose();
+                    this.DialogResult = DialogResult.OK;
+                    this.Close();
+                };
+                autoCloseTimer.Start();
             }
             else
             {
@@ -176,7 +188,7 @@ namespace nU3.Bootstrapper
         }
 
         /// <summary>
-        /// 업데이트가 없을 경우 UI를 갱신합니다.
+        /// 업데이트가 없을 경우 UI를 갱신하고 자동으로 폼을 닫습니다.
         /// </summary>
         public void ShowNoUpdates()
         {
@@ -190,8 +202,20 @@ namespace nU3.Bootstrapper
             _lblStatus.Text = "모든 컴포넌트가 최신 상태입니다.";
             _lblStatus.ForeColor = Color.Green;
             _lblDetail.Text = "";
-            _btnCancel.Text = "Shell 실행";
+            _btnCancel.Text = "Shell 실행 중...";
             _canClose = true;
+
+            // 업데이트 없을 때도 자동으로 폼 닫기 (1초 후)
+            var autoCloseTimer = new System.Windows.Forms.Timer();
+            autoCloseTimer.Interval = 1000; // 1초 대기
+            autoCloseTimer.Tick += (s, e) =>
+            {
+                autoCloseTimer.Stop();
+                autoCloseTimer.Dispose();
+                this.DialogResult = DialogResult.OK;
+                this.Close();
+            };
+            autoCloseTimer.Start();
         }
 
         /// <summary>

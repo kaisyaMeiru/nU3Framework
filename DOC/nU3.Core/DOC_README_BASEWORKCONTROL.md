@@ -11,71 +11,59 @@
   화면 간 공유되는 컨텍스트
 
   #### 컨텍스트에 포함된 정보
-  - **CurrentPatient**: 현재 선택된 환자 정보
-  - **CurrentExam**: 현재 선택된 검사 정보
-  - **CurrentAppointment**: 현재 선택된 예약 정보
-  - **CurrentUser**: 현재 로그인한 사용자 정보
-  - **Permissions**: 각 버튼/기능의 권한 정보
-  - **Parameters**: 화면으로 전달되는 매개변수
-  - **AdditionalData**: 추가 정보를 저장하는 공간
+  - **CurrentPatient**: 현재 선택된 환자 정보 (`PatientInfoDto`)
+  - **CurrentExam**: 현재 선택된 검사 정보 (`ExamOrderDto`)
+  - **CurrentAppointment**: 현재 선택된 예약 정보 (`AppointmentDto`)
+  - **CurrentUser**: 현재 로그인한 사용자 정보 (`UserInfoDto`)
+  - **Permissions**: 각 버튼/기능의 권한 정보 (`ModulePermissions`)
+  - **Parameters**: 화면으로 전달되는 매개변수 (`Dictionary<string, object>`)
 
   ### 2. 권한 제어 (ModulePermissions)
 
-  각 버튼/기능별 권한
+  `BaseWorkControl`에서 제공하는 권한 속성을 통해 선언적으로 버튼 활성화를 제어할 수 있습니다.
 
-  #### 기본 권한
+  #### 기본 권한 속성
   - `CanRead`: 조회 권한
   - `CanCreate`: 생성 권한
   - `CanUpdate`: 수정 권한
   - `CanDelete`: 삭제 권한
   - `CanPrint`: 인쇄 권한
   - `CanExport`: 내보내기 권한
-  - `CanApprove`: 승인 권한
-  - `CanCancel`: 취소 권한
-  - `CustomPermissions`: 사용자 정의 권한
 
-  ### 3. 리소스 관리
+  ### 3. 리소스 및 비동기 관리
 
-  모든 화면 컨트롤에 대한 리소스 관리
+  - **RegisterDisposable(IDisposable)**: 등록된 리소스를 화면 종료 시 자동으로 `Dispose()`합니다.
+  - **CancellationToken**: 화면이 닫히거나 리소스가 해제될 때 자동으로 취소 요청이 전달되는 토큰입니다. 비동기 DB 조회 시 필수 사용합니다.
 
-  #### 리소스 관리 메서드
-  - **RegisterDisposable()**: Disposable 리소스 자동 관리
-  - **ReleaseResources()**: 화면 종료 시 리소스 해제 (BeforeClose 시 호출)
-  - **OnReleaseResources()**: ReleaseResources 호출 후 수행하는 로직 (사용자 정의)
-  - **CancellationToken**: 비동기 작업 취소 토큰
+  ### 4. 인프라 서비스 접근
 
-  ### 4. 라이프사이클 메서드
+  - **Connectivity**: `ConnectivityManager`를 통해 DB(`Connectivity.DB`), 파일 전송 등에 접근합니다.
+  - **Logger / AuditLogger**: 표준 로깅 기능을 제공합니다.
 
-  화면 활성화/비활성화 제어
+  ### 5. 라이프사이클 메서드
 
-  #### 라이프사이클 메서드
-  - `OnScreenActivated()`: 화면 활성화 시
-  - `OnScreenDeactivated()`: 화면 비활성화 시
-  - `OnBeforeClose()`: 닫기 전
+  - `OnScreenActivated()`: 화면이 탭으로 선택되어 활성화될 때 호출됩니다.
+  - `OnScreenDeactivated()`: 다른 탭으로 이동하거나 화면이 가려질 때 호출됩니다.
+  - `OnBeforeClose()`: 화면이 닫히기 직전 호출되며, `false` 반환 시 닫기를 취소합니다.
+  - `OnReleaseResources()`: 리소스 해제 시 추가적인 정리 로직을 구현합니다.
 
   ## 사용 예시
 
-  ### 1. 기본 사용
+  ### 1. 기본 선언 ([nU3ProgramInfo] 필수)
 
   ```csharp
-  using System;
+  using nU3.Core.Attributes;
   using nU3.Core.UI;
-  using nU3.Core.Context;
-  using nU3.Models;
 
+  // 어트리뷰트를 통해 프로그램 ID, 이름, 타입을 지정합니다.
+  [nU3ProgramInfo(typeof(MyWorkControl), "내 작업 화면", "MY_SCREEN_001", "CHILD")]
   public class MyWorkControl : BaseWorkControl
   {
-      public override string ScreenId => "MY_SCREEN_001";
-      public override string ScreenTitle => "내 작업 화면";
-
-      public MyWorkControl()
+      protected override void OnScreenActivated()
       {
-          InitializeLayout();
-      }
-
-      protected override void InitializeLayout()
-      {
-          // UI 초기화
+          base.OnScreenActivated();
+          // 화면 활성화 시 데이터 로드
+          LoadData();
       }
   }
   ```
@@ -191,9 +179,9 @@
   {
       try
       {
-          // CancellationToken 전달 (자동 리소스 관리)
-          var results = await SearchDataAsync(keyword, CancellationToken);
-          DisplayResults(results);
+          // ConnectivityManager를 통한 DB 조회 (CancellationToken 전달)
+          var dt = await Connectivity.DB.ExecuteDataTableAsync("SELECT ...", CancellationToken);
+          gridControl1.DataSource = dt;
       }
       catch (OperationCanceledException)
       {
@@ -203,13 +191,6 @@
       {
           LogError("Search failed", ex);
       }
-  }
-
-  private async Task<List<Patient>> SearchDataAsync(string keyword, CancellationToken cancellationToken)
-  {
-      // 작업 취소 지원 비동기 작업
-      var results = await _patientService.SearchAsync(keyword, cancellationToken);
-      return results;
   }
   ```
 

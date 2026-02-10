@@ -82,20 +82,13 @@ if (serverConfig.Enabled)
 }
 ```
 
-### 2. MainShellForm에서 초기화
+### 2. MainShellForm에서 초기화 (ConnectivityManager 사용)
+
+`nUShell` (메인 폼)에서 `ConnectivityManager`를 사용하여 서버 연결을 중앙에서 초기화합니다.
 
 ```csharp
-public partial class MainShellForm : BaseWorkForm
+public partial class nUShell : BaseWorkForm
 {
-    private HttpDBAccessClient? _dbClient;
-    private HttpFileTransferClient? _fileClient;
-    
-    public MainShellForm(...)
-    {
-        InitializeComponent();
-        InitializeServerConnection();
-    }
-    
     private void InitializeServerConnection()
     {
         try
@@ -104,57 +97,51 @@ public partial class MainShellForm : BaseWorkForm
             
             if (!config.Enabled)
             {
-                LogManager.Info("Server connection disabled in configuration", "Shell");
+                LogManager.Info("구성에서 서버 연결이 비활성화되어 있습니다.", "Shell");
+                barStaticItemServer.Caption = "🔴 서버: 비활성화";
                 return;
             }
             
-            // HTTP 클라이언트 생성
-            _dbClient = new HttpDBAccessClient(config.BaseUrl);
-            _fileClient = new HttpFileTransferClient(config.BaseUrl);
+            // ConnectivityManager 초기화 (싱글톤)
+            // enableLogCompression: true로 설정하여 로그 업로드 시 GZip 압축 사용
+            ConnectivityManager.Instance.Initialize(config.BaseUrl, enableLogCompression: true);
             
-            LogManager.Info($"Server connection initialized: {config.BaseUrl}", "Shell");
+            // 로그 메시지 이벤트 구독
+            ConnectivityManager.Instance.LogMessage += OnConnectivityLogMessage;
             
-            // 상태바에 서버 주소 표시
-            barStaticItemServer.Caption = $"?? {config.BaseUrl}";
+            // 비동기 연결 테스트 수행
+            Task.Run(async () => {
+                var connected = await ConnectivityManager.Instance.TestConnectionAsync();
+                // UI 업데이트 로직...
+            });
         }
         catch (Exception ex)
         {
-            LogManager.Error("Failed to initialize server connection", "Shell", ex);
+            LogManager.Error("서버 연결 초기화 실패", "Shell", ex);
         }
     }
 }
 ```
 
-### 3. DB 쿼리 실행
+### 3. DB 쿼리 실행 (ConnectivityManager 접근)
+
+개별 클라이언트 인스턴스를 관리할 필요 없이 `ConnectivityManager.Instance.DB`를 사용합니다.
 
 ```csharp
 private async void btnLoadData_Click(object sender, EventArgs e)
 {
-    if (_dbClient == null)
-    {
-        XtraMessageBox.Show("서버 연결이 초기화되지 않았습니다.", "오류");
-        return;
-    }
-    
     try
     {
-        // DB 연결
-        await _dbClient.ConnectAsync();
-        
         // 쿼리 실행
-        var dt = await _dbClient.ExecuteDataTableAsync(
+        var dt = await ConnectivityManager.Instance.DB.ExecuteDataTableAsync(
             "SELECT * FROM Users WHERE Age > @age",
             new Dictionary<string, object> { { "@age", 18 } }
         );
         
-        // 결과 표시
         dataGridView1.DataSource = dt;
-        
-        LogManager.Info($"Data loaded: {dt.Rows.Count} rows", "Shell");
     }
     catch (Exception ex)
     {
-        LogManager.Error("Failed to load data", "Shell", ex);
         XtraMessageBox.Show($"데이터 로드 실패: {ex.Message}", "오류");
     }
 }

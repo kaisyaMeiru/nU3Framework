@@ -59,7 +59,7 @@ nU3.Connectivity/
 
 ## ?? 사용 방법
 
-### 1?? **HttpDBAccessClient 사용**
+### 1. HttpDBAccessClient 사용
 
 ```csharp
 using nU3.Connectivity.Implementations;
@@ -71,7 +71,7 @@ public class MyForm : Form
 
     public MyForm()
     {
-        // 서버 URL 지정
+        // 서버 URL 지정 (Timeout 기본 5분 설정됨)
         _dbClient = new HttpDBAccessClient("https://localhost:64229");
     }
 
@@ -79,14 +79,13 @@ public class MyForm : Form
     {
         try
         {
-            // DB 연결
+            // DB 연결 (POST /api/v1/db/connect)
             var connected = await _dbClient.ConnectAsync();
             
             if (connected)
             {
-                MessageBox.Show("DB 연결 성공!");
-                
-                // 쿼리 실행
+                // 쿼리 실행 (POST /api/v1/db/query/table)
+                // 결과는 List<Dictionary<string, object>>로 수신되어 DataTable로 자동 변환됨
                 var dt = await _dbClient.ExecuteDataTableAsync(
                     "SELECT * FROM Users WHERE Age > @age",
                     new Dictionary<string, object> { { "@age", 18 } }
@@ -99,15 +98,6 @@ public class MyForm : Form
         {
             MessageBox.Show($"에러: {ex.Message}");
         }
-    }
-
-    protected override void Dispose(bool disposing)
-    {
-        if (disposing)
-        {
-            _dbClient?.Dispose();
-        }
-        base.Dispose(disposing);
     }
 }
 ```
@@ -336,9 +326,12 @@ var logClient = new HttpLogUploadClient(httpClient, "https://localhost:64229");
 | `CommitTransaction()` | POST | `/api/v1/db/transaction/commit` |
 | `RollbackTransaction()` | POST | `/api/v1/db/transaction/rollback` |
 | `ExecuteDataTableAsync(...)` | POST | `/api/v1/db/query/table` |
+| `ExecuteDataSetAsync(...)` | POST | `/api/v1/db/query/table` |
 | `ExecuteNonQueryAsync(...)` | POST | `/api/v1/db/query/nonquery` |
 | `ExecuteScalarValueAsync(...)` | POST | `/api/v1/db/query/scalar` |
 | `ExecuteProcedureAsync(...)` | POST | `/api/v1/db/procedure` |
+
+> **참고**: `ExecuteDataSetAsync`는 서버에서 단일 테이블을 반환하더라도 클라이언트에서 `DataSet` 구조로 래핑하여 제공합니다.
 
 ### HttpFileTransferClient 매핑
 

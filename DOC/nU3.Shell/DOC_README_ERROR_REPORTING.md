@@ -7,24 +7,23 @@ MainShellForm에 예상치 않은 비정상 종료 발생 시 자동으로 에�
 ## 주요 기능
 
 ### 1. 자동 크래시 리포팅
-- **UI 스레드 예외** 처리
-- **비UI 스레드 예외** 처리
-- **Task 예외** 처리
-- **자동 스크린샷 캡처**
-- **상세 로그 파일 생성**
-- **이메일 자동 전송**
+- **UI 스레드 예외** 처리 (`Application.ThreadException`)
+- **비UI 스레드 예외** 처리 (`AppDomain.CurrentDomain.UnhandledException`)
+- **Task 예외** 처리 (`TaskScheduler.UnobservedTaskException`)
+- **자동 스크린샷 캡처** (`ScreenshotHelper`)
+- **상세 로그 파일 생성** (`CrashLogs` 폴더)
+- **이메일 자동 전송** (`EmailSettings` 기반)
+- **서버 로그 즉시 업로드** (`ConnectivityManager` 연동)
 
 ### 2. 수집되는 정보
-- 발생 시간
-- 사용자 ID 및 권한 레벨
-- 컴퓨터명
-- OS 버전
+- 발생 시간 및 타임스탬프
+- 사용자 ID (`UserSession.Current`)
+- 컴퓨터명, OS 버전, CLR 버전
 - 애플리케이션 버전
-- 예외 타입 및 메시지
-- 전체 스택 트레이스
-- 현재 활성 탭 정보
-- 열려있는 탭 수
-- 에러 발생 시 화면 스크린샷
+- 예외 타입, 메시지, 전체 스택 트레이스
+- **활성 탭 정보** (현재 작업 중이던 화면)
+- **열려있는 탭 수**
+- 에러 발생 시 전체 화면 또는 폼 스크린샷
 
 ### 3. 시스템 메뉴 기능
 - **에러 리포팅 설정**: 현재 설정 상태 확인
@@ -114,12 +113,24 @@ nU3.Shell/
 └── MainShellForm.cs                     # 전역 예외 처리
 ```
 
-## 로그 파일 위치
+## 로그 파일 및 업로드
 
+### 로그 파일 위치
 ```
 %AppData%\nU3.Framework\CrashLogs\
-├── crash_20241231_143025.png           # 스크린샷
-└── crash_20241231_143025.log           # 로그 파일
+├── crash_20260210_143025.png           # 스크린샷
+└── crash_20260210_143025.log           # 상세 로그 파일
+```
+
+### 서버 업로드
+`nUShell`은 예외 발생 시 `ConnectivityManager.Instance.Log`를 사용하여 현재 로그 파일과 크래시 정보를 서버로 즉시 업로드합니다. 이는 이메일 전송 실패 시에도 서버에서 오류를 추적할 수 있게 합니다.
+
+```csharp
+// nUShell.cs 내부 로직
+if (_loggingEnabled && _uploadOnError && ConnectivityManager.Instance.IsInitialized)
+{
+    await ConnectivityManager.Instance.Log.UploadCurrentLogImmediatelyAsync();
+}
 ```
 
 ## 이메일 리포트 샘플

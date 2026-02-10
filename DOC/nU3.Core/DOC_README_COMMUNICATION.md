@@ -30,7 +30,8 @@ nU3 Framework는 두 가지 통신 방식을 지원합니다:
 │  - PatientSelectedEvent                  │
 │  - ExamSelectedEvent                     │
 │  - WorkContextChangedEvent               │
-│  - NavigationRequestEvent등              │
+│  - ModuleActivatedEvent (자동 발행)        │
+│  - NavigationRequestEvent 등             │
 └───────────────────────────────────────────┘
 ```
 
@@ -199,9 +200,26 @@ public class PatientDetailControl : BaseWorkControl
 }
 ```
 
-### 3. Module ↔ Module (약결합)
+### 4. 자동 시스템 이벤트
 
-모듈 간 직접 통신은 EventAggregator를 통해서만 가능합니다.
+`BaseWorkControl`을 상속받은 화면은 활성화될 때 자동으로 `ModuleActivatedEvent`를 발행합니다. 이는 Shell의 타이틀 바 업데이트나 통계 수집 등에 사용됩니다.
+
+```csharp
+// BaseWorkControl.cs 내부 로직
+public virtual void OnActivated()
+{
+    // ...
+    EventBus?.GetEvent<ModuleActivatedEvent>().Publish(new ModuleActivatedEventPayload
+    {
+        ProgId = this.ProgramID,
+        ProgramName = this.ProgramTitle,
+        ModuleId = attr?.GetModuleId(),
+        Version = this.GetType().Assembly.GetName().Version?.ToString()
+    });
+}
+```
+
+## 이벤트 정의 가이드
 
 #### 발행자 모듈
 

@@ -41,21 +41,22 @@
 
 주요 흐름
 - 버전 비교
-  - `ComponentLoader`가 서버(또는 로컬 메타데이터)의 `SYS_COMPONENT_MST` / `SYS_COMPONENT_VER` 정보를 조회
-  - 로컬 파일의 해시(예: SHA256)와 서버에 등록된 해시를 비교
+  - `ComponentLoader`가 서버의 `SYS_COMPONENT_MST` / `SYS_COMPONENT_VER` 정보를 조회 (`ConnectivityManager` 활용)
+  - 로컬 파일의 해시(SHA256)와 서버에 등록된 해시를 비교
 
 - 캐시 기반 다운로드
-  - 업데이트 대상 발견 시 `HttpFileTransferClient` 등을 사용해 파일을 임시 캐시 경로(예: `%AppData%\nU3.Framework\Cache\Components`)로 다운로드
+  - 업데이트 대상 발견 시 `HttpFileTransferClient`를 사용해 파일을 임시 캐시 경로(예: `%AppData%\nU3.Framework\Cache\Components`)로 다운로드
   - 다운로드 실패/충돌에 대한 재시도 정책 적용
 
 - 패치 및 설치
-  - 캐시에서 실제 설치 경로(RuntimeDirectory)에 파일을 복사
+  - 캐시에서 실제 설치 경로(RuntimeDirectory + `InstallPath`)에 파일을 복사
+  - `InstallPath`가 지정된 경우 해당 하위 디렉토리에 배치 (예: `plugins`, `resources`)
   - 파일 잠금(사용 중) 문제 발생 시 재시도 로직을 통해 안정적으로 덮어쓰기
-  - 설치 완료 후 로그 기록 및 필요 시 모듈 메타데이터 갱신
+  - 설치 완료 후 로그 기록
 
 UI 연동
-- 업데이트 진행은 `UpdateProgressForm`을 통해 사용자에게 표시
-- 업데이트 실패 시 필수 컴포넌트 검사 후, 미설치 항목이 존재하면 실행 차단 및 경고
+- 업데이트 진행은 `UpdateProgressForm`을 통해 사용자에게 표시 (다운로드/설치 상태 분리 표시)
+- 업데이트 실패 시 필수(Required) 컴포넌트 여부에 따라 실행 차단 결정
 
 운영/보안 권고
 - 패치 파일 검증: 전송 중 무결성 검사를 위해 서버에서 해시/서명 정보를 제공하고, 클라이언트는 다운로드 후 검증해야 합니다.

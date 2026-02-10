@@ -74,6 +74,9 @@ namespace nU3.Bootstrapper
                 }
                 FileLogger.SectionEnd("데이터베이스 연결 확인");
 
+                // 1.5. 실행 중인 프로세스 확인 및 종료 (업데이트 전에 먼저 확인)
+                CheckAndKillRunningShell(_configuration);
+
                 // 2. 통합 업데이트 (ModuleLoaderService 사용)
                 FileLogger.SectionStart("시스템 업데이트");
 
@@ -116,9 +119,6 @@ namespace nU3.Bootstrapper
                 }
                 FileLogger.Info($"Shell 경로: {shellPath}");
                 FileLogger.SectionEnd("Shell 실행 파일 위치 확인");
-
-                // 3.2 실행 중인 프로세스 확인 및 종료 (이제 exeName이 존재하므로 확인 가능)
-                CheckAndKillRunningShell(_configuration);
 
                 // 4. Seeder (개발 환경용 더미 데이터)
 #if DEBUG

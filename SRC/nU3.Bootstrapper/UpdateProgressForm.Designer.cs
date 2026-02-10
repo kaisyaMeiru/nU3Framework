@@ -39,180 +39,206 @@ namespace nU3.Bootstrapper
 
         private void InitializeComponent()
         {
-            this._pnlTitleBar = new System.Windows.Forms.Panel();
-            this._lblTitleText = new System.Windows.Forms.Label();
-            this._btnClose = new System.Windows.Forms.Button();
-            this._pnlProgress = new System.Windows.Forms.Panel();
-            this._lblStatus = new System.Windows.Forms.Label();
-            this._lblDetail = new System.Windows.Forms.Label();
-            this._progressBar = new System.Windows.Forms.ProgressBar();
-            this._pnlList = new System.Windows.Forms.Panel();
-            this._listView = new System.Windows.Forms.ListView();
-            this._colStatus = new System.Windows.Forms.ColumnHeader();
-            this._colComponent = new System.Windows.Forms.ColumnHeader();
-            this._colVersion = new System.Windows.Forms.ColumnHeader();
-            this._colSize = new System.Windows.Forms.ColumnHeader();
-            this._colType = new System.Windows.Forms.ColumnHeader();
-            this._pnlBottom = new System.Windows.Forms.Panel();
-            this._btnCancel = new System.Windows.Forms.Button();
-            
-            this._pnlTitleBar.SuspendLayout();
-            this._pnlProgress.SuspendLayout();
-            this._pnlList.SuspendLayout();
-            this._pnlBottom.SuspendLayout();
-            this.SuspendLayout();
-
-            // 
-            // UpdateProgressForm
-            // 
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(600, 500);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Name = "UpdateProgressForm";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "nU3 Framework Updater";
-
+            _pnlTitleBar = new Panel();
+            _btnClose = new Button();
+            _lblTitleText = new Label();
+            _pnlProgress = new Panel();
+            _lblDetail = new Label();
+            _progressBar = new ProgressBar();
+            _lblStatus = new Label();
+            _pnlList = new Panel();
+            _listView = new ListView();
+            _colStatus = new ColumnHeader();
+            _colComponent = new ColumnHeader();
+            _colVersion = new ColumnHeader();
+            _colSize = new ColumnHeader();
+            _colType = new ColumnHeader();
+            _pnlBottom = new Panel();
+            _btnCancel = new Button();
+            _pnlTitleBar.SuspendLayout();
+            _pnlProgress.SuspendLayout();
+            _pnlList.SuspendLayout();
+            _pnlBottom.SuspendLayout();
+            SuspendLayout();
             // 
             // _pnlTitleBar
             // 
-            this._pnlTitleBar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(51)))), ((int)(((byte)(51)))));
-            this._pnlTitleBar.Controls.Add(this._btnClose);
-            this._pnlTitleBar.Controls.Add(this._lblTitleText);
-            this._pnlTitleBar.Dock = System.Windows.Forms.DockStyle.Top;
-            this._pnlTitleBar.Height = 40;
-            this._pnlTitleBar.MouseDown += (s, e) => { if (e.Button == MouseButtons.Left) { ReleaseCapture(); SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0); } };
-
-            // 
-            // _lblTitleText
-            // 
-            this._lblTitleText.AutoSize = true;
-            this._lblTitleText.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this._lblTitleText.ForeColor = System.Drawing.Color.White;
-            this._lblTitleText.Location = new System.Drawing.Point(12, 10);
-            this._lblTitleText.Text = "nU3 Framework Updater";
-            this._lblTitleText.MouseDown += (s, e) => { if (e.Button == MouseButtons.Left) { ReleaseCapture(); SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0); } };
-
+            _pnlTitleBar.BackColor = Color.FromArgb(51, 51, 51);
+            _pnlTitleBar.Controls.Add(_btnClose);
+            _pnlTitleBar.Controls.Add(_lblTitleText);
+            _pnlTitleBar.Dock = DockStyle.Top;
+            _pnlTitleBar.Location = new Point(0, 0);
+            _pnlTitleBar.Name = "_pnlTitleBar";
+            _pnlTitleBar.Size = new Size(600, 40);
+            _pnlTitleBar.TabIndex = 3;
+            _pnlTitleBar.MouseDown += PnlTitleBar_MouseDown;
             // 
             // _btnClose
             // 
-            this._btnClose.Dock = System.Windows.Forms.DockStyle.Right;
-            this._btnClose.FlatAppearance.BorderSize = 0;
-            this._btnClose.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(17)))), ((int)(((byte)(35)))));
-            this._btnClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this._btnClose.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this._btnClose.ForeColor = System.Drawing.Color.White;
-            this._btnClose.Location = new System.Drawing.Point(560, 0);
-            this._btnClose.Size = new System.Drawing.Size(40, 40);
-            this._btnClose.Text = "✕";
-            this._btnClose.Click += (s, e) => this.Close();
-
+            _btnClose.Dock = DockStyle.Right;
+            _btnClose.FlatAppearance.BorderSize = 0;
+            _btnClose.FlatAppearance.MouseOverBackColor = Color.FromArgb(232, 17, 35);
+            _btnClose.FlatStyle = FlatStyle.Flat;
+            _btnClose.Font = new Font("Segoe UI", 9F);
+            _btnClose.ForeColor = Color.White;
+            _btnClose.Location = new Point(560, 0);
+            _btnClose.Name = "_btnClose";
+            _btnClose.Size = new Size(40, 40);
+            _btnClose.TabIndex = 0;
+            _btnClose.Text = "✕";
+            _btnClose.Click += BtnClose_Click;
+            // 
+            // _lblTitleText
+            // 
+            _lblTitleText.AutoSize = true;
+            _lblTitleText.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            _lblTitleText.ForeColor = Color.White;
+            _lblTitleText.Location = new Point(12, 10);
+            _lblTitleText.Name = "_lblTitleText";
+            _lblTitleText.Size = new Size(182, 20);
+            _lblTitleText.TabIndex = 1;
+            _lblTitleText.Text = "nU3 Framework Updater";
+            _lblTitleText.MouseDown += LblTitleText_MouseDown;
             // 
             // _pnlProgress
             // 
-            this._pnlProgress.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(248)))), ((int)(((byte)(248)))));
-            this._pnlProgress.Controls.Add(this._lblDetail);
-            this._pnlProgress.Controls.Add(this._progressBar);
-            this._pnlProgress.Controls.Add(this._lblStatus);
-            this._pnlProgress.Dock = System.Windows.Forms.DockStyle.Top;
-            this._pnlProgress.Height = 110;
-            this._pnlProgress.Padding = new System.Windows.Forms.Padding(20);
-
-            // 
-            // _lblStatus
-            // 
-            this._lblStatus.AutoEllipsis = true;
-            this._lblStatus.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this._lblStatus.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(120)))), ((int)(((byte)(215)))));
-            this._lblStatus.Location = new System.Drawing.Point(20, 20);
-            this._lblStatus.Size = new System.Drawing.Size(560, 30);
-            this._lblStatus.Text = "Checking for updates...";
-
-            // 
-            // _progressBar
-            // 
-            this._progressBar.Location = new System.Drawing.Point(20, 60);
-            this._progressBar.Size = new System.Drawing.Size(560, 4);
-            this._progressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
-            
+            _pnlProgress.BackColor = Color.FromArgb(248, 248, 248);
+            _pnlProgress.Controls.Add(_lblDetail);
+            _pnlProgress.Controls.Add(_progressBar);
+            _pnlProgress.Controls.Add(_lblStatus);
+            _pnlProgress.Dock = DockStyle.Top;
+            _pnlProgress.Location = new Point(0, 40);
+            _pnlProgress.Name = "_pnlProgress";
+            _pnlProgress.Padding = new Padding(20);
+            _pnlProgress.Size = new Size(600, 110);
+            _pnlProgress.TabIndex = 2;
             // 
             // _lblDetail
             // 
-            this._lblDetail.AutoEllipsis = true;
-            this._lblDetail.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this._lblDetail.ForeColor = System.Drawing.Color.Gray;
-            this._lblDetail.Location = new System.Drawing.Point(20, 75);
-            this._lblDetail.Size = new System.Drawing.Size(560, 20);
-            this._lblDetail.Text = "Preparing...";
-
+            _lblDetail.AutoEllipsis = true;
+            _lblDetail.Font = new Font("Segoe UI", 9F);
+            _lblDetail.ForeColor = Color.Gray;
+            _lblDetail.Location = new Point(20, 75);
+            _lblDetail.Name = "_lblDetail";
+            _lblDetail.Size = new Size(560, 20);
+            _lblDetail.TabIndex = 0;
+            _lblDetail.Text = "Preparing...";
+            // 
+            // _progressBar
+            // 
+            _progressBar.Location = new Point(20, 60);
+            _progressBar.Name = "_progressBar";
+            _progressBar.Size = new Size(560, 4);
+            _progressBar.Style = ProgressBarStyle.Continuous;
+            _progressBar.TabIndex = 1;
+            // 
+            // _lblStatus
+            // 
+            _lblStatus.AutoEllipsis = true;
+            _lblStatus.Font = new Font("Segoe UI", 14F);
+            _lblStatus.ForeColor = Color.FromArgb(0, 120, 215);
+            _lblStatus.Location = new Point(20, 20);
+            _lblStatus.Name = "_lblStatus";
+            _lblStatus.Size = new Size(560, 30);
+            _lblStatus.TabIndex = 2;
+            _lblStatus.Text = "Checking for updates...";
             // 
             // _pnlList
             // 
-            this._pnlList.Controls.Add(this._listView);
-            this._pnlList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this._pnlList.Padding = new System.Windows.Forms.Padding(20, 10, 20, 0);
-
+            _pnlList.Controls.Add(_listView);
+            _pnlList.Dock = DockStyle.Fill;
+            _pnlList.Location = new Point(0, 150);
+            _pnlList.Name = "_pnlList";
+            _pnlList.Padding = new Padding(20, 10, 20, 0);
+            _pnlList.Size = new Size(600, 290);
+            _pnlList.TabIndex = 0;
             // 
             // _listView
             // 
-            this._listView.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this._listView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this._colStatus,
-            this._colComponent,
-            this._colVersion,
-            this._colSize,
-            this._colType});
-            this._listView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this._listView.FullRowSelect = true;
-            this._listView.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-            this._listView.View = System.Windows.Forms.View.Details;
-            this._listView.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this._listView.OwnerDraw = true; 
-            this._listView.DrawColumnHeader += (s, e) => e.DrawDefault = true;
-            this._listView.DrawSubItem += (s, e) => {
-                // Custom draw for better spacing if needed, or just default
-                e.DrawDefault = true;
-            };
-
-            // Columns
-            this._colStatus.Text = "상태"; this._colStatus.Width = 80;
-            this._colComponent.Text = "컴포넌트"; this._colComponent.Width = 250;
-            this._colVersion.Text = "버전"; this._colVersion.Width = 100;
-            this._colSize.Text = "크기"; this._colSize.Width = 80;
-            this._colType.Text = "유형"; this._colType.Width = 60;
-
+            _listView.BorderStyle = BorderStyle.None;
+            _listView.Columns.AddRange(new ColumnHeader[] { _colStatus, _colComponent, _colVersion, _colSize, _colType });
+            _listView.Dock = DockStyle.Fill;
+            _listView.Font = new Font("Segoe UI", 9F);
+            _listView.FullRowSelect = true;
+            _listView.HeaderStyle = ColumnHeaderStyle.Nonclickable;
+            _listView.Location = new Point(20, 10);
+            _listView.Name = "_listView";
+            _listView.OwnerDraw = true;
+            _listView.Size = new Size(560, 280);
+            _listView.TabIndex = 0;
+            _listView.UseCompatibleStateImageBehavior = false;
+            _listView.View = View.Details;
+            _listView.DrawColumnHeader += ListView_DrawColumnHeader;
+            _listView.DrawSubItem += ListView_DrawSubItem;
+            // 
+            // _colStatus
+            // 
+            _colStatus.Text = "상태";
+            _colStatus.Width = 80;
+            // 
+            // _colComponent
+            // 
+            _colComponent.Text = "컴포넌트";
+            _colComponent.Width = 250;
+            // 
+            // _colVersion
+            // 
+            _colVersion.Text = "버전";
+            _colVersion.Width = 100;
+            // 
+            // _colSize
+            // 
+            _colSize.Text = "크기";
+            _colSize.Width = 80;
+            // 
+            // _colType
+            // 
+            _colType.Text = "유형";
             // 
             // _pnlBottom
             // 
-            this._pnlBottom.Controls.Add(this._btnCancel);
-            this._pnlBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this._pnlBottom.Height = 60;
-            this._pnlBottom.Padding = new System.Windows.Forms.Padding(0, 0, 20, 0);
-
+            _pnlBottom.Controls.Add(_btnCancel);
+            _pnlBottom.Dock = DockStyle.Bottom;
+            _pnlBottom.Location = new Point(0, 440);
+            _pnlBottom.Name = "_pnlBottom";
+            _pnlBottom.Padding = new Padding(0, 0, 20, 0);
+            _pnlBottom.Size = new Size(600, 60);
+            _pnlBottom.TabIndex = 1;
             // 
             // _btnCancel
             // 
-            this._btnCancel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(225)))), ((int)(((byte)(225)))));
-            this._btnCancel.FlatAppearance.BorderSize = 0;
-            this._btnCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this._btnCancel.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this._btnCancel.Location = new System.Drawing.Point(480, 12);
-            this._btnCancel.Size = new System.Drawing.Size(100, 36);
-            this._btnCancel.Text = "취소";
-            this._btnCancel.Click += BtnCancel_Click;
-
-            // Add Controls
-            this.Controls.Add(this._pnlList);
-            this.Controls.Add(this._pnlBottom);
-            this.Controls.Add(this._pnlProgress);
-            this.Controls.Add(this._pnlTitleBar);
-
-            this._pnlTitleBar.ResumeLayout(false);
-            this._pnlTitleBar.PerformLayout();
-            this._pnlProgress.ResumeLayout(false);
-            this._pnlList.ResumeLayout(false);
-            this._pnlBottom.ResumeLayout(false);
-            this.ResumeLayout(false);
+            _btnCancel.BackColor = Color.FromArgb(225, 225, 225);
+            _btnCancel.FlatAppearance.BorderSize = 0;
+            _btnCancel.FlatStyle = FlatStyle.Flat;
+            _btnCancel.Font = new Font("Segoe UI", 9F);
+            _btnCancel.Location = new Point(480, 12);
+            _btnCancel.Name = "_btnCancel";
+            _btnCancel.Size = new Size(100, 36);
+            _btnCancel.TabIndex = 0;
+            _btnCancel.Text = "취소";
+            _btnCancel.UseVisualStyleBackColor = false;
+            _btnCancel.Click += BtnCancel_Click;
+            // 
+            // UpdateProgressForm
+            // 
+            AutoScaleDimensions = new SizeF(96F, 96F);
+            AutoScaleMode = AutoScaleMode.Dpi;
+            BackColor = Color.White;
+            ClientSize = new Size(600, 500);
+            Controls.Add(_pnlList);
+            Controls.Add(_pnlBottom);
+            Controls.Add(_pnlProgress);
+            Controls.Add(_pnlTitleBar);
+            FormBorderStyle = FormBorderStyle.None;
+            Name = "UpdateProgressForm";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "nU3 Framework Updater";
+            _pnlTitleBar.ResumeLayout(false);
+            _pnlTitleBar.PerformLayout();
+            _pnlProgress.ResumeLayout(false);
+            _pnlList.ResumeLayout(false);
+            _pnlBottom.ResumeLayout(false);
+            ResumeLayout(false);
         }
 
         // Window Dragging Support
@@ -222,5 +248,38 @@ namespace nU3.Bootstrapper
         public static extern bool ReleaseCapture();
         [System.Runtime.InteropServices.DllImport("User32.dll")]
         public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
+
+        private void PnlTitleBar_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                ReleaseCapture();
+                SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
+            }
+        }
+
+        private void LblTitleText_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                ReleaseCapture();
+                SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
+            }
+        }
+
+        private void BtnClose_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void ListView_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
+        {
+            e.DrawDefault = true;
+        }
+
+        private void ListView_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
+        {
+            e.DrawDefault = true;
+        }
     }
 }
