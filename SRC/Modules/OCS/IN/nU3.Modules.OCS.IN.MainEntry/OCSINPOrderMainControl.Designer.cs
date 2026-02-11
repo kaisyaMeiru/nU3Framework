@@ -95,10 +95,10 @@ namespace nU3.Modules.OCS.IN.MainEntry
             // 
             pnlMain.Controls.Add(OrderCodeControl);
             pnlMain.Dock = DockStyle.Fill;
-            pnlMain.Location = new Point(310, 60);
+            pnlMain.Location = new Point(500, 60);
             pnlMain.Margin = new Padding(4);
             pnlMain.Name = "pnlMain";
-            pnlMain.Size = new Size(438, 738);
+            pnlMain.Size = new Size(389, 738);
             pnlMain.TabIndex = 0;
             // 
             // OrderCodeControl
@@ -108,7 +108,7 @@ namespace nU3.Modules.OCS.IN.MainEntry
             OrderCodeControl.Margin = new Padding(4);
             OrderCodeControl.Name = "OrderCodeControl";
             OrderCodeControl.OrderType = "D";
-            OrderCodeControl.Size = new Size(434, 734);
+            OrderCodeControl.Size = new Size(385, 734);
             OrderCodeControl.TabIndex = 0;
             // 
             // pnlPatientInfo
@@ -140,7 +140,7 @@ namespace nU3.Modules.OCS.IN.MainEntry
             pnlWaitList.Location = new Point(0, 60);
             pnlWaitList.Margin = new Padding(4);
             pnlWaitList.Name = "pnlWaitList";
-            pnlWaitList.Size = new Size(300, 738);
+            pnlWaitList.Size = new Size(490, 738);
             pnlWaitList.TabIndex = 2;
             // 
             // PatientListControl
@@ -152,7 +152,7 @@ namespace nU3.Modules.OCS.IN.MainEntry
             PatientListControl.Location = new Point(2, 2);
             PatientListControl.Margin = new Padding(4);
             PatientListControl.Name = "PatientListControl";
-            PatientListControl.Size = new Size(296, 734);
+            PatientListControl.Size = new Size(486, 734);
             PatientListControl.TabIndex = 0;
             // 
             // pnlCenter
@@ -162,10 +162,10 @@ namespace nU3.Modules.OCS.IN.MainEntry
             pnlCenter.Controls.Add(pnlDiagProblem);
             pnlCenter.Controls.Add(pnlMemo);
             pnlCenter.Dock = DockStyle.Fill;
-            pnlCenter.Location = new Point(310, 60);
+            pnlCenter.Location = new Point(500, 60);
             pnlCenter.Margin = new Padding(4);
             pnlCenter.Name = "pnlCenter";
-            pnlCenter.Size = new Size(438, 738);
+            pnlCenter.Size = new Size(389, 738);
             pnlCenter.TabIndex = 3;
             // 
             // ProblemListControl
@@ -174,7 +174,7 @@ namespace nU3.Modules.OCS.IN.MainEntry
             ProblemListControl.Location = new Point(2, 146);
             ProblemListControl.Margin = new Padding(4);
             ProblemListControl.Name = "ProblemListControl";
-            ProblemListControl.Size = new Size(434, 455);
+            ProblemListControl.Size = new Size(385, 455);
             ProblemListControl.TabIndex = 1;
             // 
             // splitterDiagProblem
@@ -183,7 +183,7 @@ namespace nU3.Modules.OCS.IN.MainEntry
             splitterDiagProblem.Location = new Point(2, 136);
             splitterDiagProblem.Margin = new Padding(4);
             splitterDiagProblem.Name = "splitterDiagProblem";
-            splitterDiagProblem.Size = new Size(434, 10);
+            splitterDiagProblem.Size = new Size(385, 10);
             splitterDiagProblem.TabIndex = 9;
             splitterDiagProblem.TabStop = false;
             // 
@@ -194,7 +194,7 @@ namespace nU3.Modules.OCS.IN.MainEntry
             pnlDiagProblem.Location = new Point(2, 2);
             pnlDiagProblem.Margin = new Padding(4);
             pnlDiagProblem.Name = "pnlDiagProblem";
-            pnlDiagProblem.Size = new Size(434, 134);
+            pnlDiagProblem.Size = new Size(385, 134);
             pnlDiagProblem.TabIndex = 0;
             // 
             // DiagCodeControl
@@ -203,7 +203,7 @@ namespace nU3.Modules.OCS.IN.MainEntry
             DiagCodeControl.Location = new Point(2, 2);
             DiagCodeControl.Margin = new Padding(4);
             DiagCodeControl.Name = "DiagCodeControl";
-            DiagCodeControl.Size = new Size(430, 130);
+            DiagCodeControl.Size = new Size(381, 130);
             DiagCodeControl.TabIndex = 0;
             // 
             // pnlMemo
@@ -213,7 +213,7 @@ namespace nU3.Modules.OCS.IN.MainEntry
             pnlMemo.Location = new Point(2, 601);
             pnlMemo.Margin = new Padding(4);
             pnlMemo.Name = "pnlMemo";
-            pnlMemo.Size = new Size(434, 135);
+            pnlMemo.Size = new Size(385, 135);
             pnlMemo.TabIndex = 1;
             // 
             // SendMemoControl
@@ -222,7 +222,7 @@ namespace nU3.Modules.OCS.IN.MainEntry
             SendMemoControl.Location = new Point(2, 2);
             SendMemoControl.Margin = new Padding(4);
             SendMemoControl.Name = "SendMemoControl";
-            SendMemoControl.Size = new Size(430, 131);
+            SendMemoControl.Size = new Size(381, 131);
             SendMemoControl.TabIndex = 0;
             // 
             // pnlRight
@@ -230,10 +230,10 @@ namespace nU3.Modules.OCS.IN.MainEntry
             pnlRight.Controls.Add(tabSupport);
             pnlRight.Controls.Add(OtherTabControl);
             pnlRight.Dock = DockStyle.Right;
-            pnlRight.Location = new Point(758, 60);
+            pnlRight.Location = new Point(899, 60);
             pnlRight.Margin = new Padding(4);
             pnlRight.Name = "pnlRight";
-            pnlRight.Size = new Size(547, 738);
+            pnlRight.Size = new Size(406, 738);
             pnlRight.TabIndex = 4;
             // 
             // tabSupport
@@ -243,7 +243,7 @@ namespace nU3.Modules.OCS.IN.MainEntry
             tabSupport.Margin = new Padding(4);
             tabSupport.Name = "tabSupport";
             tabSupport.SelectedTabPage = OrderPage;
-            tabSupport.Size = new Size(506, 734);
+            tabSupport.Size = new Size(365, 734);
             tabSupport.TabIndex = 1;
             tabSupport.TabPages.AddRange(new DevExpress.XtraTab.XtraTabPage[] { OrderPage });
             tabSupport.TabStop = false;
@@ -254,7 +254,7 @@ namespace nU3.Modules.OCS.IN.MainEntry
             OrderPage.Controls.Add(OtherOrderControl);
             OrderPage.Margin = new Padding(4);
             OrderPage.Name = "OrderPage";
-            OrderPage.Size = new Size(504, 708);
+            OrderPage.Size = new Size(363, 708);
             OrderPage.Text = "기타처방";
             // 
             // OtherOrderControl
@@ -264,13 +264,13 @@ namespace nU3.Modules.OCS.IN.MainEntry
             OtherOrderControl.Margin = new Padding(4);
             OtherOrderControl.Name = "OtherOrderControl";
             OtherOrderControl.RefCodeType = MainEntry.Controls.RefCodeType.REP;
-            OtherOrderControl.Size = new Size(504, 708);
+            OtherOrderControl.Size = new Size(363, 708);
             OtherOrderControl.TabIndex = 0;
             // 
             // OtherTabControl
             // 
             OtherTabControl.Dock = DockStyle.Right;
-            OtherTabControl.Location = new Point(508, 2);
+            OtherTabControl.Location = new Point(367, 2);
             OtherTabControl.Margin = new Padding(4);
             OtherTabControl.Name = "OtherTabControl";
             OtherTabControl.RefCodeType = MainEntry.Controls.RefCodeType.REP;
@@ -458,7 +458,7 @@ namespace nU3.Modules.OCS.IN.MainEntry
             // 
             // splitterLeft
             // 
-            splitterLeft.Location = new Point(300, 60);
+            splitterLeft.Location = new Point(490, 60);
             splitterLeft.Margin = new Padding(4);
             splitterLeft.Name = "splitterLeft";
             splitterLeft.Size = new Size(10, 738);
@@ -468,7 +468,7 @@ namespace nU3.Modules.OCS.IN.MainEntry
             // splitterRight
             // 
             splitterRight.Dock = DockStyle.Right;
-            splitterRight.Location = new Point(748, 60);
+            splitterRight.Location = new Point(889, 60);
             splitterRight.Margin = new Padding(4);
             splitterRight.Name = "splitterRight";
             splitterRight.Size = new Size(10, 738);

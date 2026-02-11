@@ -37,7 +37,7 @@ namespace nU3.Modules.OCS.IN.MainEntry
         #endregion
 
         #region 2. Form 변수를 정의한다
-        
+
         private string mInNumber = string.Empty;
         private string mPatiNumber = string.Empty;
         private string mOrdDate = string.Empty;
@@ -70,7 +70,7 @@ namespace nU3.Modules.OCS.IN.MainEntry
             LoadInitialData();
 
             // 환자 선택 이벤트 핸들러 연결
-            if(PatientListControl != null)            
+            if (PatientListControl != null)
                 PatientListControl.PatientSelected += OnPatientSelected;
 
             // OtherTabControl과 OtherOrderControl 탭 동기화 이벤트 연결
@@ -150,13 +150,32 @@ namespace nU3.Modules.OCS.IN.MainEntry
                 // 환자 배너 정보 업데이트 (실제 선택된 환자 데이터 사용)
                 if (PatientInfoControl != null)
                 {
-                    PatientInfoControl.SetPatientInfo(PatientListControl.GetSelectedPatient());                        
+                    PatientInfoControl.SetPatientInfo(PatientListControl.GetSelectedPatient());
                 }
 
                 // 처방정보 조회
                 string lRecDate = dtpOrdDate?.EditValue?.ToString()?.Replace("-", "") ?? DateTime.Now.ToString("yyyyMMdd");
                 GetOrderQueryLayout(mInNumber, lRecDate);
+
+
+                PublishPatientSelectedEvent(PatientListControl.GetSelectedPatient());
             }
+        }
+
+        public void PublishPatientSelectedEvent(PatientInfoDto patient)
+        {
+            if (patient == null) return;
+            
+            // EventBus를 통해 다른 모듈에 이벤트 발행
+            var evenPub = EventBus?.GetEvent<PatientSelectedEvent>();
+            evenPub?.Publish(new PatientSelectedEventPayload
+            {
+                Patient = patient,
+                Source = this.ProgramID,
+            });
+
+            LogInfo($"PatientSelectedEvent 발행: {patient.PatientName} ({patient.PatientId})");
+            LogInfo($"Patient selected event published: {patient.PatientId}");
         }
 
         /// <summary>
@@ -336,7 +355,7 @@ namespace nU3.Modules.OCS.IN.MainEntry
         private bool SetDataSave(ref string lErrMessage, string lStatusCode)
         {
             try
-            {                
+            {
                 // 처방코드 저장
                 if (OrderCodeControl != null && !OrderCodeControl.SaveData(this.mInNumber, this.mOrdDate))
                 {
@@ -365,7 +384,7 @@ namespace nU3.Modules.OCS.IN.MainEntry
                     return false;
                 }
 
-                
+
                 return true;
             }
             catch (Exception ex)
