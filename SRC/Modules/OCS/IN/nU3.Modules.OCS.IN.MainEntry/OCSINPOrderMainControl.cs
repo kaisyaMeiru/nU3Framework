@@ -1,19 +1,20 @@
+using DevExpress.XtraEditors;
+using nU3.Core.Attributes;
+using nU3.Core.Context;
+using nU3.Core.Events;
+using nU3.Core.UI;
+using nU3.Core.UI.Components.Events;
+using nU3.Core.UI.Controls;
+using nU3.Models;
+using nU3.Modules.OCS.IN.MainEntry.Controls;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
 using System.Data;
+using System.Drawing;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using DevExpress.XtraEditors;
-using nU3.Core.UI;
-using nU3.Core.Context;
-using nU3.Core.Events;
-using nU3.Models;
-using nU3.Core.Attributes;
-using nU3.Core.UI.Controls;
-using nU3.Modules.OCS.IN.MainEntry.Controls;
 
 namespace nU3.Modules.OCS.IN.MainEntry
 {
@@ -70,7 +71,7 @@ namespace nU3.Modules.OCS.IN.MainEntry
 
             // 환자 선택 이벤트 핸들러 연결
             if(PatientListControl != null)            
-                PatientListControl.OnPatientSelected += OnPatientSelected;
+                PatientListControl.PatientSelected += OnPatientSelected;
 
             // OtherTabControl과 OtherOrderControl 탭 동기화 이벤트 연결
             if (OtherTabControl != null)
@@ -88,7 +89,7 @@ namespace nU3.Modules.OCS.IN.MainEntry
 
             // 환자 선택 이벤트 핸들러 해제
             if (PatientListControl != null)
-                PatientListControl.OnPatientSelected -= OnPatientSelected;
+                PatientListControl.PatientSelected -= OnPatientSelected;
 
             // 탭 동기화 이벤트 핸들러 해제
             if (OtherTabControl != null)
@@ -137,7 +138,7 @@ namespace nU3.Modules.OCS.IN.MainEntry
                 cboOrderType.Focus();
         }
 
-        private void OnPatientSelected(object sender, EventArgs e)
+        private void OnPatientSelected(object sender, PatientSelectedEventArgs e)
         {
             // 환자가 선택되면 관련 정보를 로드
             if (PatientListControl != null && PatientListControl.SelectedInNumber != null)

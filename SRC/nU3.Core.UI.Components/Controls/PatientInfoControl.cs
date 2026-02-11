@@ -1,13 +1,12 @@
 using System;
 using System.Data;
 using DevExpress.XtraEditors;
-using nU3.Core.Contracts.Models;
 using nU3.Core.Events;
 using nU3.Core.UI.Components.Events;
 using nU3.Core.UI;
 using nU3.Core.UI.Controls;
 using nU3.Models;
-using PatientSelectedEvent = nU3.Core.Events.Contracts.PatientSelectedEvent;
+using PatientSelectedEvent = nU3.Core.Events.PatientSelectedEvent;
 using System.ComponentModel;
 
 namespace nU3.Core.UI.Components.Controls
@@ -81,7 +80,7 @@ namespace nU3.Core.UI.Components.Controls
             }
 
             // PatientSelectedEvent 구독
-            EventBus.GetEvent<PatientSelectedEvent>()
+            EventBus.GetEvent<nU3.Core.Events.Contracts.PatientSelectedEvent>()
                 .Subscribe(OnPatientSelected);
 
             LogInfo("PatientSelectedEvent 구독 시작");
@@ -91,35 +90,36 @@ namespace nU3.Core.UI.Components.Controls
         /// 환자 선택 이벤트 처리
         /// </summary>
         /// <param name="context">환자 컨텍스트 (PatientId, PatientName, VisitNo)</param>
-        private void OnPatientSelected(PatientContext context)
+        private void OnPatientSelected(PatientSelectedEventPayload context)
         {
             if (context == null) return;
 
-            LogInfo($"환자 선택 이벤트 수신: {context.PatientName} ({context.PatientId})");
+            LogInfo($"환자 선택 이벤트 수신: {context.Patient.PatientName} ({context.Patient.PatientId})");
 
             // 이전 환자 ID와 비교하여 중복 이벤트 방지
-            if (_currentPatientId == context.PatientId)
+            if (_currentPatientId == context.Patient.PatientId)
             {
-                LogInfo($"같은 환자 ID로 중복 이벤트 무시: {context.PatientId}");
+                LogInfo($"같은 환자 ID로 중복 이벤트 무시: {context.Patient.PatientId}");
                 return;
             }
 
-            _currentPatientId = context.PatientId;
+            _currentPatientId = context.Patient.PatientId;
+
 
             // 데모 데이터 조회 (실제로는 DB에서 조회)
-            var patientInfo = GetPatientInfoByPatientId(context.PatientId);
-
-            if (patientInfo != null)
-            {
-                // 환자 정보 표시
-                SetPatientInfo(patientInfo);
-            }
-            else
-            {
-                // 환자 정보가 없으면 초기화
-                ClearPatientInfo();
-                LogWarning($"환자 정보를 찾을 수 없음: {context.PatientId}");
-            }
+            SetPatientInfo(context.Patient);
+            //var patientInfo = GetPatientInfoByPatientId(context.Patient.PatientId);
+            //if (patientInfo != null)
+            //{
+            //    // 환자 정보 표시
+            //    SetPatientInfo(context.Patient);
+            //}
+            //else
+            //{
+            //    // 환자 정보가 없으면 초기화
+            //    ClearPatientInfo();
+            //    LogWarning($"환자 정보를 찾을 수 없음: {context.Patient.PatientId}");
+            //}
         }
 
         #endregion

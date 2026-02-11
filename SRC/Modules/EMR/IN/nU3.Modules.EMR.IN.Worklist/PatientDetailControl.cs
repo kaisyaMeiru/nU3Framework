@@ -5,7 +5,6 @@ using nU3.Core.UI;
 using nU3.Core.Context;
 using nU3.Core.Events;
 using nU3.Core.Attributes;
-using nU3.Core.Contracts.Models; // New
 using nU3.Models;
 
 namespace nU3.Modules.EMR.IN.Worklist
@@ -121,25 +120,25 @@ namespace nU3.Modules.EMR.IN.Worklist
         /// <summary>
         /// 강타입 환자 선택 이벤트 처리기
         /// </summary>
-        private void OnPatientSelectedGeneric(PatientContext context)
+        private void OnPatientSelectedGeneric(PatientSelectedEventPayload context)
         {
             try
             {
                 AddEventLog("[GenericEvent] PatientSelectedEvent 수신");
-                AddEventLog($"   환자: {context.PatientName} ({context.PatientId})");
+                AddEventLog($"   환자: {context.Patient.PatientName} ({context.Patient.PatientId})");
 
                 // UI 스레드에서 안전하게 업데이트
                 if (InvokeRequired)
                 {
-                    Invoke(new Action(() => UpdateUIFromContext(context)));
+                    Invoke(new Action(() => UpdateUIFromContext(context.Patient)));
                 }
                 else
                 {
-                    UpdateUIFromContext(context);
+                    UpdateUIFromContext(context.Patient);
                 }
 
-                UpdateStatus($"환자 변경: {context.PatientName}", System.Drawing.Color.DarkBlue);
-                LogInfo($"환자 선택 처리: {context.PatientName}");
+                UpdateStatus($"환자 변경: {context.Patient.PatientName}", System.Drawing.Color.DarkBlue);
+                LogInfo($"환자 선택 처리: {context.Patient.PatientName}");
             }
             catch (Exception ex)
             {
@@ -148,7 +147,7 @@ namespace nU3.Modules.EMR.IN.Worklist
             }
         }
 
-        private void UpdateUIFromContext(PatientContext context)
+        private void UpdateUIFromContext(PatientInfoDto context)
         {
             lblPatientIdValue.Text = context.PatientId;
             lblPatientNameValue.Text = context.PatientName;

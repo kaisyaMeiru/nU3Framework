@@ -513,7 +513,7 @@ namespace nU3.Shell
             LogManager.Debug($"Shell Title 업데이트됨: {evt.ProgId} (v{version})", "Shell");
         }
 
-        private void OnPatientSelectedGeneric(nU3.Core.Contracts.Models.PatientContext context)
+        private void OnPatientSelectedGeneric(PatientSelectedEventPayload context)
         {
             // UI 스레드에서 상태 표시줄 업데이트
             if (this.InvokeRequired)
@@ -522,8 +522,8 @@ namespace nU3.Shell
                 return;
             }
 
-            UpdateStatusMessage($"[계약 기반 데이터 흐름] 환자 선택: {context.PatientName} ({context.PatientId})");
-            LogManager.Info($"제네릭 이벤트로 글로벌 컨텍스트 업데이트: {context.PatientId}", "Shell");
+            UpdateStatusMessage($"[계약 기반 데이터 흐름] 환자 선택: {context.Patient.PatientName} ({context.Patient.PatientId})");
+            LogManager.Info($"제네릭 이벤트로 글로벌 컨텍스트 업데이트: {context.Patient.PatientId}", "Shell");
         }
 
         /// <summary>

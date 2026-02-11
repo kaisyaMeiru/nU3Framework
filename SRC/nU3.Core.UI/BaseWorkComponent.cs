@@ -1,7 +1,6 @@
 using DashboardDesignExternalTool;
 using DevExpress.Charts.Native;
 using DevExpress.CodeParser;
-using nU3.Core.Contracts.Models;
 using nU3.Core.Events;
 using nU3.Core.Events.Contracts;
 using nU3.Core.Logging;

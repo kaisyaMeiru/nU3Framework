@@ -8,5 +8,5 @@ namespace nU3.Core.Contracts.Models
     /// <param name="PatientId">환자를 고유하게 식별하는 ID(예: 병원 등록 번호)</param>
     /// <param name="PatientName">환자의 표시 이름(예: 홍길동)</param>
     /// <param name="VisitNo">현재 내원/접수 번호(선택 항목). 동일 환자의 여러 내원 중 특정 내원을 구분할 때 사용합니다.</param>
-    public record PatientContext(string PatientId, string PatientName, string VisitNo = null);
+    //public record PatientContext(string PatientId, string PatientName, string VisitNo = null);
 }

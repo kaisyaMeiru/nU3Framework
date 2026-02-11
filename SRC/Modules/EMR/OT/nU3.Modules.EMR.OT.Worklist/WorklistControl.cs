@@ -4,7 +4,6 @@ using Microsoft.Extensions.DependencyInjection;
 using nU3.Connectivity;
 using nU3.Core.Attributes;
 using nU3.Core.Context;
-using nU3.Core.Contracts.Models; // New
 using nU3.Core.Events;
 using nU3.Core.Events.Contracts;
 using nU3.Core.Logic;
@@ -155,7 +154,7 @@ namespace nU3.Modules.EMR.OT.Worklist
                 if (!string.IsNullOrEmpty(patientId))
                 {
                     // 강타입 이벤트 발행
-                    var context = new PatientContext(patientId, patientName, "VISIT_TEST");
+                    var context = new PatientSelectedEventPayload() { Patient = new Models.PatientInfoDto() { PatientId = patientId, PatientName = patientName } } ;
                     EventBus?.GetEvent<Core.Events.PatientSelectedEvent>().Publish(context);
 
                     Logger.Information($"환자 선택: {patientName} ({patientId})", ProgramID);

@@ -9,7 +9,6 @@ using nU3.Core.UI.Components.Events;
 using nU3.Core.UI;
 using nU3.Models;
 using nU3.Core.Events.Contracts;
-using nU3.Core.Contracts.Models;
 using nU3.Core.Events;
 using nU3.Core.Enums;
 using PatientSelectedEvent = nU3.Core.Events.PatientSelectedEvent;
@@ -69,37 +68,24 @@ namespace nU3.Core.UI.Components.Controls
             {
 
                 // EventBus를 통해 다른 모듈에 이벤트 발행
-                EventBus?.GetEvent< PatientSelectedEvent>()
-                    .Publish(new PatientSelectedEventPayload
-                    {
+                var evenPub = EventBus?.GetEvent<PatientSelectedEvent>();
+                evenPub?.Publish(new PatientSelectedEventPayload
+                {
                         Patient = patient,
-                        Source = this.Name
-                    });
+                        Source = this.Name                    
+                });
 
-                LogInfo($"PatientSelectedEvent 발행: {patient.PatientName} ({patient.PatientId})");
-                //LogAudit(AuditAction.Read, "Patient", patient.PatientId,
-                //    $"Patient selected and broadcasted to other modules");
-
-                //var payload = new PatientContext(patient.PatientId, patient.PatientName);
-                //var eventInstance = EventBus.GetEvent<PubSubEvent>();
-                //<PatientContext>>();
-                //eventInstance.Publish(payload);
-
-
+                LogInfo($"PatientSelectedEvent 발행: {patient.PatientName} ({patient.PatientId})");                
                 LogInfo($"Patient selected event published: {patient.PatientId}");
             }
 
-            // 인스턴스 이벤트 발생
-            var eventArgs = new PatientSelectedEventArgs
+            // 인스턴스 이벤트 발생            
+            PatientSelected?.Invoke(this, new PatientSelectedEventArgs
             {
                 Patient = patient,
                 Source = EventSource
-            };
+            });            
 
-            PatientSelected?.Invoke(this, eventArgs);
-
-            // 하위 호환성 이벤트
-            OnPatientSelected?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -164,19 +150,15 @@ namespace nU3.Core.UI.Components.Controls
         [Category("Data")]
         [Browsable(false)]
         public string SelectedDeptID => string.Empty; // DTO에 없는 필드, 필요시 확장
-
-        /// <summary>
-        /// 하위 호환성을 위한 레거시 이벤트
-        /// </summary>
-        [Browsable(false)]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public event EventHandler? OnPatientSelected;
+        
         #endregion
 
         public PatientListControl()
         {
             InitializeComponent();
-         
+
+            EventBusUse = true;
+
             this.Load += (s, e) => LoadDemoData();  
         }
 
@@ -381,23 +363,10 @@ namespace nU3.Core.UI.Components.Controls
             {
                 _selectedPatient = gridView.GetRow(gridView.FocusedRowHandle) as PatientInfoDto;
 
+                // EventBus 전파 (명시적인 메서드 사용)
                 if (_selectedPatient != null)
                 {
-                    // EventBus 전파 (명시적인 메서드 사용)
-                    PublishPatientSelectedEvent(_selectedPatient);
-
-                    // 새로운 DTO 기반 이벤트 발생
-                    var eventArgs = new PatientSelectedEventArgs
-                    {
-                        Patient = _selectedPatient,
-                        Source = EventSource
-                    };
-
-                    // 인스턴스 기반 이벤트 발생
-                    PatientSelected?.Invoke(this, eventArgs);
-
-                    // 하위 호환성을 위한 레거시 이벤트 발생
-                    OnPatientSelected?.Invoke(this, EventArgs.Empty);
+                    TriggerPatientSelectedEvent(_selectedPatient);
                 }
             }
             catch (Exception ex)
@@ -408,41 +377,41 @@ namespace nU3.Core.UI.Components.Controls
 
         private void gridView_DoubleClick(object sender, EventArgs e)
         {
-            // 디자인 타임 체크
-            if (DesignMode || LicenseManager.UsageMode == LicenseUsageMode.Designtime)
-                return;
+            //// 디자인 타임 체크
+            //if (DesignMode || LicenseManager.UsageMode == LicenseUsageMode.Designtime)
+            //    return;
 
-            // null 체크
-            if (gridView == null || gridView.FocusedRowHandle < 0)
-                return;
+            //// null 체크
+            //if (gridView == null || gridView.FocusedRowHandle < 0)
+            //    return;
 
-            try
-            {
-                _selectedPatient = gridView.GetRow(gridView.FocusedRowHandle) as PatientInfoDto;
+            //try
+            //{
+            //    _selectedPatient = gridView.GetRow(gridView.FocusedRowHandle) as PatientInfoDto;
 
-                if (_selectedPatient != null)
-                {
-                    // EventBus 전파 (명시적인 메서드 사용)
-                    PublishPatientSelectedEvent(_selectedPatient);
+            //    if (_selectedPatient != null)
+            //    {
+            //        // EventBus 전파 (명시적인 메서드 사용)
+            //        PublishPatientSelectedEvent(_selectedPatient);
 
-                    // 더블클릭 시 환자 선택 이벤트 발생
-                    var eventArgs = new PatientSelectedEventArgs
-                    {
-                        Patient = _selectedPatient,
-                        Source = EventSource
-                    };
+            //        // 더블클릭 시 환자 선택 이벤트 발생
+            //        var eventArgs = new PatientSelectedEventArgs
+            //        {
+            //            Patient = _selectedPatient,
+            //            Source = EventSource
+            //        };
 
-                    // 인스턴스 기반 이벤트 발생
-                    PatientSelected?.Invoke(this, eventArgs);
+            //        // 인스턴스 기반 이벤트 발생
+            //        PatientSelected?.Invoke(this, eventArgs);
 
-                    // 하위 호환성을 위한 레거시 이벤트 발생
-                    OnPatientSelected?.Invoke(this, EventArgs.Empty);
-                }
-            }
-            catch (Exception ex)
-            {
-                LogError($"gridView_DoubleClick Error: {ex.Message}", ex);
-            }
+            //        // 하위 호환성을 위한 레거시 이벤트 발생
+            //        OnPatientSelected?.Invoke(this, EventArgs.Empty);
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    LogError($"gridView_DoubleClick Error: {ex.Message}", ex);
+            //}
         }
 
         private void btnRefresh_Click(object sender, EventArgs e)
