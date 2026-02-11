@@ -18,12 +18,11 @@ namespace nU3.Data.Repositories
         public List<SecurityUserDto> GetAllSecurityUsers()
         {
             var list = new List<SecurityUserDto>();
-            string sql = @"
-                SELECT u.USER_ID, u.USERNAME, u.EMAIL, u.ROLE_CODE, r.ROLE_NAME
-                FROM SYS_USER u
-                LEFT JOIN SYS_ROLE r ON u.ROLE_CODE = r.ROLE_CODE
-                WHERE u.IS_ACTIVE = 'Y'
-                ORDER BY u.USERNAME";
+            string sql = @"SELECT u.USER_ID, u.USERNAME, u.EMAIL, u.ROLE_CODE, r.ROLE_NAME
+                           FROM SYS_USER u
+                           LEFT JOIN SYS_ROLE r ON u.ROLE_CODE = r.ROLE_CODE
+                           WHERE u.IS_ACTIVE = 'Y'
+                           ORDER BY u.USERNAME";
 
             using (var dt = _db.ExecuteDataTable(sql))
             {

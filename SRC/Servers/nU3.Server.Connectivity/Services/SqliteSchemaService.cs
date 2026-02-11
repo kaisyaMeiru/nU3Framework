@@ -135,7 +135,7 @@ namespace nU3.Server.Connectivity.Services
                 {
                     _db.ExecuteNonQuery(@"
                         INSERT INTO SYS_USER (USER_ID, USERNAME, PASSWORD, EMAIL, ROLE_CODE, IS_ACTIVE) 
-                        VALUES ('admin', '관리자', '1234', 'admin@nu3.com', 'Admin', 'Y')");
+                        VALUES ('admin', '관리자', '1234', 'admin@nu3.com',  '0', 'Y')");
                     _logger.LogInformation("Default admin user seeded.");
                 }
             }
@@ -463,9 +463,12 @@ namespace nU3.Server.Connectivity.Services
         {
             var users = new[]
             {
-                new { UserId = "user01", UserName = "홍길동", Password = "1234", Email = "hong@test.com", RoleCode = "Doctor" },
-                new { UserId = "user02", UserName = "김철수", Password = "1234", Email = "kim@test.com", RoleCode = "Nurse" },
-                new { UserId = "user03", UserName = "이영희", Password = "1234", Email = "lee@test.com", RoleCode = "Doctor" }
+                new { UserId = "user01", UserName = "홍길동", Password = "1234", Email = "hong@test.com",
+                      RoleCode = ((int)UserRole.Doctor).ToString() },
+                new { UserId = "user02", UserName = "김철수", Password = "1234", Email = "kim@test.com",
+                      RoleCode = ((int)UserRole.Nurse).ToString() },
+                new { UserId = "user03", UserName = "이영희", Password = "1234", Email = "lee@test.com",
+                      RoleCode = ((int)UserRole.Doctor).ToString() }
             };
 
             foreach (var user in users)
