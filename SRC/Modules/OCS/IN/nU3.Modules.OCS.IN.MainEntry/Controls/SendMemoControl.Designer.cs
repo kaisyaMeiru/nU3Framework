@@ -49,7 +49,7 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             grpSendMemo.Location = new Point(0, 0);
             grpSendMemo.Margin = new Padding(4);
             grpSendMemo.Name = "grpSendMemo";
-            grpSendMemo.Size = new Size(1406, 750);
+            grpSendMemo.Size = new Size(742, 494);
             grpSendMemo.TabIndex = 0;
             grpSendMemo.Text = "전달메모";
             // 
@@ -62,14 +62,14 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             pnlButtons.Location = new Point(2, 23);
             pnlButtons.Margin = new Padding(4);
             pnlButtons.Name = "pnlButtons";
-            pnlButtons.Size = new Size(1402, 38);
+            pnlButtons.Size = new Size(738, 38);
             pnlButtons.TabIndex = 1;
             // 
             // btnMemoResv
             // 
             btnMemoResv.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnMemoResv.AuthId = "";
-            btnMemoResv.Location = new Point(1306, 4);
+            btnMemoResv.Location = new Point(642, 4);
             btnMemoResv.Margin = new Padding(4);
             btnMemoResv.Name = "btnMemoResv";
             btnMemoResv.Size = new Size(88, 29);
@@ -81,7 +81,7 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             // 
             btnSave.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnSave.AuthId = "";
-            btnSave.Location = new Point(1211, 4);
+            btnSave.Location = new Point(547, 4);
             btnSave.Margin = new Padding(4);
             btnSave.Name = "btnSave";
             btnSave.Size = new Size(88, 29);
@@ -93,7 +93,7 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             // 
             btnClear.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnClear.AuthId = "";
-            btnClear.Location = new Point(1117, 4);
+            btnClear.Location = new Point(453, 4);
             btnClear.Margin = new Padding(4);
             btnClear.Name = "btnClear";
             btnClear.Size = new Size(88, 29);
@@ -110,7 +110,7 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             memoEdit.Name = "memoEdit";
             memoEdit.Properties.Appearance.Options.UseFont = true;
             memoEdit.Properties.MaxLength = 2000;
-            memoEdit.Size = new Size(1402, 725);
+            memoEdit.Size = new Size(738, 469);
             memoEdit.TabIndex = 0;
             // 
             // SendMemoControl
@@ -120,7 +120,7 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             Controls.Add(grpSendMemo);
             Margin = new Padding(4);
             Name = "SendMemoControl";
-            Size = new Size(1406, 750);
+            Size = new Size(742, 494);
             ((System.ComponentModel.ISupportInitialize)grpSendMemo).EndInit();
             grpSendMemo.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)pnlButtons).EndInit();

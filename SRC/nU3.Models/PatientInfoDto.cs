@@ -3,42 +3,77 @@ using System;
 namespace nU3.Models
 {
     /// <summary>
-    /// È¯ÀÚ ±âº» Á¤º¸ ¸ğµ¨
+    /// È¯ï¿½ï¿½ ï¿½âº» ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
     /// </summary>
     public class PatientInfoDto
     {
         /// <summary>
-        /// È¯ÀÚ ID (Primary Key)
+        /// í™˜ì ID (Primary Key)
         /// </summary>
         public string PatientId { get; set; }
 
         /// <summary>
-        /// Â÷Æ® ¹øÈ£
+        /// ì…ì›ë²ˆí˜¸
+        /// </summary>
+        public string InNumber { get; set; }
+
+        /// <summary>
+        /// í™˜ì ID (Primary Key)
         /// </summary>
         public string ChartNo { get; set; }
 
         /// <summary>
-        /// È¯ÀÚ ÀÌ¸§
+        /// È¯ï¿½ï¿½ ï¿½Ì¸ï¿½
         /// </summary>
         public string PatientName { get; set; }
 
         /// <summary>
-        /// ÁÖ¹Îµî·Ï¹øÈ£ (¾ÏÈ£È­)
+        /// ï¿½Ö¹Îµï¿½Ï¹ï¿½È£ (ï¿½ï¿½È£È­)
         /// </summary>
         public string ResidentNo { get; set; }
 
         /// <summary>
-        /// ¼ºº° (0:Unspecified, 1:Male, 2:Female, 9:Other)
+        /// ì„±ë³„ (0:Unspecified, 1:Male, 2:Female, 9:Other)
         /// </summary>
         public int Gender { get; set; }
 
         /// <summary>
-        /// »ı³â¿ùÀÏ
+        /// ì§„ë£Œê³¼ ì´ë¦„
+        /// </summary>
+        public string DeptName { get; set; }
+
+        /// <summary>
+        /// ë‹´ë‹¹ì˜ ì´ë¦„
+        /// </summary>
+        public string DoctorName { get; set; }
+
+        /// <summary>
+        /// ë³‘ì‹¤ ë²ˆí˜¸
+        /// </summary>
+        public string RoomNo { get; set; }
+
+        /// <summary>
+        /// ì…ì›ì¼
+        /// </summary>
+        public DateTime AdmDate { get; set; }
+
+        /// <summary>
+        /// ë‹´ë‹¹ì˜ ID
+        /// </summary>
+        public string DoctorID { get; set; }
+
+        /// <summary>
+        /// ì§„ë£Œê³¼ ID
+        /// </summary>
+        public string DeptID { get; set; }
+
+        /// <summary>
+        /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         public DateTime BirthDate { get; set; }
 
         /// <summary>
-        /// ³ªÀÌ (°è»ê)
+        /// ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½)
         /// </summary>
         public int Age
         {
@@ -52,147 +87,147 @@ namespace nU3.Models
         }
 
         /// <summary>
-        /// Ç÷¾×Çü (0:Unknown, 1:A+, 2:A-, 3:B+, 4:B-, 5:O+, 6:O-, 7:AB+, 8:AB-)
+        /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ (0:Unknown, 1:A+, 2:A-, 3:B+, 4:B-, 5:O+, 6:O-, 7:AB+, 8:AB-)
         /// </summary>
         public int BloodType { get; set; }
 
         /// <summary>
-        /// ÀüÈ­¹øÈ£
+        /// ï¿½ï¿½È­ï¿½ï¿½È£
         /// </summary>
         public string PhoneNumber { get; set; }
 
         /// <summary>
-        /// ÈŞ´ëÀüÈ­
+        /// ï¿½Ş´ï¿½ï¿½ï¿½È­
         /// </summary>
         public string MobileNumber { get; set; }
 
         /// <summary>
-        /// ÀÌ¸ŞÀÏ
+        /// ï¿½Ì¸ï¿½ï¿½ï¿½
         /// </summary>
         public string Email { get; set; }
 
         /// <summary>
-        /// ¿ìÆí¹øÈ£
+        /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È£
         /// </summary>
         public string PostalCode { get; set; }
 
         /// <summary>
-        /// ÁÖ¼Ò
+        /// ï¿½Ö¼ï¿½
         /// </summary>
         public string Address { get; set; }
 
         /// <summary>
-        /// »ó¼¼ ÁÖ¼Ò
+        /// ï¿½ï¿½ ï¿½Ö¼ï¿½
         /// </summary>
         public string AddressDetail { get; set; }
 
         /// <summary>
-        /// º¸Çè À¯Çü (1:°Ç°­º¸Çè, 2:ÀÇ·á±Ş¿©, 3:»êÀç, 4:ÀÚµ¿Â÷, 5:½Ç¼Õ, 6:º¸ÈÆ, 99:ºñ±Ş¿©)
+        /// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ (1:ï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½, 2:ï¿½Ç·ï¿½Ş¿ï¿½, 3:ï¿½ï¿½ï¿½ï¿½, 4:ï¿½Úµï¿½ï¿½ï¿½, 5:ï¿½Ç¼ï¿½, 6:ï¿½ï¿½ï¿½ï¿½, 99:ï¿½ï¿½Ş¿ï¿½)
         /// </summary>
         public int InsuranceType { get; set; }
 
         /// <summary>
-        /// º¸Çè ¹øÈ£
+        /// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È£
         /// </summary>
         public string InsuranceNo { get; set; }
 
         /// <summary>
-        /// º¸È£ÀÚ ÀÌ¸§
+        /// ï¿½ï¿½È£ï¿½ï¿½ ï¿½Ì¸ï¿½
         /// </summary>
         public string GuardianName { get; set; }
 
         /// <summary>
-        /// º¸È£ÀÚ °ü°è
+        /// ï¿½ï¿½È£ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         public string GuardianRelation { get; set; }
 
         /// <summary>
-        /// º¸È£ÀÚ ¿¬¶ôÃ³
+        /// ï¿½ï¿½È£ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ã³
         /// </summary>
         public string GuardianPhone { get; set; }
 
         /// <summary>
-        /// ºñ»ó¿¬¶ôÃ³
+        /// ï¿½ï¿½ó¿¬¶ï¿½Ã³
         /// </summary>
         public string EmergencyContact { get; set; }
 
         /// <summary>
-        /// ºñ»ó¿¬¶ôÃ³ °ü°è
+        /// ï¿½ï¿½ó¿¬¶ï¿½Ã³ ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         public string EmergencyRelation { get; set; }
 
         /// <summary>
-        /// ¾Ë·¹¸£±â Á¤º¸
+        /// ï¿½Ë·ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         public string Allergies { get; set; }
 
         /// <summary>
-        /// ¸¸¼ºÁúÈ¯ Á¤º¸
+        /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¯ ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         public string ChronicDiseases { get; set; }
 
         /// <summary>
-        /// º¹¿ë ÁßÀÎ ¾à¹°
+        /// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½à¹°
         /// </summary>
         public string CurrentMedications { get; set; }
 
         /// <summary>
-        /// Èí¿¬ ¿©ºÎ
+        /// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         public bool IsSmoker { get; set; }
 
         /// <summary>
-        /// À½ÁÖ ¿©ºÎ
+        /// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         public bool IsDrinker { get; set; }
 
         /// <summary>
-        /// È¯ÀÚ »óÅÂ (0:Waiting, 1:InProgress, 2:Completed, 3:OnHold, 4:Cancelled, 10:Admitted, 11:Discharged)
+        /// È¯ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ (0:Waiting, 1:InProgress, 2:Completed, 3:OnHold, 4:Cancelled, 10:Admitted, 11:Discharged)
         /// </summary>
         public int Status { get; set; }
 
         /// <summary>
-        /// VIP ¿©ºÎ
+        /// VIP ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         public bool IsVIP { get; set; }
 
         /// <summary>
-        /// »ç¸Á ¿©ºÎ
+        /// ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         public bool IsDeceased { get; set; }
 
         /// <summary>
-        /// »ç¸ÁÀÏ
+        /// ï¿½ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         public DateTime? DeceasedDate { get; set; }
 
         /// <summary>
-        /// ÃÖÃÊ µî·ÏÀÏ
+        /// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         public DateTime RegisteredDate { get; set; }
 
         /// <summary>
-        /// ÃÖÃÊ µî·ÏÀÚ
+        /// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         public string RegisteredBy { get; set; }
 
         /// <summary>
-        /// ¸¶Áö¸· ¹æ¹®ÀÏ
+        /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½æ¹®ï¿½ï¿½
         /// </summary>
         public DateTime? LastVisitDate { get; set; }
 
         /// <summary>
-        /// ¼öÁ¤ÀÏ½Ã
+        /// ï¿½ï¿½ï¿½ï¿½ï¿½Ï½ï¿½
         /// </summary>
         public DateTime? ModifiedDate { get; set; }
 
         /// <summary>
-        /// ¼öÁ¤ÀÚ
+        /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         public string ModifiedBy { get; set; }
 
         /// <summary>
-        /// ºñ°í
+        /// ï¿½ï¿½ï¿½
         /// </summary>
         public string Remarks { get; set; }
     }

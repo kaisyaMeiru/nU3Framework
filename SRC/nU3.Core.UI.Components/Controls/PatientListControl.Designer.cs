@@ -4,7 +4,7 @@ using System.Windows.Forms;
 using nU3.Core.UI.Controls;
 using DevExpress.XtraGrid.Columns;
 
-namespace nU3.Modules.OCS.IN.MainEntry.Controls
+namespace nU3.Core.UI.Components.Controls
 {
     partial class PatientListControl
     {
@@ -35,8 +35,6 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
         private void InitializeComponent()
         {
             grpPatientList = new nU3GroupControl();
-            pnlButtons = new nU3PanelControl();
-            btnRefresh = new nU3SimpleButton();
             gridControl = new nU3GridControl();
             gridView = new nU3GridView();
             colInNumber = new nU3GridColumn();
@@ -48,12 +46,14 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             colDoctorName = new nU3GridColumn();
             colRoomNo = new nU3GridColumn();
             colAdmDate = new nU3GridColumn();
+            pnlButtons = new nU3PanelControl();
+            btnRefresh = new nU3SimpleButton();
             ((ISupportInitialize)grpPatientList).BeginInit();
             grpPatientList.SuspendLayout();
-            ((ISupportInitialize)pnlButtons).BeginInit();
-            pnlButtons.SuspendLayout();
             ((ISupportInitialize)gridControl).BeginInit();
             ((ISupportInitialize)gridView).BeginInit();
+            ((ISupportInitialize)pnlButtons).BeginInit();
+            pnlButtons.SuspendLayout();
             SuspendLayout();
             // 
             // grpPatientList
@@ -64,41 +64,18 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             grpPatientList.Location = new Point(0, 0);
             grpPatientList.Margin = new Padding(4);
             grpPatientList.Name = "grpPatientList";
-            grpPatientList.Size = new Size(1389, 750);
+            grpPatientList.Size = new Size(1305, 852);
             grpPatientList.TabIndex = 0;
             grpPatientList.Text = "입원환자 리스트";
-            // 
-            // pnlButtons
-            // 
-            pnlButtons.Controls.Add(btnRefresh);
-            pnlButtons.Dock = DockStyle.Top;
-            pnlButtons.Location = new Point(2, 23);
-            pnlButtons.Margin = new Padding(4);
-            pnlButtons.Name = "pnlButtons";
-            pnlButtons.Size = new Size(1385, 38);
-            pnlButtons.TabIndex = 1;
-            // 
-            // btnRefresh
-            // 
-            btnRefresh.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnRefresh.AuthId = "";
-            btnRefresh.Location = new Point(1289, 4);
-            btnRefresh.Margin = new Padding(4);
-            btnRefresh.Name = "btnRefresh";
-            btnRefresh.Size = new Size(88, 29);
-            btnRefresh.TabIndex = 0;
-            btnRefresh.Text = "새로고침";
-            btnRefresh.Click += btnRefresh_Click;
             // 
             // gridControl
             // 
             gridControl.Dock = DockStyle.Fill;
-            gridControl.EmbeddedNavigator.Margin = new Padding(4);
             gridControl.Location = new Point(2, 61);
             gridControl.MainView = gridView;
             gridControl.Margin = new Padding(4);
             gridControl.Name = "gridControl";
-            gridControl.Size = new Size(1385, 687);
+            gridControl.Size = new Size(1301, 789);
             gridControl.TabIndex = 0;
             gridControl.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] { gridView });
             // 
@@ -123,41 +100,36 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             gridView.OptionsView.ShowGroupPanel = false;
             gridView.FocusedRowChanged += gridView_FocusedRowChanged;
             gridView.DoubleClick += gridView_DoubleClick;
+            gridView.CustomColumnDisplayText += gridView_CustomColumnDisplayText;
             // 
             // colInNumber
             // 
             colInNumber.AuthId = "";
-            colInNumber.Caption = "입원번호";
-            colInNumber.FieldName = "InNumber";
-            colInNumber.MinWidth = 23;
             colInNumber.Name = "colInNumber";
             colInNumber.ResourceKey = "";
-            colInNumber.Visible = true;
-            colInNumber.VisibleIndex = 0;
-            colInNumber.Width = 93;
             // 
             // colPatiNumber
             // 
             colPatiNumber.AuthId = "";
             colPatiNumber.Caption = "환자번호";
-            colPatiNumber.FieldName = "PatiNumber";
+            colPatiNumber.FieldName = "PatientId";
             colPatiNumber.MinWidth = 23;
             colPatiNumber.Name = "colPatiNumber";
             colPatiNumber.ResourceKey = "";
             colPatiNumber.Visible = true;
-            colPatiNumber.VisibleIndex = 1;
+            colPatiNumber.VisibleIndex = 0;
             colPatiNumber.Width = 93;
             // 
             // colPatiName
             // 
             colPatiName.AuthId = "";
             colPatiName.Caption = "환자명";
-            colPatiName.FieldName = "PatiName";
+            colPatiName.FieldName = "PatientName";
             colPatiName.MinWidth = 23;
             colPatiName.Name = "colPatiName";
             colPatiName.ResourceKey = "";
             colPatiName.Visible = true;
-            colPatiName.VisibleIndex = 2;
+            colPatiName.VisibleIndex = 1;
             colPatiName.Width = 70;
             // 
             // colGender
@@ -169,7 +141,7 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             colGender.Name = "colGender";
             colGender.ResourceKey = "";
             colGender.Visible = true;
-            colGender.VisibleIndex = 3;
+            colGender.VisibleIndex = 2;
             colGender.Width = 47;
             // 
             // colAge
@@ -181,7 +153,7 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             colAge.Name = "colAge";
             colAge.ResourceKey = "";
             colAge.Visible = true;
-            colAge.VisibleIndex = 4;
+            colAge.VisibleIndex = 3;
             colAge.Width = 58;
             // 
             // colDeptName
@@ -193,7 +165,7 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             colDeptName.Name = "colDeptName";
             colDeptName.ResourceKey = "";
             colDeptName.Visible = true;
-            colDeptName.VisibleIndex = 5;
+            colDeptName.VisibleIndex = 4;
             colDeptName.Width = 82;
             // 
             // colDoctorName
@@ -205,7 +177,7 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             colDoctorName.Name = "colDoctorName";
             colDoctorName.ResourceKey = "";
             colDoctorName.Visible = true;
-            colDoctorName.VisibleIndex = 6;
+            colDoctorName.VisibleIndex = 5;
             colDoctorName.Width = 82;
             // 
             // colRoomNo
@@ -217,7 +189,7 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             colRoomNo.Name = "colRoomNo";
             colRoomNo.ResourceKey = "";
             colRoomNo.Visible = true;
-            colRoomNo.VisibleIndex = 7;
+            colRoomNo.VisibleIndex = 6;
             colRoomNo.Width = 58;
             // 
             // colAdmDate
@@ -231,8 +203,30 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             colAdmDate.Name = "colAdmDate";
             colAdmDate.ResourceKey = "";
             colAdmDate.Visible = true;
-            colAdmDate.VisibleIndex = 8;
+            colAdmDate.VisibleIndex = 7;
             colAdmDate.Width = 93;
+            // 
+            // pnlButtons
+            // 
+            pnlButtons.Controls.Add(btnRefresh);
+            pnlButtons.Dock = DockStyle.Top;
+            pnlButtons.Location = new Point(2, 23);
+            pnlButtons.Margin = new Padding(4);
+            pnlButtons.Name = "pnlButtons";
+            pnlButtons.Size = new Size(1301, 38);
+            pnlButtons.TabIndex = 1;
+            // 
+            // btnRefresh
+            // 
+            btnRefresh.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnRefresh.AuthId = "";
+            btnRefresh.Location = new Point(1205, 4);
+            btnRefresh.Margin = new Padding(4);
+            btnRefresh.Name = "btnRefresh";
+            btnRefresh.Size = new Size(88, 29);
+            btnRefresh.TabIndex = 0;
+            btnRefresh.Text = "새로고침";
+            btnRefresh.Click += btnRefresh_Click;
             // 
             // PatientListControl
             // 
@@ -241,13 +235,13 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             Controls.Add(grpPatientList);
             Margin = new Padding(4);
             Name = "PatientListControl";
-            Size = new Size(1389, 750);
+            Size = new Size(1305, 852);
             ((ISupportInitialize)grpPatientList).EndInit();
             grpPatientList.ResumeLayout(false);
-            ((ISupportInitialize)pnlButtons).EndInit();
-            pnlButtons.ResumeLayout(false);
             ((ISupportInitialize)gridControl).EndInit();
             ((ISupportInitialize)gridView).EndInit();
+            ((ISupportInitialize)pnlButtons).EndInit();
+            pnlButtons.ResumeLayout(false);
             ResumeLayout(false);
 
         }

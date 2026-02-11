@@ -34,7 +34,7 @@ namespace nU3.Modules.EMR.OT.Worklist
             _topPanel.Dock = DockStyle.Top;
             _topPanel.Location = new Point(0, 0);
             _topPanel.Name = "_topPanel";
-            _topPanel.Size = new Size(1305, 100);
+            _topPanel.Size = new Size(1603, 100);
             _topPanel.TabIndex = 1;
             // 
             // _lblTitle
@@ -51,7 +51,7 @@ namespace nU3.Modules.EMR.OT.Worklist
             _btnSearch.Dock = DockStyle.Fill;
             _btnSearch.Location = new Point(0, 0);
             _btnSearch.Name = "_btnSearch";
-            _btnSearch.Size = new Size(1305, 100);
+            _btnSearch.Size = new Size(1603, 100);
             _btnSearch.TabIndex = 1;
             _btnSearch.Text = "Search Patient";
             _btnSearch.Click += _btnSearch_Click1;
@@ -62,7 +62,7 @@ namespace nU3.Modules.EMR.OT.Worklist
             _gridControl.Location = new Point(0, 100);
             _gridControl.MainView = _gridView;
             _gridControl.Name = "_gridControl";
-            _gridControl.Size = new Size(1305, 752);
+            _gridControl.Size = new Size(1603, 714);
             _gridControl.TabIndex = 0;
             _gridControl.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] { _gridView });
             // 
@@ -76,7 +76,7 @@ namespace nU3.Modules.EMR.OT.Worklist
             Controls.Add(_gridControl);
             Controls.Add(_topPanel);
             Name = "WorklistControl";
-            Size = new Size(1305, 852);
+            Size = new Size(1603, 814);
             _topPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)_gridControl).EndInit();
             ((System.ComponentModel.ISupportInitialize)_gridView).EndInit();

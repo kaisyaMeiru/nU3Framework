@@ -18,9 +18,43 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
         public OtherOrderControl()
         {
             InitializeComponent();
+            
+            // 탭 헤더 숨기기
+            if (tabControl != null)
+            {
+                tabControl.ShowTabHeader = DevExpress.Utils.DefaultBoolean.False;
+                
+                // 탭 변경 이벤트 구독 (외부에서 탭이 변경되었을 때 이벤트 발생)
+                tabControl.SelectedPageChanged += TabControl_SelectedPageChanged;
+            }
         }
 
         public RefCodeType RefCodeType { get; set; } = RefCodeType.REP;
+
+        /// <summary>
+        /// 탭이 변경되었을 때 발생하는 이벤트
+        /// </summary>
+        public event EventHandler<RefCodeType> TabChanged;
+
+        private void TabControl_SelectedPageChanged(object sender, TabPageChangedEventArgs e)
+        {
+            // 현재 선택된 탭에 따라 RefCodeType 업데이트
+            if (e.Page == tabOrder)
+            {
+                RefCodeType = RefCodeType.REP;
+                TabChanged?.Invoke(this, RefCodeType.REP);
+            }
+            else if (e.Page == tabSheet)
+            {
+                RefCodeType = RefCodeType.SHT;
+                TabChanged?.Invoke(this, RefCodeType.SHT);
+            }
+            else if (e.Page == tabEtc)
+            {
+                RefCodeType = RefCodeType.ETC;
+                TabChanged?.Invoke(this, RefCodeType.ETC);
+            }
+        }
 
         private void btnLabOrder_Click(object sender, EventArgs e)
         {
@@ -63,22 +97,37 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             // 데이터 초기화
         }
 
+        /// <summary>
+        /// 외부에서 탭을 변경합니다 (OtherTabControl에서 호출)
+        /// </summary>
         public void SetRefCodeSelect(RefCodeType refCodeType)
         {
             RefCodeType = refCodeType;
             
-            // 탭 선택에 따른 처리
-            switch (refCodeType)
+            if (tabControl == null) return;
+
+            // 탭 선택에 따른 처리 (이벤트가 발생하지 않도록 일시적으로 구독 해제)
+            tabControl.SelectedPageChanged -= TabControl_SelectedPageChanged;
+            
+            try
             {
-                case RefCodeType.REP:
-                    tabControl.SelectedTabPage = tabOrder;
-                    break;
-                case RefCodeType.SHT:
-                    tabControl.SelectedTabPage = tabSheet;
-                    break;
-                case RefCodeType.ETC:
-                    tabControl.SelectedTabPage = tabEtc;
-                    break;
+                switch (refCodeType)
+                {
+                    case RefCodeType.REP:
+                        tabControl.SelectedTabPage = tabOrder;
+                        break;
+                    case RefCodeType.SHT:
+                        tabControl.SelectedTabPage = tabSheet;
+                        break;
+                    case RefCodeType.ETC:
+                        tabControl.SelectedTabPage = tabEtc;
+                        break;
+                }
+            }
+            finally
+            {
+                // 이벤트 다시 구독
+                tabControl.SelectedPageChanged += TabControl_SelectedPageChanged;
             }
         }
     }

@@ -18,8 +18,7 @@ using nU3.Modules.OCS.IN.MainEntry.Controls;
 namespace nU3.Modules.OCS.IN.MainEntry
 {
     /// <summary>
-    /// OCS 입원 처방 메인 화면
-    /// 기존 GMIS OCSINPOrderMain을 nU3 Framework로 마이그레이션
+    /// OCS 입원 처방 메인 화면    
     /// </summary>
     [nU3ProgramInfo(typeof(OCSINPOrderMainControl), "OCS 입원 처방", "OCS_IN_001")]
     public partial class OCSINPOrderMainControl : BaseWorkControl
@@ -37,10 +36,7 @@ namespace nU3.Modules.OCS.IN.MainEntry
         #endregion
 
         #region 2. Form 변수를 정의한다
-
-        private const int MIN_LEFT_SIZE = 24;
-        private const int MAX_LEFT_SIZE = 275;
-
+        
         private string mInNumber = string.Empty;
         private string mPatiNumber = string.Empty;
         private string mOrdDate = string.Empty;
@@ -58,8 +54,6 @@ namespace nU3.Modules.OCS.IN.MainEntry
 
             if (EventBus == null)
                 LogWarning("EventBus가 할당되지 않았습니다.");
-
-
         }
 
         private void EnableEventListening()
@@ -78,6 +72,13 @@ namespace nU3.Modules.OCS.IN.MainEntry
             if(PatientListControl != null)            
                 PatientListControl.OnPatientSelected += OnPatientSelected;
 
+            // OtherTabControl과 OtherOrderControl 탭 동기화 이벤트 연결
+            if (OtherTabControl != null)
+                OtherTabControl.RefCodeSelected += OtherTabControl_RefCodeSelected;
+
+            if (OtherOrderControl != null)
+                OtherOrderControl.TabChanged += OtherOrderControl_TabChanged;
+
             AddEventLog("OCS 입원 처방 화면 활성화");
         }
 
@@ -86,7 +87,15 @@ namespace nU3.Modules.OCS.IN.MainEntry
             base.OnScreenDeactivated();
 
             // 환자 선택 이벤트 핸들러 해제
-            PatientListControl.OnPatientSelected -= OnPatientSelected;
+            if (PatientListControl != null)
+                PatientListControl.OnPatientSelected -= OnPatientSelected;
+
+            // 탭 동기화 이벤트 핸들러 해제
+            if (OtherTabControl != null)
+                OtherTabControl.RefCodeSelected -= OtherTabControl_RefCodeSelected;
+
+            if (OtherOrderControl != null)
+                OtherOrderControl.TabChanged -= OtherOrderControl_TabChanged;
 
             AddEventLog("OCS 입원 처방 화면 비활성화");
         }
@@ -137,12 +146,39 @@ namespace nU3.Modules.OCS.IN.MainEntry
                 mPatiNumber = PatientListControl.SelectedPatiNumber;
                 mAdmDate = PatientListControl.SelectedAdmDate.ToString("yyyyMMdd");
 
+                // 환자 배너 정보 업데이트 (실제 선택된 환자 데이터 사용)
+                if (PatientInfoControl != null)
+                {
+                    PatientInfoControl.SetPatientInfo(PatientListControl.GetSelectedPatient());                        
+                }
+
                 // 처방정보 조회
                 string lRecDate = dtpOrdDate?.EditValue?.ToString()?.Replace("-", "") ?? DateTime.Now.ToString("yyyyMMdd");
                 GetOrderQueryLayout(mInNumber, lRecDate);
             }
         }
 
+        /// <summary>
+        /// OtherTabControl에서 탭 버튼 클릭 시 OtherOrderControl의 탭 동기화
+        /// </summary>
+        private void OtherTabControl_RefCodeSelected(object sender, RefCodeSelectedEventArgs e)
+        {
+            if (OtherOrderControl != null)
+            {
+                OtherOrderControl.SetRefCodeSelect(e.SelectedTab);
+            }
+        }
+
+        /// <summary>
+        /// OtherOrderControl에서 탭 변경 시 OtherTabControl의 버튼 상태 동기화
+        /// </summary>
+        private void OtherOrderControl_TabChanged(object sender, RefCodeType refCodeType)
+        {
+            if (OtherTabControl != null)
+            {
+                OtherTabControl.SetRefCode(refCodeType);
+            }
+        }
         #endregion
 
         #region 4. 메인 버튼 이벤트를 정의한다
@@ -224,7 +260,6 @@ namespace nU3.Modules.OCS.IN.MainEntry
 
         #endregion
 
-        #region 5. 메서드를 정의한다
 
         private bool GetOrderQueryLayout(string InNumber, string lRecDate)
         {
@@ -300,12 +335,7 @@ namespace nU3.Modules.OCS.IN.MainEntry
         private bool SetDataSave(ref string lErrMessage, string lStatusCode)
         {
             try
-            {
-                // 트랜잭션 시작 (데모에서는 실제 DB 연동 없이 true 반환)
-                // using (var transaction = BeginTransaction())
-                // {
-                //     try
-                //     {
+            {                
                 // 처방코드 저장
                 if (OrderCodeControl != null && !OrderCodeControl.SaveData(this.mInNumber, this.mOrdDate))
                 {
@@ -334,16 +364,7 @@ namespace nU3.Modules.OCS.IN.MainEntry
                     return false;
                 }
 
-                //         // 트랜잭션 커밋
-                //         transaction.Commit();
-                //     }
-                //     catch
-                //     {
-                //         transaction.Rollback();
-                //         throw;
-                //     }
-                // }
-
+                
                 return true;
             }
             catch (Exception ex)
@@ -430,6 +451,5 @@ namespace nU3.Modules.OCS.IN.MainEntry
             LogInfo(message);
         }
 
-        #endregion
     }
 }

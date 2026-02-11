@@ -40,6 +40,7 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             // 
             pnlMain.Appearance.BackColor = SystemColors.Control;
             pnlMain.Appearance.Options.UseBackColor = true;
+            pnlMain.AutoSize = true;
             pnlMain.Controls.Add(btnEtc);
             pnlMain.Controls.Add(btnSheet);
             pnlMain.Controls.Add(btnRep);
@@ -56,10 +57,11 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             btnEtc.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
             btnEtc.Appearance.TextOptions.VAlignment = DevExpress.Utils.VertAlignment.Center;
             btnEtc.ButtonStyle = DevExpress.XtraEditors.Controls.BorderStyles.HotFlat;
-            btnEtc.Location = new Point(2, 181);
-            btnEtc.Margin = new Padding(4);
+            btnEtc.Dock = DockStyle.Top;
+            btnEtc.Location = new Point(2, 162);
+            btnEtc.Margin = new Padding(0);
             btnEtc.Name = "btnEtc";
-            btnEtc.Size = new Size(23, 75);
+            btnEtc.Size = new Size(1301, 80);
             btnEtc.TabIndex = 2;
             btnEtc.Text = "기\r\n\r\n\r\n타";
             btnEtc.Click += btnEtc_Click;
@@ -70,10 +72,11 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             btnSheet.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
             btnSheet.Appearance.TextOptions.VAlignment = DevExpress.Utils.VertAlignment.Center;
             btnSheet.ButtonStyle = DevExpress.XtraEditors.Controls.BorderStyles.HotFlat;
-            btnSheet.Location = new Point(2, 93);
-            btnSheet.Margin = new Padding(4);
+            btnSheet.Dock = DockStyle.Top;
+            btnSheet.Location = new Point(2, 82);
+            btnSheet.Margin = new Padding(0);
             btnSheet.Name = "btnSheet";
-            btnSheet.Size = new Size(23, 75);
+            btnSheet.Size = new Size(1301, 80);
             btnSheet.TabIndex = 1;
             btnSheet.Text = "시\r\n\r\n\r\n트";
             btnSheet.Click += btnSheet_Click;
@@ -86,10 +89,11 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             btnRep.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
             btnRep.Appearance.TextOptions.VAlignment = DevExpress.Utils.VertAlignment.Center;
             btnRep.ButtonStyle = DevExpress.XtraEditors.Controls.BorderStyles.HotFlat;
-            btnRep.Location = new Point(2, 5);
-            btnRep.Margin = new Padding(4);
+            btnRep.Dock = DockStyle.Top;
+            btnRep.Location = new Point(2, 2);
+            btnRep.Margin = new Padding(0);
             btnRep.Name = "btnRep";
-            btnRep.Size = new Size(23, 75);
+            btnRep.Size = new Size(1301, 80);
             btnRep.TabIndex = 0;
             btnRep.Text = "처\r\n\r\n\r\n방";
             btnRep.Click += btnRep_Click;
@@ -105,6 +109,7 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             ((System.ComponentModel.ISupportInitialize)pnlMain).EndInit();
             pnlMain.ResumeLayout(false);
             ResumeLayout(false);
+            PerformLayout();
 
         }
 

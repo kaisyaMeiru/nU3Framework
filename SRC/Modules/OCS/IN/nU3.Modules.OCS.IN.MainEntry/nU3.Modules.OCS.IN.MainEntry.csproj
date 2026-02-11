@@ -10,6 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\nU3.Core.UI.Components\nU3.Core.UI.Components.csproj" />
     <ProjectReference Include="..\..\..\..\nU3.Core.UI\nU3.Core.UI.csproj" />
     <ProjectReference Include="..\..\..\..\nU3.Core\nU3.Core.csproj" />
   </ItemGroup>
@@ -25,9 +26,6 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Update="Controls\OtherTabControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Update="Controls\PatientInfoControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Update="Controls\PatientListControl.cs">

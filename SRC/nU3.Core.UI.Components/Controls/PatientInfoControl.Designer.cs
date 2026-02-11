@@ -1,15 +1,11 @@
-namespace nU3.Modules.OCS.IN.MainEntry.Controls
+namespace nU3.Core.UI.Components.Controls
 {
     partial class PatientInfoControl
     {
-        /// <summary> 
-        /// 필수 디자이너 변수입니다.
-        /// </summary>
+        /// <summary> 필수 디자이너 변수입니다. </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary> 
-        /// 사용 중인 모든 리소스를 정리합니다.
-        /// </summary>
+        /// <summary> 사용 중인 모든 리소스를 정리합니다. </summary>
         /// <param name="disposing">관리되는 리소스를 삭제해야 하면 true이고, 그렇지 않으면 false입니다.</param>
         protected override void Dispose(bool disposing)
         {
@@ -22,10 +18,7 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
 
         #region 구성 요소 디자이너에서 생성한 코드
 
-        /// <summary> 
-        /// 디자이너 지원에 필요한 메서드입니다. 
-        /// 이 메서드의 내용을 코드 편집기로 수정하지 마십시오.
-        /// </summary>
+        /// <summary> 디자이너 지원에 필요한 메서드입니다. 이 메서드의 내용을 코드 편집기로 수정하지 마십시오. </summary>
         private void InitializeComponent()
         {
             grpPatientInfo = new nU3.Core.UI.Controls.nU3GroupControl();
@@ -54,15 +47,6 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             btnAlergy = new nU3.Core.UI.Controls.nU3SimpleButton();
             ((System.ComponentModel.ISupportInitialize)grpPatientInfo).BeginInit();
             grpPatientInfo.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)txtDiagnosis.Properties).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)txtInDate.Properties).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)txtRoomNo.Properties).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)txtDoctorName.Properties).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)txtDeptName.Properties).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)txtAge.Properties).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)txtGender.Properties).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)txtPatName.Properties).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)txtPatId.Properties).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pnlButtons).BeginInit();
             pnlButtons.SuspendLayout();
             SuspendLayout();
@@ -116,7 +100,6 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             txtDiagnosis.Location = new Point(989, 0);
             txtDiagnosis.Margin = new Padding(4);
             txtDiagnosis.Name = "txtDiagnosis";
-            txtDiagnosis.Properties.ReadOnly = true;
             txtDiagnosis.Size = new Size(373, 20);
             txtDiagnosis.TabIndex = 16;
             // 
@@ -138,7 +121,6 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             txtInDate.Location = new Point(826, 0);
             txtInDate.Margin = new Padding(4);
             txtInDate.Name = "txtInDate";
-            txtInDate.Properties.ReadOnly = true;
             txtInDate.Size = new Size(117, 20);
             txtInDate.TabIndex = 14;
             // 
@@ -160,7 +142,6 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             txtRoomNo.Location = new Point(700, 0);
             txtRoomNo.Margin = new Padding(4);
             txtRoomNo.Name = "txtRoomNo";
-            txtRoomNo.Properties.ReadOnly = true;
             txtRoomNo.Size = new Size(70, 20);
             txtRoomNo.TabIndex = 12;
             // 
@@ -182,7 +163,6 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             txtDoctorName.Location = new Point(574, 0);
             txtDoctorName.Margin = new Padding(4);
             txtDoctorName.Name = "txtDoctorName";
-            txtDoctorName.Properties.ReadOnly = true;
             txtDoctorName.Size = new Size(94, 20);
             txtDoctorName.TabIndex = 10;
             // 
@@ -204,7 +184,6 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             txtDeptName.Location = new Point(444, 0);
             txtDeptName.Margin = new Padding(4);
             txtDeptName.Name = "txtDeptName";
-            txtDeptName.Properties.ReadOnly = true;
             txtDeptName.Size = new Size(74, 20);
             txtDeptName.TabIndex = 8;
             // 
@@ -226,7 +205,6 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             txtAge.Location = new Point(368, 0);
             txtAge.Margin = new Padding(4);
             txtAge.Name = "txtAge";
-            txtAge.Properties.ReadOnly = true;
             txtAge.Size = new Size(30, 20);
             txtAge.TabIndex = 6;
             // 
@@ -248,7 +226,6 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             txtGender.Location = new Point(300, 0);
             txtGender.Margin = new Padding(4);
             txtGender.Name = "txtGender";
-            txtGender.Properties.ReadOnly = true;
             txtGender.Size = new Size(32, 20);
             txtGender.TabIndex = 4;
             // 
@@ -270,7 +247,6 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             txtPatName.Location = new Point(193, 0);
             txtPatName.Margin = new Padding(4);
             txtPatName.Name = "txtPatName";
-            txtPatName.Properties.ReadOnly = true;
             txtPatName.Size = new Size(71, 20);
             txtPatName.TabIndex = 2;
             // 
@@ -292,7 +268,6 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             txtPatId.Location = new Point(102, 0);
             txtPatId.Margin = new Padding(4);
             txtPatId.Name = "txtPatId";
-            txtPatId.Properties.ReadOnly = true;
             txtPatId.Size = new Size(45, 20);
             txtPatId.TabIndex = 0;
             // 
@@ -367,19 +342,9 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
             ((System.ComponentModel.ISupportInitialize)grpPatientInfo).EndInit();
             grpPatientInfo.ResumeLayout(false);
             grpPatientInfo.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)txtDiagnosis.Properties).EndInit();
-            ((System.ComponentModel.ISupportInitialize)txtInDate.Properties).EndInit();
-            ((System.ComponentModel.ISupportInitialize)txtRoomNo.Properties).EndInit();
-            ((System.ComponentModel.ISupportInitialize)txtDoctorName.Properties).EndInit();
-            ((System.ComponentModel.ISupportInitialize)txtDeptName.Properties).EndInit();
-            ((System.ComponentModel.ISupportInitialize)txtAge.Properties).EndInit();
-            ((System.ComponentModel.ISupportInitialize)txtGender.Properties).EndInit();
-            ((System.ComponentModel.ISupportInitialize)txtPatName.Properties).EndInit();
-            ((System.ComponentModel.ISupportInitialize)txtPatId.Properties).EndInit();
             ((System.ComponentModel.ISupportInitialize)pnlButtons).EndInit();
             pnlButtons.ResumeLayout(false);
             ResumeLayout(false);
-
         }
 
         #endregion

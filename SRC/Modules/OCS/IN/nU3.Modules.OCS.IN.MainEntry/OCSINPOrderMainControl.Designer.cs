@@ -31,9 +31,9 @@ namespace nU3.Modules.OCS.IN.MainEntry
             pnlMain = new nU3.Core.UI.Controls.nU3PanelControl();
             OrderCodeControl = new nU3.Modules.OCS.IN.MainEntry.Controls.OrderCodeControl();
             pnlPatientInfo = new nU3.Core.UI.Controls.nU3PanelControl();
-            PatientInfoControl = new nU3.Modules.OCS.IN.MainEntry.Controls.PatientInfoControl();
+            PatientInfoControl = new nU3.Core.UI.Components.Controls.PatientInfoControl();
             pnlWaitList = new nU3.Core.UI.Controls.nU3PanelControl();
-            PatientListControl = new nU3.Modules.OCS.IN.MainEntry.Controls.PatientListControl();
+            PatientListControl = new nU3.Core.UI.Components.Controls.PatientListControl();
             pnlCenter = new nU3.Core.UI.Controls.nU3PanelControl();
             ProblemListControl = new nU3.Modules.OCS.IN.MainEntry.Controls.ProblemListControl();
             splitterDiagProblem = new DevExpress.XtraEditors.SplitterControl();
@@ -125,6 +125,8 @@ namespace nU3.Modules.OCS.IN.MainEntry
             // 
             PatientInfoControl.Dock = DockStyle.Fill;
             PatientInfoControl.EventBus = null;
+            PatientInfoControl.EventBusUse = false;
+            PatientInfoControl.EventSource = "BaseWorkComponent";
             PatientInfoControl.Location = new Point(2, 2);
             PatientInfoControl.Margin = new Padding(4);
             PatientInfoControl.Name = "PatientInfoControl";
@@ -144,6 +146,9 @@ namespace nU3.Modules.OCS.IN.MainEntry
             // PatientListControl
             // 
             PatientListControl.Dock = DockStyle.Fill;
+            PatientListControl.EventBus = null;
+            PatientListControl.EventBusUse = false;
+            PatientListControl.EventSource = "BaseWorkComponent";
             PatientListControl.Location = new Point(2, 2);
             PatientListControl.Margin = new Padding(4);
             PatientListControl.Name = "PatientListControl";
@@ -167,7 +172,7 @@ namespace nU3.Modules.OCS.IN.MainEntry
             // 
             ProblemListControl.Dock = DockStyle.Fill;
             ProblemListControl.Location = new Point(2, 146);
-            ProblemListControl.Margin = new Padding(4, 4, 4, 4);
+            ProblemListControl.Margin = new Padding(4);
             ProblemListControl.Name = "ProblemListControl";
             ProblemListControl.Size = new Size(434, 455);
             ProblemListControl.TabIndex = 1;
@@ -223,6 +228,7 @@ namespace nU3.Modules.OCS.IN.MainEntry
             // pnlRight
             // 
             pnlRight.Controls.Add(tabSupport);
+            pnlRight.Controls.Add(OtherTabControl);
             pnlRight.Dock = DockStyle.Right;
             pnlRight.Location = new Point(758, 60);
             pnlRight.Margin = new Padding(4);
@@ -237,7 +243,7 @@ namespace nU3.Modules.OCS.IN.MainEntry
             tabSupport.Margin = new Padding(4);
             tabSupport.Name = "tabSupport";
             tabSupport.SelectedTabPage = OrderPage;
-            tabSupport.Size = new Size(543, 734);
+            tabSupport.Size = new Size(506, 734);
             tabSupport.TabIndex = 1;
             tabSupport.TabPages.AddRange(new DevExpress.XtraTab.XtraTabPage[] { OrderPage });
             tabSupport.TabStop = false;
@@ -246,10 +252,9 @@ namespace nU3.Modules.OCS.IN.MainEntry
             // 
             OrderPage.AuthId = "";
             OrderPage.Controls.Add(OtherOrderControl);
-            OrderPage.Controls.Add(OtherTabControl);
             OrderPage.Margin = new Padding(4);
             OrderPage.Name = "OrderPage";
-            OrderPage.Size = new Size(541, 708);
+            OrderPage.Size = new Size(504, 708);
             OrderPage.Text = "기타처방";
             // 
             // OtherOrderControl
@@ -259,17 +264,17 @@ namespace nU3.Modules.OCS.IN.MainEntry
             OtherOrderControl.Margin = new Padding(4);
             OtherOrderControl.Name = "OtherOrderControl";
             OtherOrderControl.RefCodeType = MainEntry.Controls.RefCodeType.REP;
-            OtherOrderControl.Size = new Size(541, 680);
+            OtherOrderControl.Size = new Size(504, 708);
             OtherOrderControl.TabIndex = 0;
             // 
             // OtherTabControl
             // 
-            OtherTabControl.Dock = DockStyle.Bottom;
-            OtherTabControl.Location = new Point(0, 680);
+            OtherTabControl.Dock = DockStyle.Right;
+            OtherTabControl.Location = new Point(508, 2);
             OtherTabControl.Margin = new Padding(4);
             OtherTabControl.Name = "OtherTabControl";
             OtherTabControl.RefCodeType = MainEntry.Controls.RefCodeType.REP;
-            OtherTabControl.Size = new Size(541, 28);
+            OtherTabControl.Size = new Size(37, 734);
             OtherTabControl.TabIndex = 1;
             // 
             // pnlBottom
@@ -539,8 +544,8 @@ namespace nU3.Modules.OCS.IN.MainEntry
         private nU3.Core.UI.Controls.nU3PanelControl pnlTopBar;
         private nU3.Core.UI.Controls.nU3PanelControl pnlDiagProblem;
         private nU3.Core.UI.Controls.nU3PanelControl pnlMemo;
-        private nU3.Modules.OCS.IN.MainEntry.Controls.PatientInfoControl PatientInfoControl;
-        private nU3.Modules.OCS.IN.MainEntry.Controls.PatientListControl PatientListControl;
+        private nU3.Core.UI.Components.Controls.PatientInfoControl PatientInfoControl;
+        private nU3.Core.UI.Components.Controls.PatientListControl PatientListControl;
         private nU3.Modules.OCS.IN.MainEntry.Controls.OrderCodeControl OrderCodeControl;
         private nU3.Modules.OCS.IN.MainEntry.Controls.DiagCodeControl DiagCodeControl;
         private nU3.Modules.OCS.IN.MainEntry.Controls.ProblemListControl ProblemListControl;

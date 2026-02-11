@@ -28,155 +28,170 @@ namespace nU3.Modules.OCS.IN.MainEntry.Controls
         /// </summary>
         private void InitializeComponent()
         {
-            this.grpProblemList = new nU3.Core.UI.Controls.nU3GroupControl();
-            this.pnlButtons = new nU3.Core.UI.Controls.nU3PanelControl();
-            this.btnDeleteProblem = new nU3.Core.UI.Controls.nU3SimpleButton();
-            this.btnAddProblem = new nU3.Core.UI.Controls.nU3SimpleButton();
-            this.gridControl = new nU3.Core.UI.Controls.nU3GridControl();
-            this.gridView = new nU3.Core.UI.Controls.nU3GridView();
-            this.colProblemCode = new nU3.Core.UI.Controls.nU3GridColumn();
-            this.colProblemName = new nU3.Core.UI.Controls.nU3GridColumn();
-            this.colProblemType = new nU3.Core.UI.Controls.nU3GridColumn();
-            ((System.ComponentModel.ISupportInitialize)(this.grpProblemList)).BeginInit();
-            this.grpProblemList.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pnlButtons)).BeginInit();
-            this.pnlButtons.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.gridControl)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.gridView)).BeginInit();
-            this.SuspendLayout();
+            grpProblemList = new nU3.Core.UI.Controls.nU3GroupControl();
+            pnlButtons = new nU3.Core.UI.Controls.nU3PanelControl();
+            btnDeleteProblem = new nU3.Core.UI.Controls.nU3SimpleButton();
+            btnAddProblem = new nU3.Core.UI.Controls.nU3SimpleButton();
+            gridControl = new nU3.Core.UI.Controls.nU3GridControl();
+            gridView = new nU3.Core.UI.Controls.nU3GridView();
+            colProblemCode = new nU3.Core.UI.Controls.nU3GridColumn();
+            colProblemName = new nU3.Core.UI.Controls.nU3GridColumn();
+            colProblemType = new nU3.Core.UI.Controls.nU3GridColumn();
+            ((System.ComponentModel.ISupportInitialize)grpProblemList).BeginInit();
+            grpProblemList.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pnlButtons).BeginInit();
+            pnlButtons.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)gridControl).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)gridView).BeginInit();
+            SuspendLayout();
             // 
             // grpProblemList
             // 
-            this.grpProblemList.Controls.Add(this.pnlButtons);
-            this.grpProblemList.Controls.Add(this.gridControl);
-            this.grpProblemList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.grpProblemList.Location = new System.Drawing.Point(0, 0);
-            this.grpProblemList.Name = "grpProblemList";
-            this.grpProblemList.Size = new System.Drawing.Size(305, 107);
-            this.grpProblemList.TabIndex = 0;
-            this.grpProblemList.Text = "문제리스트";
+            grpProblemList.Controls.Add(gridControl);
+            grpProblemList.Controls.Add(pnlButtons);
+            grpProblemList.Dock = DockStyle.Fill;
+            grpProblemList.Location = new Point(0, 0);
+            grpProblemList.Margin = new Padding(4, 4, 4, 4);
+            grpProblemList.Name = "grpProblemList";
+            grpProblemList.Size = new Size(501, 194);
+            grpProblemList.TabIndex = 0;
+            grpProblemList.Text = "문제리스트";
             // 
             // pnlButtons
             // 
-            this.pnlButtons.Controls.Add(this.btnDeleteProblem);
-            this.pnlButtons.Controls.Add(this.btnAddProblem);
-            this.pnlButtons.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlButtons.Location = new System.Drawing.Point(2, 22);
-            this.pnlButtons.Name = "pnlButtons";
-            this.pnlButtons.Size = new System.Drawing.Size(301, 30);
-            this.pnlButtons.TabIndex = 1;
+            pnlButtons.Controls.Add(btnDeleteProblem);
+            pnlButtons.Controls.Add(btnAddProblem);
+            pnlButtons.Dock = DockStyle.Top;
+            pnlButtons.Location = new Point(2, 23);
+            pnlButtons.Margin = new Padding(4, 4, 4, 4);
+            pnlButtons.Name = "pnlButtons";
+            pnlButtons.Size = new Size(497, 38);
+            pnlButtons.TabIndex = 1;
             // 
             // btnDeleteProblem
             // 
-            this.btnDeleteProblem.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDeleteProblem.Location = new System.Drawing.Point(219, 3);
-            this.btnDeleteProblem.Name = "btnDeleteProblem";
-            this.btnDeleteProblem.Size = new System.Drawing.Size(75, 23);
-            this.btnDeleteProblem.TabIndex = 1;
-            this.btnDeleteProblem.Text = "삭제";
-            this.btnDeleteProblem.Click += new System.EventHandler(this.btnDeleteProblem_Click);
+            btnDeleteProblem.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnDeleteProblem.AuthId = "";
+            btnDeleteProblem.Location = new Point(401, 4);
+            btnDeleteProblem.Margin = new Padding(4, 4, 4, 4);
+            btnDeleteProblem.Name = "btnDeleteProblem";
+            btnDeleteProblem.Size = new Size(88, 29);
+            btnDeleteProblem.TabIndex = 1;
+            btnDeleteProblem.Text = "삭제";
+            btnDeleteProblem.Click += btnDeleteProblem_Click;
             // 
             // btnAddProblem
             // 
-            this.btnAddProblem.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnAddProblem.Location = new System.Drawing.Point(138, 3);
-            this.btnAddProblem.Name = "btnAddProblem";
-            this.btnAddProblem.Size = new System.Drawing.Size(75, 23);
-            this.btnAddProblem.TabIndex = 0;
-            this.btnAddProblem.Text = "추가";
-            this.btnAddProblem.Click += new System.EventHandler(this.btnAddProblem_Click);
+            btnAddProblem.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnAddProblem.AuthId = "";
+            btnAddProblem.Location = new Point(307, 4);
+            btnAddProblem.Margin = new Padding(4, 4, 4, 4);
+            btnAddProblem.Name = "btnAddProblem";
+            btnAddProblem.Size = new Size(88, 29);
+            btnAddProblem.TabIndex = 0;
+            btnAddProblem.Text = "추가";
+            btnAddProblem.Click += btnAddProblem_Click;
             // 
             // gridControl
             // 
-            this.gridControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.gridControl.Location = new System.Drawing.Point(2, 52);
-            this.gridControl.MainView = this.gridView;
-            this.gridControl.Name = "gridControl";
-            this.gridControl.Size = new System.Drawing.Size(301, 53);
-            this.gridControl.TabIndex = 0;
-            this.gridControl.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
-            this.gridView});
+            gridControl.Dock = DockStyle.Fill;
+            gridControl.EmbeddedNavigator.Margin = new Padding(4, 4, 4, 4);
+            gridControl.Location = new Point(2, 61);
+            gridControl.MainView = gridView;
+            gridControl.Margin = new Padding(4, 4, 4, 4);
+            gridControl.Name = "gridControl";
+            gridControl.Size = new Size(497, 131);
+            gridControl.TabIndex = 0;
+            gridControl.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] { gridView });
             // 
             // gridView
             // 
-            this.gridView.Appearance.HeaderPanel.Options.UseTextOptions = true;
-            this.gridView.Appearance.HeaderPanel.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
-            this.gridView.Appearance.Row.Options.UseTextOptions = true;
-            this.gridView.Appearance.Row.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Near;
-            this.gridView.Columns.AddRange(new nU3.Core.UI.Controls.nU3GridColumn[] {
-            this.colProblemCode,
-            this.colProblemName,
-            this.colProblemType});
-            this.gridView.FocusRectStyle = DevExpress.XtraGrid.Views.Grid.DrawFocusRectStyle.RowFocus;
-            this.gridView.GridControl = this.gridControl;
-            this.gridView.IndicatorWidth = 40;
-            this.gridView.Name = "gridView";
-            this.gridView.OptionsBehavior.AutoExpandAllGroups = true;
-            this.gridView.OptionsBehavior.Editable = false;
-            this.gridView.OptionsCustomization.AllowColumnMoving = false;
-            this.gridView.OptionsCustomization.AllowFilter = false;
-            this.gridView.OptionsNavigation.EnterMoveNextColumn = true;
-            this.gridView.OptionsSelection.EnableAppearanceFocusedCell = false;
-            this.gridView.OptionsView.EnableAppearanceEvenRow = true;
-            this.gridView.OptionsView.EnableAppearanceOddRow = true;
-            this.gridView.OptionsView.ShowAutoFilterRow = true;
-            this.gridView.OptionsView.ShowGroupPanel = false;
-            this.gridView.DoubleClick += new System.EventHandler(this.gridView_DoubleClick);
+            gridView.Appearance.HeaderPanel.Options.UseTextOptions = true;
+            gridView.Appearance.HeaderPanel.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            gridView.Appearance.Row.Options.UseTextOptions = true;
+            gridView.Appearance.Row.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Near;
+            gridView.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] { colProblemCode, colProblemName, colProblemType });
+            gridView.DetailHeight = 437;
+            gridView.FocusRectStyle = DevExpress.XtraGrid.Views.Grid.DrawFocusRectStyle.RowFocus;
+            gridView.GridControl = gridControl;
+            gridView.IndicatorWidth = 47;
+            gridView.Name = "gridView";
+            gridView.OptionsBehavior.AutoExpandAllGroups = true;
+            gridView.OptionsBehavior.Editable = false;
+            gridView.OptionsCustomization.AllowColumnMoving = false;
+            gridView.OptionsCustomization.AllowFilter = false;
+            gridView.OptionsEditForm.PopupEditFormWidth = 933;
+            gridView.OptionsNavigation.EnterMoveNextColumn = true;
+            gridView.OptionsSelection.EnableAppearanceFocusedCell = false;
+            gridView.OptionsView.EnableAppearanceEvenRow = true;
+            gridView.OptionsView.EnableAppearanceOddRow = true;
+            gridView.OptionsView.ShowAutoFilterRow = true;
+            gridView.OptionsView.ShowGroupPanel = false;
+            gridView.DoubleClick += gridView_DoubleClick;
             // 
             // colProblemCode
             // 
-            this.colProblemCode.Caption = "문제코드";
-            this.colProblemCode.FieldName = "ProblemCode";
-            this.colProblemCode.Name = "colProblemCode";
-            this.colProblemCode.Visible = true;
-            this.colProblemCode.VisibleIndex = 0;
-            this.colProblemCode.Width = 80;
+            colProblemCode.AuthId = "";
+            colProblemCode.Caption = "문제코드";
+            colProblemCode.FieldName = "ProblemCode";
+            colProblemCode.MinWidth = 23;
+            colProblemCode.Name = "colProblemCode";
+            colProblemCode.ResourceKey = "";
+            colProblemCode.Visible = true;
+            colProblemCode.VisibleIndex = 0;
+            colProblemCode.Width = 93;
             // 
             // colProblemName
             // 
-            this.colProblemName.Caption = "문제명";
-            this.colProblemName.FieldName = "ProblemName";
-            this.colProblemName.Name = "colProblemName";
-            this.colProblemName.Visible = true;
-            this.colProblemName.VisibleIndex = 1;
-            this.colProblemName.Width = 150;
+            colProblemName.AuthId = "";
+            colProblemName.Caption = "문제명";
+            colProblemName.FieldName = "ProblemName";
+            colProblemName.MinWidth = 23;
+            colProblemName.Name = "colProblemName";
+            colProblemName.ResourceKey = "";
+            colProblemName.Visible = true;
+            colProblemName.VisibleIndex = 1;
+            colProblemName.Width = 175;
             // 
             // colProblemType
             // 
-            this.colProblemType.Caption = "구분";
-            this.colProblemType.FieldName = "ProblemType";
-            this.colProblemType.Name = "colProblemType";
-            this.colProblemType.Visible = true;
-            this.colProblemType.VisibleIndex = 2;
-            this.colProblemType.Width = 60;
+            colProblemType.AuthId = "";
+            colProblemType.Caption = "구분";
+            colProblemType.FieldName = "ProblemType";
+            colProblemType.MinWidth = 23;
+            colProblemType.Name = "colProblemType";
+            colProblemType.ResourceKey = "";
+            colProblemType.Visible = true;
+            colProblemType.VisibleIndex = 2;
+            colProblemType.Width = 70;
             // 
             // ProblemListControl
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.grpProblemList);
-            this.Name = "ProblemListControl";
-            this.Size = new System.Drawing.Size(305, 107);
-            ((System.ComponentModel.ISupportInitialize)(this.grpProblemList)).EndInit();
-            this.grpProblemList.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pnlButtons)).EndInit();
-            this.pnlButtons.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.gridControl)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.gridView)).EndInit();
-            this.ResumeLayout(false);
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(grpProblemList);
+            Margin = new Padding(4, 4, 4, 4);
+            Name = "ProblemListControl";
+            Size = new Size(501, 194);
+            ((System.ComponentModel.ISupportInitialize)grpProblemList).EndInit();
+            grpProblemList.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)pnlButtons).EndInit();
+            pnlButtons.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)gridControl).EndInit();
+            ((System.ComponentModel.ISupportInitialize)gridView).EndInit();
+            ResumeLayout(false);
 
         }
 
         #endregion
-
-        private DevExpress.XtraEditors.GroupControl grpProblemList;
-        private DevExpress.XtraEditors.PanelControl pnlButtons;
-        private DevExpress.XtraEditors.SimpleButton btnDeleteProblem;
-        private DevExpress.XtraEditors.SimpleButton btnAddProblem;
         private nU3.Core.UI.Controls.nU3GridControl gridControl;
         private nU3.Core.UI.Controls.nU3GridView gridView;
         private nU3.Core.UI.Controls.nU3GridColumn colProblemCode;
         private nU3.Core.UI.Controls.nU3GridColumn colProblemName;
         private nU3.Core.UI.Controls.nU3GridColumn colProblemType;
+        private Core.UI.Controls.nU3GroupControl grpProblemList;
+        private Core.UI.Controls.nU3PanelControl pnlButtons;
+        private Core.UI.Controls.nU3SimpleButton btnDeleteProblem;
+        private Core.UI.Controls.nU3SimpleButton btnAddProblem;
     }
 }
