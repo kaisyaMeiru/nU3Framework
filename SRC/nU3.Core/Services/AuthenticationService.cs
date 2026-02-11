@@ -37,9 +37,9 @@ namespace nU3.Core.Services
                     // 부서 코드 목록 조회
                     var deptCodes = await _userRepo.GetUserDepartmentCodesAsync(id);
                     
-                    // 역할 정보 (DB 스키마 상 ROLE_CODE)
-                    var roleCode = string.IsNullOrEmpty(user.Remarks) ? "User" : user.Remarks;
-                    var roles = new[] { roleCode };
+                    // 역할 정보 (DB 스키마상 ROLE_CODE: 0=Admin, 1=Tech, 10=Doctor, 11=Nurse, 100=Patient)
+                    int roleCode = int.TryParse(user.Remarks, out var code) ? code : 1;  // 기본값: Tech(1)
+                    var roles = new[] { roleCode.ToString() };
 
                     var issuer = new LocalJwtIssuer(DemoSecret, issuer: "local", audience: "nU3");
                     var token = issuer.GenerateDotNetToken(id, user.UserName, roles: roles, deptCodes: deptCodes.ToArray(), expiresMinutes: 60);
@@ -56,7 +56,7 @@ namespace nU3.Core.Services
                 // 2. Demo Fallback (admin / 1234)
                 if (id == "admin" && password == "1234")
                 {
-                    return CreateDemoAuthResult(id, "시스템 관리자", new[] { "Admin" });
+                    return CreateDemoAuthResult(id, "시스템 관리자", new[] { "0" });
                 }
 
                 return new AuthResult { Success = false, ErrorMessage = "아이디를 찾을 수 없거나 비활성화된 계정입니다." };
@@ -73,7 +73,7 @@ namespace nU3.Core.Services
             var defaultDepts = Enum.GetValues(typeof(Department))
                                    .Cast<Department>()
                                    .Take(2)
-                                   .Select(d => d.ToString())
+                                   .Select(d => ((int)d).ToString())
                                    .ToArray();
 
             var token = issuer.GenerateDotNetToken(id, name, roles: roles, deptCodes: defaultDepts, expiresMinutes: 60);

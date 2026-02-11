@@ -104,6 +104,9 @@ namespace nU3.Server.Connectivity.Services
                     SeedInitialData();
                     _logger.LogInformation("Initial seed data checked.");
 
+                    SeedTestData();
+                    _logger.LogInformation("Test data checked.");
+
                     _logger.LogInformation("SQLite schema initialization completed successfully.");
                 }
                 else
@@ -149,21 +152,37 @@ namespace nU3.Server.Connectivity.Services
                 // Sync Roles
                 foreach (UserRole role in Enum.GetValues(typeof(UserRole)))
                 {
-                    string code = role.ToString();
+                    int code = (int)role;
                     string name = GetEnumDisplayName(role);
                     string desc = GetEnumDescription(role);
 
                     string sql = @"INSERT OR REPLACE INTO SYS_ROLE (ROLE_CODE, ROLE_NAME, DESCRIPTION) VALUES (@c, @n, @d)";
-                    _db.ExecuteNonQuery(sql, new Dictionary<string, object> { { "@c", code }, { "@n", name }, { "@d", desc } });
+                    _db.ExecuteNonQuery(sql, new Dictionary<string, object> { { "@c", code.ToString() }, { "@n", name }, { "@d", desc } });
                 }
 
-                // Sync Depts
+                // Sync Depts (Department enum 기반)
                 foreach (Department dept in Enum.GetValues(typeof(Department)))
                 {
-                    string code = dept.ToString();
-                    string name = GetEnumDisplayName(dept);
-                    string sql = @"INSERT OR REPLACE INTO SYS_DEPT (DEPT_CODE, DEPT_NAME) VALUES (@c, @n)";
-                    _db.ExecuteNonQuery(sql, new Dictionary<string, object> { { "@c", code }, { "@n", name } });
+                    int deptCode = (int)dept;
+                    string deptCodeStr = deptCode.ToString();
+                    string deptName = GetEnumDisplayName(dept);
+                    string deptNameEng = dept.ToString();
+                    string description = GetEnumDescription(dept);
+                    int displayOrder = GetEnumDisplayOrder(dept);
+
+                    string sql = @"
+                        INSERT OR REPLACE INTO SYS_DEPT 
+                        (DEPT_CODE, DEPT_NAME, DEPT_NAME_ENG, DESCRIPTION, DISPLAY_ORDER, IS_ACTIVE, CREATED_DATE) 
+                        VALUES (@code, @name, @nameEng, @desc, @order, 'Y', CURRENT_TIMESTAMP)";
+                    
+                    _db.ExecuteNonQuery(sql, new Dictionary<string, object> 
+                    { 
+                        { "@code", deptCodeStr }, 
+                        { "@name", deptName },
+                        { "@nameEng", deptNameEng },
+                        { "@desc", description },
+                        { "@order", displayOrder }
+                    });
                 }
                 
                 _logger.LogInformation("Enums synced to SYS_ROLE and SYS_DEPT.");
@@ -186,6 +205,13 @@ namespace nU3.Server.Connectivity.Services
             var field = value.GetType().GetField(value.ToString());
             var attr = field?.GetCustomAttribute<DisplayAttribute>();
             return attr?.Description ?? "";
+        }
+
+        private int GetEnumDisplayOrder(Enum value)
+        {
+            var field = value.GetType().GetField(value.ToString());
+            var attr = field?.GetCustomAttribute<DisplayAttribute>();
+            return attr?.Order ?? 0;
         }
 
         /// <summary>
@@ -229,8 +255,7 @@ namespace nU3.Server.Connectivity.Services
                     PROG_NAME TEXT,
                     AUTH_LEVEL INTEGER DEFAULT 1,
                     IS_ACTIVE TEXT DEFAULT 'N',
-                    PROG_TYPE INTEGER DEFAULT 1,
-                    FOREIGN KEY(MODULE_ID) REFERENCES SYS_MODULE_MST(MODULE_ID)
+                    PROG_TYPE INTEGER DEFAULT 1
                 );");
 
             // 메뉴 마스터
@@ -245,8 +270,7 @@ namespace nU3.Server.Connectivity.Services
                     SHORTCUT TEXT,
                     AUTH_LEVEL INTEGER DEFAULT 1,
                     CHECK (PARENT_ID IS NULL OR PARENT_ID != ''),
-                    CHECK (PROG_ID IS NULL OR PROG_ID != ''),
-                    FOREIGN KEY(PROG_ID) REFERENCES SYS_PROG_MST(PROG_ID)
+                    CHECK (PROG_ID IS NULL OR PROG_ID != '')
                 );");
 
             // 컴포넌트 마스터
@@ -283,8 +307,7 @@ namespace nU3.Server.Connectivity.Services
                     REG_DATE TEXT DEFAULT CURRENT_TIMESTAMP,
                     DEL_DATE TEXT,
                     IS_ACTIVE TEXT DEFAULT 'Y',
-                    PRIMARY KEY (COMPONENT_ID, VERSION),
-                    FOREIGN KEY(COMPONENT_ID) REFERENCES SYS_COMPONENT_MST(COMPONENT_ID)
+                    PRIMARY KEY (COMPONENT_ID, VERSION)
                 );");
 
             // 클라이언트 컴포넌트
@@ -319,31 +342,42 @@ namespace nU3.Server.Connectivity.Services
                     DESCRIPTION TEXT
                 );");
 
-            // 시스템 부서
+            // 시스템 부서 (Department enum 기반)
             ExecuteSql(@"
                 CREATE TABLE IF NOT EXISTS SYS_DEPT (
-                    DEPT_CODE TEXT PRIMARY KEY,
-                    DEPT_NAME TEXT NOT NULL,
-                    PARENT_CODE TEXT,
-                    SORT_ORD INTEGER DEFAULT 0
+                    DEPT_CODE VARCHAR(10) PRIMARY KEY,
+                    DEPT_NAME VARCHAR(100) NOT NULL,
+                    DEPT_NAME_ENG VARCHAR(100),
+                    DESCRIPTION VARCHAR(200),
+                    DISPLAY_ORDER INTEGER DEFAULT 0,
+                    PARENT_DEPT VARCHAR(10),
+                    IS_ACTIVE VARCHAR(1) DEFAULT 'Y',
+                    CREATED_DATE DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    MODIFIED_DATE DATETIME
                 );");
+            
+            ExecuteSql("CREATE INDEX IF NOT EXISTS IDX_DEPT_ACTIVE ON SYS_DEPT(IS_ACTIVE);");
+            ExecuteSql("CREATE INDEX IF NOT EXISTS IDX_DEPT_ORDER ON SYS_DEPT(DISPLAY_ORDER);");
 
             // 사용자-부서 매핑
             ExecuteSql(@"
                 CREATE TABLE IF NOT EXISTS SYS_USER_DEPT (
-                    USER_ID TEXT,
-                    DEPT_CODE TEXT,
-                    PRIMARY KEY (USER_ID, DEPT_CODE),
-                    FOREIGN KEY(USER_ID) REFERENCES SYS_USER(USER_ID),
-                    FOREIGN KEY(DEPT_CODE) REFERENCES SYS_DEPT(DEPT_CODE)
+                    USER_ID VARCHAR(50) NOT NULL,
+                    DEPT_CODE VARCHAR(10) NOT NULL,
+                    IS_PRIMARY VARCHAR(1) DEFAULT 'N',
+                    CREATED_DATE DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    PRIMARY KEY (USER_ID, DEPT_CODE)
                 );");
+            
+            ExecuteSql("CREATE INDEX IF NOT EXISTS IDX_USER_DEPT_USER ON SYS_USER_DEPT(USER_ID);");
+            ExecuteSql("CREATE INDEX IF NOT EXISTS IDX_USER_DEPT_DEPT ON SYS_USER_DEPT(DEPT_CODE);");
 
             // 시스템 권한
             ExecuteSql(@"
                 CREATE TABLE IF NOT EXISTS SYS_PERMISSION (
                     PERM_ID INTEGER PRIMARY KEY AUTOINCREMENT,
-                    TARGET_TYPE TEXT NOT NULL, -- 'USER', 'ROLE', 'DEPT'
-                    TARGET_ID TEXT NOT NULL,   -- USER_ID, ROLE_CODE, DEPT_CODE
+                    TARGET_TYPE TEXT NOT NULL,
+                    TARGET_ID TEXT NOT NULL,
                     PROG_ID TEXT NOT NULL,
                     CAN_READ INTEGER DEFAULT 1,
                     CAN_CREATE INTEGER DEFAULT 0,
@@ -356,6 +390,206 @@ namespace nU3.Server.Connectivity.Services
                     CUSTOM_JSON TEXT,
                     UNIQUE(TARGET_TYPE, TARGET_ID, PROG_ID)
                 );");
+
+            // 부서별 메뉴 템플릿
+            ExecuteSql(@"
+                CREATE TABLE IF NOT EXISTS SYS_DEPT_MENU (
+                    MENU_ID VARCHAR(50) NOT NULL,
+                    DEPT_CODE VARCHAR(10) NOT NULL,
+                    PARENT_ID VARCHAR(50),
+                    MENU_NAME VARCHAR(100) NOT NULL,
+                    PROG_ID VARCHAR(50),
+                    SORT_ORD INTEGER DEFAULT 0,
+                    AUTH_LEVEL INTEGER DEFAULT 1,
+                    CREATED_DATE DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    MODIFIED_DATE DATETIME,
+                    PRIMARY KEY (MENU_ID, DEPT_CODE)
+                );");
+            
+            ExecuteSql("CREATE INDEX IF NOT EXISTS IDX_DEPT_MENU_DEPT ON SYS_DEPT_MENU(DEPT_CODE);");
+            ExecuteSql("CREATE INDEX IF NOT EXISTS IDX_DEPT_MENU_PARENT ON SYS_DEPT_MENU(PARENT_ID);");
+            ExecuteSql("CREATE INDEX IF NOT EXISTS IDX_DEPT_MENU_SORT ON SYS_DEPT_MENU(DEPT_CODE, SORT_ORD);");
+
+            // 사용자별 커스텀 메뉴
+            ExecuteSql(@"
+                CREATE TABLE IF NOT EXISTS SYS_USER_MENU (
+                    MENU_ID VARCHAR(50) NOT NULL,
+                    USER_ID VARCHAR(50) NOT NULL,
+                    DEPT_CODE VARCHAR(10) NOT NULL,
+                    PARENT_ID VARCHAR(50),
+                    MENU_NAME VARCHAR(100) NOT NULL,
+                    PROG_ID VARCHAR(50),
+                    SORT_ORD INTEGER DEFAULT 0,
+                    AUTH_LEVEL INTEGER DEFAULT 1,
+                    CREATED_DATE DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    MODIFIED_DATE DATETIME,
+                    PRIMARY KEY (MENU_ID, USER_ID, DEPT_CODE)
+                );");
+            
+            ExecuteSql("CREATE INDEX IF NOT EXISTS IDX_USER_MENU_USER_DEPT ON SYS_USER_MENU(USER_ID, DEPT_CODE);");
+            ExecuteSql("CREATE INDEX IF NOT EXISTS IDX_USER_MENU_PARENT ON SYS_USER_MENU(PARENT_ID);");
+            ExecuteSql("CREATE INDEX IF NOT EXISTS IDX_USER_MENU_SORT ON SYS_USER_MENU(USER_ID, DEPT_CODE, SORT_ORD);");
+        }
+
+        private void SeedTestData()
+        {
+#if DEBUG
+            try
+            {
+                var userCount = Convert.ToInt32(_db.ExecuteScalarValue("SELECT COUNT(*) FROM SYS_USER WHERE USER_ID IN ('user01', 'user02', 'user03')"));
+                if (userCount > 0)
+                {
+                    _logger.LogInformation("Test users already exist. Skipping test data seeding.");
+                    return;
+                }
+
+                _logger.LogInformation("Seeding test data for user/department menu system...");
+
+                SeedTestUsers();
+                SeedUserDepartmentMappings();
+                SeedDepartmentMenuTemplates();
+                SeedUserCustomMenus();
+
+                _logger.LogInformation("Test data seeding completed successfully.");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning($"Failed to seed test data: {ex.Message}");
+            }
+#endif
+        }
+
+        private void SeedTestUsers()
+        {
+            var users = new[]
+            {
+                new { UserId = "user01", UserName = "홍길동", Password = "1234", Email = "hong@test.com", RoleCode = "Doctor" },
+                new { UserId = "user02", UserName = "김철수", Password = "1234", Email = "kim@test.com", RoleCode = "Nurse" },
+                new { UserId = "user03", UserName = "이영희", Password = "1234", Email = "lee@test.com", RoleCode = "Doctor" }
+            };
+
+            foreach (var user in users)
+            {
+                _db.ExecuteNonQuery(@"
+                    INSERT OR IGNORE INTO SYS_USER (USER_ID, USERNAME, PASSWORD, EMAIL, ROLE_CODE, IS_ACTIVE) 
+                    VALUES (@id, @name, @pwd, @email, @role, 'Y')",
+                    new Dictionary<string, object>
+                    {
+                        { "@id", user.UserId },
+                        { "@name", user.UserName },
+                        { "@pwd", user.Password },
+                        { "@email", user.Email },
+                        { "@role", user.RoleCode }
+                    });
+            }
+
+            _logger.LogInformation("Test users seeded: user01, user02, user03");
+        }
+
+        private void SeedUserDepartmentMappings()
+        {
+            var mappings = new[]
+            {
+                new { UserId = "user01", DeptCode = "1", IsPrimary = "Y" },
+                new { UserId = "user01", DeptCode = "2", IsPrimary = "N" },
+                new { UserId = "user02", DeptCode = "3", IsPrimary = "Y" },
+                new { UserId = "user03", DeptCode = "1", IsPrimary = "Y" },
+                new { UserId = "user03", DeptCode = "4", IsPrimary = "N" },
+                new { UserId = "user03", DeptCode = "5", IsPrimary = "N" },
+                new { UserId = "admin", DeptCode = "1", IsPrimary = "Y" },
+                new { UserId = "admin", DeptCode = "2", IsPrimary = "N" },
+                new { UserId = "admin", DeptCode = "3", IsPrimary = "N" }
+            };
+
+            foreach (var mapping in mappings)
+            {
+                _db.ExecuteNonQuery(@"
+                    INSERT OR IGNORE INTO SYS_USER_DEPT (USER_ID, DEPT_CODE, IS_PRIMARY) 
+                    VALUES (@userId, @deptCode, @isPrimary)",
+                    new Dictionary<string, object>
+                    {
+                        { "@userId", mapping.UserId },
+                        { "@deptCode", mapping.DeptCode },
+                        { "@isPrimary", mapping.IsPrimary }
+                    });
+            }
+
+            _logger.LogInformation("User-Department mappings seeded (9 mappings)");
+        }
+
+        private void SeedDepartmentMenuTemplates()
+        {
+            var deptMenus = new[]
+            {
+                new { MenuId = "DEPT1_M01", DeptCode = "1", ParentId = (string?)null, MenuName = "내과 환자관리", ProgId = (string?)null, SortOrd = 10, AuthLevel = 1 },
+                new { MenuId = "DEPT1_M02", DeptCode = "1", ParentId = (string?)"DEPT1_M01", MenuName = "외래 환자", ProgId = (string?)"EMR_001", SortOrd = 10, AuthLevel = 1 },
+                new { MenuId = "DEPT1_M03", DeptCode = "1", ParentId = (string?)"DEPT1_M01", MenuName = "입원 환자", ProgId = (string?)"EMR_002", SortOrd = 20, AuthLevel = 1 },
+                new { MenuId = "DEPT1_M04", DeptCode = "1", ParentId = (string?)null, MenuName = "내과 검사", ProgId = (string?)null, SortOrd = 20, AuthLevel = 1 },
+                new { MenuId = "DEPT1_M05", DeptCode = "1", ParentId = (string?)"DEPT1_M04", MenuName = "내시경 검사", ProgId = (string?)"EMR_005", SortOrd = 10, AuthLevel = 2 },
+                
+                new { MenuId = "DEPT2_M01", DeptCode = "2", ParentId = (string?)null, MenuName = "외과 수술관리", ProgId = (string?)null, SortOrd = 10, AuthLevel = 1 },
+                new { MenuId = "DEPT2_M02", DeptCode = "2", ParentId = (string?)"DEPT2_M01", MenuName = "수술 예약", ProgId = (string?)"OT_001", SortOrd = 10, AuthLevel = 1 },
+                new { MenuId = "DEPT2_M03", DeptCode = "2", ParentId = (string?)"DEPT2_M01", MenuName = "수술 기록", ProgId = (string?)"OT_002", SortOrd = 20, AuthLevel = 1 },
+                new { MenuId = "DEPT2_M04", DeptCode = "2", ParentId = (string?)null, MenuName = "외과 입원관리", ProgId = (string?)null, SortOrd = 20, AuthLevel = 1 },
+                new { MenuId = "DEPT2_M05", DeptCode = "2", ParentId = (string?)"DEPT2_M04", MenuName = "병상 배정", ProgId = (string?)"ADM_003", SortOrd = 10, AuthLevel = 1 },
+                
+                new { MenuId = "DEPT3_M01", DeptCode = "3", ParentId = (string?)null, MenuName = "소아 진료", ProgId = (string?)null, SortOrd = 10, AuthLevel = 1 },
+                new { MenuId = "DEPT3_M02", DeptCode = "3", ParentId = (string?)"DEPT3_M01", MenuName = "예방접종", ProgId = (string?)"EMR_010", SortOrd = 10, AuthLevel = 1 },
+                new { MenuId = "DEPT3_M03", DeptCode = "3", ParentId = (string?)"DEPT3_M01", MenuName = "성장 발달", ProgId = (string?)"EMR_011", SortOrd = 20, AuthLevel = 1 }
+            };
+
+            foreach (var menu in deptMenus)
+            {
+                _db.ExecuteNonQuery(@"
+                    INSERT OR IGNORE INTO SYS_DEPT_MENU 
+                    (MENU_ID, DEPT_CODE, PARENT_ID, MENU_NAME, PROG_ID, SORT_ORD, AUTH_LEVEL) 
+                    VALUES (@menuId, @deptCode, @parentId, @menuName, @progId, @sortOrd, @authLevel)",
+                    new Dictionary<string, object>
+                    {
+                        { "@menuId", menu.MenuId },
+                        { "@deptCode", menu.DeptCode },
+                        { "@parentId", menu.ParentId ?? (object)DBNull.Value },
+                        { "@menuName", menu.MenuName },
+                        { "@progId", menu.ProgId ?? (object)DBNull.Value },
+                        { "@sortOrd", menu.SortOrd },
+                        { "@authLevel", menu.AuthLevel }
+                    });
+            }
+
+            _logger.LogInformation("Department menu templates seeded (13 menus for 3 departments)");
+        }
+
+        private void SeedUserCustomMenus()
+        {
+            var userMenus = new[]
+            {
+                new { MenuId = "USER01_D1_M01", UserId = "user01", DeptCode = "1", ParentId = (string?)null, MenuName = "내 즐겨찾기", ProgId = (string?)null, SortOrd = 10, AuthLevel = 1 },
+                new { MenuId = "USER01_D1_M02", UserId = "user01", DeptCode = "1", ParentId = (string?)"USER01_D1_M01", MenuName = "빠른 외래", ProgId = (string?)"EMR_001", SortOrd = 10, AuthLevel = 1 },
+                new { MenuId = "USER01_D1_M03", UserId = "user01", DeptCode = "1", ParentId = (string?)"USER01_D1_M01", MenuName = "빠른 처방", ProgId = (string?)"EMR_004", SortOrd = 20, AuthLevel = 1 },
+                new { MenuId = "USER01_D1_M04", UserId = "user01", DeptCode = "1", ParentId = (string?)null, MenuName = "내과 환자관리", ProgId = (string?)null, SortOrd = 20, AuthLevel = 1 },
+                new { MenuId = "USER01_D1_M05", UserId = "user01", DeptCode = "1", ParentId = (string?)"USER01_D1_M04", MenuName = "외래 환자", ProgId = (string?)"EMR_001", SortOrd = 10, AuthLevel = 1 }
+            };
+
+            foreach (var menu in userMenus)
+            {
+                _db.ExecuteNonQuery(@"
+                    INSERT OR IGNORE INTO SYS_USER_MENU 
+                    (MENU_ID, USER_ID, DEPT_CODE, PARENT_ID, MENU_NAME, PROG_ID, SORT_ORD, AUTH_LEVEL) 
+                    VALUES (@menuId, @userId, @deptCode, @parentId, @menuName, @progId, @sortOrd, @authLevel)",
+                    new Dictionary<string, object>
+                    {
+                        { "@menuId", menu.MenuId },
+                        { "@userId", menu.UserId },
+                        { "@deptCode", menu.DeptCode },
+                        { "@parentId", menu.ParentId ?? (object)DBNull.Value },
+                        { "@menuName", menu.MenuName },
+                        { "@progId", menu.ProgId ?? (object)DBNull.Value },
+                        { "@sortOrd", menu.SortOrd },
+                        { "@authLevel", menu.AuthLevel }
+                    });
+            }
+
+            _logger.LogInformation("User custom menus seeded (5 menus for user01+내과)");
         }
 
         private void ExecuteSql(string sql)

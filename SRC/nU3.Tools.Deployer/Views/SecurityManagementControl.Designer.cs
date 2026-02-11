@@ -147,7 +147,7 @@ namespace nU3.Tools.Deployer.Views
             // 
             splitMain.Panel2.Controls.Add(splitRight);
             splitMain.Panel2.Text = "Panel2";
-            splitMain.Size = new System.Drawing.Size(0, 0);
+            splitMain.Size = new System.Drawing.Size(1305, 852);
             splitMain.SplitterPosition = 400;
             splitMain.TabIndex = 0;
             // 
@@ -157,7 +157,7 @@ namespace nU3.Tools.Deployer.Views
             tabTargets.Location = new System.Drawing.Point(0, 0);
             tabTargets.Name = "tabTargets";
             tabTargets.SelectedTabPage = pageUsers;
-            tabTargets.Size = new System.Drawing.Size(0, 0);
+            tabTargets.Size = new System.Drawing.Size(400, 852);
             tabTargets.TabIndex = 0;
             tabTargets.TabPages.AddRange(new DevExpress.XtraTab.XtraTabPage[] { pageUsers, pageRoles, pageDepts });
             // 
@@ -166,7 +166,7 @@ namespace nU3.Tools.Deployer.Views
             pageUsers.Controls.Add(dgvUsers);
             pageUsers.Controls.Add(pnlUsersTop);
             pageUsers.Name = "pageUsers";
-            pageUsers.Size = new System.Drawing.Size(0, 0);
+            pageUsers.Size = new System.Drawing.Size(398, 826);
             pageUsers.Text = "사용자";
             // 
             // dgvUsers
@@ -175,7 +175,7 @@ namespace nU3.Tools.Deployer.Views
             dgvUsers.Location = new System.Drawing.Point(0, 35);
             dgvUsers.MainView = gvUsers;
             dgvUsers.Name = "dgvUsers";
-            dgvUsers.Size = new System.Drawing.Size(0, 0);
+            dgvUsers.Size = new System.Drawing.Size(398, 791);
             dgvUsers.TabIndex = 1;
             dgvUsers.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] { gvUsers });
             // 
@@ -196,7 +196,7 @@ namespace nU3.Tools.Deployer.Views
             pnlUsersTop.Dock = System.Windows.Forms.DockStyle.Top;
             pnlUsersTop.Location = new System.Drawing.Point(0, 0);
             pnlUsersTop.Name = "pnlUsersTop";
-            pnlUsersTop.Size = new System.Drawing.Size(0, 35);
+            pnlUsersTop.Size = new System.Drawing.Size(398, 35);
             pnlUsersTop.TabIndex = 0;
             // 
             // btnAddUser
@@ -305,7 +305,7 @@ namespace nU3.Tools.Deployer.Views
             // 
             splitRight.Panel2.Controls.Add(grpPermissions);
             splitRight.Panel2.Text = "Panel2";
-            splitRight.Size = new System.Drawing.Size(0, 0);
+            splitRight.Size = new System.Drawing.Size(895, 852);
             splitRight.SplitterPosition = 400;
             splitRight.TabIndex = 0;
             // 
@@ -315,7 +315,7 @@ namespace nU3.Tools.Deployer.Views
             dgvModules.Location = new System.Drawing.Point(0, 0);
             dgvModules.MainView = gvModules;
             dgvModules.Name = "dgvModules";
-            dgvModules.Size = new System.Drawing.Size(0, 0);
+            dgvModules.Size = new System.Drawing.Size(895, 400);
             dgvModules.TabIndex = 0;
             dgvModules.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] { gvModules });
             // 
@@ -335,7 +335,7 @@ namespace nU3.Tools.Deployer.Views
             grpPermissions.Dock = System.Windows.Forms.DockStyle.Fill;
             grpPermissions.Location = new System.Drawing.Point(0, 0);
             grpPermissions.Name = "grpPermissions";
-            grpPermissions.Size = new System.Drawing.Size(0, 0);
+            grpPermissions.Size = new System.Drawing.Size(895, 442);
             grpPermissions.TabIndex = 0;
             grpPermissions.Text = "권한 설정";
             // 
@@ -350,10 +350,10 @@ namespace nU3.Tools.Deployer.Views
             pnlChecks.Controls.Add(chkApprove);
             pnlChecks.Controls.Add(chkCancel);
             pnlChecks.Dock = System.Windows.Forms.DockStyle.Fill;
-            pnlChecks.Location = new System.Drawing.Point(0, 65);
+            pnlChecks.Location = new System.Drawing.Point(2, 47);
             pnlChecks.Name = "pnlChecks";
             pnlChecks.Padding = new System.Windows.Forms.Padding(10);
-            pnlChecks.Size = new System.Drawing.Size(0, 0);
+            pnlChecks.Size = new System.Drawing.Size(891, 360);
             pnlChecks.TabIndex = 0;
             // 
             // chkRead
@@ -361,72 +361,72 @@ namespace nU3.Tools.Deployer.Views
             chkRead.Location = new System.Drawing.Point(13, 13);
             chkRead.Name = "chkRead";
             chkRead.Properties.Caption = "조회 (Read)";
-            chkRead.Size = new System.Drawing.Size(120, 27);
+            chkRead.Size = new System.Drawing.Size(120, 20);
             chkRead.TabIndex = 0;
             // 
             // chkCreate
             // 
-            chkCreate.Location = new System.Drawing.Point(13, 46);
+            chkCreate.Location = new System.Drawing.Point(139, 13);
             chkCreate.Name = "chkCreate";
             chkCreate.Properties.Caption = "생성 (Create)";
-            chkCreate.Size = new System.Drawing.Size(120, 27);
+            chkCreate.Size = new System.Drawing.Size(120, 20);
             chkCreate.TabIndex = 1;
             // 
             // chkUpdate
             // 
-            chkUpdate.Location = new System.Drawing.Point(13, 79);
+            chkUpdate.Location = new System.Drawing.Point(265, 13);
             chkUpdate.Name = "chkUpdate";
             chkUpdate.Properties.Caption = "수정 (Update)";
-            chkUpdate.Size = new System.Drawing.Size(120, 27);
+            chkUpdate.Size = new System.Drawing.Size(120, 20);
             chkUpdate.TabIndex = 2;
             // 
             // chkDelete
             // 
-            chkDelete.Location = new System.Drawing.Point(13, 112);
+            chkDelete.Location = new System.Drawing.Point(391, 13);
             chkDelete.Name = "chkDelete";
             chkDelete.Properties.Caption = "삭제 (Delete)";
-            chkDelete.Size = new System.Drawing.Size(120, 27);
+            chkDelete.Size = new System.Drawing.Size(120, 20);
             chkDelete.TabIndex = 3;
             // 
             // chkPrint
             // 
-            chkPrint.Location = new System.Drawing.Point(13, 145);
+            chkPrint.Location = new System.Drawing.Point(517, 13);
             chkPrint.Name = "chkPrint";
             chkPrint.Properties.Caption = "출력 (Print)";
-            chkPrint.Size = new System.Drawing.Size(120, 27);
+            chkPrint.Size = new System.Drawing.Size(120, 20);
             chkPrint.TabIndex = 4;
             // 
             // chkExport
             // 
-            chkExport.Location = new System.Drawing.Point(13, 178);
+            chkExport.Location = new System.Drawing.Point(643, 13);
             chkExport.Name = "chkExport";
             chkExport.Properties.Caption = "내보내기 (Export)";
-            chkExport.Size = new System.Drawing.Size(120, 27);
+            chkExport.Size = new System.Drawing.Size(120, 20);
             chkExport.TabIndex = 5;
             // 
             // chkApprove
             // 
-            chkApprove.Location = new System.Drawing.Point(13, 211);
+            chkApprove.Location = new System.Drawing.Point(13, 39);
             chkApprove.Name = "chkApprove";
             chkApprove.Properties.Caption = "승인 (Approve)";
-            chkApprove.Size = new System.Drawing.Size(120, 27);
+            chkApprove.Size = new System.Drawing.Size(120, 20);
             chkApprove.TabIndex = 6;
             // 
             // chkCancel
             // 
-            chkCancel.Location = new System.Drawing.Point(13, 244);
+            chkCancel.Location = new System.Drawing.Point(139, 39);
             chkCancel.Name = "chkCancel";
             chkCancel.Properties.Caption = "취소 (Cancel)";
-            chkCancel.Size = new System.Drawing.Size(120, 27);
+            chkCancel.Size = new System.Drawing.Size(120, 20);
             chkCancel.TabIndex = 7;
             // 
             // btnSavePermission
             // 
             btnSavePermission.AuthId = "";
             btnSavePermission.Dock = System.Windows.Forms.DockStyle.Bottom;
-            btnSavePermission.Location = new System.Drawing.Point(0, -33);
+            btnSavePermission.Location = new System.Drawing.Point(2, 407);
             btnSavePermission.Name = "btnSavePermission";
-            btnSavePermission.Size = new System.Drawing.Size(0, 33);
+            btnSavePermission.Size = new System.Drawing.Size(891, 33);
             btnSavePermission.TabIndex = 1;
             btnSavePermission.Text = "권한 저장";
             btnSavePermission.Click += BtnSavePermission_Click;
@@ -435,10 +435,10 @@ namespace nU3.Tools.Deployer.Views
             // 
             lblCurrentTarget.Dock = System.Windows.Forms.DockStyle.Top;
             lblCurrentTarget.IsRequiredMarker = false;
-            lblCurrentTarget.Location = new System.Drawing.Point(0, 33);
+            lblCurrentTarget.Location = new System.Drawing.Point(2, 23);
             lblCurrentTarget.Name = "lblCurrentTarget";
             lblCurrentTarget.Padding = new System.Windows.Forms.Padding(10, 5, 5, 5);
-            lblCurrentTarget.Size = new System.Drawing.Size(118, 32);
+            lblCurrentTarget.Size = new System.Drawing.Size(93, 24);
             lblCurrentTarget.TabIndex = 2;
             lblCurrentTarget.Text = "선택된 대상 없음";
             // 
@@ -446,7 +446,7 @@ namespace nU3.Tools.Deployer.Views
             // 
             Controls.Add(splitMain);
             Name = "SecurityManagementControl";
-            Size = new System.Drawing.Size(0, 0);
+            Size = new System.Drawing.Size(1305, 852);
             ((System.ComponentModel.ISupportInitialize)splitMain.Panel1).EndInit();
             splitMain.Panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitMain.Panel2).EndInit();

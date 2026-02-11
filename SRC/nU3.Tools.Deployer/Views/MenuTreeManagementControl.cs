@@ -17,8 +17,9 @@ namespace nU3.Tools.Deployer.Views
     /// <summary>
     /// 메뉴 트리(Menu Navigation Tree)를 관리하고 편집하는 컨트롤입니다.
     /// 주요 기능:
+    /// - 사용자별/부서별 메뉴 트리 관리
     /// - 전체 프로그램 목록의 로드
-    /// - SYS_MENU 테이블의 메뉴 트리 로드/저장/삭제
+    /// - SYS_USER_MENU, SYS_DEPT_MENU, SYS_MENU 3단계 폴백 구조
     /// - 새 항목 추가(루트/자식), 편집, 삭제 기능
     /// </summary>
     public partial class MenuTreeManagementControl : BaseWorkControl
@@ -26,6 +27,11 @@ namespace nU3.Tools.Deployer.Views
         private readonly IDBAccessService _db;
         private readonly IMenuRepository _menuRepo;
         private readonly IProgramRepository _progRepo;
+        private readonly IUserRepository _userRepo;
+        private readonly IDepartmentRepository _deptRepo;
+
+        private string? _currentUserId;
+        private string? _currentDeptCode;
 
         /// <summary>
         /// Designer 전용 생성자
@@ -35,16 +41,23 @@ namespace nU3.Tools.Deployer.Views
             InitializeComponent();
         }
 
-        public MenuTreeManagementControl(IDBAccessService db, IMenuRepository menuRepo, IProgramRepository progRepo) : this()
+        public MenuTreeManagementControl(
+            IDBAccessService db,
+            IMenuRepository menuRepo,
+            IProgramRepository progRepo,
+            IUserRepository userRepo,
+            IDepartmentRepository deptRepo) : this()
         {
             _db = db;
             _menuRepo = menuRepo;
             _progRepo = progRepo;
+            _userRepo = userRepo;
+            _deptRepo = deptRepo;
 
             if (!IsDesignMode())
             {
                 LoadPrograms();
-                LoadMenuTree();
+                LoadUsers();
                 WireEvents();
             }
         }
@@ -124,21 +137,98 @@ namespace nU3.Tools.Deployer.Views
             }
         }
 
-        private void LoadMenuTree()
+        private async void LoadUsers()
+        {
+            lbUsers.Items.Clear();
+            lbUsers.DisplayMember = "DisplayText";
+
+            var users = await _userRepo.GetAllUsersAsync();
+            foreach (var user in users)
+            {
+                var item = new UserItem
+                {
+                    UserId = user.UserId,
+                    UserName = user.UserName
+                };
+                lbUsers.Items.Add(item);
+            }
+        }
+
+        private async void LbUsers_SelectedIndexChanged(object? sender, EventArgs e)
+        {
+            if (lbUsers.SelectedItem is not UserItem userItem) return;
+
+            _currentUserId = userItem.UserId;
+            _currentDeptCode = null;
+
+            lbDepts.Items.Clear();
+            tvMenu.Nodes.Clear();
+            btnSave.Enabled = false;
+
+            var depts = await _deptRepo.GetDepartmentsByUserIdAsync(_currentUserId);
+            lbDepts.DisplayMember = "DisplayText";
+
+            foreach (var dept in depts)
+            {
+                lbDepts.Items.Add(dept);
+            }
+        }
+
+        private void LbDepts_SelectedIndexChanged(object? sender, EventArgs e)
+        {
+            if (lbDepts.SelectedItem is not DepartmentDto deptDto) return;
+
+            _currentDeptCode = deptDto.DeptCode;
+            LoadMenuTree(_currentUserId, _currentDeptCode);
+            btnSave.Enabled = true;
+        }
+
+        private void LoadMenuTree(string? userId, string? deptCode)
         {
             tvMenu.Nodes.Clear();
-            var allMenus = _menuRepo.GetAllMenus();
+
+            if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(deptCode))
+                return;
+
+            List<MenuDto> allMenus;
+
+            var userMenus = _menuRepo.GetMenusByUserAndDept(userId, deptCode);
+            if (userMenus.Count > 0)
+            {
+                allMenus = userMenus;
+            }
+            else
+            {
+                var deptMenus = _menuRepo.GetMenusByDeptCode(deptCode);
+                if (deptMenus.Count > 0)
+                {
+                    allMenus = deptMenus;
+                }
+                else
+                {
+                    allMenus = _menuRepo.GetAllMenus();
+                }
+            }
+
             AddTreeNodes(allMenus, null, tvMenu.Nodes);
             tvMenu.ExpandAll();
         }
 
-        private void BtnRefreshPrograms_Click(object sender, EventArgs e)
+        private void BtnRefreshAll_Click(object sender, EventArgs e)
         {
+            LoadUsers();
             LoadPrograms();
-            LoadMenuTree();
-
+            lbDepts.Items.Clear();
+            tvMenu.Nodes.Clear();
+            _currentUserId = null;
+            _currentDeptCode = null;
+            btnSave.Enabled = false;
         }
 
+        private void BtnRefreshPrograms_Click(object sender, EventArgs e)
+        {
+            BtnRefreshAll_Click(sender, e);
+        }
 
         private void AddTreeNodes(List<MenuDto> allMenus, string? parentId, TreeNodeCollection nodes)
         {
@@ -149,11 +239,11 @@ namespace nU3.Tools.Deployer.Views
 
             foreach (var menu in children)
             {
-                var data = new MenuNodeData 
-                { 
-                    MenuId = menu.MenuId, 
-                    ProgId = menu.ProgId, 
-                    AuthLevel = menu.AuthLevel 
+                var data = new MenuNodeData
+                {
+                    MenuId = menu.MenuId,
+                    ProgId = menu.ProgId,
+                    AuthLevel = menu.AuthLevel
                 };
                 var node = new TreeNode(menu.MenuName) { Tag = data };
 
@@ -199,42 +289,36 @@ namespace nU3.Tools.Deployer.Views
         {
             if (lbPrograms.SelectedItem is ProgramItem item)
             {
-                // 선택된 노드가 있는지 확인
                 if (tvMenu.SelectedNode != null)
                 {
                     var selectedData = tvMenu.SelectedNode.Tag as MenuNodeData;
-                    
-                    // ★ 중요: 선택된 항목이 이미 '프로그램'일 경우 하위에 추가하는 것을 차단
+
                     if (selectedData != null && !string.IsNullOrEmpty(selectedData.ProgId))
                     {
-                        return; // 아무 동작도 하지 않음
+                        return;
                     }
                 }
 
-                // 프로그램 정보를 담은 새 메뉴 노드 데이터 생성
-                var data = new MenuNodeData 
-                { 
-                    MenuId = Guid.NewGuid().ToString().Substring(0, 8), 
-                    ProgId = item.ProgId, 
-                    AuthLevel = 1 
+                var data = new MenuNodeData
+                {
+                    MenuId = Guid.NewGuid().ToString().Substring(0, 8),
+                    ProgId = item.ProgId,
+                    AuthLevel = 1
                 };
-                
-                // 트리 노드 생성 (프로그램 연결 노드는 파란색으로 표시)
-                var newNode = new TreeNode(item.ProgName) 
-                { 
-                    Tag = data, 
-                    ForeColor = Color.Blue 
+
+                var newNode = new TreeNode(item.ProgName)
+                {
+                    Tag = data,
+                    ForeColor = Color.Blue
                 };
 
                 if (tvMenu.SelectedNode != null)
                 {
-                    // 폴더 노드일 경우 자식으로 추가
                     tvMenu.SelectedNode.Nodes.Add(newNode);
                     tvMenu.SelectedNode.Expand();
                 }
                 else
                 {
-                    // 선택된 노드가 없으면 최상위 루트로 추가
                     tvMenu.Nodes.Add(newNode);
                 }
             }
@@ -242,24 +326,26 @@ namespace nU3.Tools.Deployer.Views
 
         private void SaveMenu()
         {
+            if (string.IsNullOrEmpty(_currentUserId) || string.IsNullOrEmpty(_currentDeptCode))
+            {
+                XtraMessageBox.Show("사용자와 부서를 먼저 선택해주세요.", "알림", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
             try
             {
-                //_db.BeginTransaction();
-                
-                _menuRepo.DeleteAllMenus();
-                SaveNodesRecursive(tvMenu.Nodes, null);
-                
-                //_db.CommitTransaction();
-                XtraMessageBox.Show("메뉴가 저장되었습니다!", "완료", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                _menuRepo.DeleteMenusByUserAndDept(_currentUserId, _currentDeptCode);
+                SaveNodesRecursive(tvMenu.Nodes, null, _currentUserId, _currentDeptCode);
+
+                XtraMessageBox.Show($"메뉴가 저장되었습니다!\n사용자: {_currentUserId}, 부서: {_currentDeptCode}", "완료", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
-                //_db.RollbackTransaction();
                 XtraMessageBox.Show($"메뉴 저장 실패: {ex.Message}", "오류", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        private void SaveNodesRecursive(TreeNodeCollection nodes, string? parentId)
+        private void SaveNodesRecursive(TreeNodeCollection nodes, string? parentId, string userId, string deptCode)
         {
             int sort = 10;
             foreach (TreeNode node in nodes)
@@ -277,11 +363,19 @@ namespace nU3.Tools.Deployer.Views
                     AuthLevel = data.AuthLevel
                 };
 
-                _menuRepo.AddMenu(dto);
+                _menuRepo.AddMenuForUser(userId, deptCode, dto);
 
-                SaveNodesRecursive(node.Nodes, data.MenuId);
+                SaveNodesRecursive(node.Nodes, data.MenuId, userId, deptCode);
                 sort += 10;
             }
+        }
+
+        class UserItem
+        {
+            public string UserId { get; set; } = string.Empty;
+            public string UserName { get; set; } = string.Empty;
+            public string DisplayText => $"[{UserId}] {UserName}";
+            public override string ToString() => DisplayText;
         }
 
         class ProgramItem
@@ -292,7 +386,7 @@ namespace nU3.Tools.Deployer.Views
             public string? IsActive { get; set; }
             public int ProgType { get; set; }
             public string DisplayInfo => $"[{ModuleId}] {ProgName} ({ProgId})";
-            
+
             public override string ToString() => DisplayInfo;
         }
 

@@ -5,16 +5,22 @@ namespace nU3.Tools.Deployer.Views
     partial class MenuTreeManagementControl
     {
         private System.ComponentModel.IContainer components = null;
-        private DevExpress.XtraEditors.SplitContainerControl split;
+        private DevExpress.XtraEditors.SplitContainerControl splitMain;
+        private DevExpress.XtraEditors.SplitContainerControl splitLeft;
+        private DevExpress.XtraEditors.SplitContainerControl splitRight;
+        private DevExpress.XtraEditors.GroupControl grpUsers;
+        private DevExpress.XtraEditors.GroupControl grpDepts;
         private DevExpress.XtraEditors.GroupControl grpTree;
         private DevExpress.XtraEditors.GroupControl grpProg;
         private DevExpress.XtraEditors.PanelControl pnlBottom;
         private System.Windows.Forms.TreeView tvMenu;
+        private DevExpress.XtraEditors.ListBoxControl lbUsers;
+        private DevExpress.XtraEditors.ListBoxControl lbDepts;
         private DevExpress.XtraEditors.ListBoxControl lbPrograms;
         private nU3.Core.UI.Controls.nU3SimpleButton btnAddRoot;
         private nU3.Core.UI.Controls.nU3SimpleButton btnAddChild;
         private nU3.Core.UI.Controls.nU3SimpleButton btnDeleteNode;
-        private nU3.Core.UI.Controls.nU3SimpleButton btnRefreshPrograms;
+        private nU3.Core.UI.Controls.nU3SimpleButton btnRefreshAll;
         private nU3.Core.UI.Controls.nU3SimpleButton btnSave;
         private nU3.Core.UI.Controls.nU3LabelControl lblAuthLevel;
         private nU3.Core.UI.Controls.nU3SpinEdit numAuthLevel;
@@ -34,7 +40,13 @@ namespace nU3.Tools.Deployer.Views
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            split = new DevExpress.XtraEditors.SplitContainerControl();
+            splitMain = new DevExpress.XtraEditors.SplitContainerControl();
+            splitLeft = new DevExpress.XtraEditors.SplitContainerControl();
+            grpUsers = new DevExpress.XtraEditors.GroupControl();
+            lbUsers = new DevExpress.XtraEditors.ListBoxControl();
+            grpDepts = new DevExpress.XtraEditors.GroupControl();
+            lbDepts = new DevExpress.XtraEditors.ListBoxControl();
+            splitRight = new DevExpress.XtraEditors.SplitContainerControl();
             grpTree = new DevExpress.XtraEditors.GroupControl();
             tvMenu = new System.Windows.Forms.TreeView();
             cmsTree = new System.Windows.Forms.ContextMenuStrip(components);
@@ -44,16 +56,34 @@ namespace nU3.Tools.Deployer.Views
             btnAddRoot = new nU3.Core.UI.Controls.nU3SimpleButton();
             btnAddChild = new nU3.Core.UI.Controls.nU3SimpleButton();
             btnDeleteNode = new nU3.Core.UI.Controls.nU3SimpleButton();
-            btnRefreshPrograms = new nU3.Core.UI.Controls.nU3SimpleButton();
+            btnRefreshAll = new nU3.Core.UI.Controls.nU3SimpleButton();
             lblAuthLevel = new nU3.Core.UI.Controls.nU3LabelControl();
             numAuthLevel = new nU3.Core.UI.Controls.nU3SpinEdit();
             btnSave = new nU3.Core.UI.Controls.nU3SimpleButton();
-            ((System.ComponentModel.ISupportInitialize)split).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)split.Panel1).BeginInit();
-            split.Panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)split.Panel2).BeginInit();
-            split.Panel2.SuspendLayout();
-            split.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)splitMain).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)splitMain.Panel1).BeginInit();
+            splitMain.Panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)splitMain.Panel2).BeginInit();
+            splitMain.Panel2.SuspendLayout();
+            splitMain.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)splitLeft).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)splitLeft.Panel1).BeginInit();
+            splitLeft.Panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)splitLeft.Panel2).BeginInit();
+            splitLeft.Panel2.SuspendLayout();
+            splitLeft.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)grpUsers).BeginInit();
+            grpUsers.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)lbUsers).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)grpDepts).BeginInit();
+            grpDepts.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)lbDepts).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)splitRight).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)splitRight.Panel1).BeginInit();
+            splitRight.Panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)splitRight.Panel2).BeginInit();
+            splitRight.Panel2.SuspendLayout();
+            splitRight.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)grpTree).BeginInit();
             grpTree.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)grpProg).BeginInit();
@@ -64,24 +94,101 @@ namespace nU3.Tools.Deployer.Views
             ((System.ComponentModel.ISupportInitialize)numAuthLevel.Properties).BeginInit();
             SuspendLayout();
             // 
-            // split
+            // splitMain
             // 
-            split.Dock = System.Windows.Forms.DockStyle.Fill;
-            split.Location = new System.Drawing.Point(0, 0);
-            split.Name = "split";
+            splitMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            splitMain.Location = new System.Drawing.Point(0, 0);
+            splitMain.Name = "splitMain";
             // 
-            // split.Panel1
+            // splitMain.Panel1
             // 
-            split.Panel1.Controls.Add(grpTree);
-            split.Panel1.Text = "Panel1";
+            splitMain.Panel1.Controls.Add(splitLeft);
+            splitMain.Panel1.Text = "Panel1";
             // 
-            // split.Panel2
+            // splitMain.Panel2
             // 
-            split.Panel2.Controls.Add(grpProg);
-            split.Panel2.Text = "Panel2";
-            split.Size = new System.Drawing.Size(1406, 607);
-            split.SplitterPosition = 700;
-            split.TabIndex = 1;
+            splitMain.Panel2.Controls.Add(splitRight);
+            splitMain.Panel2.Text = "Panel2";
+            splitMain.Size = new System.Drawing.Size(1305, 709);
+            splitMain.SplitterPosition = 500;
+            splitMain.TabIndex = 1;
+            // 
+            // splitLeft
+            // 
+            splitLeft.Dock = System.Windows.Forms.DockStyle.Fill;
+            splitLeft.Horizontal = false;
+            splitLeft.Location = new System.Drawing.Point(0, 0);
+            splitLeft.Name = "splitLeft";
+            // 
+            // splitLeft.Panel1
+            // 
+            splitLeft.Panel1.Controls.Add(grpUsers);
+            splitLeft.Panel1.Text = "Panel1";
+            // 
+            // splitLeft.Panel2
+            // 
+            splitLeft.Panel2.Controls.Add(grpDepts);
+            splitLeft.Panel2.Text = "Panel2";
+            splitLeft.Size = new System.Drawing.Size(500, 709);
+            splitLeft.SplitterPosition = 300;
+            splitLeft.TabIndex = 0;
+            // 
+            // grpUsers
+            // 
+            grpUsers.Controls.Add(lbUsers);
+            grpUsers.Dock = System.Windows.Forms.DockStyle.Fill;
+            grpUsers.Location = new System.Drawing.Point(0, 0);
+            grpUsers.Name = "grpUsers";
+            grpUsers.Size = new System.Drawing.Size(500, 300);
+            grpUsers.TabIndex = 0;
+            grpUsers.Text = "사용자 리스트";
+            // 
+            // lbUsers
+            // 
+            lbUsers.Dock = System.Windows.Forms.DockStyle.Fill;
+            lbUsers.Location = new System.Drawing.Point(2, 23);
+            lbUsers.Name = "lbUsers";
+            lbUsers.Size = new System.Drawing.Size(496, 275);
+            lbUsers.TabIndex = 0;
+            lbUsers.SelectedIndexChanged += LbUsers_SelectedIndexChanged;
+            // 
+            // grpDepts
+            // 
+            grpDepts.Controls.Add(lbDepts);
+            grpDepts.Dock = System.Windows.Forms.DockStyle.Fill;
+            grpDepts.Location = new System.Drawing.Point(0, 0);
+            grpDepts.Name = "grpDepts";
+            grpDepts.Size = new System.Drawing.Size(500, 399);
+            grpDepts.TabIndex = 0;
+            grpDepts.Text = "부서 리스트 (선택된 사용자)";
+            // 
+            // lbDepts
+            // 
+            lbDepts.Dock = System.Windows.Forms.DockStyle.Fill;
+            lbDepts.Location = new System.Drawing.Point(2, 23);
+            lbDepts.Name = "lbDepts";
+            lbDepts.Size = new System.Drawing.Size(496, 374);
+            lbDepts.TabIndex = 0;
+            lbDepts.SelectedIndexChanged += LbDepts_SelectedIndexChanged;
+            // 
+            // splitRight
+            // 
+            splitRight.Dock = System.Windows.Forms.DockStyle.Fill;
+            splitRight.Location = new System.Drawing.Point(0, 0);
+            splitRight.Name = "splitRight";
+            // 
+            // splitRight.Panel1
+            // 
+            splitRight.Panel1.Controls.Add(grpTree);
+            splitRight.Panel1.Text = "Panel1";
+            // 
+            // splitRight.Panel2
+            // 
+            splitRight.Panel2.Controls.Add(grpProg);
+            splitRight.Panel2.Text = "Panel2";
+            splitRight.Size = new System.Drawing.Size(795, 709);
+            splitRight.SplitterPosition = 450;
+            splitRight.TabIndex = 0;
             // 
             // grpTree
             // 
@@ -89,7 +196,7 @@ namespace nU3.Tools.Deployer.Views
             grpTree.Dock = System.Windows.Forms.DockStyle.Fill;
             grpTree.Location = new System.Drawing.Point(0, 0);
             grpTree.Name = "grpTree";
-            grpTree.Size = new System.Drawing.Size(700, 607);
+            grpTree.Size = new System.Drawing.Size(450, 709);
             grpTree.TabIndex = 0;
             grpTree.Text = "메뉴 트리";
             // 
@@ -101,7 +208,7 @@ namespace nU3.Tools.Deployer.Views
             tvMenu.HideSelection = false;
             tvMenu.Location = new System.Drawing.Point(2, 23);
             tvMenu.Name = "tvMenu";
-            tvMenu.Size = new System.Drawing.Size(696, 582);
+            tvMenu.Size = new System.Drawing.Size(446, 684);
             tvMenu.TabIndex = 0;
             tvMenu.AfterSelect += TvMenu_AfterSelect;
             // 
@@ -117,7 +224,7 @@ namespace nU3.Tools.Deployer.Views
             grpProg.Dock = System.Windows.Forms.DockStyle.Fill;
             grpProg.Location = new System.Drawing.Point(0, 0);
             grpProg.Name = "grpProg";
-            grpProg.Size = new System.Drawing.Size(696, 607);
+            grpProg.Size = new System.Drawing.Size(335, 709);
             grpProg.TabIndex = 0;
             grpProg.Text = "등록 프로그램 목록";
             // 
@@ -126,7 +233,7 @@ namespace nU3.Tools.Deployer.Views
             lbPrograms.Dock = System.Windows.Forms.DockStyle.Fill;
             lbPrograms.Location = new System.Drawing.Point(2, 23);
             lbPrograms.Name = "lbPrograms";
-            lbPrograms.Size = new System.Drawing.Size(692, 582);
+            lbPrograms.Size = new System.Drawing.Size(331, 684);
             lbPrograms.TabIndex = 0;
             // 
             // pnlBottom
@@ -134,14 +241,14 @@ namespace nU3.Tools.Deployer.Views
             pnlBottom.Controls.Add(btnAddRoot);
             pnlBottom.Controls.Add(btnAddChild);
             pnlBottom.Controls.Add(btnDeleteNode);
-            pnlBottom.Controls.Add(btnRefreshPrograms);
+            pnlBottom.Controls.Add(btnRefreshAll);
             pnlBottom.Controls.Add(lblAuthLevel);
             pnlBottom.Controls.Add(numAuthLevel);
             pnlBottom.Controls.Add(btnSave);
             pnlBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            pnlBottom.Location = new System.Drawing.Point(0, 607);
+            pnlBottom.Location = new System.Drawing.Point(0, 709);
             pnlBottom.Name = "pnlBottom";
-            pnlBottom.Size = new System.Drawing.Size(1406, 56);
+            pnlBottom.Size = new System.Drawing.Size(1305, 56);
             pnlBottom.TabIndex = 2;
             // 
             // btnAddRoot
@@ -176,15 +283,15 @@ namespace nU3.Tools.Deployer.Views
             btnDeleteNode.Text = "삭제";
             btnDeleteNode.Click += BtnDeleteNode_Click;
             // 
-            // btnRefreshPrograms
+            // btnRefreshAll
             // 
-            btnRefreshPrograms.AuthId = "";
-            btnRefreshPrograms.Location = new System.Drawing.Point(700, 13);
-            btnRefreshPrograms.Name = "btnRefreshPrograms";
-            btnRefreshPrograms.Size = new System.Drawing.Size(120, 30);
-            btnRefreshPrograms.TabIndex = 6;
-            btnRefreshPrograms.Text = "프로그램 새로고침";
-            btnRefreshPrograms.Click += BtnRefreshPrograms_Click;
+            btnRefreshAll.AuthId = "";
+            btnRefreshAll.Location = new System.Drawing.Point(700, 13);
+            btnRefreshAll.Name = "btnRefreshAll";
+            btnRefreshAll.Size = new System.Drawing.Size(120, 30);
+            btnRefreshAll.TabIndex = 6;
+            btnRefreshAll.Text = "새로고침";
+            btnRefreshAll.Click += BtnRefreshAll_Click;
             // 
             // lblAuthLevel
             // 
@@ -216,6 +323,7 @@ namespace nU3.Tools.Deployer.Views
             btnSave.Appearance.BackColor = System.Drawing.Color.LightGreen;
             btnSave.Appearance.Options.UseBackColor = true;
             btnSave.AuthId = "";
+            btnSave.Enabled = false;
             btnSave.Location = new System.Drawing.Point(850, 8);
             btnSave.Name = "btnSave";
             btnSave.Size = new System.Drawing.Size(150, 40);
@@ -225,16 +333,34 @@ namespace nU3.Tools.Deployer.Views
             // 
             // MenuTreeManagementControl
             // 
-            Controls.Add(split);
+            Controls.Add(splitMain);
             Controls.Add(pnlBottom);
             Name = "MenuTreeManagementControl";
-            Size = new System.Drawing.Size(1406, 663);
-            ((System.ComponentModel.ISupportInitialize)split.Panel1).EndInit();
-            split.Panel1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)split.Panel2).EndInit();
-            split.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)split).EndInit();
-            split.ResumeLayout(false);
+            Size = new System.Drawing.Size(1305, 765);
+            ((System.ComponentModel.ISupportInitialize)splitMain.Panel1).EndInit();
+            splitMain.Panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)splitMain.Panel2).EndInit();
+            splitMain.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)splitMain).EndInit();
+            splitMain.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)splitLeft.Panel1).EndInit();
+            splitLeft.Panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)splitLeft.Panel2).EndInit();
+            splitLeft.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)splitLeft).EndInit();
+            splitLeft.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)grpUsers).EndInit();
+            grpUsers.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)lbUsers).EndInit();
+            ((System.ComponentModel.ISupportInitialize)grpDepts).EndInit();
+            grpDepts.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)lbDepts).EndInit();
+            ((System.ComponentModel.ISupportInitialize)splitRight.Panel1).EndInit();
+            splitRight.Panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)splitRight.Panel2).EndInit();
+            splitRight.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)splitRight).EndInit();
+            splitRight.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)grpTree).EndInit();
             grpTree.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)grpProg).EndInit();

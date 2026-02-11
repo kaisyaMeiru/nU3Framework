@@ -101,7 +101,7 @@ namespace nU3.Tools.Deployer.Services
                     {
                         // 속성 인자 추출 (생성자 파라미터)
                         var ctorArgs = attrData.ConstructorArguments;
-                        string progId = ctorArgs.Count > 0 ? ctorArgs[0].Value?.ToString() : null;
+                        string progId = ctorArgs.Count > 2 ? ctorArgs[2].Value?.ToString() : null;
                         string progName = ctorArgs.Count > 1 ? ctorArgs[1].Value?.ToString() : null;
 
                         // Named 속성 추출
@@ -111,10 +111,39 @@ namespace nU3.Tools.Deployer.Services
                         );
 
                         namedArgs.TryGetValue("AuthLevel", out var authLevelStr);
-                        namedArgs.TryGetValue("SystemType", out var systemType);
-                        namedArgs.TryGetValue("SubSystem", out var subSystem);
                         namedArgs.TryGetValue("DllName", out var dllName);
                         namedArgs.TryGetValue("FullClassName", out var fullClassName);
+                        
+                        // SystemType과 SubSystem은 생성자에서 자동 계산되므로 
+                        // NamedArguments가 아닌 속성에서 직접 읽어야 함
+                        string systemType = null;
+                        string subSystem = null;
+                        
+                        // 속성 값 읽기 시도
+                        try
+                        {
+                            var systemTypeProp = attrData.AttributeType.GetProperty("SystemType");
+                            var subSystemProp = attrData.AttributeType.GetProperty("SubSystem");
+                            
+                            // MetadataLoadContext에서는 실제 속성 값을 읽을 수 없으므로
+                            // 네임스페이스에서 직접 추출
+                            var namespaceParts = type.Namespace?.Split('.') ?? Array.Empty<string>();
+                            if (namespaceParts.Length >= 3 && namespaceParts[0] == "nU3" && namespaceParts[1] == "Modules")
+                            {
+                                systemType = namespaceParts[2];
+                                subSystem = namespaceParts.Length >= 4 ? namespaceParts[3] : null;
+                            }
+                        }
+                        catch
+                        {
+                            // 속성 읽기 실패 시 네임스페이스에서 추출
+                            var namespaceParts = type.Namespace?.Split('.') ?? Array.Empty<string>();
+                            if (namespaceParts.Length >= 3 && namespaceParts[0] == "nU3" && namespaceParts[1] == "Modules")
+                            {
+                                systemType = namespaceParts[2];
+                                subSystem = namespaceParts.Length >= 4 ? namespaceParts[3] : null;
+                            }
+                        }
 
                         var validationErrors = ValidateProgramInfo(type, systemType, subSystem, result);
 

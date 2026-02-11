@@ -386,7 +386,7 @@ namespace nU3.Tools.Deployer.Views
             {
                 cboFilterCategory.Properties.Items.Clear();
                 cboFilterCategory.Properties.Items.Add("(ALL)");
-                cboFilterCategory.Properties.Items.AddRange(new object[] { "EMR", "ADM", "BAS" });
+                cboFilterCategory.Properties.Items.AddRange(new object[] { "ADM", "EMR", "OCS" });
                 cboFilterCategory.SelectedIndex = 0;
 
                 cboFilterSubSystem.Properties.Items.Clear();

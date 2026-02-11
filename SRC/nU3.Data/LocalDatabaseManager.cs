@@ -220,10 +220,10 @@ namespace nU3.Data
             using var tx = conn.BeginTransaction();
             using (var cmd = conn.CreateCommand())
             {
-                cmd.CommandText = @"CREATE TABLE IF NOT EXISTS SYS_ROLE (ROLE_CODE TEXT PRIMARY KEY, ROLE_NAME TEXT, DESCRIPTION TEXT);";
+                cmd.CommandText = @"CREATE TABLE IF NOT EXISTS SYS_ROLE (ROLE_CODE INTEGER PRIMARY KEY, ROLE_NAME TEXT, DESCRIPTION TEXT);";
                 cmd.ExecuteNonQuery();
 
-                cmd.CommandText = @"CREATE TABLE IF NOT EXISTS SYS_DEPT (DEPT_CODE TEXT PRIMARY KEY, DEPT_NAME TEXT);";
+                cmd.CommandText = @"CREATE TABLE IF NOT EXISTS SYS_DEPT (DEPT_CODE INTEGER PRIMARY KEY, DEPT_NAME TEXT, DEPT_NAME_ENG TEXT, DESCRIPTION TEXT, DISPLAY_ORDER INTEGER DEFAULT 0, PARENT_DEPT INTEGER, IS_ACTIVE TEXT DEFAULT 'Y', CREATED_DATE TEXT, MODIFIED_DATE TEXT);";
                 cmd.ExecuteNonQuery();
 
                 cmd.CommandText = @"
@@ -232,7 +232,7 @@ namespace nU3.Data
                         USERNAME TEXT,
                         PASSWORD TEXT,
                         EMAIL TEXT,
-                        ROLE_CODE TEXT,
+                        ROLE_CODE INTEGER,
                         IS_ACTIVE TEXT DEFAULT 'Y',
                         REG_DATE TEXT DEFAULT (datetime('now')),
                         MOD_DATE TEXT,
@@ -240,7 +240,7 @@ namespace nU3.Data
                     );";
                 cmd.ExecuteNonQuery();
 
-                cmd.CommandText = @"CREATE TABLE IF NOT EXISTS SYS_USER_DEPT (USER_ID TEXT, DEPT_CODE TEXT, SEQ INTEGER DEFAULT 0, PRIMARY KEY(USER_ID, DEPT_CODE));";
+                cmd.CommandText = @"CREATE TABLE IF NOT EXISTS SYS_USER_DEPT (USER_ID TEXT, DEPT_CODE INTEGER, IS_PRIMARY TEXT DEFAULT 'N', CREATED_DATE TEXT, PRIMARY KEY(USER_ID, DEPT_CODE));";
                 cmd.ExecuteNonQuery();
 
                 cmd.CommandText = @"CREATE TABLE IF NOT EXISTS SYS_PERMISSION (TARGET_TYPE TEXT, TARGET_ID TEXT, PROG_ID TEXT, CAN_READ INTEGER DEFAULT 0, CAN_CREATE INTEGER DEFAULT 0, CAN_UPDATE INTEGER DEFAULT 0, CAN_DELETE INTEGER DEFAULT 0, CAN_PRINT INTEGER DEFAULT 0, CAN_EXPORT INTEGER DEFAULT 0, CAN_APPROVE INTEGER DEFAULT 0, CAN_CANCEL INTEGER DEFAULT 0, PRIMARY KEY(TARGET_TYPE, TARGET_ID, PROG_ID));";

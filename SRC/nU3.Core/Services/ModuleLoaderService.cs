@@ -75,8 +75,8 @@ namespace nU3.Core.Services
     /// </summary>
     public class ModuleLoaderService
     {
-        public const string MODULES_DIR = "Modules";
-        public const string FRAMEWORKS_DIR = "Patch";
+        public const string MODULES_DIR = PathConstants.ModuleDirectoryStr; 
+        public const string FRAMEWORKS_DIR = PathConstants.PatchDirectoryStr; 
 
         private readonly IModuleRepository _moduleRepo;
         private readonly IComponentRepository _compRepo;
@@ -132,7 +132,7 @@ namespace nU3.Core.Services
                 _runtimePath = AppDomain.CurrentDomain.BaseDirectory;
 
             _cachePath = PathConstants.CacheDirectory;
-            _shadowCopyDirectory = Path.Combine(_cachePath, "Shadow");
+            _shadowCopyDirectory = Path.Combine(_cachePath, PathConstants.ShadowDirectoryStr);
 
             Debug.WriteLine($"[ModuleLoader] 서비스 초기화됨. 실행 경로: {_runtimePath}");
             if (_skipModuleUpdates)

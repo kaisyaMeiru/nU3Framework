@@ -10,6 +10,11 @@ namespace nU3.Core.Repositories
     public interface IUserRepository
     {
         /// <summary>
+        /// 모든 활성화된 사용자 목록을 조회합니다.
+        /// </summary>
+        Task<List<UserInfoDto>> GetAllUsersAsync();
+
+        /// <summary>
         /// 사용자 ID를 기반으로 활성화된 사용자 정보를 조회합니다.
         /// </summary>
         Task<UserInfoDto?> GetUserByIdAsync(string userId);

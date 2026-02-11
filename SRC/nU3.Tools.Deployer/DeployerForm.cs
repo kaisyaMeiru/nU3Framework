@@ -22,6 +22,8 @@ namespace nU3.Tools.Deployer
         private readonly IMenuRepository _menuRepo;
         private readonly IProgramRepository _progRepo;
         private readonly ISecurityRepository _securityRepo;
+        private readonly IUserRepository _userRepo;
+        private readonly IDepartmentRepository _deptRepo;
         private readonly IConfiguration _configuration;
         private string _serverStoragePath;
         private string? _serverBaseUrl;
@@ -37,7 +39,7 @@ namespace nU3.Tools.Deployer
             InitializeComponent();
         }
 
-        public DeployerForm(IDBAccessService db, IFileTransferService fileTransfer, IModuleRepository moduleRepo, IComponentRepository componentRepo, IMenuRepository menuRepo, IProgramRepository progRepo, ISecurityRepository securityRepo, IConfiguration configuration)
+        public DeployerForm(IDBAccessService db, IFileTransferService fileTransfer, IModuleRepository moduleRepo, IComponentRepository componentRepo, IMenuRepository menuRepo, IProgramRepository progRepo, ISecurityRepository securityRepo, IUserRepository userRepo, IDepartmentRepository deptRepo, IConfiguration configuration)
         {
             _db = db;
             _fileTransfer = fileTransfer;
@@ -46,6 +48,8 @@ namespace nU3.Tools.Deployer
             _menuRepo = menuRepo;
             _progRepo = progRepo;
             _securityRepo = securityRepo;
+            _userRepo = userRepo;
+            _deptRepo = deptRepo;
             _configuration = configuration;
 
             InitializeComponent();
@@ -211,14 +215,14 @@ namespace nU3.Tools.Deployer
 
             // 2. Framework 컴포넌트 배포 
             var tabComponent = new XtraTabPage { Text = "프레임워크모듈 배포" };
-            var componentControl = new Views.AssemblyDeployManagementControl();            
+            var componentControl = new Views.AssemblyDeployManagementControl();
             componentControl.Initialize(_componentRepo, _configuration, _fileTransfer);
             componentControl.Dock = DockStyle.Fill;
             tabComponent.Controls.Add(componentControl);
-            
+
             // 3. 메뉴트리 관리
             var tabMenu = new XtraTabPage { Text = "메뉴 관리" };
-            var menuControl = new Views.MenuTreeManagementControl(_db, _menuRepo, _progRepo);
+            var menuControl = new Views.MenuTreeManagementControl(_db, _menuRepo, _progRepo, _userRepo, _deptRepo);
             menuControl.Dock = DockStyle.Fill;
             tabMenu.Controls.Add(menuControl);
 
@@ -227,7 +231,7 @@ namespace nU3.Tools.Deployer
             var securityControl = new Views.SecurityManagementControl(_securityRepo, _progRepo, _moduleRepo);
             securityControl.Dock = DockStyle.Fill;
             tabSecurity.Controls.Add(securityControl);
-            
+
             tabMain.TabPages.Add(tabDeploy);
             tabMain.TabPages.Add(tabComponent);
             tabMain.TabPages.Add(tabMenu);

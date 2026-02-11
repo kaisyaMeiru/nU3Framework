@@ -22,6 +22,31 @@ namespace nU3.Data.Repositories
             _db = db;
         }
 
+        public async Task<List<UserInfoDto>> GetAllUsersAsync()
+        {
+            string sql = "SELECT USER_ID, USERNAME, PASSWORD, EMAIL, ROLE_CODE, IS_ACTIVE FROM SYS_USER WHERE IS_ACTIVE = 'Y' ORDER BY USERNAME";
+            var dt = await _db.ExecuteDataTableAsync(sql);
+            var users = new List<UserInfoDto>();
+
+            if (dt != null)
+            {
+                foreach (DataRow row in dt.Rows)
+                {
+                    users.Add(new UserInfoDto
+                    {
+                        UserId = row["USER_ID"].ToString() ?? string.Empty,
+                        UserName = row["USERNAME"].ToString() ?? string.Empty,
+                        Password = row["PASSWORD"].ToString() ?? string.Empty,
+                        Email = row["EMAIL"].ToString() ?? string.Empty,
+                        IsActive = (row["IS_ACTIVE"].ToString() ?? "N") == "Y",
+                        Remarks = row["ROLE_CODE"].ToString() ?? "1"  // 기본값: 사용자(Tech)
+                    });
+                }
+            }
+
+            return users;
+        }
+
         public async Task<UserInfoDto?> GetUserByIdAsync(string userId)
         {
             string sql = "SELECT USER_ID, USERNAME, PASSWORD, EMAIL, ROLE_CODE, IS_ACTIVE FROM SYS_USER WHERE USER_ID = @id AND IS_ACTIVE = 'Y'";
@@ -38,7 +63,7 @@ namespace nU3.Data.Repositories
                 Password = row["PASSWORD"].ToString() ?? string.Empty,
                 Email = row["EMAIL"].ToString() ?? string.Empty,
                 IsActive = (row["IS_ACTIVE"].ToString() ?? "N") == "Y",
-                Remarks = row["ROLE_CODE"].ToString() ?? string.Empty // ROLE_CODE는 우선 Remarks나 별도 필드에 맵핑
+                Remarks = row["ROLE_CODE"].ToString() ?? "1"  // 기본값: 사용자(Tech)
             };
         }
 
@@ -73,13 +98,15 @@ namespace nU3.Data.Repositories
                     ROLE_CODE = @role,
                     IS_ACTIVE = @active";
 
+            int roleCode = int.TryParse(user.Remarks, out var code) ? code : 1;  // 기본값: Tech(1)
+
             var parameters = new Dictionary<string, object>
             {
                 { "@id", user.UserId },
                 { "@name", user.UserName },
                 { "@pwd", user.Password },
                 { "@email", user.Email },
-                { "@role", user.Remarks }, // ROLE_CODE
+                { "@role", roleCode },
                 { "@active", user.IsActive ? "Y" : "N" }
             };
 

@@ -64,6 +64,7 @@ namespace nU3.Tools.Deployer
             services.AddScoped<IProgramRepository, SQLiteProgramRepository>();
             services.AddScoped<IComponentRepository, SQLiteComponentRepository>();
             services.AddScoped<IUserRepository, SQLiteUserRepository>();
+            services.AddScoped<IDepartmentRepository, SQLiteDepartmentRepository>();
             services.AddScoped<ISecurityRepository, SQLiteSecurityRepository>();
             
             // Form

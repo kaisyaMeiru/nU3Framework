@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
@@ -1226,9 +1226,7 @@ namespace nU3.Shell
 
         private void BuildMenu()
         {
-            var allMenus = _menuRepo.GetAllMenus();
-            var userAuth = nU3.Core.Security.UserSession.Current.AuthLevel;
-
+            var user = nU3.Core.Security.UserSession.Current;
             var manager = barManager1;
             if (manager == null)
                 return;
@@ -1251,40 +1249,71 @@ namespace nU3.Shell
 
                 barMainMenu.ItemLinks.Clear();
 
-                if (allMenus.Count == 0)
+                if (string.IsNullOrWhiteSpace(user.SelectedDeptCode))
                 {
-                    var root = new BarSubItem(manager, "System (Empty)");
-                    var item = new BarButtonItem(manager, "No Menus Configured");
-                    item.ItemClick += (s, e) => XtraMessageBox.Show("Please configure menus using Deployer.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    var root = new BarSubItem(manager, "System (No Department)");
+                    var item = new BarButtonItem(manager, "Please select a department.");
+                    item.ItemClick += (s, e) => XtraMessageBox.Show("Please select a department during login.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     root.AddItem(item);
                     barMainMenu.AddItem(root);
                     return;
                 }
 
-                var rootMenus = allMenus
-                    .Where(m => m.ParentId == null)
+                List<MenuDto> allMenus;
+
+                // 1단계: 사용자+부서 커스텀 메뉴
+                allMenus = _menuRepo.GetMenusByUserAndDept(user.UserId, user.SelectedDeptCode);
+
+                // 2단계: 부서 템플릿 메뉴 (커스텀 메뉴가 없으면)
+                if (allMenus.Count == 0)
+                {
+                    allMenus = _menuRepo.GetMenusByDeptCode(user.SelectedDeptCode);
+                }
+
+                // 3단계: 글로벌 템플릿 메뉴 (부서 템플릿도 없으면)
+                if (allMenus.Count == 0)
+                {
+                    allMenus = _menuRepo.GetAllMenus();
+                }
+
+                // AuthLevel로 필터링
+                var filteredMenus = allMenus
+                    .Where(m => m.AuthLevel <= user.AuthLevel)
                     .OrderBy(m => m.SortOrd)
+                    .ToList();
+
+                if (filteredMenus.Count == 0)
+                {
+                    var root = new BarSubItem(manager, "System (Empty)");
+                    var item = new BarButtonItem(manager, "No Menus Available");
+                    item.ItemClick += (s, e) => XtraMessageBox.Show("No menus configured for your role or department.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    root.AddItem(item);
+                    barMainMenu.AddItem(root);
+                    return;
+                }
+
+                var rootMenus = filteredMenus
+                    .Where(m => m.ParentId == null)
                     .ToList();
 
                 foreach (var m in rootMenus)
                 {
-                    var root = new BarSubItem(manager, m.MenuName);
-                    root.ItemAppearance.Normal.Font = new System.Drawing.Font("Segoe UI", 9F);
-                    root.ItemAppearance.Normal.Options.UseFont = true;
+                    var subItem = new BarSubItem(manager, m.MenuName);
+                    subItem.ItemAppearance.Normal.Font = new System.Drawing.Font("Segoe UI", 9F);
+                    subItem.ItemAppearance.Normal.Options.UseFont = true;
 
-                    BuildBarMenuRecursive(root, m.MenuId, allMenus, userAuth, manager);
+                    BuildBarMenuRecursive(subItem, m.MenuId, filteredMenus, user.AuthLevel, manager);
 
                     if (!string.IsNullOrEmpty(m.ProgId))
                     {
                         var prog = new BarButtonItem(manager, m.MenuName);
                         prog.ItemClick += (s, e) => OpenProgram(m.ProgId, m.MenuName);
-                        root.AddItem(prog);
+                        subItem.AddItem(prog);
                     }
 
-                    if (root.ItemLinks.Count > 0)
-                        barMainMenu.AddItem(root);
+                    if (subItem.ItemLinks.Count > 0)
+                        barMainMenu.AddItem(subItem);
                 }
-
 
             }
             finally

@@ -95,7 +95,8 @@ namespace nU3.Shell.Forms
                                      .OfType<DisplayAttribute>()
                                      .FirstOrDefault()?.Name
                                      ?? d.ToString();
-                        map[d.ToString()] = display;
+                        // 저장할 때는 정수 코드(1, 2, 3...)를 key로 사용
+                        map[((int)d).ToString()] = display;
                     }
 
                     using var dlg = new DeptSelectionDialog(available.Select(code => (code, map.ContainsKey(code) ? map[code] : code)).ToList())
@@ -118,7 +119,7 @@ namespace nU3.Shell.Forms
                 nU3.Core.Security.UserSession.Current.SelectDepartment(selectedDept);
 
                 // Determine auth level from roles (DB-driven). Admin -> 9, otherwise default 1.
-                var authLevel = (roles ?? Array.Empty<string>()).Any(r => string.Equals(r, "Admin", StringComparison.OrdinalIgnoreCase)) ? 9 : 1;
+                var authLevel = (roles ?? Array.Empty<string>()).Any(r => string.Equals(r, "0", StringComparison.OrdinalIgnoreCase)) ? 9 : 1;
                 nU3.Core.Security.UserSession.Current.SetSession(id, id, selectedDept, authLevel);
 
                 this.DialogResult = DialogResult.OK;
