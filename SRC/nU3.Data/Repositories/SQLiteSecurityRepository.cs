@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using nU3.Core.Repositories;
 using nU3.Connectivity;
+using nU3.Core.Interfaces;
 
 namespace nU3.Data.Repositories
 {

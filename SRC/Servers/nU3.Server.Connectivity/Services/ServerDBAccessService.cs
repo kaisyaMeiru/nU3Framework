@@ -5,6 +5,7 @@ using System.Data.Common;
 using System.Threading.Tasks;
 using System.Text.Json;
 using nU3.Connectivity;
+using nU3.Core.Interfaces;
 
 namespace nU3.Server.Connectivity.Services
 {

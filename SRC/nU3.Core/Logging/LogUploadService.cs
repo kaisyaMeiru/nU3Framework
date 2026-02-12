@@ -1,4 +1,5 @@
 using System;
+using nU3.Core.Interfaces;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -7,15 +8,15 @@ using System.Threading.Tasks;
 namespace nU3.Core.Logging
 {
     /// <summary>
-    /// ·ÎÄÃ¿¡ ÀúÀåµÈ ·Î±× ÆÄÀÏµéÀ» ¼­¹ö·Î ¾÷·ÎµåÇÏ´Â ¼­ºñ½º ±¸ÇöÃ¼ÀÔ´Ï´Ù.
-    /// ÆÄÀÏ Àü¼ÛÀ» À§ÇÑ IFileTransferService¸¦ ÁÖÀÔ¹Ş¾Æ µ¿ÀÛÇÕ´Ï´Ù.
-    /// - Æ¯Á¤ ÆÄÀÏ ¾÷·Îµå
-    /// - º¸·ùÁßÀÎ ¸ğµç ·Î±× ¾÷·Îµå
-    /// - ÀÚµ¿ ¾÷·Îµå ½ºÄÉÁÙ ±â´É(¸ÅÀÏ 2½Ã)
+    /// ë¡œì»¬ì— ì €ì¥ëœ ë¡œê·¸ íŒŒì¼ë“¤ì„ ì„œë²„ë¡œ ì—…ë¡œë“œí•˜ëŠ” ì„œë¹„ìŠ¤ êµ¬í˜„ì²´ì…ë‹ˆë‹¤.
+    /// íŒŒì¼ ì „ì†¡ì„ ìœ„í•œ IFileTransferServiceë¥¼ ì£¼ì…ë°›ì•„ ë™ì‘í•©ë‹ˆë‹¤.
+    /// - íŠ¹ì • íŒŒì¼ ì—…ë¡œë“œ
+    /// - ë³´ë¥˜ì¤‘ì¸ ëª¨ë“  ë¡œê·¸ ì—…ë¡œë“œ
+    /// - ìë™ ì—…ë¡œë“œ ìŠ¤ì¼€ì¤„ ê¸°ëŠ¥(ë§¤ì¼ 2ì‹œ)
     /// </summary>
     public class LogUploadService : ILogUploadService
     {
-        private readonly Connectivity.IFileTransferService _fileTransferService;
+        private readonly IFileTransferService _fileTransferService;
         private readonly FileLogger _logger;
         private readonly string _logDirectory;
         private readonly string _serverLogPath;
@@ -23,7 +24,7 @@ namespace nU3.Core.Logging
         private System.Threading.Timer _autoUploadTimer;
 
         public LogUploadService(
-            Connectivity.IFileTransferService fileTransferService,
+            IFileTransferService fileTransferService,
             FileLogger logger,
             string serverLogPath = "Logs")
         {
@@ -39,8 +40,8 @@ namespace nU3.Core.Logging
         }
 
         /// <summary>
-        /// ÁöÁ¤ÇÑ ·ÎÄÃ ·Î±× ÆÄÀÏÀ» ¼­¹ö·Î ¾÷·ÎµåÇÕ´Ï´Ù.
-        /// ¼º°ø ½Ã(¹× deleteAfterUpload=true) ·ÎÄÃ ÆÄÀÏÀ» »èÁ¦ÇÒ ¼ö ÀÖ½À´Ï´Ù.
+        /// ì§€ì •í•œ ë¡œì»¬ ë¡œê·¸ íŒŒì¼ì„ ì„œë²„ë¡œ ì—…ë¡œë“œí•©ë‹ˆë‹¤.
+        /// ì„±ê³µ ì‹œ(ë° deleteAfterUpload=true) ë¡œì»¬ íŒŒì¼ì„ ì‚­ì œí•  ìˆ˜ ìˆìŠµë‹ˆë‹¤.
         /// </summary>
         public async Task<bool> UploadLogFileAsync(string localFilePath, bool deleteAfterUpload = false)
         {
@@ -91,8 +92,8 @@ namespace nU3.Core.Logging
         }
 
         /// <summary>
-        /// º¸·ù ÁßÀÎ ¸ğµç ·Î±× ÆÄÀÏÀ» ¼­¹ö·Î ¾÷·ÎµåÇÕ´Ï´Ù(¿À´Ã ³¯Â¥ÀÇ ÆÄÀÏ Á¦¿Ü).
-        /// ¾÷·Îµå ½ÇÆĞÇØµµ ´ÙÀ½ ÆÄÀÏ·Î °è¼Ó ÁøÇàÇÕ´Ï´Ù.
+        /// ë³´ë¥˜ ì¤‘ì¸ ëª¨ë“  ë¡œê·¸ íŒŒì¼ì„ ì„œë²„ë¡œ ì—…ë¡œë“œí•©ë‹ˆë‹¤(ì˜¤ëŠ˜ ë‚ ì§œì˜ íŒŒì¼ ì œì™¸).
+        /// ì—…ë¡œë“œ ì‹¤íŒ¨í•´ë„ ë‹¤ìŒ íŒŒì¼ë¡œ ê³„ì† ì§„í–‰í•©ë‹ˆë‹¤.
         /// </summary>
         public async Task<bool> UploadAllPendingLogsAsync()
         {
@@ -101,7 +102,7 @@ namespace nU3.Core.Logging
                 if (!Directory.Exists(_logDirectory))
                     return false;
 
-                // ¿À´Ã ³¯Â¥ÀÇ ·Î±×´Â Á¦¿Ü (ÇöÀç »ç¿ë ÁßÀÏ ¼ö ÀÖÀ½)
+                // ì˜¤ëŠ˜ ë‚ ì§œì˜ ë¡œê·¸ëŠ” ì œì™¸ (í˜„ì¬ ì‚¬ìš© ì¤‘ì¼ ìˆ˜ ìˆìŒ)
                 var today = DateTime.Now.ToString("yyyyMMdd");
                 var logFiles = Directory.GetFiles(_logDirectory, "*.log")
                     .Where(f => !Path.GetFileName(f).Contains(today))
@@ -118,13 +119,13 @@ namespace nU3.Core.Logging
                 var successCount = 0;
                 foreach (var logFile in logFiles)
                 {
-                    // °¢ ÆÄÀÏÀ» ¾÷·ÎµåÇÏµÇ, ½ÇÆĞÇØµµ °è¼Ó ÁøÇà
+                    // ê° íŒŒì¼ì„ ì—…ë¡œë“œí•˜ë˜, ì‹¤íŒ¨í•´ë„ ê³„ì† ì§„í–‰
                     if (await UploadLogFileAsync(logFile, deleteAfterUpload: true))
                     {
                         successCount++;
                     }
 
-                    // ¼­¹ö ºÎÇÏ¸¦ ÁÙÀÌ±â À§ÇØ °¢ ¾÷·Îµå »çÀÌ¿¡ ¾à°£ÀÇ Áö¿¬
+                    // ì„œë²„ ë¶€í•˜ë¥¼ ì¤„ì´ê¸° ìœ„í•´ ê° ì—…ë¡œë“œ ì‚¬ì´ì— ì•½ê°„ì˜ ì§€ì—°
                     await Task.Delay(500);
                 }
 
@@ -139,8 +140,8 @@ namespace nU3.Core.Logging
         }
 
         /// <summary>
-        /// ÀÚµ¿ ¾÷·Îµå ±â´ÉÀ» È°¼ºÈ­/ºñÈ°¼ºÈ­ ÇÕ´Ï´Ù.
-        /// È°¼ºÈ­ ½Ã ¸ÅÀÏ »õº® 2½Ã¿¡ UploadAllPendingLogsAsync¸¦ ½ÇÇàÇÏµµ·Ï Å¸ÀÌ¸Ó¸¦ ¼³Á¤ÇÕ´Ï´Ù.
+        /// ìë™ ì—…ë¡œë“œ ê¸°ëŠ¥ì„ í™œì„±í™”/ë¹„í™œì„±í™” í•©ë‹ˆë‹¤.
+        /// í™œì„±í™” ì‹œ ë§¤ì¼ ìƒˆë²½ 2ì‹œì— UploadAllPendingLogsAsyncë¥¼ ì‹¤í–‰í•˜ë„ë¡ íƒ€ì´ë¨¸ë¥¼ ì„¤ì •í•©ë‹ˆë‹¤.
         /// </summary>
         public void EnableAutoUpload(bool enable)
         {
@@ -148,7 +149,7 @@ namespace nU3.Core.Logging
 
             if (enable)
             {
-                // ¸ÅÀÏ »õº® 2½Ã¿¡ ÀÚµ¿ ¾÷·Îµå ½ÇÇà
+                // ë§¤ì¼ ìƒˆë²½ 2ì‹œì— ìë™ ì—…ë¡œë“œ ì‹¤í–‰
                 _autoUploadTimer?.Dispose();
                 _autoUploadTimer = new System.Threading.Timer(
                     async _ => await AutoUploadCallback(),
@@ -194,20 +195,20 @@ namespace nU3.Core.Logging
         }
 
         /// <summary>
-        /// Å©·¡½Ã³ª Ä¡¸íÀû ¿À·ù ¹ß»ı ½Ã ÇöÀç ·Î±× ÆÄÀÏÀ» Áï½Ã ¾÷·ÎµåÇÏµµ·Ï ÇÕ´Ï´Ù.
-        /// ÇöÀç ·Î±× ÆÄÀÏÀ» flushÇÏ°í º¹»çº»À» ¾÷·ÎµåÇÕ´Ï´Ù(¿øº»Àº »èÁ¦ÇÏÁö ¾ÊÀ½).
+        /// í¬ë˜ì‹œë‚˜ ì¹˜ëª…ì  ì˜¤ë¥˜ ë°œìƒ ì‹œ í˜„ì¬ ë¡œê·¸ íŒŒì¼ì„ ì¦‰ì‹œ ì—…ë¡œë“œí•˜ë„ë¡ í•©ë‹ˆë‹¤.
+        /// í˜„ì¬ ë¡œê·¸ íŒŒì¼ì„ flushí•˜ê³  ë³µì‚¬ë³¸ì„ ì—…ë¡œë“œí•©ë‹ˆë‹¤(ì›ë³¸ì€ ì‚­ì œí•˜ì§€ ì•ŠìŒ).
         /// </summary>
         public async Task<bool> UploadCurrentLogImmediatelyAsync()
         {
             try
             {
-                // ÇöÀç »ç¿ë ÁßÀÎ ·Î±× ÆÄÀÏÀ» flushÇÏ°í ¾÷·Îµå
+                // í˜„ì¬ ì‚¬ìš© ì¤‘ì¸ ë¡œê·¸ íŒŒì¼ì„ flushí•˜ê³  ì—…ë¡œë“œ
                 await _logger.FlushAsync();
                 var currentLogFile = _logger.GetLogFilePath();
 
                 if (File.Exists(currentLogFile))
                 {
-                    // ÇöÀç ·Î±×´Â »èÁ¦ÇÏÁö ¾Ê°í º¹»çº» ¾÷·Îµå
+                    // í˜„ì¬ ë¡œê·¸ëŠ” ì‚­ì œí•˜ì§€ ì•Šê³  ë³µì‚¬ë³¸ ì—…ë¡œë“œ
                     return await UploadLogFileAsync(currentLogFile, deleteAfterUpload: false);
                 }
 

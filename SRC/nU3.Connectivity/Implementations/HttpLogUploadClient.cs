@@ -1,4 +1,5 @@
 using System;
+using nU3.Core.Interfaces;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
@@ -44,6 +45,7 @@ namespace nU3.Connectivity.Implementations
             Action<string, string>? logCallback = null,
             bool enableCompression = true)
         {
+
             _baseUrl = baseUrl.TrimEnd('/');
             _logCallback = logCallback;
             _enableCompression = enableCompression;

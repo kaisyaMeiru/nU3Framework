@@ -1,14 +1,15 @@
 using System;
 using System.Threading.Tasks;
 using nU3.Models;
+using nU3.Core.Interfaces;
 
 namespace nU3.Core.Logging
 {
     /// <summary>
-    /// ¾ÖÇÃ¸®ÄÉÀÌ¼Ç Àü¿ª¿¡¼­ »ç¿ëÇÏ´Â ·Î±× ¸Å´ÏÀú(singleton)ÀÔ´Ï´Ù.
-    /// - ÆÄÀÏ ·Î°Å(FileLogger), ¿Àµ÷ ·Î°Å(AuditLogger), ·Î±× ¾÷·Îµå ¼­ºñ½º(LogUploadService)¸¦ °ü¸®ÇÕ´Ï´Ù.
-    /// - ÃÊ±âÈ­(Initialize) ½Ã ·Î±× µğ·ºÅÍ¸®¸¦ ¼³Á¤ÇÏ°í, ½ÃÀÛ ¸Ş½ÃÁö¸¦ ±â·ÏÇÕ´Ï´Ù.
-    /// - Àü¿ª À¯Æ¿¸®Æ¼ ¸Ş¼­µå(Trace/Debug/Info/Error/Critical µî)¸¦ Á¦°øÇÏ¿© Æí¸®ÇÏ°Ô ·Î±×¸¦ ³²±æ ¼ö ÀÖ½À´Ï´Ù.
+    /// ì• í”Œë¦¬ì¼€ì´ì…˜ ì „ì—­ì—ì„œ ì‚¬ìš©í•˜ëŠ” ë¡œê·¸ ë§¤ë‹ˆì €(singleton)ì…ë‹ˆë‹¤.
+    /// - íŒŒì¼ ë¡œê±°(FileLogger), ì˜¤ë”§ ë¡œê±°(AuditLogger), ë¡œê·¸ ì—…ë¡œë“œ ì„œë¹„ìŠ¤(LogUploadService)ë¥¼ ê´€ë¦¬í•©ë‹ˆë‹¤.
+    /// - ì´ˆê¸°í™”(Initialize) ì‹œ ë¡œê·¸ ë””ë ‰í„°ë¦¬ë¥¼ ì„¤ì •í•˜ê³ , ì‹œì‘ ë©”ì‹œì§€ë¥¼ ê¸°ë¡í•©ë‹ˆë‹¤.
+    /// - ì „ì—­ ìœ í‹¸ë¦¬í‹° ë©”ì„œë“œ(Trace/Debug/Info/Error/Critical ë“±)ë¥¼ ì œê³µí•˜ì—¬ í¸ë¦¬í•˜ê²Œ ë¡œê·¸ë¥¼ ë‚¨ê¸¸ ìˆ˜ ìˆìŠµë‹ˆë‹¤.
     /// </summary>
     public sealed class LogManager
     {
@@ -25,16 +26,16 @@ namespace nU3.Core.Logging
         }
 
         /// <summary>
-        /// ·Î±× ¸Å´ÏÀú ÃÊ±âÈ­.
-        /// - logDirectory: ÀÏ¹İ ·Î±× ÆÄÀÏ ÀúÀå °æ·Î
-        /// - auditDirectory: ¿Àµ÷ ·Î±× ÀúÀå °æ·Î
-        /// - fileTransferService: ·Î±× ¾÷·Îµå¿¡ »ç¿ëÇÒ ¿ø°İ ÆÄÀÏ Àü¼Û ¼­ºñ½º
-        /// - enableAutoUpload: ÃÊ±âÈ­ ½Ã ÀÚµ¿ ¾÷·Îµå ¼³Á¤
+        /// ë¡œê·¸ ë§¤ë‹ˆì € ì´ˆê¸°í™”.
+        /// - logDirectory: ì¼ë°˜ ë¡œê·¸ íŒŒì¼ ì €ì¥ ê²½ë¡œ
+        /// - auditDirectory: ì˜¤ë”§ ë¡œê·¸ ì €ì¥ ê²½ë¡œ
+        /// - fileTransferService: ë¡œê·¸ ì—…ë¡œë“œì— ì‚¬ìš©í•  ì›ê²© íŒŒì¼ ì „ì†¡ ì„œë¹„ìŠ¤
+        /// - enableAutoUpload: ì´ˆê¸°í™” ì‹œ ìë™ ì—…ë¡œë“œ ì„¤ì •
         /// </summary>
         public void Initialize(
             string logDirectory = null,
             string auditDirectory = null,
-            Connectivity.IFileTransferService fileTransferService = null,
+            IFileTransferService fileTransferService = null,
             bool enableAutoUpload = false)
         {
             if (_initialized)
@@ -52,7 +53,7 @@ namespace nU3.Core.Logging
                 }
             }
 
-            // ±âº» ½ÃÀÛ ·Î±× ±â·Ï
+            // ê¸°ë³¸ ì‹œì‘ ë¡œê·¸ ê¸°ë¡
             _fileLogger.Information("=".PadRight(80, '='), "System");
             _fileLogger.Information($"nU3 Framework Started - Version {GetVersion()}", "System");
             _fileLogger.Information($"Machine: {Environment.MachineName}", "System");
@@ -60,7 +61,7 @@ namespace nU3.Core.Logging
             _fileLogger.Information($"OS: {Environment.OSVersion}", "System");
             _fileLogger.Information("=".PadRight(80, '='), "System");
 
-            // ¿À·¡µÈ ·Î±× Á¤¸®
+            // ì˜¤ë˜ëœ ë¡œê·¸ ì •ë¦¬
             _fileLogger.CleanupOldLogs(30);
             _auditLogger.CleanupOldAudits(90);
 
@@ -80,22 +81,22 @@ namespace nU3.Core.Logging
         }
 
         /// <summary>
-        /// ÇöÀç »ç¿ë °¡´ÉÇÑ ÀÏ¹İ ·Î°Å¸¦ ¹İÈ¯ÇÕ´Ï´Ù. Initialize È£Ãâ Àü¿¡´Â »ç¿ë ºÒ°¡ÇÕ´Ï´Ù.
+        /// í˜„ì¬ ì‚¬ìš© ê°€ëŠ¥í•œ ì¼ë°˜ ë¡œê±°ë¥¼ ë°˜í™˜í•©ë‹ˆë‹¤. Initialize í˜¸ì¶œ ì „ì—ëŠ” ì‚¬ìš© ë¶ˆê°€í•©ë‹ˆë‹¤.
         /// </summary>
         public ILogger Logger => _fileLogger ?? throw new InvalidOperationException("LogManager not initialized. Call Initialize() first.");
 
         /// <summary>
-        /// ÇöÀç »ç¿ë °¡´ÉÇÑ ¿Àµ÷ ·Î°Å¸¦ ¹İÈ¯ÇÕ´Ï´Ù. Initialize È£Ãâ Àü¿¡´Â »ç¿ë ºÒ°¡ÇÕ´Ï´Ù.
+        /// í˜„ì¬ ì‚¬ìš© ê°€ëŠ¥í•œ ì˜¤ë”§ ë¡œê±°ë¥¼ ë°˜í™˜í•©ë‹ˆë‹¤. Initialize í˜¸ì¶œ ì „ì—ëŠ” ì‚¬ìš© ë¶ˆê°€í•©ë‹ˆë‹¤.
         /// </summary>
         public IAuditLogger AuditLogger => _auditLogger ?? throw new InvalidOperationException("LogManager not initialized. Call Initialize() first.");
 
         /// <summary>
-        /// ·Î±× ¾÷·Îµå ¼­ºñ½º(ÀÖÀ» °æ¿ì)¸¦ ¹İÈ¯ÇÕ´Ï´Ù.
+        /// ë¡œê·¸ ì—…ë¡œë“œ ì„œë¹„ìŠ¤(ìˆì„ ê²½ìš°)ë¥¼ ë°˜í™˜í•©ë‹ˆë‹¤.
         /// </summary>
         public ILogUploadService UploadService => _uploadService;
 
         /// <summary>
-        /// ¸ğµç ·Î±×(ÀÏ¹İ/¿Àµ÷)¸¦ °­Á¦·Î Flush ÇÕ´Ï´Ù.
+        /// ëª¨ë“  ë¡œê·¸(ì¼ë°˜/ì˜¤ë”§)ë¥¼ ê°•ì œë¡œ Flush í•©ë‹ˆë‹¤.
         /// </summary>
         public async Task FlushAllAsync()
         {
@@ -107,8 +108,8 @@ namespace nU3.Core.Logging
         }
 
         /// <summary>
-        /// ¿¹¿Ü ¹ß»ı ½Ã È£Ãâ: Ä¡¸íÀû ·Î±× ±â·Ï ¹× Áï½Ã ¾÷·Îµå ½Ãµµ
-        /// (ºñµ¿±â) ³»ºÎÀûÀ¸·Î ·Î±×¸¦ ³²±â°í Flush, ¾÷·Îµå¸¦ ½ÃµµÇÕ´Ï´Ù.
+        /// ì˜ˆì™¸ ë°œìƒ ì‹œ í˜¸ì¶œ: ì¹˜ëª…ì  ë¡œê·¸ ê¸°ë¡ ë° ì¦‰ì‹œ ì—…ë¡œë“œ ì‹œë„
+        /// (ë¹„ë™ê¸°) ë‚´ë¶€ì ìœ¼ë¡œ ë¡œê·¸ë¥¼ ë‚¨ê¸°ê³  Flush, ì—…ë¡œë“œë¥¼ ì‹œë„í•©ë‹ˆë‹¤.
         /// </summary>
         public async Task OnErrorAsync(Exception exception, string context = null)
         {
@@ -117,13 +118,13 @@ namespace nU3.Core.Logging
 
             try
             {
-                // Ä¡¸íÀû ·Î±× ±â·Ï
+                // ì¹˜ëª…ì  ë¡œê·¸ ê¸°ë¡
                 _fileLogger?.Critical($"Critical Error: {exception.Message}", context ?? "Error", exception);
 
-                // Áï½Ã flush
+                // ì¦‰ì‹œ flush
                 await FlushAllAsync();
 
-                // ¾÷·Îµå ¼­ºñ½º°¡ ÀÖÀ¸¸é ÇöÀç ·Î±× Áï½Ã ¾÷·Îµå
+                // ì—…ë¡œë“œ ì„œë¹„ìŠ¤ê°€ ìˆìœ¼ë©´ í˜„ì¬ ë¡œê·¸ ì¦‰ì‹œ ì—…ë¡œë“œ
                 if (_uploadService != null)
                 {
                     await _uploadService.UploadCurrentLogImmediatelyAsync();
@@ -131,12 +132,12 @@ namespace nU3.Core.Logging
             }
             catch
             {
-                // ·Î±ë ÀÚÃ¼¿¡¼­ ¿¹¿Ü°¡ ¹ß»ıÇÏ¸é ¹«½Ã
+                // ë¡œê¹… ìì²´ì—ì„œ ì˜ˆì™¸ê°€ ë°œìƒí•˜ë©´ ë¬´ì‹œ
             }
         }
 
         /// <summary>
-        /// ¾ÖÇÃ¸®ÄÉÀÌ¼Ç Á¾·á ½Ã È£Ãâ: Á¾·á ·Î±× ±â·Ï ¹× ¸®¼Ò½º Á¤¸®
+        /// ì• í”Œë¦¬ì¼€ì´ì…˜ ì¢…ë£Œ ì‹œ í˜¸ì¶œ: ì¢…ë£Œ ë¡œê·¸ ê¸°ë¡ ë° ë¦¬ì†ŒìŠ¤ ì •ë¦¬
         /// </summary>
         public void Shutdown()
         {
@@ -157,7 +158,7 @@ namespace nU3.Core.Logging
             catch { }
         }
 
-        // Àü¿ª À¯Æ¿¸®Æ¼ ¸Ş¼­µå: ÆíÀÇ¼º Á¦°ø
+        // ì „ì—­ ìœ í‹¸ë¦¬í‹° ë©”ì„œë“œ: í¸ì˜ì„± ì œê³µ
         public static void Trace(string message, string category = null) 
             => Instance.Logger?.Trace(message, category);
 
@@ -176,7 +177,7 @@ namespace nU3.Core.Logging
         public static void Critical(string message, string category = null, Exception exception = null) 
             => Instance.Logger?.Critical(message, category, exception);
 
-        // Audit °ü·Ã ÆíÀÇ ¸Ş¼­µå
+        // Audit ê´€ë ¨ í¸ì˜ ë©”ì„œë“œ
         public static void LogAudit(AuditLogDto audit) 
             => Instance.AuditLogger?.LogAudit(audit);
 

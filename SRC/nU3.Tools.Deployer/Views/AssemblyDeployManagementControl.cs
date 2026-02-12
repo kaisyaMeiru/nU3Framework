@@ -10,7 +10,8 @@ using DevExpress.XtraGrid.Views.Grid; // GridView
 using nU3.Connectivity;
 using nU3.Core.Repositories;
 using nU3.Models;
-using nU3.Core.UI; // BaseWorkControl
+using nU3.Core.UI;
+using nU3.Core.Interfaces; // BaseWorkControl
 
 namespace nU3.Tools.Deployer.Views
 {

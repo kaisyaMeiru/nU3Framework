@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using nU3.Core.Enums;
 using System.Reflection;
 using System.ComponentModel.DataAnnotations;
+using nU3.Core.Interfaces;
 
 namespace nU3.Server.Connectivity.Services
 {

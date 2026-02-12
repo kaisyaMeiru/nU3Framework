@@ -1,4 +1,5 @@
 using System;
+using nU3.Core.Interfaces;
 using System.Collections.Generic;
 using System.Data;
 using System.Net.Http;
@@ -9,17 +10,17 @@ using System.Threading.Tasks;
 namespace nU3.Connectivity.Implementations
 {
     /// <summary>
-    /// µ¥ÀÌÅÍº£ÀÌ½º Á¢±Ù ¼­ºñ½º¸¦ HTTP/REST·Î ±¸ÇöÇÑ Å¬¶óÀÌ¾ğÆ®ÀÔ´Ï´Ù.
+    /// ë°ì´í„°ë² ì´ìŠ¤ ì ‘ê·¼ ì„œë¹„ìŠ¤ë¥¼ HTTP/RESTë¡œ êµ¬í˜„í•œ í´ë¼ì´ì–¸íŠ¸ì…ë‹ˆë‹¤.
     /// 
-    /// ¿ä¾à:
-    /// - DB °ü·Ã µ¿ÀÛ(Äõ¸®, ºñÄõ¸®, ½ºÄ®¶ó, ÇÁ·Î½ÃÀú È£Ãâ µî)À» REST API·Î º¯È¯ÇÏ¿© ¼­¹ö¿¡ ¿äÃ»ÇÕ´Ï´Ù.
-    /// - ¼­¹ö ÀÀ´äÀº JSONÀ¸·Î ¼ö½ÅÇÏ¸ç, ÇÊ¿ä ½Ã DataTable/DataSetÀ¸·Î º¯È¯ÇÕ´Ï´Ù.
-    /// - È£ÃâÀÚ´Â DBAccessClientBaseÀÇ IDBAccessService ÀÎÅÍÆäÀÌ½º¸¦ ÅëÇØ ÀÌ Å¬¶óÀÌ¾ğÆ®¸¦ »ç¿ëÇÕ´Ï´Ù.
+    /// ìš”ì•½:
+    /// - DB ê´€ë ¨ ë™ì‘(ì¿¼ë¦¬, ë¹„ì¿¼ë¦¬, ìŠ¤ì¹¼ë¼, í”„ë¡œì‹œì € í˜¸ì¶œ ë“±)ì„ REST APIë¡œ ë³€í™˜í•˜ì—¬ ì„œë²„ì— ìš”ì²­í•©ë‹ˆë‹¤.
+    /// - ì„œë²„ ì‘ë‹µì€ JSONìœ¼ë¡œ ìˆ˜ì‹ í•˜ë©°, í•„ìš” ì‹œ DataTable/DataSetìœ¼ë¡œ ë³€í™˜í•©ë‹ˆë‹¤.
+    /// - í˜¸ì¶œìëŠ” DBAccessClientBaseì˜ IDBAccessService ì¸í„°í˜ì´ìŠ¤ë¥¼ í†µí•´ ì´ í´ë¼ì´ì–¸íŠ¸ë¥¼ ì‚¬ìš©í•©ë‹ˆë‹¤.
     /// 
-    /// ¼³°è °í·Á»çÇ×:
-    /// - ¿ø°İ È£ÃâÀÇ ½ÇÆĞ´Â È£ÃâÀÚ¿¡°Ô InvalidOperationExceptionÀ¸·Î ·¡ÇÎÇÏ¿© Àü´ŞÇÕ´Ï´Ù.
-    /// - ´ë·® µ¥ÀÌÅÍ Ã³¸®¸¦ À§ÇØ Post ¿äÃ»ÀÇ Å¸ÀÓ¾Æ¿ôÀ» ³Ë³ËÈ÷ ¼³Á¤ÇÒ ¼ö ÀÖµµ·Ï ±¸¼ºµÇ¾î¾ß ÇÕ´Ï´Ù.
-    /// - ÇÁ·Î½ÃÀú È£ÃâÀÇ Ãâ·Â ÆÄ¶ó¹ÌÅÍ´Â ¼­¹ö¿¡¼­ JSONÀ¸·Î ¹İÈ¯µÈ OutputParams·Î Ã¤¿öÁı´Ï´Ù.
+    /// ì„¤ê³„ ê³ ë ¤ì‚¬í•­:
+    /// - ì›ê²© í˜¸ì¶œì˜ ì‹¤íŒ¨ëŠ” í˜¸ì¶œìì—ê²Œ InvalidOperationExceptionìœ¼ë¡œ ë˜í•‘í•˜ì—¬ ì „ë‹¬í•©ë‹ˆë‹¤.
+    /// - ëŒ€ëŸ‰ ë°ì´í„° ì²˜ë¦¬ë¥¼ ìœ„í•´ Post ìš”ì²­ì˜ íƒ€ì„ì•„ì›ƒì„ ë„‰ë„‰íˆ ì„¤ì •í•  ìˆ˜ ìˆë„ë¡ êµ¬ì„±ë˜ì–´ì•¼ í•©ë‹ˆë‹¤.
+    /// - í”„ë¡œì‹œì € í˜¸ì¶œì˜ ì¶œë ¥ íŒŒë¼ë¯¸í„°ëŠ” ì„œë²„ì—ì„œ JSONìœ¼ë¡œ ë°˜í™˜ëœ OutputParamsë¡œ ì±„ì›Œì§‘ë‹ˆë‹¤.
     /// </summary>
     public class HttpDBAccessClient : DBAccessClientBase
     {
@@ -28,17 +29,17 @@ namespace nU3.Connectivity.Implementations
         private readonly JsonSerializerOptions _jsonOptions;
 
         /// <summary>
-        /// ±âº» »ı¼ºÀÚ: ³»ºÎÀûÀ¸·Î HttpClient¸¦ »ı¼ºÇÏ¿© »ç¿ëÇÕ´Ï´Ù.
-        /// ÁÖ·Î °£´ÜÇÑ »ç¿ë¿¡¼­ ±âº» HttpClient »ç¿ëÀ» ¿øÇÒ ¶§ È£ÃâÇÕ´Ï´Ù.
+        /// ê¸°ë³¸ ìƒì„±ì: ë‚´ë¶€ì ìœ¼ë¡œ HttpClientë¥¼ ìƒì„±í•˜ì—¬ ì‚¬ìš©í•©ë‹ˆë‹¤.
+        /// ì£¼ë¡œ ê°„ë‹¨í•œ ì‚¬ìš©ì—ì„œ ê¸°ë³¸ HttpClient ì‚¬ìš©ì„ ì›í•  ë•Œ í˜¸ì¶œí•©ë‹ˆë‹¤.
         /// </summary>
-        /// <param name="baseUrl">¼­¹ö ±âº» URL (¿¹: "https://localhost:64229") - ³¡ÀÇ '/'´Â ³»ºÎ¿¡¼­ Á¦°ÅµË´Ï´Ù.</param>
+        /// <param name="baseUrl">ì„œë²„ ê¸°ë³¸ URL (ì˜ˆ: "https://localhost:64229") - ëì˜ '/'ëŠ” ë‚´ë¶€ì—ì„œ ì œê±°ë©ë‹ˆë‹¤.</param>
         public HttpDBAccessClient(string baseUrl)
         {
             _baseUrl = baseUrl.TrimEnd('/');
             _httpClient = new HttpClient
             {
                 BaseAddress = new Uri(_baseUrl),
-                // ´ë¿ë·® Äõ¸®/ÀÀ´äÀ» °í·ÁÇØ ºñ±³Àû ±ä Å¸ÀÓ¾Æ¿ôÀ» ¼³Á¤
+                // ëŒ€ìš©ëŸ‰ ì¿¼ë¦¬/ì‘ë‹µì„ ê³ ë ¤í•´ ë¹„êµì  ê¸´ íƒ€ì„ì•„ì›ƒì„ ì„¤ì •
                 Timeout = TimeSpan.FromMinutes(5)
             };
 
@@ -49,11 +50,11 @@ namespace nU3.Connectivity.Implementations
         }
 
         /// <summary>
-        /// ¿ÜºÎ¿¡¼­ »ı¼ºÇÑ HttpClient¸¦ ÁÖÀÔ¹Ş¾Æ »ç¿ëÇÏ´Â »ı¼ºÀÚÀÔ´Ï´Ù.
-        /// DI(Dependency Injection) È¯°æÀÌ³ª ´ÜÀ§ Å×½ºÆ®¿¡¼­ HttpClient¸¦ Á¦¾îÇØ¾ß ÇÒ ¶§ »ç¿ëÇÕ´Ï´Ù.
+        /// ì™¸ë¶€ì—ì„œ ìƒì„±í•œ HttpClientë¥¼ ì£¼ì…ë°›ì•„ ì‚¬ìš©í•˜ëŠ” ìƒì„±ìì…ë‹ˆë‹¤.
+        /// DI(Dependency Injection) í™˜ê²½ì´ë‚˜ ë‹¨ìœ„ í…ŒìŠ¤íŠ¸ì—ì„œ HttpClientë¥¼ ì œì–´í•´ì•¼ í•  ë•Œ ì‚¬ìš©í•©ë‹ˆë‹¤.
         /// </summary>
-        /// <param name="httpClient">ÁÖÀÔ¹ŞÀ» HttpClient ÀÎ½ºÅÏ½º</param>
-        /// <param name="baseUrl">¼­¹ö ±âº» URL</param>
+        /// <param name="httpClient">ì£¼ì…ë°›ì„ HttpClient ì¸ìŠ¤í„´ìŠ¤</param>
+        /// <param name="baseUrl">ì„œë²„ ê¸°ë³¸ URL</param>
         public HttpDBAccessClient(HttpClient httpClient, string baseUrl)
         {
             _httpClient = httpClient;
@@ -66,27 +67,27 @@ namespace nU3.Connectivity.Implementations
         }
 
         /// <summary>
-        /// DB Á¢±Ù ÀÛ¾÷À» ¿ø°İÀ¸·Î ½ÇÇàÇÏ´Â ÇÙ½É ¸Ş¼­µåÀÔ´Ï´Ù.
-        /// - method: DBAccessClientBaseÀÇ ¸Ş¼­µå ÀÌ¸§ (¿¹: ExecuteDataTable, ExecuteProcedure µî)
-        /// - args: ¸Ş¼­µå¿¡ Àü´ŞµÈ ÀÎ¼öµé(¿¹: SQL ÅØ½ºÆ®, ÆÄ¶ó¹ÌÅÍ µñ¼Å³Ê¸® µî)
+        /// DB ì ‘ê·¼ ì‘ì—…ì„ ì›ê²©ìœ¼ë¡œ ì‹¤í–‰í•˜ëŠ” í•µì‹¬ ë©”ì„œë“œì…ë‹ˆë‹¤.
+        /// - method: DBAccessClientBaseì˜ ë©”ì„œë“œ ì´ë¦„ (ì˜ˆ: ExecuteDataTable, ExecuteProcedure ë“±)
+        /// - args: ë©”ì„œë“œì— ì „ë‹¬ëœ ì¸ìˆ˜ë“¤(ì˜ˆ: SQL í…ìŠ¤íŠ¸, íŒŒë¼ë¯¸í„° ë”•ì…”ë„ˆë¦¬ ë“±)
         /// 
-        /// µ¿ÀÛ:
-        /// 1. ¸Ş¼­µå ÀÌ¸§À» ±âÁØÀ¸·Î REST ¿£µåÆ÷ÀÎÆ®¸¦ °áÁ¤(MapMethodToEndpoint)
-        /// 2. ÇÊ¿äÇÏ¸é ¿äÃ» ¹Ùµğ¸¦ »ı¼º(CreateRequestData)ÇÏ¿© POST·Î Àü¼Û
-        /// 3. ÀÀ´äÀ» ¼ö½ÅÇÑ ÈÄ Á¦³×¸¯ Å¸ÀÔ T¿¡ ¸Â°Ô Ã³¸®(¿¹: DataTableÀ¸·Î º¯È¯ µî)
+        /// ë™ì‘:
+        /// 1. ë©”ì„œë“œ ì´ë¦„ì„ ê¸°ì¤€ìœ¼ë¡œ REST ì—”ë“œí¬ì¸íŠ¸ë¥¼ ê²°ì •(MapMethodToEndpoint)
+        /// 2. í•„ìš”í•˜ë©´ ìš”ì²­ ë°”ë””ë¥¼ ìƒì„±(CreateRequestData)í•˜ì—¬ POSTë¡œ ì „ì†¡
+        /// 3. ì‘ë‹µì„ ìˆ˜ì‹ í•œ í›„ ì œë„¤ë¦­ íƒ€ì… Tì— ë§ê²Œ ì²˜ë¦¬(ì˜ˆ: DataTableìœ¼ë¡œ ë³€í™˜ ë“±)
         /// </summary>
         protected override async Task<T> RemoteExecuteAsync<T>(string method, object[]? args)
         {
             try
             {
-                // ¸Ş¼­µå ÀÌ¸§À» API ¿£µåÆ÷ÀÎÆ®·Î ¸ÅÇÎ
+                // ë©”ì„œë“œ ì´ë¦„ì„ API ì—”ë“œí¬ì¸íŠ¸ë¡œ ë§¤í•‘
                 var endpoint = MapMethodToEndpoint(method);
                 
                 HttpResponseMessage response;
 
                 if (RequiresBody(method))
                 {
-                    // º»¹®À» Æ÷ÇÔÇÑ POST ¿äÃ» (Äõ¸®/ÆÄ¶ó¹ÌÅÍ°¡ ÀÖ´Â °æ¿ì)
+                    // ë³¸ë¬¸ì„ í¬í•¨í•œ POST ìš”ì²­ (ì¿¼ë¦¬/íŒŒë¼ë¯¸í„°ê°€ ìˆëŠ” ê²½ìš°)
                     var requestData = CreateRequestData(method, args);
                     response = await _httpClient.PostAsJsonAsync(endpoint, requestData).ConfigureAwait(false);
                     if (!response.IsSuccessStatusCode)
@@ -97,53 +98,53 @@ namespace nU3.Connectivity.Implementations
                 }
                 else
                 {
-                    // ¿¹: Connect, Æ®·£Àè¼Ç ½ÃÀÛ/Á¾·á µî ´Ü¼ø POST È£Ãâ
+                    // ì˜ˆ: Connect, íŠ¸ëœì­ì…˜ ì‹œì‘/ì¢…ë£Œ ë“± ë‹¨ìˆœ POST í˜¸ì¶œ
                     response = await _httpClient.PostAsync(endpoint, null).ConfigureAwait(false);
                 }
 
-                // HTTP »óÅÂ ÄÚµå°¡ ¼º°øÀÎ °æ¿ì ÀÌ¾î¼­ °á°ú Ã³¸®
+                // HTTP ìƒíƒœ ì½”ë“œê°€ ì„±ê³µì¸ ê²½ìš° ì´ì–´ì„œ ê²°ê³¼ ì²˜ë¦¬
                 response.EnsureSuccessStatusCode();
 
-                // ¹İÈ¯ Å¸ÀÔ(T)¿¡ µû¸¥ °á°ú Ã³¸®
+                // ë°˜í™˜ íƒ€ì…(T)ì— ë”°ë¥¸ ê²°ê³¼ ì²˜ë¦¬
                 if (method == nameof(ExecuteProcedure) || method == nameof(ExecuteProcedureAsync))
                 {
-                    // ÇÁ·Î½ÃÀú È£ÃâÀº ¼º°ø ¿©ºÎ¿Í OutputParams µñ¼Å³Ê¸®¸¦ ¹İÈ¯ÇÏ´Â ±¸Á¶¸¦ °¡Á¤
+                    // í”„ë¡œì‹œì € í˜¸ì¶œì€ ì„±ê³µ ì—¬ë¶€ì™€ OutputParams ë”•ì…”ë„ˆë¦¬ë¥¼ ë°˜í™˜í•˜ëŠ” êµ¬ì¡°ë¥¼ ê°€ì •
                     var resultObj = await response.Content.ReadFromJsonAsync<ProcedureResultDto>(_jsonOptions).ConfigureAwait(false);
                     
                     if (resultObj != null && args != null && args.Length > 2)
                     {
-                        // Å¬¶óÀÌ¾ğÆ®¿¡¼­ Àü´ŞÇÑ outputParams µñ¼Å³Ê¸®¸¦ ¼­¹ö °á°ú·Î °»½Å
+                        // í´ë¼ì´ì–¸íŠ¸ì—ì„œ ì „ë‹¬í•œ outputParams ë”•ì…”ë„ˆë¦¬ë¥¼ ì„œë²„ ê²°ê³¼ë¡œ ê°±ì‹ 
                         if (args[2] is Dictionary<string, object> clientOutputParams && resultObj.OutputParams != null)
                         {
                             foreach (var kvp in resultObj.OutputParams)
                             {
                                 if (clientOutputParams.ContainsKey(kvp.Key))
                                 {
-                                    // JsonÀ¸·Î Àü´ŞµÈ °ªÀº object·Î µé¾î¿À¹Ç·Î Å¸ÀÔ º¯È¯ÀÌ ÇÊ¿äÇÑ °æ¿ì È£ÃâÀÚ°¡ Ã³¸®ÇØ¾ß ÇÔ
+                                    // Jsonìœ¼ë¡œ ì „ë‹¬ëœ ê°’ì€ objectë¡œ ë“¤ì–´ì˜¤ë¯€ë¡œ íƒ€ì… ë³€í™˜ì´ í•„ìš”í•œ ê²½ìš° í˜¸ì¶œìê°€ ì²˜ë¦¬í•´ì•¼ í•¨
                                     clientOutputParams[kvp.Key] = kvp.Value;
                                 }
                             }
                         }
-                        // ÇÁ·Î½ÃÀú ¼º°ø ¿©ºÎ ¹İÈ¯
+                        // í”„ë¡œì‹œì € ì„±ê³µ ì—¬ë¶€ ë°˜í™˜
                         return (T)(object)resultObj.Success;
                     }
                     return (T)(object)(resultObj?.Success ?? false);
                 }
                 else if (typeof(T) == typeof(bool))
                 {
-                    // ´Ü¼ø ¼º°ø/½ÇÆĞ¸¦ bool·Î ¹İÈ¯ÇÏ´Â API
+                    // ë‹¨ìˆœ ì„±ê³µ/ì‹¤íŒ¨ë¥¼ boolë¡œ ë°˜í™˜í•˜ëŠ” API
                     var result = await response.Content.ReadFromJsonAsync<bool>(_jsonOptions).ConfigureAwait(false);
                     return (T)(object)result!;
                 }
                 else if (typeof(T) == typeof(DataTable))
                 {
-                    // ¼­¹ö´Â Å×ÀÌºí µ¥ÀÌÅÍ¸¦ List<Dictionary<string, object>>·Î ¹İÈ¯ÇÑ´Ù°í °¡Á¤
+                    // ì„œë²„ëŠ” í…Œì´ë¸” ë°ì´í„°ë¥¼ List<Dictionary<string, object>>ë¡œ ë°˜í™˜í•œë‹¤ê³  ê°€ì •
                     var data = await response.Content.ReadFromJsonAsync<List<Dictionary<string, object>>>(_jsonOptions).ConfigureAwait(false);
                     return (T)(object)ConvertToDataTable(data);
                 }
                 else if (typeof(T) == typeof(DataSet))
                 {
-                    // ´ÜÀÏ Å×ÀÌºíÀ» DataSetÀ¸·Î °¨½Î¼­ ¹İÈ¯
+                    // ë‹¨ì¼ í…Œì´ë¸”ì„ DataSetìœ¼ë¡œ ê°ì‹¸ì„œ ë°˜í™˜
                     var data = await response.Content.ReadFromJsonAsync<List<Dictionary<string, object>>>(_jsonOptions).ConfigureAwait(false);
                     var dt = ConvertToDataTable(data);
                     var ds = new DataSet();
@@ -157,40 +158,40 @@ namespace nU3.Connectivity.Implementations
                 }
                 else
                 {
-                    // Á¦³×¸¯ Å¸ÀÔÀ¸·Î JSON ¿ªÁ÷·ÄÈ­
+                    // ì œë„¤ë¦­ íƒ€ì…ìœ¼ë¡œ JSON ì—­ì§ë ¬í™”
                     var result = await response.Content.ReadFromJsonAsync<T>(_jsonOptions).ConfigureAwait(false);
                     return result!;
                 }
             }
             catch (HttpRequestException ex)
             {
-                // ³×Æ®¿öÅ© °ü·Ã ¿¹¿Ü¸¦ È£ÃâÀÚ¿¡°Ô ¸íÈ®ÇÏ°Ô Àü´Ş
-                throw new InvalidOperationException($"¿ø°İ È£Ãâ Áß HTTP ¿äÃ» ½ÇÆĞ (¸Ş¼­µå: '{method}'): {ex.Message}", ex);
+                // ë„¤íŠ¸ì›Œí¬ ê´€ë ¨ ì˜ˆì™¸ë¥¼ í˜¸ì¶œìì—ê²Œ ëª…í™•í•˜ê²Œ ì „ë‹¬
+                throw new InvalidOperationException($"ì›ê²© í˜¸ì¶œ ì¤‘ HTTP ìš”ì²­ ì‹¤íŒ¨ (ë©”ì„œë“œ: '{method}'): {ex.Message}", ex);
             }
             catch (Exception ex)
             {
-                // ±âÅ¸ ¿¹¿Ü´Â È£ÃâÀÚ¿¡°Ô Àü´Ş
-                throw new InvalidOperationException($"¿ø°İ ½ÇÇà ½ÇÆĞ (¸Ş¼­µå: '{method}'): {ex.Message}", ex);
+                // ê¸°íƒ€ ì˜ˆì™¸ëŠ” í˜¸ì¶œìì—ê²Œ ì „ë‹¬
+                throw new InvalidOperationException($"ì›ê²© ì‹¤í–‰ ì‹¤íŒ¨ (ë©”ì„œë“œ: '{method}'): {ex.Message}", ex);
             }
         }
 
-        // ÇÁ·Î½ÃÀú °á°ú DTO (¼­¹ö°¡ ÀÌ ±¸Á¶·Î ¹İÈ¯ÇÑ´Ù°í °¡Á¤)
+        // í”„ë¡œì‹œì € ê²°ê³¼ DTO (ì„œë²„ê°€ ì´ êµ¬ì¡°ë¡œ ë°˜í™˜í•œë‹¤ê³  ê°€ì •)
         private class ProcedureResultDto
         {
             /// <summary>
-            /// ÇÁ·Î½ÃÀúÀÇ ¼º°ø ¿©ºÎ
+            /// í”„ë¡œì‹œì €ì˜ ì„±ê³µ ì—¬ë¶€
             /// </summary>
             public bool Success { get; set; }
 
             /// <summary>
-            /// Ãâ·Â ÆÄ¶ó¹ÌÅÍ µñ¼Å³Ê¸® (Å°: ÆÄ¶ó¹ÌÅÍ¸í, °ª: ¹İÈ¯°ª)
+            /// ì¶œë ¥ íŒŒë¼ë¯¸í„° ë”•ì…”ë„ˆë¦¬ (í‚¤: íŒŒë¼ë¯¸í„°ëª…, ê°’: ë°˜í™˜ê°’)
             /// </summary>
             public Dictionary<string, object>? OutputParams { get; set; }
         }
 
         /// <summary>
-        /// ¸Ş¼­µå ÀÌ¸§À» REST ¿£µåÆ÷ÀÎÆ® URL·Î ¸ÅÇÎÇÕ´Ï´Ù.
-        /// ¿ÜºÎ APIÀÇ °æ·Î°¡ º¯°æµÇ¸é ÀÌ ¸ÅÇÎÀ» ¼öÁ¤ÇØ¾ß ÇÕ´Ï´Ù.
+        /// ë©”ì„œë“œ ì´ë¦„ì„ REST ì—”ë“œí¬ì¸íŠ¸ URLë¡œ ë§¤í•‘í•©ë‹ˆë‹¤.
+        /// ì™¸ë¶€ APIì˜ ê²½ë¡œê°€ ë³€ê²½ë˜ë©´ ì´ ë§¤í•‘ì„ ìˆ˜ì •í•´ì•¼ í•©ë‹ˆë‹¤.
         /// </summary>
         private string MapMethodToEndpoint(string method)
         {
@@ -205,13 +206,13 @@ namespace nU3.Connectivity.Implementations
                 nameof(ExecuteNonQuery) or nameof(ExecuteNonQueryAsync) => "/api/v1/db/query/nonquery",
                 nameof(ExecuteScalarValue) or nameof(ExecuteScalarValueAsync) => "/api/v1/db/query/scalar",
                 nameof(ExecuteProcedure) or nameof(ExecuteProcedureAsync) => "/api/v1/db/procedure",
-                _ => throw new NotSupportedException($"¸Ş¼­µå '{method}'´Â Áö¿øµÇÁö ¾Ê½À´Ï´Ù")
+                _ => throw new NotSupportedException($"ë©”ì„œë“œ '{method}'ëŠ” ì§€ì›ë˜ì§€ ì•ŠìŠµë‹ˆë‹¤")
             };
         }
 
         /// <summary>
-        /// ÇØ´ç ¸Ş¼­µå°¡ ¿äÃ» º»¹®À» ÇÊ¿ä·Î ÇÏ´ÂÁö ¿©ºÎ¸¦ ÆÇ´ÜÇÕ´Ï´Ù.
-        /// ÀÏºÎ °£´ÜÇÑ ¿£µåÆ÷ÀÎÆ®´Â º»¹® ¾øÀÌ È£ÃâµÉ ¼ö ÀÖ½À´Ï´Ù.
+        /// í•´ë‹¹ ë©”ì„œë“œê°€ ìš”ì²­ ë³¸ë¬¸ì„ í•„ìš”ë¡œ í•˜ëŠ”ì§€ ì—¬ë¶€ë¥¼ íŒë‹¨í•©ë‹ˆë‹¤.
+        /// ì¼ë¶€ ê°„ë‹¨í•œ ì—”ë“œí¬ì¸íŠ¸ëŠ” ë³¸ë¬¸ ì—†ì´ í˜¸ì¶œë  ìˆ˜ ìˆìŠµë‹ˆë‹¤.
         /// </summary>
         private bool RequiresBody(string method)
         {
@@ -226,8 +227,8 @@ namespace nU3.Connectivity.Implementations
         }
 
         /// <summary>
-        /// ¸Ş¼­µå¿Í ÀÎÀÚ¿¡ µû¶ó ¿äÃ»¿¡ »ç¿ëÇÒ µ¥ÀÌÅÍ¸¦ »ı¼ºÇÕ´Ï´Ù.
-        /// ¹İÈ¯µÇ´Â °´Ã¼´Â JSONÀ¸·Î Á÷·ÄÈ­µÇ¾î POST º»¹®À¸·Î Àü¼ÛµË´Ï´Ù.
+        /// ë©”ì„œë“œì™€ ì¸ìì— ë”°ë¼ ìš”ì²­ì— ì‚¬ìš©í•  ë°ì´í„°ë¥¼ ìƒì„±í•©ë‹ˆë‹¤.
+        /// ë°˜í™˜ë˜ëŠ” ê°ì²´ëŠ” JSONìœ¼ë¡œ ì§ë ¬í™”ë˜ì–´ POST ë³¸ë¬¸ìœ¼ë¡œ ì „ì†¡ë©ë‹ˆë‹¤.
         /// </summary>
         private object CreateRequestData(string method, object[]? args)
         {
@@ -236,7 +237,7 @@ namespace nU3.Connectivity.Implementations
 
             return method switch
             {
-                // SQL Äõ¸®/ÆÄ¶ó¹ÌÅÍ ±â¹İ È£Ãâ
+                // SQL ì¿¼ë¦¬/íŒŒë¼ë¯¸í„° ê¸°ë°˜ í˜¸ì¶œ
                 nameof(ExecuteDataTable) or nameof(ExecuteDataTableAsync) or
                 nameof(ExecuteDataSet) or nameof(ExecuteDataSetAsync) or
                 nameof(ExecuteNonQuery) or nameof(ExecuteNonQueryAsync) or
@@ -248,7 +249,7 @@ namespace nU3.Connectivity.Implementations
                         Parameters = args.Length > 1 ? args[1] as Dictionary<string, object> : null
                     },
 
-                // ÇÁ·Î½ÃÀú È£Ãâ: ÀÌ¸§ + ÀÔ·Â/Ãâ·Â ÆÄ¶ó¹ÌÅÍ
+                // í”„ë¡œì‹œì € í˜¸ì¶œ: ì´ë¦„ + ì…ë ¥/ì¶œë ¥ íŒŒë¼ë¯¸í„°
                 nameof(ExecuteProcedure) or nameof(ExecuteProcedureAsync) =>
                     new
                     {
@@ -262,9 +263,9 @@ namespace nU3.Connectivity.Implementations
         }
 
         /// <summary>
-        /// ¼­¹ö¿¡¼­ ¹İÈ¯ÇÑ List<Dictionary<string, object>> Çü½ÄÀ» DataTable·Î º¯È¯ÇÕ´Ï´Ù.
-        /// - Ã¹ ÇàÀÇ Å°µéÀ» ÄÃ·³À¸·Î »ç¿ë
-        /// - °¢ °ªÀº System.Text.Json.JsonElementÀÎ °æ¿ì ÀûÀıÈ÷ º¯È¯
+        /// ì„œë²„ì—ì„œ ë°˜í™˜í•œ List<Dictionary<string, object>> í˜•ì‹ì„ DataTableë¡œ ë³€í™˜í•©ë‹ˆë‹¤.
+        /// - ì²« í–‰ì˜ í‚¤ë“¤ì„ ì»¬ëŸ¼ìœ¼ë¡œ ì‚¬ìš©
+        /// - ê° ê°’ì€ System.Text.Json.JsonElementì¸ ê²½ìš° ì ì ˆíˆ ë³€í™˜
         /// </summary>
         private DataTable ConvertToDataTable(List<Dictionary<string, object>>? data)
         {
@@ -273,13 +274,13 @@ namespace nU3.Connectivity.Implementations
             if (data == null || data.Count == 0)
                 return dt;
 
-            // Ã¹ ÇàÀÇ Å°¸¦ ±â¹İÀ¸·Î ÄÃ·³ »ı¼º
+            // ì²« í–‰ì˜ í‚¤ë¥¼ ê¸°ë°˜ìœ¼ë¡œ ì»¬ëŸ¼ ìƒì„±
             foreach (var key in data[0].Keys)
             {
                 dt.Columns.Add(key);
             }
 
-            // °¢ ÇàÀ» DataRow·Î º¯È¯
+            // ê° í–‰ì„ DataRowë¡œ ë³€í™˜
             foreach (var row in data)
             {
                 var dataRow = dt.NewRow();
@@ -287,14 +288,14 @@ namespace nU3.Connectivity.Implementations
                 {
                     if (kvp.Value is JsonElement element)
                     {
-                        // JsonElementÀÇ ValueKind¿¡ µû¶ó ÀûÀıÇÑ .NET Å¸ÀÔÀ¸·Î º¯È¯
+                        // JsonElementì˜ ValueKindì— ë”°ë¼ ì ì ˆí•œ .NET íƒ€ì…ìœ¼ë¡œ ë³€í™˜
                         switch (element.ValueKind)
                         {
                             case JsonValueKind.String:
                                 dataRow[kvp.Key] = element.GetString();
                                 break;
                             case JsonValueKind.Number:
-                                // Á¤¼ö/½Ç¼ö Å¸ÀÔÀ» ¿ì¼±ÀûÀ¸·Î ½Ãµµ
+                                // ì •ìˆ˜/ì‹¤ìˆ˜ íƒ€ì…ì„ ìš°ì„ ì ìœ¼ë¡œ ì‹œë„
                                 if (element.TryGetInt64(out long l)) dataRow[kvp.Key] = l;
                                 else if (element.TryGetDouble(out double d)) dataRow[kvp.Key] = d;
                                 else dataRow[kvp.Key] = element.ToString();
@@ -309,14 +310,14 @@ namespace nU3.Connectivity.Implementations
                                 dataRow[kvp.Key] = DBNull.Value;
                                 break;
                             default:
-                                // °´Ã¼/¹è¿­ µîÀº ToStringÀ¸·Î ÀúÀå(ÇÊ¿ä½Ã È®Àå °í·Á)
+                                // ê°ì²´/ë°°ì—´ ë“±ì€ ToStringìœ¼ë¡œ ì €ì¥(í•„ìš”ì‹œ í™•ì¥ ê³ ë ¤)
                                 dataRow[kvp.Key] = element.ToString();
                                 break;
                         }
                     }
                     else
                     {
-                        // ÀÏ¹İ CLR Å¸ÀÔÀÎ °æ¿ì ±×´ë·Î ÇÒ´ç, nullÀº DBNull·Î º¯È¯
+                        // ì¼ë°˜ CLR íƒ€ì…ì¸ ê²½ìš° ê·¸ëŒ€ë¡œ í• ë‹¹, nullì€ DBNullë¡œ ë³€í™˜
                         dataRow[kvp.Key] = kvp.Value ?? DBNull.Value;
                     }
                 }

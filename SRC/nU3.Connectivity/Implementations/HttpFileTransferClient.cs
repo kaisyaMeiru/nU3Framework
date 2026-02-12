@@ -1,4 +1,5 @@
 using System;
+using nU3.Core.Interfaces;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;

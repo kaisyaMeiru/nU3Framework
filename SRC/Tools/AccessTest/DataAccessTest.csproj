@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\nU3.Core\nU3.Core.csproj" />
+    <ProjectReference Include="..\..\nU3.Connectivity\nU3.Connectivity.csproj" />
+  </ItemGroup>
+
+</Project>

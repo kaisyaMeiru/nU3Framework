@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System.Security.Cryptography.X509Certificates;
 using System.Linq;
+using nU3.Core.Interfaces;
 
 // ============================================================================
 // nU3 Server Host - 향상된 ASP.NET Core Web API 진입점

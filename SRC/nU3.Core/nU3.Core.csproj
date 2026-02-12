@@ -17,7 +17,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\nU3.Models\nU3.Models.csproj" />
-    <ProjectReference Include="..\nU3.Connectivity\nU3.Connectivity.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
 using nU3.Connectivity;
+using nU3.Core.Interfaces;
 using nU3.Core.Repositories;
 using nU3.Models;
 

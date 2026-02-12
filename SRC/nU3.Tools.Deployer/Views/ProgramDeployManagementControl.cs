@@ -17,6 +17,7 @@ using nU3.Core.UI.Controls;
 using DevExpress.XtraGrid.Views.Grid;
 using DevExpress.XtraGrid.Columns;
 using System.Drawing;
+using nU3.Core.Interfaces;
 
 namespace nU3.Tools.Deployer.Views
 {

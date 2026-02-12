@@ -5,6 +5,7 @@ using System.Data.SQLite;
 using System.IO;
 using System.Threading.Tasks;
 using nU3.Connectivity;
+using nU3.Core.Interfaces;
 
 namespace nU3.Data
 {
@@ -189,7 +190,7 @@ namespace nU3.Data
     }
 
     // Wrapper expected by other projects
-    public class LocalDatabaseManager : nU3.Connectivity.IDBAccessService
+    public class LocalDatabaseManager : IDBAccessService
     {
         private readonly LocalDbService _service;
         private readonly string _dbFilePath;

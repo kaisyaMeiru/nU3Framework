@@ -1,4 +1,5 @@
 using System;
+using nU3.Core.Interfaces;
 using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
@@ -6,44 +7,44 @@ using System.Threading.Tasks;
 namespace nU3.Connectivity.Implementations
 {
     /// <summary>
-    /// µ¥ÀÌÅÍº£ÀÌ½º Á¢±Ù ¼­ºñ½º¸¦ À§ÇÑ Å¬¶óÀÌ¾ðÆ® ±âº» ±¸Çö(Ãß»ó).
+    /// ë°ì´í„°ë² ì´ìŠ¤ ì ‘ê·¼ ì„œë¹„ìŠ¤ë¥¼ ìœ„í•œ í´ë¼ì´ì–¸íŠ¸ ê¸°ë³¸ êµ¬í˜„(ì¶”ìƒ).
     /// 
-    /// Ã¥ÀÓ:
-    /// - IDBAccessService ÀÎÅÍÆäÀÌ½º¿¡ Á¤ÀÇµÈ µ¥ÀÌÅÍº£ÀÌ½º ÀÛ¾÷À» ¿ø°Ý È£Ãâ·Î À§ÀÓ
-    /// - µ¿±â API´Â ³»ºÎÀûÀ¸·Î ºñµ¿±â È£ÃâÀ» ºí·ÏÅ· ¹æ½ÄÀ¸·Î È£Ãâ(ÁÖÀÇ: UI ½º·¹µå Â÷´Ü °¡´É)
-    /// - ½ÇÁ¦ ¿ø°Ý È£Ãâ ·ÎÁ÷Àº ÇÏÀ§ Å¬·¡½º°¡ RemoteExecuteAsync<T>¸¦ ±¸ÇöÇÏ¿© Ã³¸®
+    /// ì±…ìž„:
+    /// - IDBAccessService ì¸í„°íŽ˜ì´ìŠ¤ì— ì •ì˜ëœ ë°ì´í„°ë² ì´ìŠ¤ ìž‘ì—…ì„ ì›ê²© í˜¸ì¶œë¡œ ìœ„ìž„
+    /// - ë™ê¸° APIëŠ” ë‚´ë¶€ì ìœ¼ë¡œ ë¹„ë™ê¸° í˜¸ì¶œì„ ë¸”ë¡í‚¹ ë°©ì‹ìœ¼ë¡œ í˜¸ì¶œ(ì£¼ì˜: UI ìŠ¤ë ˆë“œ ì°¨ë‹¨ ê°€ëŠ¥)
+    /// - ì‹¤ì œ ì›ê²© í˜¸ì¶œ ë¡œì§ì€ í•˜ìœ„ í´ëž˜ìŠ¤ê°€ RemoteExecuteAsync<T>ë¥¼ êµ¬í˜„í•˜ì—¬ ì²˜ë¦¬
     /// 
-    /// µ¿ÀÛ ¸ðµ¨:
-    /// - °¢ ¸Þ¼­µå´Â ¸Þ¼­µå ÀÌ¸§°ú ÀÎÀÚ¸¦ RemoteExecuteAsync·Î Àü´Þ
-    /// - RemoteExecuteAsync´Â HTTP/gRPC µî ¿øÇÏ´Â Àü¼Û ¹æ½ÄÀ» »ç¿ëÇÏ¿© ¼­¹ö¿Í Åë½ÅÇÏ°í °á°ú¸¦ ¿ªÁ÷·ÄÈ­ÇÏ¿© ¹ÝÈ¯
+    /// ë™ìž‘ ëª¨ë¸:
+    /// - ê° ë©”ì„œë“œëŠ” ë©”ì„œë“œ ì´ë¦„ê³¼ ì¸ìžë¥¼ RemoteExecuteAsyncë¡œ ì „ë‹¬
+    /// - RemoteExecuteAsyncëŠ” HTTP/gRPC ë“± ì›í•˜ëŠ” ì „ì†¡ ë°©ì‹ì„ ì‚¬ìš©í•˜ì—¬ ì„œë²„ì™€ í†µì‹ í•˜ê³  ê²°ê³¼ë¥¼ ì—­ì§ë ¬í™”í•˜ì—¬ ë°˜í™˜
     /// 
-    /// ¿¹¿Ü ¹× ¿À·ù Ã³¸®:
-    /// - ³×Æ®¿öÅ©/Á÷·ÄÈ­ ¿À·ù´Â RemoteExecuteAsyncÀÇ ±¸Çö¿¡ ÀÇÇØ ¹ß»ýÇÏ¸ç ÀÌ Å¬·¡½º¿¡¼­´Â ±×´ë·Î È£ÃâÀÚ¿¡°Ô Àü´Þ
-    /// - µ¿±â ¸Þ¼­µå È£Ãâ ½Ã ºñµ¿±â ÀÛ¾÷ ´ë±â¿¡¼­ ¹ß»ýÇÑ ¿¹¿Ü´Â È£ÃâÀÚ¿¡°Ô ´øÁ®Áý´Ï´Ù.
+    /// ì˜ˆì™¸ ë° ì˜¤ë¥˜ ì²˜ë¦¬:
+    /// - ë„¤íŠ¸ì›Œí¬/ì§ë ¬í™” ì˜¤ë¥˜ëŠ” RemoteExecuteAsyncì˜ êµ¬í˜„ì— ì˜í•´ ë°œìƒí•˜ë©° ì´ í´ëž˜ìŠ¤ì—ì„œëŠ” ê·¸ëŒ€ë¡œ í˜¸ì¶œìžì—ê²Œ ì „ë‹¬
+    /// - ë™ê¸° ë©”ì„œë“œ í˜¸ì¶œ ì‹œ ë¹„ë™ê¸° ìž‘ì—… ëŒ€ê¸°ì—ì„œ ë°œìƒí•œ ì˜ˆì™¸ëŠ” í˜¸ì¶œìžì—ê²Œ ë˜ì ¸ì§‘ë‹ˆë‹¤.
     /// </summary>
     public abstract class DBAccessClientBase : IDBAccessService
     {
         /// <summary>
-        /// ½ÇÁ¦ ¿ø°Ý È£ÃâÀ» ¼öÇàÇÒ Ãß»ó ¸Þ¼­µåÀÔ´Ï´Ù.
-        /// ÇÏÀ§ Å¬·¡½º´Â ÀÌ ¸Þ¼­µå¸¦ ±¸ÇöÇÏ¿© ÁöÁ¤µÈ ¸Þ¼­µå ÀÌ¸§°ú ÀÎÀÚ¿¡ ÇØ´çÇÏ´Â ¿ø°Ý ¿£µåÆ÷ÀÎÆ®¸¦ È£ÃâÇÏ°í,
-        /// °á°ú¸¦ Á¦³×¸¯ Å¸ÀÔ T·Î ¿ªÁ÷·ÄÈ­ÇÏ¿© ¹ÝÈ¯ÇØ¾ß ÇÕ´Ï´Ù.
+        /// ì‹¤ì œ ì›ê²© í˜¸ì¶œì„ ìˆ˜í–‰í•  ì¶”ìƒ ë©”ì„œë“œìž…ë‹ˆë‹¤.
+        /// í•˜ìœ„ í´ëž˜ìŠ¤ëŠ” ì´ ë©”ì„œë“œë¥¼ êµ¬í˜„í•˜ì—¬ ì§€ì •ëœ ë©”ì„œë“œ ì´ë¦„ê³¼ ì¸ìžì— í•´ë‹¹í•˜ëŠ” ì›ê²© ì—”ë“œí¬ì¸íŠ¸ë¥¼ í˜¸ì¶œí•˜ê³ ,
+        /// ê²°ê³¼ë¥¼ ì œë„¤ë¦­ íƒ€ìž… Të¡œ ì—­ì§ë ¬í™”í•˜ì—¬ ë°˜í™˜í•´ì•¼ í•©ë‹ˆë‹¤.
         /// 
-        /// ÁÖÀÇ»çÇ×:
-        /// - method: È£ÃâÇÏ·Á´Â IDBAccessService ¸Þ¼­µå ÀÌ¸§(¿¹: ExecuteDataTable, ExecuteProcedure µî)
-        /// - args: ¸Þ¼­µå¿¡ Àü´ÞµÈ ÀÎÀÚ ¹è¿­(¾øÀ¸¸é null)
-        /// - ¹ÝÈ¯ Å¸ÀÔ T´Â È£ÃâÀÚ°¡ ±â´ëÇÏ´Â Å¸ÀÔÀÌ¾î¾ß ÇÏ¸ç, ÇÏÀ§ ±¸ÇöÀº ÀÌ¸¦ ÃæÁ·ÇÏµµ·Ï Á÷·ÄÈ­/¿ªÁ÷·ÄÈ­¸¦ ¼öÇàÇØ¾ß ÇÕ´Ï´Ù.
+        /// ì£¼ì˜ì‚¬í•­:
+        /// - method: í˜¸ì¶œí•˜ë ¤ëŠ” IDBAccessService ë©”ì„œë“œ ì´ë¦„(ì˜ˆ: ExecuteDataTable, ExecuteProcedure ë“±)
+        /// - args: ë©”ì„œë“œì— ì „ë‹¬ëœ ì¸ìž ë°°ì—´(ì—†ìœ¼ë©´ null)
+        /// - ë°˜í™˜ íƒ€ìž… TëŠ” í˜¸ì¶œìžê°€ ê¸°ëŒ€í•˜ëŠ” íƒ€ìž…ì´ì–´ì•¼ í•˜ë©°, í•˜ìœ„ êµ¬í˜„ì€ ì´ë¥¼ ì¶©ì¡±í•˜ë„ë¡ ì§ë ¬í™”/ì—­ì§ë ¬í™”ë¥¼ ìˆ˜í–‰í•´ì•¼ í•©ë‹ˆë‹¤.
         /// </summary>
         protected abstract Task<T> RemoteExecuteAsync<T>(string method, object[] args);
 
         /// <summary>
-        /// µ¿±â ¿¬°á ½Ãµµ. ³»ºÎÀûÀ¸·Î ºñµ¿±â ConnectAsync¸¦ ºí·ÏÅ· ¹æ½ÄÀ¸·Î È£ÃâÇÕ´Ï´Ù.
-        /// UI ½º·¹µå¿¡¼­ Á÷Á¢ È£ÃâÇÏ¸é ¾ÖÇÃ¸®ÄÉÀÌ¼ÇÀÌ ÀÏ½Ã ÁßÁöµÉ ¼ö ÀÖÀ¸´Ï ÁÖÀÇÇÏ¼¼¿ä.
+        /// ë™ê¸° ì—°ê²° ì‹œë„. ë‚´ë¶€ì ìœ¼ë¡œ ë¹„ë™ê¸° ConnectAsyncë¥¼ ë¸”ë¡í‚¹ ë°©ì‹ìœ¼ë¡œ í˜¸ì¶œí•©ë‹ˆë‹¤.
+        /// UI ìŠ¤ë ˆë“œì—ì„œ ì§ì ‘ í˜¸ì¶œí•˜ë©´ ì• í”Œë¦¬ì¼€ì´ì…˜ì´ ì¼ì‹œ ì¤‘ì§€ë  ìˆ˜ ìžˆìœ¼ë‹ˆ ì£¼ì˜í•˜ì„¸ìš”.
         /// </summary>
         public bool Connect() => ConnectAsync().GetAwaiter().GetResult();
 
         /// <summary>
-        /// ¿ø°Ý ¿¬°áÀ» ºñµ¿±âÀûÀ¸·Î ½ÃµµÇÕ´Ï´Ù.
-        /// ³»ºÎÀûÀ¸·Î RemoteExecuteAsync¿¡ nameof(Connect)¸¦ Àü´ÞÇÏ¿© ¿ø°Ý ¿¬°á ¿£µåÆ÷ÀÎÆ®¸¦ È£ÃâÇÕ´Ï´Ù.
+        /// ì›ê²© ì—°ê²°ì„ ë¹„ë™ê¸°ì ìœ¼ë¡œ ì‹œë„í•©ë‹ˆë‹¤.
+        /// ë‚´ë¶€ì ìœ¼ë¡œ RemoteExecuteAsyncì— nameof(Connect)ë¥¼ ì „ë‹¬í•˜ì—¬ ì›ê²© ì—°ê²° ì—”ë“œí¬ì¸íŠ¸ë¥¼ í˜¸ì¶œí•©ë‹ˆë‹¤.
         /// </summary>
         public async Task<bool> ConnectAsync()
         {
@@ -51,29 +52,29 @@ namespace nU3.Connectivity.Implementations
         }
 
         /// <summary>
-        /// µ¿±â ¹æ½ÄÀ¸·Î Æ®·£Àè¼ÇÀ» ½ÃÀÛÇÕ´Ï´Ù. ³»ºÎÀûÀ¸·Î ¿ø°Ý È£ÃâÀ» ¼öÇàÇÕ´Ï´Ù.
+        /// ë™ê¸° ë°©ì‹ìœ¼ë¡œ íŠ¸ëžœìž­ì…˜ì„ ì‹œìž‘í•©ë‹ˆë‹¤. ë‚´ë¶€ì ìœ¼ë¡œ ì›ê²© í˜¸ì¶œì„ ìˆ˜í–‰í•©ë‹ˆë‹¤.
         /// </summary>
         public void BeginTransaction() => RemoteExecuteAsync<object>(nameof(BeginTransaction), null).GetAwaiter().GetResult();
 
         /// <summary>
-        /// Æ®·£Àè¼Ç Ä¿¹ÔÀ» µ¿±âÀûÀ¸·Î ¼öÇàÇÕ´Ï´Ù.
+        /// íŠ¸ëžœìž­ì…˜ ì»¤ë°‹ì„ ë™ê¸°ì ìœ¼ë¡œ ìˆ˜í–‰í•©ë‹ˆë‹¤.
         /// </summary>
         public void CommitTransaction() => RemoteExecuteAsync<object>(nameof(CommitTransaction), null).GetAwaiter().GetResult();
 
         /// <summary>
-        /// Æ®·£Àè¼Ç ·Ñ¹éÀ» µ¿±âÀûÀ¸·Î ¼öÇàÇÕ´Ï´Ù.
+        /// íŠ¸ëžœìž­ì…˜ ë¡¤ë°±ì„ ë™ê¸°ì ìœ¼ë¡œ ìˆ˜í–‰í•©ë‹ˆë‹¤.
         /// </summary>
         public void RollbackTransaction() => RemoteExecuteAsync<object>(nameof(RollbackTransaction), null).GetAwaiter().GetResult();
 
         /// <summary>
-        /// SQL Äõ¸® °á°ú¸¦ DataTable·Î ¹ÝÈ¯ÇÕ´Ï´Ù (µ¿±â). ³»ºÎÀûÀ¸·Î ºñµ¿±â È£ÃâÀ» ´ë±âÇÕ´Ï´Ù.
+        /// SQL ì¿¼ë¦¬ ê²°ê³¼ë¥¼ DataTableë¡œ ë°˜í™˜í•©ë‹ˆë‹¤ (ë™ê¸°). ë‚´ë¶€ì ìœ¼ë¡œ ë¹„ë™ê¸° í˜¸ì¶œì„ ëŒ€ê¸°í•©ë‹ˆë‹¤.
         /// </summary>
         public DataTable ExecuteDataTable(string commandText, Dictionary<string, object>? parameters = null) => ExecuteDataTableAsync(commandText, parameters).GetAwaiter().GetResult();
 
         /// <summary>
-        /// SQL Äõ¸® °á°ú¸¦ DataTable·Î ºñµ¿±â ¹ÝÈ¯ÇÕ´Ï´Ù.
+        /// SQL ì¿¼ë¦¬ ê²°ê³¼ë¥¼ DataTableë¡œ ë¹„ë™ê¸° ë°˜í™˜í•©ë‹ˆë‹¤.
         /// - request: { CommandText, Parameters }
-        /// - ¼­¹ö´Â Ç¥ Çü½Ä °á°ú¸¦ JSON ¹è¿­(Çà: µñ¼Å³Ê¸®) µîÀ¸·Î ¹ÝÈ¯ÇÏ°í Å¬¶óÀÌ¾ðÆ®°¡ ÀÌ¸¦ DataTable·Î º¯È¯ÇÕ´Ï´Ù.
+        /// - ì„œë²„ëŠ” í‘œ í˜•ì‹ ê²°ê³¼ë¥¼ JSON ë°°ì—´(í–‰: ë”•ì…”ë„ˆë¦¬) ë“±ìœ¼ë¡œ ë°˜í™˜í•˜ê³  í´ë¼ì´ì–¸íŠ¸ê°€ ì´ë¥¼ DataTableë¡œ ë³€í™˜í•©ë‹ˆë‹¤.
         /// </summary>
         public async Task<DataTable> ExecuteDataTableAsync(string commandText, Dictionary<string, object>? parameters = null)
         {
@@ -81,13 +82,13 @@ namespace nU3.Connectivity.Implementations
         }
 
         /// <summary>
-        /// SQL Äõ¸® °á°ú¸¦ DataSetÀ¸·Î ¹ÝÈ¯ÇÕ´Ï´Ù (µ¿±â).
+        /// SQL ì¿¼ë¦¬ ê²°ê³¼ë¥¼ DataSetìœ¼ë¡œ ë°˜í™˜í•©ë‹ˆë‹¤ (ë™ê¸°).
         /// </summary>
         public DataSet ExecuteDataSet(string commandText, Dictionary<string, object>? parameters = null) => ExecuteDataSetAsync(commandText, parameters).GetAwaiter().GetResult();
 
         /// <summary>
-        /// SQL Äõ¸® °á°ú¸¦ DataSetÀ¸·Î ºñµ¿±â ¹ÝÈ¯ÇÕ´Ï´Ù.
-        /// ¼­¹ö°¡ ´ÜÀÏ Å×ÀÌºíÀ» ¹ÝÈ¯ÇÏ´Â °æ¿ì DataSet.Tables[0]¿¡ °á°ú°¡ µé¾îÀÖÀ» °ÍÀÔ´Ï´Ù.
+        /// SQL ì¿¼ë¦¬ ê²°ê³¼ë¥¼ DataSetìœ¼ë¡œ ë¹„ë™ê¸° ë°˜í™˜í•©ë‹ˆë‹¤.
+        /// ì„œë²„ê°€ ë‹¨ì¼ í…Œì´ë¸”ì„ ë°˜í™˜í•˜ëŠ” ê²½ìš° DataSet.Tables[0]ì— ê²°ê³¼ê°€ ë“¤ì–´ìžˆì„ ê²ƒìž…ë‹ˆë‹¤.
         /// </summary>
         public async Task<DataSet> ExecuteDataSetAsync(string commandText, Dictionary<string, object>? parameters = null)
         {
@@ -95,13 +96,13 @@ namespace nU3.Connectivity.Implementations
         }
 
         /// <summary>
-        /// ºñÄõ¸®(INSERT/UPDATE/DELETE µî)¸¦ ½ÇÇàÇÏ°í ¼º°ø ¿©ºÎ¸¦ ¹ÝÈ¯ÇÕ´Ï´Ù (µ¿±â).
+        /// ë¹„ì¿¼ë¦¬(INSERT/UPDATE/DELETE ë“±)ë¥¼ ì‹¤í–‰í•˜ê³  ì„±ê³µ ì—¬ë¶€ë¥¼ ë°˜í™˜í•©ë‹ˆë‹¤ (ë™ê¸°).
         /// </summary>
         public bool ExecuteNonQuery(string commandText, Dictionary<string, object>? parameters = null) => ExecuteNonQueryAsync(commandText, parameters).GetAwaiter().GetResult();
 
         /// <summary>
-        /// ºñÄõ¸®¸¦ ºñµ¿±âÀûÀ¸·Î ½ÇÇàÇÕ´Ï´Ù.
-        /// ¹ÝÈ¯ Å¸ÀÔÀº bool(¼º°ø ¿©ºÎ)À» ±â´ëÇÕ´Ï´Ù.
+        /// ë¹„ì¿¼ë¦¬ë¥¼ ë¹„ë™ê¸°ì ìœ¼ë¡œ ì‹¤í–‰í•©ë‹ˆë‹¤.
+        /// ë°˜í™˜ íƒ€ìž…ì€ bool(ì„±ê³µ ì—¬ë¶€)ì„ ê¸°ëŒ€í•©ë‹ˆë‹¤.
         /// </summary>
         public async Task<bool> ExecuteNonQueryAsync(string commandText, Dictionary<string, object>? parameters = null)
         {
@@ -109,13 +110,13 @@ namespace nU3.Connectivity.Implementations
         }
 
         /// <summary>
-        /// ´ÜÀÏ ½ºÄ®¶ó °ªÀ» ¹ÝÈ¯ÇÏ´Â Äõ¸®¸¦ µ¿±âÀûÀ¸·Î ½ÇÇàÇÕ´Ï´Ù.
+        /// ë‹¨ì¼ ìŠ¤ì¹¼ë¼ ê°’ì„ ë°˜í™˜í•˜ëŠ” ì¿¼ë¦¬ë¥¼ ë™ê¸°ì ìœ¼ë¡œ ì‹¤í–‰í•©ë‹ˆë‹¤.
         /// </summary>
         public object ExecuteScalarValue(string commandText, Dictionary<string, object>? parameters = null) => ExecuteScalarValueAsync(commandText, parameters).GetAwaiter().GetResult();
 
         /// <summary>
-        /// ½ºÄ®¶ó °ªÀ» ºñµ¿±âÀûÀ¸·Î Á¶È¸ÇÕ´Ï´Ù.
-        /// ¹ÝÈ¯ Å¸ÀÔÀº objectÀÌ¸ç, ½ÇÁ¦ Å¸ÀÔÀº È£ÃâÀÚ°¡ Ä³½ºÆÃÇÏ¿© »ç¿ëÇØ¾ß ÇÕ´Ï´Ù.
+        /// ìŠ¤ì¹¼ë¼ ê°’ì„ ë¹„ë™ê¸°ì ìœ¼ë¡œ ì¡°íšŒí•©ë‹ˆë‹¤.
+        /// ë°˜í™˜ íƒ€ìž…ì€ objectì´ë©°, ì‹¤ì œ íƒ€ìž…ì€ í˜¸ì¶œìžê°€ ìºìŠ¤íŒ…í•˜ì—¬ ì‚¬ìš©í•´ì•¼ í•©ë‹ˆë‹¤.
         /// </summary>
         public async Task<object> ExecuteScalarValueAsync(string commandText, Dictionary<string, object>? parameters = null)
         {
@@ -123,23 +124,23 @@ namespace nU3.Connectivity.Implementations
         }
 
         /// <summary>
-        /// ÀúÀå ÇÁ·Î½ÃÀú¸¦ ½ÇÇàÇÏ°í Ãâ·Â ÆÄ¶ó¹ÌÅÍ¸¦ °»½ÅÇÕ´Ï´Ù (µ¿±â).
+        /// ì €ìž¥ í”„ë¡œì‹œì €ë¥¼ ì‹¤í–‰í•˜ê³  ì¶œë ¥ íŒŒë¼ë¯¸í„°ë¥¼ ê°±ì‹ í•©ë‹ˆë‹¤ (ë™ê¸°).
         /// </summary>
         public bool ExecuteProcedure(string spName, Dictionary<string, object> inputParams, Dictionary<string, object> outputParams) => ExecuteProcedureAsync(spName, inputParams, outputParams).GetAwaiter().GetResult();
 
         /// <summary>
-        /// ÀúÀå ÇÁ·Î½ÃÀú¸¦ ºñµ¿±âÀûÀ¸·Î ½ÇÇàÇÕ´Ï´Ù.
-        /// - ÀÔ·Â: spName, inputParams, outputParams(ºó µñ¼Å³Ê¸® Àü´Þ °¡´É)
-        /// - ¼­¹ö´Â Ãâ·Â ÆÄ¶ó¹ÌÅÍ¸¦ Æ÷ÇÔÇÑ ±¸Á¶(¿¹: { success: true, outputParams: {...} })·Î ÀÀ´äÇÏ°í,
-        ///   RemoteExecuteAsyncÀÇ ±¸ÇöÀº outputParams¸¦ ÀûÀýÈ÷ °»½ÅÇØ¾ß ÇÕ´Ï´Ù.
+        /// ì €ìž¥ í”„ë¡œì‹œì €ë¥¼ ë¹„ë™ê¸°ì ìœ¼ë¡œ ì‹¤í–‰í•©ë‹ˆë‹¤.
+        /// - ìž…ë ¥: spName, inputParams, outputParams(ë¹ˆ ë”•ì…”ë„ˆë¦¬ ì „ë‹¬ ê°€ëŠ¥)
+        /// - ì„œë²„ëŠ” ì¶œë ¥ íŒŒë¼ë¯¸í„°ë¥¼ í¬í•¨í•œ êµ¬ì¡°(ì˜ˆ: { success: true, outputParams: {...} })ë¡œ ì‘ë‹µí•˜ê³ ,
+        ///   RemoteExecuteAsyncì˜ êµ¬í˜„ì€ outputParamsë¥¼ ì ì ˆížˆ ê°±ì‹ í•´ì•¼ í•©ë‹ˆë‹¤.
         /// 
-        /// Âü°í: ¿ø°Ý È£ÃâÀÇ Æ¯¼º»ó outputParams Ã³¸®´Â È£Ãâ ±Ô¾à¿¡ µû¶ó ¼³°èµÇ¾î¾ß ÇÏ¸ç,
-        /// ÀÌ ±¸ÇöÀº ´Ü¼øÈ÷ ¼­¹ö¿¡ args¸¦ Àü´ÞÇÏ´Â ÇüÅÂÀÔ´Ï´Ù. ÇÊ¿ä ½Ã ¸®ÅÏ°ªÀ¸·Î Ãâ·Â ÆÄ¶ó¹ÌÅÍ¸¦ ´ã¾Æ ¹Þµµ·Ï ÇÁ·ÎÅäÄÝÀ» °³¼±ÇÏ¼¼¿ä.
+        /// ì°¸ê³ : ì›ê²© í˜¸ì¶œì˜ íŠ¹ì„±ìƒ outputParams ì²˜ë¦¬ëŠ” í˜¸ì¶œ ê·œì•½ì— ë”°ë¼ ì„¤ê³„ë˜ì–´ì•¼ í•˜ë©°,
+        /// ì´ êµ¬í˜„ì€ ë‹¨ìˆœížˆ ì„œë²„ì— argsë¥¼ ì „ë‹¬í•˜ëŠ” í˜•íƒœìž…ë‹ˆë‹¤. í•„ìš” ì‹œ ë¦¬í„´ê°’ìœ¼ë¡œ ì¶œë ¥ íŒŒë¼ë¯¸í„°ë¥¼ ë‹´ì•„ ë°›ë„ë¡ í”„ë¡œí† ì½œì„ ê°œì„ í•˜ì„¸ìš”.
         /// </summary>
         public async Task<bool> ExecuteProcedureAsync(string spName, Dictionary<string, object> inputParams, Dictionary<string, object> outputParams)
         {
-            // ¿ø°Ý È£Ãâ¿¡¼­ Output ÆÄ¶ó¹ÌÅÍ¸¦ ´Ù·ç·Á¸é ¹ÝÈ¯°ªÀ¸·Î OutputÀ» Æ÷ÇÔÇÑ °´Ã¼¸¦ »ç¿ëÇØ¾ß ÇÒ ¼ö ÀÖ½À´Ï´Ù.
-            // ÇöÀç ±¸Çö¿¡¼­´Â °£´ÜÈ÷ ¿ø°Ý È£ÃâÀ» ¼öÇàÇÏµµ·Ï Ã³¸®ÇÕ´Ï´Ù.
+            // ì›ê²© í˜¸ì¶œì—ì„œ Output íŒŒë¼ë¯¸í„°ë¥¼ ë‹¤ë£¨ë ¤ë©´ ë°˜í™˜ê°’ìœ¼ë¡œ Outputì„ í¬í•¨í•œ ê°ì²´ë¥¼ ì‚¬ìš©í•´ì•¼ í•  ìˆ˜ ìžˆìŠµë‹ˆë‹¤.
+            // í˜„ìž¬ êµ¬í˜„ì—ì„œëŠ” ê°„ë‹¨ížˆ ì›ê²© í˜¸ì¶œì„ ìˆ˜í–‰í•˜ë„ë¡ ì²˜ë¦¬í•©ë‹ˆë‹¤.
             return await RemoteExecuteAsync<bool>(nameof(ExecuteProcedure), new object[] { spName, inputParams, outputParams }).ConfigureAwait(false);
         }
     }

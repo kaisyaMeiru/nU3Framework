@@ -10,7 +10,7 @@ using System.Security.Cryptography;
 using nU3.Core.Attributes;
 using nU3.Core.Repositories;
 using nU3.Models;
-using nU3.Connectivity;
+using nU3.Core.Interfaces;
 using nU3.Core.Configuration;
 
 namespace nU3.Core.Services

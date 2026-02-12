@@ -9,6 +9,7 @@ using nU3.Connectivity;
 using nU3.Connectivity.Implementations;
 using DevExpress.LookAndFeel;
 using DevExpress.Skins;
+using nU3.Core.Interfaces;
 
 namespace nU3.Shell
 {
@@ -22,6 +23,13 @@ namespace nU3.Shell
             Application.SetCompatibleTextRenderingDefault(false);
             SkinManager.EnableFormSkins();
             UserLookAndFeel.Default.SetSkinStyle("Office 2019 Black");
+
+            // ---------------------------------------------------------
+            // Configure ConnectivityManager Factories (Break Circular Dependency)
+            // ---------------------------------------------------------
+            nU3.Core.Services.ConnectivityManager.DBClientFactory = (client, url) => new HttpDBAccessClient(client, url);
+            nU3.Core.Services.ConnectivityManager.FileClientFactory = (client, url) => new HttpFileTransferClient(client, url);
+            nU3.Core.Services.ConnectivityManager.LogClientFactory = (client, url, cb, compress) => new HttpLogUploadClient(client, url, null, cb, compress);
 
             // ---------------------------------------------------------
             // Global Culture & Date Format Configuration
@@ -101,6 +109,9 @@ namespace nU3.Shell
                     sp.GetRequiredService<System.Net.Http.HttpClient>(), 
                     baseUrl
                 ));
+
+            // Business Data Access Service (Legacy Backend Adapter)
+            services.AddScoped<nU3.Core.Interfaces.IDataService, nU3.Connectivity.Implementations.ServiceAdapter>();
 
             using (var provider = services.BuildServiceProvider())
             {
