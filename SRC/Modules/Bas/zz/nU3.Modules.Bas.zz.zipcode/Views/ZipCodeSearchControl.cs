@@ -109,8 +109,8 @@ namespace nU3.Modules.Bas.zz.zipcode
                         return;
                     }
 
-                    var rslt = await _logic.SearchRoadAddressAsync(new SearchConditionDto() { SearchCondition = "zipcode", SearchTerm = txtRoadName.Text.Trim() });
-                    gridControlResult.DataSource = rslt;
+                    // var rslt = await _logic.SearchRoadAddressAsync(new SearchConditionDto() { SearchCondition = "zipcode", SearchTerm = txtRoadName.Text.Trim() });
+                    // gridControlResult.DataSource = rslt;
 
                     var results = await _logic.SearchRoadAddressAsync(condition);
                     gridControlResult.DataSource = results;

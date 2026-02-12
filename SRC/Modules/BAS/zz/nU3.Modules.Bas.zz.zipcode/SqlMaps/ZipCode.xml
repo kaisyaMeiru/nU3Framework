@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="zz_zipcodeapp.ZipCode">
+
+    <!-- 
+        Ported from: zipcode_sqls.xml 
+        Target: External Backend (Oracle/Tibero)
+    -->
+
+    <!-- 지번 주소 검색 (getZipCodeList) -->
+    <select id="searchLotAddress" resultClass="nU3.Modules.Bas.zz.zipcode.Models.ZipCodeDto">
+        SELECT 
+            zipcode as ZipCode,
+            zipcdhead as ZipCdHead,
+            zipcdfoot as ZipCdFoot,
+            address as Address,
+            prunningaddress as PrunningAddress,
+            city as City,
+            citycntyarea as CityCntyArea,
+            blok as Blok,
+            bldnm as BldNm
+        FROM com.zbpmzpsn
+        WHERE 1=1
+        <isNotEmpty property="SearchTerm">
+            AND (
+                zipcode LIKE #SearchTerm# || '%' 
+                OR address LIKE '%' || #SearchTerm# || '%'
+                OR bldnm LIKE '%' || #SearchTerm# || '%'
+            )
+        </isNotEmpty>
+        <isEqual property="SearchCondition" compareValue="zipcode">
+             AND zipcode LIKE #SearchTerm# || '%'
+        </isEqual>
+    </select>
+
+    <!-- 도로명 주소 검색 (getRoadCodeList/getRoadCodeList2 combined logic) -->
+    <select id="searchRoadAddress" resultClass="nU3.Modules.Bas.zz.zipcode.Models.RoadAddressDto">
+        SELECT distinct
+               RDSN as Address,           -- 전체 주소
+               road.zipcode as ZipCode,   -- 우편번호
+               zipseq as ZipSeq,          -- 우편일련번호
+               bldmainno as BldMainNo,    -- 건물본번
+               bldsubno as BldSubNo,      -- 건물부번
+               bldnm as BldNm,            -- 건물명
+               city as City,
+               citycntyarea as CityCntyArea,
+               roadnm as RoadNm,
+               blok as Blok
+          FROM (SELECT zipcode,
+                       CITY,
+                       CITYCNTYAREA,
+                       BLOK,
+                       ROADNM,
+                       BLDMAINNO,
+                       BLDSUBNO,
+                       BLDNM,
+                       ZIPSEQ,
+                       CITY || ' ' || CITYCNTYAREA || ' '  ||  BLOK || ' ' ||  ROADNM  || ' ' || BLDMAINNO  as rdsn
+                  FROM com.zbpmrdsn) road 
+          WHERE  1 = 1
+            <isNotEmpty property="City">
+                AND road.CITY = #City#
+            </isNotEmpty> 
+            <isNotEmpty property="RoadNm">
+                AND road.ROADNM LIKE '%' || #RoadNm# || '%'
+            </isNotEmpty> 
+            <isNotEmpty property="BldNo">
+                AND road.BLDMAINNO = #BldNo#
+            </isNotEmpty> 
+            <isNotEmpty property="BldNm">
+                AND road.BLDNM LIKE '%' || #BldNm# || '%'
+            </isNotEmpty>
+            <isNotEmpty property="ZipCode">
+                AND road.zipcode = #ZipCode#
+            </isNotEmpty> 
+            <![CDATA[
+            AND rownum <= 2000 
+            ]]>
+    </select>
+
+    <!-- 주소 검증 (verifyAddress) - New logic replacing rfnCustCommonAddrList -->
+    <select id="verifyAddress" resultClass="nU3.Modules.Bas.zz.zipcode.Models.VerificationResultDto">
+        SELECT 
+            CASE WHEN COUNT(*) > 0 THEN 'Y' ELSE 'N' END as Verified,
+            MAX(zipcode) as VerifiedZipCode
+        FROM (
+            SELECT zipcode FROM com.zbpmzpsn 
+            WHERE zipcode = #ZipCode#
+            UNION ALL
+            SELECT zipcode FROM com.zbpmrdsn
+            WHERE zipcode = #ZipCode#
+        )
+        WHERE rownum = 1
+    </select>
+
+</sqlMap>
