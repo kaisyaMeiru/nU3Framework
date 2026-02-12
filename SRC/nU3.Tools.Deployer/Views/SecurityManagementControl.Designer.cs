@@ -62,6 +62,9 @@ namespace nU3.Tools.Deployer.Views
         private void InitializeComponent()
         {
             splitMain = new DevExpress.XtraEditors.SplitContainerControl();
+            dgvModules = new nU3.Core.UI.Controls.nU3GridControl();
+            gvModules = new nU3.Core.UI.Controls.nU3GridView();
+            splitRight = new DevExpress.XtraEditors.SplitContainerControl();
             tabTargets = new DevExpress.XtraTab.XtraTabControl();
             pageUsers = new DevExpress.XtraTab.XtraTabPage();
             dgvUsers = new nU3.Core.UI.Controls.nU3GridControl();
@@ -77,9 +80,6 @@ namespace nU3.Tools.Deployer.Views
             pageDepts = new DevExpress.XtraTab.XtraTabPage();
             dgvDepts = new nU3.Core.UI.Controls.nU3GridControl();
             gvDepts = new nU3.Core.UI.Controls.nU3GridView();
-            splitRight = new DevExpress.XtraEditors.SplitContainerControl();
-            dgvModules = new nU3.Core.UI.Controls.nU3GridControl();
-            gvModules = new nU3.Core.UI.Controls.nU3GridView();
             grpPermissions = new DevExpress.XtraEditors.GroupControl();
             pnlChecks = new System.Windows.Forms.FlowLayoutPanel();
             chkRead = new nU3.Core.UI.Controls.nU3CheckEdit();
@@ -98,6 +98,14 @@ namespace nU3.Tools.Deployer.Views
             ((System.ComponentModel.ISupportInitialize)splitMain.Panel2).BeginInit();
             splitMain.Panel2.SuspendLayout();
             splitMain.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvModules).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)gvModules).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)splitRight).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)splitRight.Panel1).BeginInit();
+            splitRight.Panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)splitRight.Panel2).BeginInit();
+            splitRight.Panel2.SuspendLayout();
+            splitRight.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)tabTargets).BeginInit();
             tabTargets.SuspendLayout();
             pageUsers.SuspendLayout();
@@ -111,14 +119,6 @@ namespace nU3.Tools.Deployer.Views
             pageDepts.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvDepts).BeginInit();
             ((System.ComponentModel.ISupportInitialize)gvDepts).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)splitRight).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)splitRight.Panel1).BeginInit();
-            splitRight.Panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)splitRight.Panel2).BeginInit();
-            splitRight.Panel2.SuspendLayout();
-            splitRight.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dgvModules).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)gvModules).BeginInit();
             ((System.ComponentModel.ISupportInitialize)grpPermissions).BeginInit();
             grpPermissions.SuspendLayout();
             pnlChecks.SuspendLayout();
@@ -140,7 +140,7 @@ namespace nU3.Tools.Deployer.Views
             // 
             // splitMain.Panel1
             // 
-            splitMain.Panel1.Controls.Add(tabTargets);
+            splitMain.Panel1.Controls.Add(dgvModules);
             splitMain.Panel1.Text = "Panel1";
             // 
             // splitMain.Panel2
@@ -151,13 +151,51 @@ namespace nU3.Tools.Deployer.Views
             splitMain.SplitterPosition = 400;
             splitMain.TabIndex = 0;
             // 
+            // dgvModules
+            // 
+            dgvModules.Dock = System.Windows.Forms.DockStyle.Fill;
+            dgvModules.Location = new System.Drawing.Point(0, 0);
+            dgvModules.MainView = gvModules;
+            dgvModules.Name = "dgvModules";
+            dgvModules.Size = new System.Drawing.Size(400, 852);
+            dgvModules.TabIndex = 0;
+            dgvModules.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] { gvModules });
+            // 
+            // gvModules
+            // 
+            gvModules.GridControl = dgvModules;
+            gvModules.Name = "gvModules";
+            gvModules.OptionsBehavior.Editable = false;
+            gvModules.OptionsView.ShowGroupPanel = false;
+            gvModules.FocusedRowChanged += gvModules_FocusedRowChanged;
+            // 
+            // splitRight
+            // 
+            splitRight.Dock = System.Windows.Forms.DockStyle.Fill;
+            splitRight.Horizontal = false;
+            splitRight.Location = new System.Drawing.Point(0, 0);
+            splitRight.Name = "splitRight";
+            // 
+            // splitRight.Panel1
+            // 
+            splitRight.Panel1.Controls.Add(tabTargets);
+            splitRight.Panel1.Text = "Panel1";
+            // 
+            // splitRight.Panel2
+            // 
+            splitRight.Panel2.Controls.Add(grpPermissions);
+            splitRight.Panel2.Text = "Panel2";
+            splitRight.Size = new System.Drawing.Size(895, 852);
+            splitRight.SplitterPosition = 400;
+            splitRight.TabIndex = 0;
+            // 
             // tabTargets
             // 
             tabTargets.Dock = System.Windows.Forms.DockStyle.Fill;
             tabTargets.Location = new System.Drawing.Point(0, 0);
             tabTargets.Name = "tabTargets";
             tabTargets.SelectedTabPage = pageUsers;
-            tabTargets.Size = new System.Drawing.Size(400, 852);
+            tabTargets.Size = new System.Drawing.Size(895, 400);
             tabTargets.TabIndex = 0;
             tabTargets.TabPages.AddRange(new DevExpress.XtraTab.XtraTabPage[] { pageUsers, pageRoles, pageDepts });
             // 
@@ -166,7 +204,7 @@ namespace nU3.Tools.Deployer.Views
             pageUsers.Controls.Add(dgvUsers);
             pageUsers.Controls.Add(pnlUsersTop);
             pageUsers.Name = "pageUsers";
-            pageUsers.Size = new System.Drawing.Size(398, 826);
+            pageUsers.Size = new System.Drawing.Size(893, 374);
             pageUsers.Text = "사용자";
             // 
             // dgvUsers
@@ -175,7 +213,7 @@ namespace nU3.Tools.Deployer.Views
             dgvUsers.Location = new System.Drawing.Point(0, 35);
             dgvUsers.MainView = gvUsers;
             dgvUsers.Name = "dgvUsers";
-            dgvUsers.Size = new System.Drawing.Size(398, 791);
+            dgvUsers.Size = new System.Drawing.Size(893, 339);
             dgvUsers.TabIndex = 1;
             dgvUsers.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] { gvUsers });
             // 
@@ -196,7 +234,7 @@ namespace nU3.Tools.Deployer.Views
             pnlUsersTop.Dock = System.Windows.Forms.DockStyle.Top;
             pnlUsersTop.Location = new System.Drawing.Point(0, 0);
             pnlUsersTop.Name = "pnlUsersTop";
-            pnlUsersTop.Size = new System.Drawing.Size(398, 35);
+            pnlUsersTop.Size = new System.Drawing.Size(893, 35);
             pnlUsersTop.TabIndex = 0;
             // 
             // btnAddUser
@@ -243,7 +281,7 @@ namespace nU3.Tools.Deployer.Views
             // 
             pageRoles.Controls.Add(dgvRoles);
             pageRoles.Name = "pageRoles";
-            pageRoles.Size = new System.Drawing.Size(0, 0);
+            pageRoles.Size = new System.Drawing.Size(893, 374);
             pageRoles.Text = "역할 (Role)";
             // 
             // dgvRoles
@@ -252,7 +290,7 @@ namespace nU3.Tools.Deployer.Views
             dgvRoles.Location = new System.Drawing.Point(0, 0);
             dgvRoles.MainView = gvRoles;
             dgvRoles.Name = "dgvRoles";
-            dgvRoles.Size = new System.Drawing.Size(0, 0);
+            dgvRoles.Size = new System.Drawing.Size(893, 374);
             dgvRoles.TabIndex = 1;
             dgvRoles.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] { gvRoles });
             // 
@@ -268,7 +306,7 @@ namespace nU3.Tools.Deployer.Views
             // 
             pageDepts.Controls.Add(dgvDepts);
             pageDepts.Name = "pageDepts";
-            pageDepts.Size = new System.Drawing.Size(0, 0);
+            pageDepts.Size = new System.Drawing.Size(893, 374);
             pageDepts.Text = "부서";
             // 
             // dgvDepts
@@ -277,7 +315,7 @@ namespace nU3.Tools.Deployer.Views
             dgvDepts.Location = new System.Drawing.Point(0, 0);
             dgvDepts.MainView = gvDepts;
             dgvDepts.Name = "dgvDepts";
-            dgvDepts.Size = new System.Drawing.Size(0, 0);
+            dgvDepts.Size = new System.Drawing.Size(893, 374);
             dgvDepts.TabIndex = 1;
             dgvDepts.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] { gvDepts });
             // 
@@ -288,44 +326,6 @@ namespace nU3.Tools.Deployer.Views
             gvDepts.OptionsBehavior.Editable = false;
             gvDepts.OptionsView.ShowGroupPanel = false;
             gvDepts.FocusedRowChanged += gvDepts_FocusedRowChanged;
-            // 
-            // splitRight
-            // 
-            splitRight.Dock = System.Windows.Forms.DockStyle.Fill;
-            splitRight.Horizontal = false;
-            splitRight.Location = new System.Drawing.Point(0, 0);
-            splitRight.Name = "splitRight";
-            // 
-            // splitRight.Panel1
-            // 
-            splitRight.Panel1.Controls.Add(dgvModules);
-            splitRight.Panel1.Text = "Panel1";
-            // 
-            // splitRight.Panel2
-            // 
-            splitRight.Panel2.Controls.Add(grpPermissions);
-            splitRight.Panel2.Text = "Panel2";
-            splitRight.Size = new System.Drawing.Size(895, 852);
-            splitRight.SplitterPosition = 400;
-            splitRight.TabIndex = 0;
-            // 
-            // dgvModules
-            // 
-            dgvModules.Dock = System.Windows.Forms.DockStyle.Fill;
-            dgvModules.Location = new System.Drawing.Point(0, 0);
-            dgvModules.MainView = gvModules;
-            dgvModules.Name = "dgvModules";
-            dgvModules.Size = new System.Drawing.Size(895, 400);
-            dgvModules.TabIndex = 0;
-            dgvModules.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] { gvModules });
-            // 
-            // gvModules
-            // 
-            gvModules.GridControl = dgvModules;
-            gvModules.Name = "gvModules";
-            gvModules.OptionsBehavior.Editable = false;
-            gvModules.OptionsView.ShowGroupPanel = false;
-            gvModules.FocusedRowChanged += gvModules_FocusedRowChanged;
             // 
             // grpPermissions
             // 
@@ -453,6 +453,14 @@ namespace nU3.Tools.Deployer.Views
             splitMain.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitMain).EndInit();
             splitMain.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dgvModules).EndInit();
+            ((System.ComponentModel.ISupportInitialize)gvModules).EndInit();
+            ((System.ComponentModel.ISupportInitialize)splitRight.Panel1).EndInit();
+            splitRight.Panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)splitRight.Panel2).EndInit();
+            splitRight.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)splitRight).EndInit();
+            splitRight.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)tabTargets).EndInit();
             tabTargets.ResumeLayout(false);
             pageUsers.ResumeLayout(false);
@@ -466,14 +474,6 @@ namespace nU3.Tools.Deployer.Views
             pageDepts.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dgvDepts).EndInit();
             ((System.ComponentModel.ISupportInitialize)gvDepts).EndInit();
-            ((System.ComponentModel.ISupportInitialize)splitRight.Panel1).EndInit();
-            splitRight.Panel1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)splitRight.Panel2).EndInit();
-            splitRight.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)splitRight).EndInit();
-            splitRight.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)dgvModules).EndInit();
-            ((System.ComponentModel.ISupportInitialize)gvModules).EndInit();
             ((System.ComponentModel.ISupportInitialize)grpPermissions).EndInit();
             grpPermissions.ResumeLayout(false);
             grpPermissions.PerformLayout();

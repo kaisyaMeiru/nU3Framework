@@ -5,229 +5,80 @@ using nU3.Models;
 namespace nU3.Core.Context
 {
     /// <summary>
-    /// ¾ÖÇÃ¸®ÄÉÀÌ¼ÇÀÇ ÀÛ¾÷ ÄÁÅØ½ºÆ®¸¦ Ç¥ÇöÇÕ´Ï´Ù.
-    /// ¸ğµâ °£¿¡ °øÅëÀ¸·Î °øÀ¯µÇ´Â »óÅÂ(ÇöÀç ¼±ÅÃµÈ È¯ÀÚ, °Ë»ç, »ç¿ëÀÚ Á¤º¸ µî)¸¦ º¸°üÇÏ°í Àü´ŞÇÏ´Â ¿ªÇÒÀ» ÇÕ´Ï´Ù.
-    /// ÄÁÅØ½ºÆ®´Â ¸ğµâÀÌ È°¼ºÈ­µÉ ¶§ ÃÊ±â°ªÀ¸·Î Àü´ŞµÇ°Å³ª, ÀÌº¥Æ®¸¦ ÅëÇØ ºê·ÎµåÄ³½ºÆ®µÇ¾î ´Ù¸¥ ¸ğµâÀÌ µ¿ÀÏÇÑ »óÅÂ¸¦ °øÀ¯ÇÏµµ·Ï ÇÕ´Ï´Ù.
+    /// ì• í”Œë¦¬ì¼€ì´ì…˜ì˜ ì‘ì—… ì»¨í…ìŠ¤íŠ¸ë¥¼ í‘œí˜„í•©ë‹ˆë‹¤.
+    /// ëª¨ë“ˆ ê°„ì— ê³µí†µìœ¼ë¡œ ê³µìœ ë˜ëŠ” ìƒíƒœ(í˜„ì¬ ì„ íƒëœ í™˜ì, ê²€ì‚¬, ì‚¬ìš©ì ë“±)ë¥¼ ê´€ë¦¬í•©ë‹ˆë‹¤.
     /// </summary>
     public class WorkContext
     {
         /// <summary>
-        /// ÇöÀç ÀÛ¾÷¿¡¼­ ¼±ÅÃµÈ È¯ÀÚ Á¤º¸ °´Ã¼ÀÔ´Ï´Ù.
-        /// ÀÌ °ªÀº ¸ğµâ °£ È¯ÀÚ º¯°æÀ» Àü´ŞÇÏ±â À§ÇØ »ç¿ëµÇ¸ç, nullÀÏ ¼ö ÀÖ½À´Ï´Ù.
-        /// ¿¹: È¯ÀÚ ¸®½ºÆ®¿¡¼­ È¯ÀÚ¸¦ Å¬¸¯ÇÏ¸é ÀÌ ¼Ó¼ºÀÌ ÇØ´ç È¯ÀÚ·Î ¼³Á¤µË´Ï´Ù.
-        /// </summary>
-        public PatientInfoDto CurrentPatient { get; set; }
-
-        /// <summary>
-        /// ÇöÀç ¼±ÅÃµÈ °Ë»ç(°ËÃ¼ ¿À´õ) Á¤º¸ÀÔ´Ï´Ù.
-        /// °Ë»ç »ó¼¼ È­¸éÀÌ³ª °Ë»çÀÇ °á°ú Á¶È¸ µî¿¡¼­ »ç¿ëµË´Ï´Ù.
-        /// </summary>
-        public ExamOrderDto CurrentExam { get; set; }
-
-        /// <summary>
-        /// ÇöÀç ¼±ÅÃµÈ ¿¹¾à(Appointment) Á¤º¸ÀÔ´Ï´Ù.
-        /// Áø·á ¿¹¾à È­¸éÀÌ³ª ½ºÄÉÁÙ¸µ °ü·Ã ¸ğµâ¿¡¼­ ÂüÁ¶µË´Ï´Ù.
-        /// </summary>
-        public AppointmentDto CurrentAppointment { get; set; }
-
-        /// <summary>
-        /// ÇöÀç ·Î±×ÀÎÇÑ »ç¿ëÀÚ¿¡ ´ëÇÑ Á¤º¸ÀÔ´Ï´Ù.
-        /// ÀÎÁõ/ÀÎ°¡ Ã³¸® ¹× È­¸é ±ÇÇÑ °áÁ¤¿¡ »ç¿ëµË´Ï´Ù.
+        /// í˜„ì¬ ë¡œê·¸ì¸í•œ ì‚¬ìš©ì ì •ë³´
         /// </summary>
         public UserInfoDto CurrentUser { get; set; }
 
         /// <summary>
-        /// ÇöÀç ÄÁÅØ½ºÆ®°¡ Àû¿ëµÇ´Â ¸ğµâÀÇ ±ÇÇÑ ÁıÇÕÀÔ´Ï´Ù.
-        /// ÀĞ±â/¾²±â/»èÁ¦/Ãâ·Â µî ¸ğµâº° ±ÇÇÑ Ã¼Å©¿¡ »ç¿ëµË´Ï´Ù.
+        /// í˜„ì¬ ì„ íƒëœ í™˜ì ì •ë³´
+        /// </summary>
+        public PatientInfoDto CurrentPatient { get; set; }
+
+        /// <summary>
+        /// í˜„ì¬ ì„ íƒëœ ê²€ì‚¬ ì •ë³´
+        /// </summary>
+        public ExamOrderDto CurrentExam { get; set; }
+
+        /// <summary>
+        /// í˜„ì¬ ëª¨ë“ˆì— ëŒ€í•œ ê¶Œí•œ ì •ë³´
         /// </summary>
         public ModulePermissions Permissions { get; set; }
 
         /// <summary>
-        /// È®Àå¿ë Ãß°¡ µ¥ÀÌÅÍ »çÀüÀÔ´Ï´Ù. ¸ğµâ °£¿¡ Æ¯¼öÇÑ Å°-°ª µ¥ÀÌÅÍ¸¦ ÁÖ°í¹ŞÀ» ¶§ »ç¿ëÇÕ´Ï´Ù.
-        /// ¿¹: ÀÓ½Ã ÇÊÅÍ °ª, ÀÓ»ó »óÅÂ ÇÃ·¡±× µî ¸ğµâ¿¡ Æ¯È­µÈ µ¥ÀÌÅÍ¸¦ º¸°üÇÒ ¼ö ÀÖ½À´Ï´Ù.
+        /// ëª¨ë“ˆ ë‚´ë¶€ í†µì‹ ì„ ìœ„í•œ ì»¤ìŠ¤í…€ ë°ì´í„° (ì„ì˜ì˜ í‚¤/ê°’ ì €ì¥ì†Œ)
+        /// í•„ìš”ì— ë”°ë¼ ì¶”ê°€ì ì¸ ì •ë³´ë¥¼ ëª¨ë“ˆ ê°„ì— ì „ë‹¬í•  ë•Œ ì‚¬ìš©í•©ë‹ˆë‹¤.
         /// </summary>
-        public Dictionary<string, object> AdditionalData { get; set; }
+        public Dictionary<string, object> CustomData { get; set; }
 
         /// <summary>
-        /// ÀÌ ÄÁÅØ½ºÆ® °´Ã¼°¡ »ı¼ºµÈ ÀÏ½ÃÀÔ´Ï´Ù. µğ¹ö±ëÀÌ³ª »óÅÂ ÃßÀû¿¡ »ç¿ëµË´Ï´Ù.
+        /// ìƒì„±ì
         /// </summary>
-        public DateTime CreatedAt { get; set; }
-
-        /// <summary>
-        /// ºÎ¸ğ ¸ğµâÀÌ³ª È£ÃâÀÚ¿¡¼­ Àü´ŞÇÑ ÆÄ¶ó¹ÌÅÍ¸¦ º¸°üÇÏ´Â »çÀüÀÔ´Ï´Ù.
-        /// È­¸é ÀüÈ¯ ½Ã ¸ğµå, Å°°ª, ÃÊ±â ÇÊÅÍ µî ´Ù¾çÇÑ ½Ã³ª¸®¿À¿¡¼­ »ç¿ëµË´Ï´Ù.
-        /// </summary>
-        public Dictionary<string, object> Parameters { get; set; }
-
         public WorkContext()
         {
-            AdditionalData = new Dictionary<string, object>();
-            Parameters = new Dictionary<string, object>();
-            CreatedAt = DateTime.Now;
+            CustomData = new Dictionary<string, object>();
             Permissions = new ModulePermissions();
         }
 
         /// <summary>
-        /// Parameters »çÀü¿¡ Å°-°ªÀ» ¼³Á¤ÇÕ´Ï´Ù. ÀÌ¹Ì Á¸ÀçÇÏ¸é µ¤¾î¾¹´Ï´Ù.
-        /// ÁÖ·Î È­¸é ÀüÈ¯ ½Ã ¸ğµå(mode), ¼±ÅÃ Ç×¸ñ ID µîÀ» Àü´ŞÇÒ ¶§ »ç¿ëÇÕ´Ï´Ù.
+        /// í˜„ì¬ ì»¨í…ìŠ¤íŠ¸ì˜ ë³µë³¸ì„ ìƒì„±í•©ë‹ˆë‹¤.
+        /// (ì–•ì€ ë³µì‚¬ ìˆ˜í–‰, ì°¸ì¡° íƒ€ì… ê°ì²´ëŠ” ê³µìœ ë¨)
         /// </summary>
-        /// <param name="key">ÆÄ¶ó¹ÌÅÍ Å°</param>
-        /// <param name="value">ÀúÀåÇÒ °ª</param>
-        public void SetParameter(string key, object value)
-        {
-            Parameters[key] = value;
-        }
-
-        /// <summary>
-        /// Parameters¿¡¼­ ÁöÁ¤ÇÑ Å°ÀÇ °ªÀ» Å¸ÀÔÀ¸·Î º¯È¯ÇÏ¿© ¹İÈ¯ÇÕ´Ï´Ù.
-        /// Å°°¡ ¾ø°Å³ª Çü½ÄÀÌ ÀÏÄ¡ÇÏÁö ¾ÊÀ¸¸é Á¦°øÇÑ ±âº»°ªÀ» ¹İÈ¯ÇÕ´Ï´Ù.
-        /// </summary>
-        /// <typeparam name="T">±â´ëÇÏ´Â ¹İÈ¯ Å¸ÀÔ</typeparam>
-        /// <param name="key">ÆÄ¶ó¹ÌÅÍ Å°</param>
-        /// <param name="defaultValue">Ã£Áö ¸øÇßÀ» ¶§ ¹İÈ¯ÇÒ ±âº»°ª</param>
-        /// <returns>ÇØ´ç Å°ÀÇ °ª ¶Ç´Â ±âº»°ª</returns>
-        public T GetParameter<T>(string key, T defaultValue = default)
-        {
-            if (Parameters.TryGetValue(key, out var value) && value is T typedValue)
-            {
-                return typedValue;
-            }
-            return defaultValue;
-        }
-
-        /// <summary>
-        /// AdditionalData¿¡ Å°-°ªÀ» ¼³Á¤ÇÕ´Ï´Ù. ¸ğµâ °£ È®Àå µ¥ÀÌÅÍ¸¦ Àü´ŞÇÒ ¶§ »ç¿ëµË´Ï´Ù.
-        /// </summary>
-        public void SetData(string key, object value)
-        {
-            AdditionalData[key] = value;
-        }
-
-        /// <summary>
-        /// AdditionalData¿¡¼­ ÁöÁ¤ÇÑ Å°ÀÇ °ªÀ» Å¸ÀÔÀ¸·Î º¯È¯ÇÏ¿© ¹İÈ¯ÇÕ´Ï´Ù.
-        /// Å°°¡ ¾ø°Å³ª Çü½ÄÀÌ ÀÏÄ¡ÇÏÁö ¾ÊÀ¸¸é Á¦°øÇÑ ±âº»°ªÀ» ¹İÈ¯ÇÕ´Ï´Ù.
-        /// </summary>
-        public T GetData<T>(string key, T defaultValue = default)
-        {
-            if (AdditionalData.TryGetValue(key, out var value) && value is T typedValue)
-            {
-                return typedValue;
-            }
-            return defaultValue;
-        }
-
-        /// <summary>
-        /// ÇöÀç ÄÁÅØ½ºÆ®¸¦ ±íÀÌ°¡ ¾Æ´Ñ ¾èÀº º¹»ç(Shallow copy) ÇüÅÂ·Î º¹Á¦ÇÕ´Ï´Ù.
-        /// ÄÃ·º¼ÇÀº »õ·Î¿î Dictionary·Î º¹»çÇÏÁö¸¸ ³»ºÎ °´Ã¼µéÀº ÂüÁ¶¸¦ °øÀ¯ÇÕ´Ï´Ù.
-        /// ÀÌ ¸Ş¼­µå´Â ÄÁÅØ½ºÆ®¸¦ ¼öÁ¤ÇÏÁö ¾Ê°í ¾ÈÀüÇÏ°Ô ´Ù¸¥ ¸ğµâ¿¡ Àü´ŞÇÒ ¶§ À¯¿ëÇÕ´Ï´Ù.
-        /// </summary>
-        /// <returns>º¹Á¦µÈ WorkContext ÀÎ½ºÅÏ½º</returns>
         public WorkContext Clone()
         {
-            return new WorkContext
+            var clone = new WorkContext
             {
+                CurrentUser = this.CurrentUser,
                 CurrentPatient = this.CurrentPatient,
                 CurrentExam = this.CurrentExam,
-                CurrentAppointment = this.CurrentAppointment,
-                CurrentUser = this.CurrentUser,
-                Permissions = this.Permissions?.Clone(),
-                AdditionalData = new Dictionary<string, object>(this.AdditionalData),
-                Parameters = new Dictionary<string, object>(this.Parameters),
-                CreatedAt = this.CreatedAt
+                Permissions = this.Permissions?.Clone(), // Deep copy permissions as they are modified per module
+                CustomData = new Dictionary<string, object>(this.CustomData)
             };
+            return clone;
         }
     }
 
     /// <summary>
-    /// ¸ğµâº°·Î Àû¿ëµÇ´Â ±ÇÇÑ ÁıÇÕÀ» Ç¥ÇöÇÕ´Ï´Ù.
-    /// È­¸éÀÌ³ª ±â´Éº° ±ÇÇÑ ÆÇº°À» À§ÇØ »ç¿ëµÇ¸ç, ÇÊ¿äÇÏ¸é CustomPermissions¿¡ Ãß°¡ÀûÀÎ ±ÇÇÑÀ» Á¤ÀÇÇÒ ¼ö ÀÖ½À´Ï´Ù.
+    /// ëª¨ë“ˆë³„ ì ‘ê·¼ ê¶Œí•œì„ ì •ì˜í•©ë‹ˆë‹¤.
     /// </summary>
     public class ModulePermissions
     {
-        /// <summary>ÀĞ±â ±ÇÇÑ Çã¿ë ¿©ºÎ(±âº» true)</summary>
-        public bool CanRead { get; set; } = true;
-        /// <summary>»ı¼º(Ãß°¡) ±ÇÇÑ ¿©ºÎ</summary>
-        public bool CanCreate { get; set; } = false;
-        /// <summary>¼öÁ¤ ±ÇÇÑ ¿©ºÎ</summary>
-        public bool CanUpdate { get; set; } = false;
-        /// <summary>»èÁ¦ ±ÇÇÑ ¿©ºÎ</summary>
-        public bool CanDelete { get; set; } = false;
-        /// <summary>Ãâ·Â(ÇÁ¸°Æ®) ±ÇÇÑ ¿©ºÎ</summary>
-        public bool CanPrint { get; set; } = false;
-        /// <summary>µ¥ÀÌÅÍ/¸®Æ÷Æ® ³»º¸³»±â ±ÇÇÑ ¿©ºÎ</summary>
-        public bool CanExport { get; set; } = false;
-        /// <summary>½ÂÀÎ(Approve) ±ÇÇÑ ¿©ºÎ</summary>
-        public bool CanApprove { get; set; } = false;
-        /// <summary>Ãë¼Ò(Cancel) ±ÇÇÑ ¿©ºÎ</summary>
-        public bool CanCancel { get; set; } = false;
+        public bool CanRead { get; set; }
+        public bool CanCreate { get; set; }
+        public bool CanUpdate { get; set; }
+        public bool CanDelete { get; set; }
+        public bool CanPrint { get; set; }
+        public bool CanExport { get; set; }
+        public bool CanApprove { get; set; }
+        public bool CanCancel { get; set; }
 
         /// <summary>
-        /// ¸ğµâº°·Î Ãß°¡ÀûÀ¸·Î Á¤ÀÇÇÒ ¼ö ÀÖ´Â »ç¿ëÀÚ Á¤ÀÇ ±ÇÇÑ ¸ÊÀÔ´Ï´Ù.
-        /// Å°´Â ±ÇÇÑ ¸íÄª, °ªÀº Çã¿ë ¿©ºÎÀÔ´Ï´Ù.
-        /// </summary>
-        public Dictionary<string, bool> CustomPermissions { get; set; }
-
-        public ModulePermissions()
-        {
-            CustomPermissions = new Dictionary<string, bool>();
-        }
-
-        /// <summary>
-        /// CustomPermissions¿¡ Ç×¸ñÀ» ¼³Á¤ÇÕ´Ï´Ù. Á¸ÀçÇÏ¸é µ¤¾î¾¹´Ï´Ù.
-        /// </summary>
-        public void SetCustomPermission(string key, bool value)
-        {
-            CustomPermissions[key] = value;
-        }
-
-        /// <summary>
-        /// Æ¯Á¤ »ç¿ëÀÚ Á¤ÀÇ ±ÇÇÑÀÇ Çã¿ë ¿©ºÎ¸¦ ¹İÈ¯ÇÕ´Ï´Ù.
-        /// Å°°¡ ¾øÀ¸¸é false¸¦ ¹İÈ¯ÇÕ´Ï´Ù.
-        /// </summary>
-        public bool HasCustomPermission(string key)
-        {
-            return CustomPermissions.TryGetValue(key, out var value) && value;
-        }
-
-        /// <summary>
-        /// ±ÇÇÑ °´Ã¼¸¦ º¹Á¦ÇÏ¿© »õ·Î¿î ÀÎ½ºÅÏ½º·Î ¹İÈ¯ÇÕ´Ï´Ù.
-        /// CustomPermissions´Â »õ·Î¿î Dictionary·Î º¹»çµË´Ï´Ù(³»ºÎ Å°/°ªÀº µ¿ÀÏÇÑ ÂüÁ¶ À¯Áö).
-        /// </summary>
-        public ModulePermissions Clone()
-        {
-            return new ModulePermissions
-            {
-                CanRead = this.CanRead,
-                CanCreate = this.CanCreate,
-                CanUpdate = this.CanUpdate,
-                CanDelete = this.CanDelete,
-                CanPrint = this.CanPrint,
-                CanExport = this.CanExport,
-                CanApprove = this.CanApprove,
-                CanCancel = this.CanCancel,
-                CustomPermissions = new Dictionary<string, bool>(this.CustomPermissions)
-            };
-        }
-
-        /// <summary>
-        /// ¸ğµç ±ÇÇÑÀ» ºñÈ°¼ºÈ­(ÇØÁ¦)ÇÕ´Ï´Ù. CustomPermissionsµµ ¸ğµÎ Á¦°ÅµË´Ï´Ù.
-        /// È­¸é ÃÊ±âÈ­³ª ±ÇÇÑ ¸®¼Â ½Ã »ç¿ëµË´Ï´Ù.
-        /// </summary>
-        public void ClearAll()
-        {
-            CanRead = false;
-            CanCreate = false;
-            CanUpdate = false;
-            CanDelete = false;
-            CanPrint = false;
-            CanExport = false;
-            CanApprove = false;
-            CanCancel = false;
-            CustomPermissions.Clear();
-        }
-
-        /// <summary>
-        /// ¸ğµç Ç¥ÁØ ±ÇÇÑÀ» Çã¿ë »óÅÂ·Î ¼³Á¤ÇÕ´Ï´Ù. °ü¸® ±ÇÇÑ ºÎ¿© ½Ã »ç¿ëµË´Ï´Ù.
+        /// ëª¨ë“  ê¶Œí•œì„ í—ˆìš©ìœ¼ë¡œ ì„¤ì •í•©ë‹ˆë‹¤ (ê´€ë¦¬ììš© í¸ì˜ ë©”ì„œë“œ)
         /// </summary>
         public void GrantAll()
         {
@@ -240,30 +91,28 @@ namespace nU3.Core.Context
             CanApprove = true;
             CanCancel = true;
         }
+
+        public ModulePermissions Clone()
+        {
+            return (ModulePermissions)this.MemberwiseClone();
+        }
     }
 
     /// <summary>
-    /// ÄÁÅØ½ºÆ® º¯°æÀ» ¼³¸íÇÏ´Â ÀÌº¥Æ® ÀÎÀÚ Å¸ÀÔÀÔ´Ï´Ù.
-    /// OldContext¿Í NewContext¸¦ ÅëÇØ º¯°æ ÀüÈÄ »óÅÂ¸¦ ºñ±³ÇÒ ¼ö ÀÖÀ¸¸ç,
-    /// ChangedProperty¸¦ ÅëÇØ ¾î¶² ¼Ó¼ºÀÌ º¯°æµÇ¾ú´ÂÁö ºÎ°¡ Á¤º¸¸¦ Á¦°øÇÒ ¼ö ÀÖ½À´Ï´Ù.
+    /// ì»¨í…ìŠ¤íŠ¸ ë³€ê²½ ì´ë²¤íŠ¸ ì¸ì
     /// </summary>
     public class ContextChangedEventArgs : EventArgs
     {
-        /// <summary>º¯°æ Àü ÄÁÅØ½ºÆ®</summary>
-        public WorkContext OldContext { get; set; }
-        /// <summary>º¯°æ ÈÄ ÄÁÅØ½ºÆ®</summary>
-        public WorkContext NewContext { get; set; }
-        /// <summary>º¯°æµÈ ¼Ó¼º ÀÌ¸§(¿¹: "CurrentPatient")</summary>
         public string ChangedProperty { get; set; }
-        /// <summary>º¯°æ Àü °ª(¼±ÅÃÀû)</summary>
         public object OldValue { get; set; }
-        /// <summary>º¯°æ ÈÄ °ª(¼±ÅÃÀû)</summary>
         public object NewValue { get; set; }
-        /// <summary>º¯°æ ½Ã°¢</summary>
         public DateTime ChangedAt { get; set; }
 
-        public ContextChangedEventArgs()
+        public ContextChangedEventArgs(string propertyName, object oldValue, object newValue)
         {
+            ChangedProperty = propertyName;
+            OldValue = oldValue;
+            NewValue = newValue;
             ChangedAt = DateTime.Now;
         }
     }

@@ -3,122 +3,127 @@ using System;
 namespace nU3.Models
 {
     /// <summary>
-    /// »ç¿ëÀÚ Á¤º¸ ¸ğµ¨
+    /// ì‚¬ìš©ì ì •ë³´ ëª¨ë¸
     /// </summary>
     public class UserInfoDto
     {
         /// <summary>
-        /// »ç¿ëÀÚ ID (Primary Key)
+        /// ì‚¬ìš©ì ID (Primary Key)
         /// </summary>
         public string UserId { get; set; }
 
         /// <summary>
-        /// »ç¿ëÀÚ ÀÌ¸§
+        /// ì‚¬ìš©ì ì´ë¦„
         /// </summary>
         public string UserName { get; set; }
 
         /// <summary>
-        /// ºñ¹Ğ¹øÈ£ (ÇØ½Ã)
+        /// ë¹„ë°€ë²ˆí˜¸ (í•´ì‹œ)
         /// </summary>
         public string Password { get; set; }
 
         /// <summary>
-        /// »ç¿ëÀÚ ¿ªÇÒ (0:Admin, 1:Tech, 10:Doctor, 11:Nurse, 100:Patient)
+        /// ì‚¬ìš©ì ì—­í•  (0:Admin, 1:Tech, 10:Doctor, 11:Nurse, 100:Patient)
         /// </summary>
         public int UserRole { get; set; }
 
         /// <summary>
-        /// ±ÇÇÑ ·¹º§ (1-9)
+        /// ì‚¬ìš©ì ì—­í•  ì½”ë“œ (SYS_ROLE.ROLE_CODE)
+        /// </summary>
+        public string RoleCode { get; set; }
+
+        /// <summary>
+        /// ê¶Œí•œ ë ˆë²¨ (1-9)
         /// </summary>
         public int AuthLevel { get; set; }
 
         /// <summary>
-        /// »ç¿ëÀÚ ±ÇÇÑ ÇÃ·¡±× (Flags: 1:Read, 2:Write, 4:Edit, 8:Delete, 16:Access)
+        /// ì‚¬ìš©ì ê¶Œí•œ í”Œë˜ê·¸ (Flags: 1:Read, 2:Write, 4:Edit, 8:Delete, 16:Access)
         /// </summary>
         public int UserAuth { get; set; }
 
         /// <summary>
-        /// ¼Ò¼Ó ºÎ¼­ ÄÚµå
+        /// ì†Œì† ë¶€ì„œ ì½”ë“œ
         /// </summary>
         public int? DepartmentCode { get; set; }
 
         /// <summary>
-        /// Á÷¿ø ¹øÈ£
+        /// ì§ì› ë²ˆí˜¸
         /// </summary>
         public string EmployeeNo { get; set; }
 
         /// <summary>
-        /// ÀÇ»ç ¸éÇã¹øÈ£ (ÀÇ»çÀÎ °æ¿ì)
+        /// ì˜ì‚¬ ë©´í—ˆë²ˆí˜¸ (ì˜ì‚¬ì¸ ê²½ìš°)
         /// </summary>
         public string LicenseNo { get; set; }
 
         /// <summary>
-        /// Àü¹®ÀÇ ÀÚ°İ (ÀÇ»çÀÎ °æ¿ì)
+        /// ì „ë¬¸ì˜ ìê²© (ì˜ì‚¬ì¸ ê²½ìš°)
         /// </summary>
         public string Specialty { get; set; }
 
         /// <summary>
-        /// ÀÌ¸ŞÀÏ
+        /// ì´ë©”ì¼
         /// </summary>
         public string Email { get; set; }
 
         /// <summary>
-        /// ÀüÈ­¹øÈ£
+        /// ì „í™”ë²ˆí˜¸
         /// </summary>
         public string PhoneNumber { get; set; }
 
         /// <summary>
-        /// È°¼ºÈ­ ¿©ºÎ
+        /// í™œì„±í™” ì—¬ë¶€
         /// </summary>
         public bool IsActive { get; set; }
 
         /// <summary>
-        /// °èÁ¤ Àá±è ¿©ºÎ
+        /// ê³„ì • ì ê¹€ ì—¬ë¶€
         /// </summary>
         public bool IsLocked { get; set; }
 
         /// <summary>
-        /// ¸¶Áö¸· ·Î±×ÀÎ ÀÏ½Ã
+        /// ë§ˆì§€ë§‰ ë¡œê·¸ì¸ ì¼ì‹œ
         /// </summary>
         public DateTime? LastLoginDate { get; set; }
 
         /// <summary>
-        /// ·Î±×ÀÎ ½ÇÆĞ È½¼ö
+        /// ë¡œê·¸ì¸ ì‹¤íŒ¨ íšŸìˆ˜
         /// </summary>
         public int LoginFailCount { get; set; }
 
         /// <summary>
-        /// ºñ¹Ğ¹øÈ£ º¯°æÀÏ
+        /// ë¹„ë°€ë²ˆí˜¸ ë³€ê²½ì¼
         /// </summary>
         public DateTime? PasswordChangedDate { get; set; }
 
         /// <summary>
-        /// ºñ¹Ğ¹øÈ£ ¸¸·áÀÏ
+        /// ë¹„ë°€ë²ˆí˜¸ ë§Œë£Œì¼
         /// </summary>
         public DateTime? PasswordExpiryDate { get; set; }
 
         /// <summary>
-        /// »ı¼ºÀÏ½Ã
+        /// ìƒì„±ì¼ì‹œ
         /// </summary>
         public DateTime CreatedDate { get; set; }
 
         /// <summary>
-        /// »ı¼ºÀÚ
+        /// ìƒì„±ì
         /// </summary>
         public string CreatedBy { get; set; }
 
         /// <summary>
-        /// ¼öÁ¤ÀÏ½Ã
+        /// ìˆ˜ì •ì¼ì‹œ
         /// </summary>
         public DateTime? ModifiedDate { get; set; }
 
         /// <summary>
-        /// ¼öÁ¤ÀÚ
+        /// ìˆ˜ì •ì
         /// </summary>
         public string ModifiedBy { get; set; }
 
         /// <summary>
-        /// ºñ°í
+        /// ë¹„ê³ 
         /// </summary>
         public string Remarks { get; set; }
     }

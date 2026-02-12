@@ -23,7 +23,7 @@ namespace nU3.Tools.Deployer.Views
         private readonly IProgramRepository _progRepo;
         private readonly IModuleRepository _moduleRepo;
         
-        private string _currentTargetType = ""; // "USER" or "ROLE" or "DEPT"
+        private string _currentTargetType = ""; // "USER"(사용자) 또는 "ROLE"(역할) 또는 "DEPT"(부서)
         private string _currentTargetId = "";
         private string _currentTargetName = "";
         private string _currentProgId = "";
@@ -55,9 +55,9 @@ namespace nU3.Tools.Deployer.Views
         {
             // Users Grid
             gvUsers.Columns.Clear();
-            AddGridColumn(gvUsers, "UserId", "ID", 100); // Increased for User Input ID
+            AddGridColumn(gvUsers, "UserId", "ID", 100); // 사용자 입력 ID를 위해 너비 증가
             AddGridColumn(gvUsers, "Username", "이름", 100);
-            AddGridColumn(gvUsers, "RoleName", "역할", 80); // Renamed RankName -> RoleName
+            AddGridColumn(gvUsers, "RoleName", "역할", 80); // Renamed RankName -> RoleName (직급명 -> 역할명 변경)
             AddGridColumn(gvUsers, "DeptNames", "부서", 150);
             AddGridColumn(gvUsers, "Email", "이메일", 150);
 
@@ -71,7 +71,7 @@ namespace nU3.Tools.Deployer.Views
             gvDepts.Columns.Clear();
             AddGridColumn(gvDepts, "DeptCode", "부서코드", 80);
             AddGridColumn(gvDepts, "DeptName", "부서명", 120);
-            // ParentCode removed as Enum doesn't strictly support hierarchy in standard attributes unless added.
+            // ParentCode 제거됨 (Enum은 표준 속성에서 계층 구조를 엄격히 지원하지 않음)
 
             // Modules Grid
             gvModules.Columns.Clear();
@@ -79,7 +79,7 @@ namespace nU3.Tools.Deployer.Views
             AddGridColumn(gvModules, "ProgName", "프로그램명", 150);
             AddGridColumn(gvModules, "ModuleName", "모듈", 100);
             
-            // Allow filter
+            // 필터 허용
             gvModules.OptionsView.ShowAutoFilterRow = true;
         }
 
@@ -97,7 +97,7 @@ namespace nU3.Tools.Deployer.Views
             LoadModules();
         }
 
-        #region Loading Data
+        #region Loading Data (데이터 로드)
 
         private void LoadUsers()
         {
@@ -360,7 +360,15 @@ namespace nU3.Tools.Deployer.Views
 
         private void UpdateTargetLabel()
         {
-            lblCurrentTarget.Text = $"선택된 대상: {_currentTargetName}";
+            string moduleInfo = string.IsNullOrEmpty(_currentProgId) ? "모듈 미선택" : _currentProgId;
+            // You might want to lookup Module Name if possible, but _currentProgId is available.
+            // Retrieving name from grid is possible but requires lookup.
+            // Let's just show ID for now or try to get name from grid row if possible.
+            var progName = "";
+             var prog = gvModules.GetFocusedRow() as SecurityProgDto;
+             if (prog != null) progName = prog.ProgName;
+
+            lblCurrentTarget.Text = $"모듈: {progName} ({moduleInfo}) | 대상: {_currentTargetName}";
         }
 
         private void ClearChecks()

@@ -39,6 +39,7 @@ namespace nU3.Data.Repositories
                         Password = row["PASSWORD"].ToString() ?? string.Empty,
                         Email = row["EMAIL"].ToString() ?? string.Empty,
                         IsActive = (row["IS_ACTIVE"].ToString() ?? "N") == "Y",
+                        RoleCode = row["ROLE_CODE"].ToString() ?? "",
                         Remarks = row["ROLE_CODE"].ToString() ?? "1"  // 기본값: 사용자(Tech)
                     });
                 }
@@ -63,7 +64,29 @@ namespace nU3.Data.Repositories
                 Password = row["PASSWORD"].ToString() ?? string.Empty,
                 Email = row["EMAIL"].ToString() ?? string.Empty,
                 IsActive = (row["IS_ACTIVE"].ToString() ?? "N") == "Y",
+                RoleCode = row["ROLE_CODE"].ToString() ?? "",
                 Remarks = row["ROLE_CODE"].ToString() ?? "1"  // 기본값: 사용자(Tech)
+            };
+        }
+
+        public UserInfoDto? GetUserById(string userId)
+        {
+            string sql = "SELECT USER_ID, USERNAME, PASSWORD, EMAIL, ROLE_CODE, IS_ACTIVE FROM SYS_USER WHERE USER_ID = @id AND IS_ACTIVE = 'Y'";
+            var parameters = new Dictionary<string, object> { { "@id", userId } };
+
+            var dt = _db.ExecuteDataTable(sql, parameters);
+            if (dt == null || dt.Rows.Count == 0) return null;
+
+            var row = dt.Rows[0];
+            return new UserInfoDto
+            {
+                UserId = row["USER_ID"].ToString() ?? string.Empty,
+                UserName = row["USERNAME"].ToString() ?? string.Empty,
+                Password = row["PASSWORD"].ToString() ?? string.Empty,
+                Email = row["EMAIL"].ToString() ?? string.Empty,
+                IsActive = (row["IS_ACTIVE"].ToString() ?? "N") == "Y",
+                RoleCode = row["ROLE_CODE"].ToString() ?? "",
+                Remarks = row["ROLE_CODE"].ToString() ?? "1"
             };
         }
 

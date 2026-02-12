@@ -20,6 +20,11 @@ namespace nU3.Core.Repositories
         Task<UserInfoDto?> GetUserByIdAsync(string userId);
 
         /// <summary>
+        /// 사용자 ID를 기반으로 활성화된 사용자 정보를 동기적으로 조회합니다.
+        /// </summary>
+        UserInfoDto? GetUserById(string userId);
+
+        /// <summary>
         /// 사용자가 소속된 부서 코드 목록을 조회합니다.
         /// </summary>
         Task<List<string>> GetUserDepartmentCodesAsync(string userId);

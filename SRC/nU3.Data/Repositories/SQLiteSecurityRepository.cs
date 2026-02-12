@@ -217,6 +217,11 @@ namespace nU3.Data.Repositories
 
         public SecurityPermissionDto GetPermission(string targetType, string targetId, string progId)
         {
+            return GetPermissionInternal(targetType, targetId, progId);
+        }
+
+        private SecurityPermissionDto GetPermissionInternal(string targetType, string targetId, string progId)
+        {
             string sql = @"
                 SELECT CAN_READ, CAN_CREATE, CAN_UPDATE, CAN_DELETE, CAN_PRINT, CAN_EXPORT, CAN_APPROVE, CAN_CANCEL
                 FROM SYS_PERMISSION
@@ -248,6 +253,33 @@ namespace nU3.Data.Repositories
                 }
             }
             return null;
+        }
+
+        public SecurityPermissionDto GetEffectivePermission(string userId, string roleCode, string progId)
+        {
+            // 1. Check User Permission
+            var userPerm = GetPermissionInternal("USER", userId, progId);
+            if (userPerm != null) return userPerm;
+
+            // 2. Check Role Permission
+            var rolePerm = GetPermissionInternal("ROLE", roleCode, progId);
+            if (rolePerm != null) return rolePerm;
+
+            // 3. Default: All True
+            return new SecurityPermissionDto
+            {
+                TargetType = "DEFAULT",
+                TargetId = "ALL",
+                ProgId = progId,
+                CanRead = true,
+                CanCreate = true,
+                CanUpdate = true,
+                CanDelete = true,
+                CanPrint = true,
+                CanExport = true,
+                CanApprove = true,
+                CanCancel = true
+            };
         }
 
         public void SavePermission(SecurityPermissionDto p)

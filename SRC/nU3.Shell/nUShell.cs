@@ -26,6 +26,8 @@ namespace nU3.Shell
     {
         private readonly IMenuRepository _menuRepo;
         private readonly IModuleRepository _moduleRepo;
+        private readonly ISecurityRepository _securityRepo; 
+        private readonly IUserRepository _userRepo; // Injected
         private readonly nU3.Core.Events.IEventAggregator _eventAggregator;
         private readonly ModuleLoaderService _moduleLoader;
         private readonly IServiceProvider _serviceProvider;
@@ -52,6 +54,8 @@ namespace nU3.Shell
         public nUShell(
             IMenuRepository menuRepo,
             IModuleRepository moduleRepo,
+            ISecurityRepository securityRepo, 
+            IUserRepository userRepo, // Injected
             nU3.Core.Events.IEventAggregator eventAggregator,
             ModuleLoaderService moduleLoader,
             IServiceProvider serviceProvider)
@@ -64,6 +68,8 @@ namespace nU3.Shell
 
             _menuRepo = menuRepo;
             _moduleRepo = moduleRepo;
+            _securityRepo = securityRepo;
+            _userRepo = userRepo; // Assigned
             _eventAggregator = eventAggregator;
             _moduleLoader = moduleLoader;
             _serviceProvider = serviceProvider;
@@ -176,7 +182,7 @@ namespace nU3.Shell
             }
             catch
             {
-                // Ignore logging errors
+                // 로깅 오류 무시
             }
         }
 
@@ -672,10 +678,35 @@ namespace nU3.Shell
                     if (page.Controls.Count > 0)
                     {
                         var control = page.Controls[0];
+                        var progId = page.Tag as string;
 
                         if (control is IWorkContextProvider contextProvider)
                         {
-                            contextProvider.UpdateContext(newContext);
+                            // 컨텍스트를 복제하고 특정 모듈에 대한 권한을 업데이트합니다.
+                            var moduleContext = newContext.Clone();
+                            if (moduleContext.CurrentUser != null && !string.IsNullOrEmpty(progId)) 
+                            { 
+                                // Role 코드가 누락된 경우 가져옵니다 (컨텍스트에 없으면 리포지토리 시도)
+                                string roleCode = moduleContext.CurrentUser.RoleCode;
+                                if (string.IsNullOrEmpty(roleCode) && _userRepo != null)
+                                {
+                                     // 이벤트 핸들러에서 비동기 변경을 피하기 위해 동기 호출 사용
+                                     // 브로드캐스팅이 약간 지연될 수 있지만 정확성을 보장합니다.
+                                     try {
+                                        var u = _userRepo.GetUserByIdAsync(moduleContext.CurrentUser.UserId).GetAwaiter().GetResult();
+                                        if (u != null) roleCode = u.RoleCode;
+                                     } catch {}
+                                }
+
+                                moduleContext.Permissions = CreatePermissions(
+                                    moduleContext.CurrentUser.UserId, 
+                                    moduleContext.CurrentUser.AuthLevel, 
+                                    roleCode ?? "", 
+                                    progId
+                                );
+                            }
+
+                            contextProvider.UpdateContext(moduleContext);
                         }
                     }
                 }
@@ -710,15 +741,10 @@ namespace nU3.Shell
                 var context = new nU3.Core.Context.WorkContext();
                 context.CurrentPatient = patient;
 
-                var currentUser = nU3.Core.Security.UserSession.Current;
+                var currentUser = GetCurrentUserWithRole();
                 if (currentUser != null)
                 {
-                    context.CurrentUser = new UserInfoDto
-                    {
-                        UserId = currentUser.UserId,
-                        UserName = currentUser.UserName,
-                        AuthLevel = currentUser.AuthLevel
-                    };
+                    context.CurrentUser = currentUser;
                     context.Permissions = CreatePermissionsForUser(currentUser.AuthLevel);
                 }
 
@@ -756,15 +782,10 @@ namespace nU3.Shell
                 context.CurrentPatient = patient;
                 context.CurrentExam = exam;
 
-                var currentUser = nU3.Core.Security.UserSession.Current;
+                var currentUser = GetCurrentUserWithRole();
                 if (currentUser != null)
                 {
-                    context.CurrentUser = new UserInfoDto
-                    {
-                        UserId = currentUser.UserId,
-                        UserName = currentUser.UserName,
-                        AuthLevel = currentUser.AuthLevel
-                    };
+                    context.CurrentUser = currentUser;
                     context.Permissions = CreatePermissionsForUser(currentUser.AuthLevel);
                 }
 
@@ -1133,16 +1154,13 @@ namespace nU3.Shell
                     return;
                 }
 
-                LogManager.LogAction(AuditAction.Logout, "Shell", "MainShellForm", $"User logged out at {DateTime.Now:yyyy-MM-dd HH:mm:ss}");
-                LogManager.Info("Application closing", "Shell");
+                LogManager.LogAction(AuditAction.Logout, "Shell", "MainShellForm", $"사용자 로그아웃: {DateTime.Now:yyyy-MM-dd HH:mm:ss}");
+                LogManager.Info("애플리케이션 종료 중", "Shell");
             }
 
             if (!e.Cancel)
             {
-                return;
-
-
-                // 종료 처리
+                // return; // Removed unreachable return
                 try
                 {
                     // 에러 리포팅 이벤트 구독 해제
@@ -1251,9 +1269,9 @@ namespace nU3.Shell
 
                 if (string.IsNullOrWhiteSpace(user.SelectedDeptCode))
                 {
-                    var root = new BarSubItem(manager, "System (No Department)");
-                    var item = new BarButtonItem(manager, "Please select a department.");
-                    item.ItemClick += (s, e) => XtraMessageBox.Show("Please select a department during login.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    var root = new BarSubItem(manager, "시스템 (부서 미선택)");
+                    var item = new BarButtonItem(manager, "부서를 선택해주세요.");
+                    item.ItemClick += (s, e) => XtraMessageBox.Show("로그인 시 부서를 선택해야 합니다.", "알림", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     root.AddItem(item);
                     barMainMenu.AddItem(root);
                     return;
@@ -1284,9 +1302,9 @@ namespace nU3.Shell
 
                 if (filteredMenus.Count == 0)
                 {
-                    var root = new BarSubItem(manager, "System (Empty)");
-                    var item = new BarButtonItem(manager, "No Menus Available");
-                    item.ItemClick += (s, e) => XtraMessageBox.Show("No menus configured for your role or department.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    var root = new BarSubItem(manager, "시스템 (메뉴 없음)");
+                    var item = new BarButtonItem(manager, "사용 가능한 메뉴가 없습니다.");
+                    item.ItemClick += (s, e) => XtraMessageBox.Show("해당 역할 또는 부서에 구성된 메뉴가 없습니다.", "알림", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     root.AddItem(item);
                     barMainMenu.AddItem(root);
                     return;
@@ -1380,7 +1398,7 @@ namespace nU3.Shell
 
             try
             {
-                Control content = CreateProgramContent(type);
+                Control content = CreateProgramContent(type, progId);
                 if (content == null)
                     return;
 
@@ -1410,7 +1428,7 @@ namespace nU3.Shell
             }
         }
 
-        private Control CreateProgramContent(Type type)
+        private Control CreateProgramContent(Type type, string progId)
         {
             Control content;
 
@@ -1435,7 +1453,7 @@ namespace nU3.Shell
 
                 if (content is IWorkContextProvider contextProvider)
                 {
-                    var context = CreateWorkContext();
+                    var context = CreateWorkContext(progId);
                     contextProvider.InitializeContext(context);
                 }
 
@@ -1445,23 +1463,44 @@ namespace nU3.Shell
             return content;
         }
 
-        private nU3.Core.Context.WorkContext CreateWorkContext()
+        private UserInfoDto GetCurrentUserWithRole()
+        {
+            var currentUser = nU3.Core.Security.UserSession.Current;
+            if (currentUser == null) return null;
+
+            var userDto = new UserInfoDto
+            {
+                UserId = currentUser.UserId,
+                UserName = currentUser.UserName,
+                AuthLevel = currentUser.AuthLevel
+            };
+
+            try
+            {
+                if (_userRepo != null)
+                {
+                    var u = _userRepo.GetUserById(currentUser.UserId);
+                    if (u != null) userDto.RoleCode = u.RoleCode;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogManager.Warning($"사용자 Role 조회 실패: {ex.Message}", "Shell");
+            }
+            return userDto;
+        }
+
+        private nU3.Core.Context.WorkContext CreateWorkContext(string progId)
         {
             var context = new nU3.Core.Context.WorkContext();
 
             try
             {
-                var currentUser = nU3.Core.Security.UserSession.Current;
-                if (currentUser != null)
+                var userDto = GetCurrentUserWithRole();
+                if (userDto != null)
                 {
-                    context.CurrentUser = new UserInfoDto
-                    {
-                        UserId = currentUser.UserId,
-                        UserName = currentUser.UserName,
-                        AuthLevel = currentUser.AuthLevel
-                    };
-
-                    context.Permissions = CreatePermissionsForUser(currentUser.AuthLevel);
+                    context.CurrentUser = userDto;
+                    context.Permissions = CreatePermissions(userDto.UserId, userDto.AuthLevel, userDto.RoleCode, progId);
                 }
             }
             catch (Exception ex)
@@ -1470,6 +1509,55 @@ namespace nU3.Shell
             }
 
             return context;
+        }
+        
+        private nU3.Core.Context.ModulePermissions CreatePermissions(string userId, int authLevel, string roleCode, string progId)
+        {
+            // 1. Admin Level override
+            if (authLevel == 0)
+            {
+                var p = new nU3.Core.Context.ModulePermissions();
+                p.GrantAll();
+                return p;
+            }
+
+            // 2. Repo Logic (User > Role > All)
+            if (!string.IsNullOrEmpty(userId) && !string.IsNullOrEmpty(progId))
+            {
+                try
+                {
+                    // _securityRepo might be null if not injected properly, but we will ensure it is.
+                    // However, nUShell is created via DI, so constructor injection should work.
+                    // If manually created, we need to handle it.
+                    if (_securityRepo != null)
+                    {
+                        var permDto = _securityRepo.GetEffectivePermission(userId, roleCode, progId);
+                        if (permDto != null)
+                        {
+                            return new nU3.Core.Context.ModulePermissions
+                            {
+                                CanRead = permDto.CanRead,
+                                CanCreate = permDto.CanCreate,
+                                CanUpdate = permDto.CanUpdate,
+                                CanDelete = permDto.CanDelete,
+                                CanPrint = permDto.CanPrint,
+                                CanExport = permDto.CanExport,
+                                CanApprove = permDto.CanApprove,
+                                CanCancel = permDto.CanCancel
+                            };
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    LogManager.Error($"권한 조회 오류 ({progId}): {ex.Message}", "Shell", ex);
+                }
+            }
+            
+            // Fallback (ReadOnly or based on AuthLevel if DB fails)
+            var permissions = new nU3.Core.Context.ModulePermissions();
+            permissions.CanRead = true; // Default Read
+            return permissions;
         }
 
         private void ActivateTabContent(XtraTabPage page)
@@ -1518,6 +1606,42 @@ namespace nU3.Shell
             {
                 ActivateTabContent(e.Page);
                 UpdateStatusMessage($"'{e.Page.Text}' 활성화됨");
+
+                string title = "nU3 Healthcare Information System";
+                if (e.Page.Controls.Count > 0 && e.Page.Controls[0] is nU3.Core.UI.BaseWorkControl workControl)
+                {
+                    // 프로그램 정보 (제목, ID, 버전)
+                    string progTitle = workControl.ProgramTitle;
+                    string progId = workControl.ProgramID;
+                    string version = workControl.GetType().Assembly.GetName().Version?.ToString() ?? "1.0.0.0";
+
+                    title += $" - {progTitle} ({progId}, v{version})";
+
+                    // 권한 정보
+                    var p = workControl.Context?.Permissions;
+                    if (p != null)
+                    {
+                        var perms = new List<string>();
+                        if (p.CanRead) perms.Add("Read");
+                        if (p.CanCreate) perms.Add("Create");
+                        if (p.CanUpdate) perms.Add("Update");
+                        if (p.CanDelete) perms.Add("Delete");
+                        if (p.CanPrint) perms.Add("Print");
+                        if (p.CanExport) perms.Add("Export");
+                        if (p.CanApprove) perms.Add("Approve");
+                        if (p.CanCancel) perms.Add("Cancel");
+
+                        if (perms.Count > 0)
+                        {
+                            title += $" [Perm: {string.Join(", ", perms)}]";
+                        }
+                    }
+                }
+                else
+                {
+                    title += $" - {e.Page.Text}";
+                }
+                this.Text = title;
             }
             else
             {

@@ -23,6 +23,7 @@ namespace nU3.Core.Repositories
 
         // Permissions
         SecurityPermissionDto GetPermission(string targetType, string targetId, string progId);
+        SecurityPermissionDto GetEffectivePermission(string userId, string roleCode, string progId); // New
         void SavePermission(SecurityPermissionDto permission);
     }
 

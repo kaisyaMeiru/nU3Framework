@@ -38,6 +38,7 @@ namespace nU3.Shell
             services.AddScoped<IComponentRepository, SQLiteComponentRepository>(); // Frameork Component Repository
             services.AddScoped<IProgramRepository, SQLiteProgramRepository>();     // Program Repository
             services.AddScoped<IUserRepository, SQLiteUserRepository>();           // User Repository
+            services.AddScoped<ISecurityRepository, SQLiteSecurityRepository>();   // Security Repository
             services.AddSingleton<nU3.Core.Services.ModuleLoaderService>();        // DLL Module Loader Service
 
             // Biz Logic Factory
