@@ -216,18 +216,6 @@ namespace nU3.Modules.EMR.IN.Worklist
             LogInfo("리소스 해제됨");
         }
 
-        private void InitializeComponent()
-        {
-            SuspendLayout();
-            // 
-            // PatientListControl
-            // 
-            Name = "PatientListControl";
-            Size = new Size(1341, 723);
-            ResumeLayout(false);
-
-        }
-
         #endregion
 
         #region 헬퍼 메서드

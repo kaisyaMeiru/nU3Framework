@@ -23,6 +23,28 @@ namespace nU3.Shell
             SkinManager.EnableFormSkins();
             UserLookAndFeel.Default.SetSkinStyle("Office 2019 Black");
 
+            // ---------------------------------------------------------
+            // Global Culture & Date Format Configuration
+            // ---------------------------------------------------------
+            var culture = new System.Globalization.CultureInfo("ko-KR");
+            
+            // Customize Date Format
+            culture.DateTimeFormat.ShortDatePattern = "yyyy-MM-dd";
+            culture.DateTimeFormat.LongTimePattern = "HH:mm:ss";
+            culture.DateTimeFormat.DateSeparator = "-";
+
+            // Apply to Current Thread
+            System.Threading.Thread.CurrentThread.CurrentCulture = culture;
+            System.Threading.Thread.CurrentThread.CurrentUICulture = culture;
+
+            // Apply to Future Threads
+            System.Globalization.CultureInfo.DefaultThreadCurrentCulture = culture;
+            System.Globalization.CultureInfo.DefaultThreadCurrentUICulture = culture;
+            
+            // Ensure DevExpress uses this culture
+            // DevExpress controls typically respect the CurrentThread.CurrentCulture
+            // ---------------------------------------------------------
+
             // Load Configuration
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)

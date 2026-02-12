@@ -20,4 +20,8 @@
     <ProjectReference Include="..\nU3.Connectivity\nU3.Connectivity.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Events\Contracts\Models\" />
+  </ItemGroup>
+
 </Project>

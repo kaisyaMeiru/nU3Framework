@@ -162,7 +162,10 @@ namespace nU3.Modules.OCS.IN.MainEntry
             }
         }
 
-        public void PublishPatientSelectedEvent(PatientInfoDto patient)
+        /// <summary>
+        /// Base에도 있으나 테스트를 위해 재정의
+        /// </summary>        
+        new public void PublishPatientSelectedEvent(PatientInfoDto patient)
         {
             if (patient == null) return;
             

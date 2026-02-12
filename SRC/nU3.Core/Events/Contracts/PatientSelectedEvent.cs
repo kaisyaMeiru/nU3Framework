@@ -1,5 +1,4 @@
 using nU3.Core.Events;
-using nU3.Core.Contracts.Models;
 
 namespace nU3.Core.Events.Contracts
 {

@@ -1,14 +1,15 @@
-using System;
-using System.Windows.Forms;
+using nU3.Core.Attributes;
+using nU3.Core.Context;
+using nU3.Core.Events;
 using nU3.Core.Interfaces;
 using nU3.Core.Logging;
-using nU3.Core.Context;
-using nU3.Core.Attributes;
 using nU3.Core.Services;
-using nU3.Core.Events;
+using nU3.Models;
+using System;
 using System.Collections.Generic;
-using System.Threading;
 using System.Reflection;
+using System.Threading;
+using System.Windows.Forms;
 
 namespace nU3.Core.UI
 {
@@ -559,6 +560,25 @@ namespace nU3.Core.UI
             base.Dispose(disposing);
         }
 
+        #endregion
+
+
+        #region Common Event Bus Helpers
+        public void PublishPatientSelectedEvent(PatientInfoDto patient)
+        {
+            if (patient == null) return;
+
+            // EventBus를 통해 다른 모듈에 이벤트 발행
+            var evenPub = EventBus?.GetEvent<PatientSelectedEvent>();
+            evenPub?.Publish(new PatientSelectedEventPayload
+            {
+                Patient = patient,
+                Source = this.ProgramID,
+            });
+
+            LogInfo($"PatientSelectedEvent 발행: {patient.PatientName} ({patient.PatientId}) - {this.ProgramID}");
+            LogInfo($"Patient selected event published: {patient.PatientId}");
+        }
         #endregion
     }
 }

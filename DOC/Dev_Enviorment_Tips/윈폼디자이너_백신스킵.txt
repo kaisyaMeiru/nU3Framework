@@ -1,0 +1,4 @@
+https://github.com/dotnet/winforms/blob/main/docs/designer/troubleshooting.md
+
+Add-MpPreference -ExclusionProcess 'devenv.exe'
+Add-MpPreference -ExclusionProcess 'DesignToolsServer.exe'

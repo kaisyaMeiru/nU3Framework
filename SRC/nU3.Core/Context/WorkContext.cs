@@ -26,6 +26,16 @@ namespace nU3.Core.Context
         public ExamOrderDto CurrentExam { get; set; }
 
         /// <summary>
+        /// 현재 선택된 부서 정보 (선택적)
+        /// </summary>
+        public DepartmentDto CurrentDepartment { get; set; }
+
+        /// <summary>
+        /// 현재 선택된 예약 정보 (선택적)
+        /// </summary>
+        public AppointmentDto CurrentAppointment { get; set; }
+
+        /// <summary>
         /// 현재 모듈에 대한 권한 정보
         /// </summary>
         public ModulePermissions Permissions { get; set; }
@@ -46,6 +56,38 @@ namespace nU3.Core.Context
         }
 
         /// <summary>
+        /// 사용자 정의 데이터를 설정합니다.
+        /// </summary>
+        public void SetParameter(string key, object value)
+        {
+            if (CustomData.ContainsKey(key))
+                CustomData[key] = value;
+            else
+                CustomData.Add(key, value);
+        }
+
+        /// <summary>
+        /// 사용자 정의 데이터를 조회합니다.
+        /// </summary>
+        public T GetParameter<T>(string key)
+        {
+            if (CustomData.TryGetValue(key, out var value))
+            {
+                if (value is T t)
+                    return t;
+                try
+                {
+                    return (T)Convert.ChangeType(value, typeof(T));
+                }
+                catch
+                {
+                    return default;
+                }
+            }
+            return default;
+        }
+
+        /// <summary>
         /// 현재 컨텍스트의 복본을 생성합니다.
         /// (얕은 복사 수행, 참조 타입 객체는 공유됨)
         /// </summary>
@@ -56,6 +98,8 @@ namespace nU3.Core.Context
                 CurrentUser = this.CurrentUser,
                 CurrentPatient = this.CurrentPatient,
                 CurrentExam = this.CurrentExam,
+                CurrentDepartment = this.CurrentDepartment,
+                CurrentAppointment = this.CurrentAppointment,
                 Permissions = this.Permissions?.Clone(), // Deep copy permissions as they are modified per module
                 CustomData = new Dictionary<string, object>(this.CustomData)
             };

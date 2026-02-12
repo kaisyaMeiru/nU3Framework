@@ -15,6 +15,8 @@ namespace nU3.Core.Events
     {
         public PatientInfoDto Patient { get; set; }
         public string Source { get; set; }
+
+        public List<string> Target { get; set; } = new List<string>();
     }
 
     /// <summary>
@@ -120,18 +122,6 @@ namespace nU3.Core.Events
     {
         public string ScreenId { get; set; }
         public bool Force { get; set; }
-        public string Source { get; set; }
-    }
-
-    /// <summary>
-    /// 처방 서명 완료 이벤트
-    /// </summary>
-    public class OrderSignedEvent : PubSubEvent { }
-
-    public class OrderSignedEventPayload
-    {
-        public string OrderId { get; set; }
-        public string SignedBy { get; set; }
         public string Source { get; set; }
     }
 
