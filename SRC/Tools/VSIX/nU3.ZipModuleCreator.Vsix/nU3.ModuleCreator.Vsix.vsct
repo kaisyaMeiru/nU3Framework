@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable">
+  <Extern href="stdidcmd.h" />
+  <Extern href="vsshlids.h" />
+
+  <Commands package="guidModuleCreatorPackage">
+    <Menus>
+      <Menu guid="guidModuleCreatorCmdSet" id="nU3TopMenu" priority="0x0100" type="Menu">
+        <Parent guid="guidModuleCreatorCmdSet" id="MyGroup" />
+        <Strings>
+          <ButtonText>nU3 Tools</ButtonText>
+        </Strings>
+      </Menu>
+    </Menus>
+
+    <Groups>
+      <!-- Group 1: Under Extensions -->
+      <Group guid="guidModuleCreatorCmdSet" id="MyGroup" priority="0x0600">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_EXTENSIONS" />
+      </Group>
+      
+      <!-- Group 2: Under nU3 Tools Menu -->
+      <Group guid="guidModuleCreatorCmdSet" id="nU3SubGroup" priority="0x0100">
+        <Parent guid="guidModuleCreatorCmdSet" id="nU3TopMenu" />
+      </Group>
+    </Groups>
+
+    <Buttons>
+      <Button guid="guidModuleCreatorCmdSet" id="ModuleCreatorCommandId" priority="0x0100" type="Button">
+        <Parent guid="guidModuleCreatorCmdSet" id="nU3SubGroup" />
+        <Strings>
+          <ButtonText>모듈 프로젝트 생성하기</ButtonText>
+        </Strings>
+      </Button>
+    </Buttons>
+  </Commands>
+
+  <Symbols>
+    <GuidSymbol name="guidModuleCreatorPackage" value="{A1B2C3D4-E5F6-4789-0123-456789ABCDEF}" />
+    <GuidSymbol name="guidModuleCreatorCmdSet" value="{11111111-2222-3333-4444-555555555555}">
+      <IDSymbol name="MyGroup" value="0x1020" />
+      <IDSymbol name="nU3TopMenu" value="0x1030"/>
+      <IDSymbol name="nU3SubGroup" value="0x1040"/>
+      <IDSymbol name="ModuleCreatorCommandId" value="0x0100" />
+    </GuidSymbol>
+    
+    <GuidSymbol name="guidSHLMainMenu" value="{d309f791-903f-11d0-9efc-00a0c911004f}">
+        <IDSymbol name="IDM_VS_MENU_EXTENSIONS" value="0x0091" />
+    </GuidSymbol>
+  </Symbols>
+</CommandTable>

@@ -91,80 +91,79 @@ namespace nU3.Modules.Bas.zz.zipcode
             layoutControl1.Location = new System.Drawing.Point(0, 0);
             layoutControl1.Name = "layoutControl1";
             layoutControl1.Root = layoutControlGroup1;
-            layoutControl1.Size = new System.Drawing.Size(1305, 852);
+            layoutControl1.Size = new System.Drawing.Size(1160, 848);
             layoutControl1.TabIndex = 0;
             layoutControl1.Text = "layoutControl1";
             // 
             // radioGroupType
             // 
             radioGroupType.EditValue = "N";
-            radioGroupType.Location = new System.Drawing.Point(12, 12);
+            radioGroupType.Location = new System.Drawing.Point(12, 11);
             radioGroupType.Name = "radioGroupType";
             radioGroupType.Properties.Items.AddRange(new DevExpress.XtraEditors.Controls.RadioGroupItem[] { new DevExpress.XtraEditors.Controls.RadioGroupItem("J", "지번주소"), new DevExpress.XtraEditors.Controls.RadioGroupItem("N", "도로명주소") });
-            radioGroupType.Size = new System.Drawing.Size(1281, 53);
+            radioGroupType.Size = new System.Drawing.Size(1136, 53);
             radioGroupType.StyleController = layoutControl1;
             radioGroupType.TabIndex = 4;
             // 
             // cboSearchCondition
             // 
-            cboSearchCondition.Location = new System.Drawing.Point(76, 81);
+            cboSearchCondition.Location = new System.Drawing.Point(76, 79);
             cboSearchCondition.Name = "cboSearchCondition";
-            cboSearchCondition.Size = new System.Drawing.Size(278, 20);
+            cboSearchCondition.Size = new System.Drawing.Size(240, 20);
             cboSearchCondition.StyleController = layoutControl1;
             cboSearchCondition.TabIndex = 5;
             // 
             // txtSearchTerm
             // 
-            txtSearchTerm.Location = new System.Drawing.Point(410, 81);
+            txtSearchTerm.Location = new System.Drawing.Point(372, 79);
             txtSearchTerm.Name = "txtSearchTerm";
-            txtSearchTerm.Size = new System.Drawing.Size(871, 20);
+            txtSearchTerm.Size = new System.Drawing.Size(764, 20);
             txtSearchTerm.StyleController = layoutControl1;
             txtSearchTerm.TabIndex = 6;
             // 
             // cboCity
             // 
-            cboCity.Location = new System.Drawing.Point(76, 129);
+            cboCity.Location = new System.Drawing.Point(76, 125);
             cboCity.Name = "cboCity";
-            cboCity.Size = new System.Drawing.Size(194, 20);
+            cboCity.Size = new System.Drawing.Size(165, 20);
             cboCity.StyleController = layoutControl1;
             cboCity.TabIndex = 7;
             // 
             // txtRoadName
             // 
-            txtRoadName.Location = new System.Drawing.Point(326, 129);
+            txtRoadName.Location = new System.Drawing.Point(297, 125);
             txtRoadName.Name = "txtRoadName";
-            txtRoadName.Size = new System.Drawing.Size(278, 20);
+            txtRoadName.Size = new System.Drawing.Size(240, 20);
             txtRoadName.StyleController = layoutControl1;
             txtRoadName.TabIndex = 8;
             // 
             // txtBldNo
             // 
-            txtBldNo.Location = new System.Drawing.Point(660, 129);
+            txtBldNo.Location = new System.Drawing.Point(593, 125);
             txtBldNo.Name = "txtBldNo";
-            txtBldNo.Size = new System.Drawing.Size(194, 20);
+            txtBldNo.Size = new System.Drawing.Size(166, 20);
             txtBldNo.StyleController = layoutControl1;
             txtBldNo.TabIndex = 9;
             // 
             // txtBldNm
             // 
-            txtBldNm.Location = new System.Drawing.Point(910, 129);
+            txtBldNm.Location = new System.Drawing.Point(815, 125);
             txtBldNm.Name = "txtBldNm";
-            txtBldNm.Size = new System.Drawing.Size(371, 20);
+            txtBldNm.Size = new System.Drawing.Size(321, 20);
             txtBldNm.StyleController = layoutControl1;
             txtBldNm.TabIndex = 10;
             // 
             // gridControlResult
             // 
-            gridControlResult.Location = new System.Drawing.Point(12, 191);
+            gridControlResult.Location = new System.Drawing.Point(12, 186);
             gridControlResult.MainView = gridViewResult;
             gridControlResult.Name = "gridControlResult";
-            gridControlResult.Size = new System.Drawing.Size(1281, 623);
+            gridControlResult.Size = new System.Drawing.Size(1136, 625);
             gridControlResult.TabIndex = 11;
             gridControlResult.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] { gridViewResult });
             // 
             // gridViewResult
             // 
-            gridViewResult.DetailHeight = 375;
             gridViewResult.GridControl = gridControlResult;
             gridViewResult.Name = "gridViewResult";
             gridViewResult.OptionsBehavior.Editable = false;
@@ -172,26 +171,26 @@ namespace nU3.Modules.Bas.zz.zipcode
             // 
             // txtDetailAddress
             // 
-            txtDetailAddress.Location = new System.Drawing.Point(64, 818);
+            txtDetailAddress.Location = new System.Drawing.Point(64, 815);
             txtDetailAddress.Name = "txtDetailAddress";
-            txtDetailAddress.Size = new System.Drawing.Size(1097, 20);
+            txtDetailAddress.Size = new System.Drawing.Size(967, 20);
             txtDetailAddress.StyleController = layoutControl1;
             txtDetailAddress.TabIndex = 12;
             // 
             // btnSearch
             // 
-            btnSearch.Location = new System.Drawing.Point(1165, 165);
+            btnSearch.Location = new System.Drawing.Point(1035, 160);
             btnSearch.Name = "btnSearch";
-            btnSearch.Size = new System.Drawing.Size(128, 22);
+            btnSearch.Size = new System.Drawing.Size(113, 22);
             btnSearch.StyleController = layoutControl1;
             btnSearch.TabIndex = 13;
             btnSearch.Text = "조회";
             // 
             // btnVerify
             // 
-            btnVerify.Location = new System.Drawing.Point(1165, 818);
+            btnVerify.Location = new System.Drawing.Point(1035, 815);
             btnVerify.Name = "btnVerify";
-            btnVerify.Size = new System.Drawing.Size(128, 22);
+            btnVerify.Size = new System.Drawing.Size(113, 22);
             btnVerify.StyleController = layoutControl1;
             btnVerify.TabIndex = 14;
             btnVerify.Text = "검증";
@@ -202,7 +201,7 @@ namespace nU3.Modules.Bas.zz.zipcode
             layoutControlGroup1.GroupBordersVisible = false;
             layoutControlGroup1.Items.AddRange(new DevExpress.XtraLayout.BaseLayoutItem[] { layoutControlItemRadio, layoutControlGroupLot, layoutControlGroupRoad, layoutControlItemGrid, layoutControlItemDetail, layoutControlItemSearch, layoutControlItemVerify, emptySpaceItem1 });
             layoutControlGroup1.Name = "Root";
-            layoutControlGroup1.Size = new System.Drawing.Size(1305, 852);
+            layoutControlGroup1.Size = new System.Drawing.Size(1160, 848);
             layoutControlGroup1.TextVisible = false;
             // 
             // layoutControlItemRadio
@@ -210,7 +209,7 @@ namespace nU3.Modules.Bas.zz.zipcode
             layoutControlItemRadio.Control = radioGroupType;
             layoutControlItemRadio.Location = new System.Drawing.Point(0, 0);
             layoutControlItemRadio.Name = "layoutControlItemRadio";
-            layoutControlItemRadio.Size = new System.Drawing.Size(1285, 57);
+            layoutControlItemRadio.Size = new System.Drawing.Size(1140, 57);
             layoutControlItemRadio.TextSize = new System.Drawing.Size(0, 0);
             layoutControlItemRadio.TextVisible = false;
             // 
@@ -219,7 +218,7 @@ namespace nU3.Modules.Bas.zz.zipcode
             layoutControlGroupLot.Items.AddRange(new DevExpress.XtraLayout.BaseLayoutItem[] { layoutControlItemCondition, layoutControlItemTerm });
             layoutControlGroupLot.Location = new System.Drawing.Point(0, 57);
             layoutControlGroupLot.Name = "layoutControlGroupLot";
-            layoutControlGroupLot.Size = new System.Drawing.Size(1285, 48);
+            layoutControlGroupLot.Size = new System.Drawing.Size(1140, 46);
             layoutControlGroupLot.Text = "지번주소 검색조건";
             layoutControlGroupLot.TextVisible = false;
             // 
@@ -228,25 +227,25 @@ namespace nU3.Modules.Bas.zz.zipcode
             layoutControlItemCondition.Control = cboSearchCondition;
             layoutControlItemCondition.Location = new System.Drawing.Point(0, 0);
             layoutControlItemCondition.Name = "layoutControlItemCondition";
-            layoutControlItemCondition.Size = new System.Drawing.Size(334, 24);
+            layoutControlItemCondition.Size = new System.Drawing.Size(296, 24);
             layoutControlItemCondition.Text = "검색조건";
             layoutControlItemCondition.TextSize = new System.Drawing.Size(40, 14);
             // 
             // layoutControlItemTerm
             // 
             layoutControlItemTerm.Control = txtSearchTerm;
-            layoutControlItemTerm.Location = new System.Drawing.Point(334, 0);
+            layoutControlItemTerm.Location = new System.Drawing.Point(296, 0);
             layoutControlItemTerm.Name = "layoutControlItemTerm";
-            layoutControlItemTerm.Size = new System.Drawing.Size(927, 24);
+            layoutControlItemTerm.Size = new System.Drawing.Size(820, 24);
             layoutControlItemTerm.Text = "검색어";
             layoutControlItemTerm.TextSize = new System.Drawing.Size(40, 14);
             // 
             // layoutControlGroupRoad
             // 
             layoutControlGroupRoad.Items.AddRange(new DevExpress.XtraLayout.BaseLayoutItem[] { layoutControlItemCity, layoutControlItemRoadName, layoutControlItemBldNo, layoutControlItemBldNm });
-            layoutControlGroupRoad.Location = new System.Drawing.Point(0, 105);
+            layoutControlGroupRoad.Location = new System.Drawing.Point(0, 103);
             layoutControlGroupRoad.Name = "layoutControlGroupRoad";
-            layoutControlGroupRoad.Size = new System.Drawing.Size(1285, 48);
+            layoutControlGroupRoad.Size = new System.Drawing.Size(1140, 46);
             layoutControlGroupRoad.Text = "도로명주소 검색조건";
             layoutControlGroupRoad.TextVisible = false;
             // 
@@ -255,88 +254,88 @@ namespace nU3.Modules.Bas.zz.zipcode
             layoutControlItemCity.Control = cboCity;
             layoutControlItemCity.Location = new System.Drawing.Point(0, 0);
             layoutControlItemCity.Name = "layoutControlItemCity";
-            layoutControlItemCity.Size = new System.Drawing.Size(250, 24);
+            layoutControlItemCity.Size = new System.Drawing.Size(221, 24);
             layoutControlItemCity.Text = "시도";
             layoutControlItemCity.TextSize = new System.Drawing.Size(40, 14);
             // 
             // layoutControlItemRoadName
             // 
             layoutControlItemRoadName.Control = txtRoadName;
-            layoutControlItemRoadName.Location = new System.Drawing.Point(250, 0);
+            layoutControlItemRoadName.Location = new System.Drawing.Point(221, 0);
             layoutControlItemRoadName.Name = "layoutControlItemRoadName";
-            layoutControlItemRoadName.Size = new System.Drawing.Size(334, 24);
+            layoutControlItemRoadName.Size = new System.Drawing.Size(296, 24);
             layoutControlItemRoadName.Text = "도로명";
             layoutControlItemRoadName.TextSize = new System.Drawing.Size(40, 14);
             // 
             // layoutControlItemBldNo
             // 
             layoutControlItemBldNo.Control = txtBldNo;
-            layoutControlItemBldNo.Location = new System.Drawing.Point(584, 0);
+            layoutControlItemBldNo.Location = new System.Drawing.Point(517, 0);
             layoutControlItemBldNo.Name = "layoutControlItemBldNo";
-            layoutControlItemBldNo.Size = new System.Drawing.Size(250, 24);
+            layoutControlItemBldNo.Size = new System.Drawing.Size(222, 24);
             layoutControlItemBldNo.Text = "건물번호";
             layoutControlItemBldNo.TextSize = new System.Drawing.Size(40, 14);
             // 
             // layoutControlItemBldNm
             // 
             layoutControlItemBldNm.Control = txtBldNm;
-            layoutControlItemBldNm.Location = new System.Drawing.Point(834, 0);
+            layoutControlItemBldNm.Location = new System.Drawing.Point(739, 0);
             layoutControlItemBldNm.Name = "layoutControlItemBldNm";
-            layoutControlItemBldNm.Size = new System.Drawing.Size(427, 24);
+            layoutControlItemBldNm.Size = new System.Drawing.Size(377, 24);
             layoutControlItemBldNm.Text = "건물명";
             layoutControlItemBldNm.TextSize = new System.Drawing.Size(40, 14);
             // 
             // layoutControlItemGrid
             // 
             layoutControlItemGrid.Control = gridControlResult;
-            layoutControlItemGrid.Location = new System.Drawing.Point(0, 179);
+            layoutControlItemGrid.Location = new System.Drawing.Point(0, 175);
             layoutControlItemGrid.Name = "layoutControlItemGrid";
-            layoutControlItemGrid.Size = new System.Drawing.Size(1285, 627);
+            layoutControlItemGrid.Size = new System.Drawing.Size(1140, 629);
             layoutControlItemGrid.TextSize = new System.Drawing.Size(0, 0);
             layoutControlItemGrid.TextVisible = false;
             // 
             // layoutControlItemDetail
             // 
             layoutControlItemDetail.Control = txtDetailAddress;
-            layoutControlItemDetail.Location = new System.Drawing.Point(0, 806);
+            layoutControlItemDetail.Location = new System.Drawing.Point(0, 804);
             layoutControlItemDetail.Name = "layoutControlItemDetail";
-            layoutControlItemDetail.Size = new System.Drawing.Size(1153, 26);
+            layoutControlItemDetail.Size = new System.Drawing.Size(1023, 26);
             layoutControlItemDetail.Text = "상세주소";
             layoutControlItemDetail.TextSize = new System.Drawing.Size(40, 14);
             // 
             // layoutControlItemSearch
             // 
             layoutControlItemSearch.Control = btnSearch;
-            layoutControlItemSearch.Location = new System.Drawing.Point(1153, 153);
+            layoutControlItemSearch.Location = new System.Drawing.Point(1023, 149);
             layoutControlItemSearch.Name = "layoutControlItemSearch";
-            layoutControlItemSearch.Size = new System.Drawing.Size(132, 26);
+            layoutControlItemSearch.Size = new System.Drawing.Size(117, 26);
             layoutControlItemSearch.TextSize = new System.Drawing.Size(0, 0);
             layoutControlItemSearch.TextVisible = false;
             // 
             // layoutControlItemVerify
             // 
             layoutControlItemVerify.Control = btnVerify;
-            layoutControlItemVerify.Location = new System.Drawing.Point(1153, 806);
+            layoutControlItemVerify.Location = new System.Drawing.Point(1023, 804);
             layoutControlItemVerify.Name = "layoutControlItemVerify";
-            layoutControlItemVerify.Size = new System.Drawing.Size(132, 26);
+            layoutControlItemVerify.Size = new System.Drawing.Size(117, 26);
             layoutControlItemVerify.TextSize = new System.Drawing.Size(0, 0);
             layoutControlItemVerify.TextVisible = false;
             // 
             // emptySpaceItem1
             // 
             emptySpaceItem1.AllowHotTrack = false;
-            emptySpaceItem1.Location = new System.Drawing.Point(0, 153);
+            emptySpaceItem1.Location = new System.Drawing.Point(0, 149);
             emptySpaceItem1.Name = "emptySpaceItem1";
-            emptySpaceItem1.Size = new System.Drawing.Size(1153, 26);
+            emptySpaceItem1.Size = new System.Drawing.Size(1023, 26);
             emptySpaceItem1.TextSize = new System.Drawing.Size(0, 0);
             // 
             // ZipCodeSearchControl
             // 
-            AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             Controls.Add(layoutControl1);
             Name = "ZipCodeSearchControl";
-            Size = new System.Drawing.Size(1305, 852);
+            Size = new System.Drawing.Size(1160, 848);
             ((System.ComponentModel.ISupportInitialize)layoutControl1).EndInit();
             layoutControl1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)radioGroupType.Properties).EndInit();

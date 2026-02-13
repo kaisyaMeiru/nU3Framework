@@ -1,3 +1,4 @@
+using DevExpress.XtraEditors;
 using nU3.Core.Attributes;
 using nU3.Core.Context;
 using nU3.Core.Events;
@@ -17,7 +18,7 @@ namespace nU3.Core.UI
     /// 병원 MDI 자식 작업 화면의 기본 클래스입니다.
     /// 화면 생명주기(활성화/비활성화), 컨텍스트 공유, 리소스 해제 등을 관리합니다.
     /// </summary>
-    public class BaseWorkControl : UserControl, IBaseWorkControl, IBaseWorkControlExpand, IDisposable
+    public class BaseWorkControl : XtraUserControl, IBaseWorkControl, IBaseWorkControlExpand, IDisposable
     {
         private WorkContext _workContext;
         private bool _isActivated;

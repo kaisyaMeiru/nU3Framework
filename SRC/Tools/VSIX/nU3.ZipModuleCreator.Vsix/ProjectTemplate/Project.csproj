@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+	<PropertyGroup>
+		<TargetFramework>net8.0-windows</TargetFramework>
+		<UseWindowsForms>true</UseWindowsForms>
+		<RootNamespace>$projectname$</RootNamespace>
+		<AssemblyName>$dllname$</AssemblyName>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+		<PackageReference Include="DevExpress.Win" Version="23.2.9" />
+		<PackageReference Include="DevExpress.Win.Design" Version="23.2.9" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\..\..\nU3.Core.UI\nU3.Core.UI.csproj" />
+		<ProjectReference Include="..\..\..\..\nU3.Core\nU3.Core.csproj" />
+	</ItemGroup>
+</Project>

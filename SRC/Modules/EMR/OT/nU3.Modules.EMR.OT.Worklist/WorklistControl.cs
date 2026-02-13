@@ -1,11 +1,11 @@
 using DevExpress.XtraGrid;
 using DevExpress.XtraGrid.Views.Grid;
 using Microsoft.Extensions.DependencyInjection;
-using nU3.Connectivity;
 using nU3.Core.Attributes;
 using nU3.Core.Context;
 using nU3.Core.Events;
 using nU3.Core.Events.Contracts;
+using nU3.Core.Interfaces;
 using nU3.Core.Logic;
 using nU3.Core.UI;
 using nU3.Core.UI.Controls;

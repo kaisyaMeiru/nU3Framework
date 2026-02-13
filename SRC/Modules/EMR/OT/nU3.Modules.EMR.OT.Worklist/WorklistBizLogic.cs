@@ -1,7 +1,7 @@
 using System;
 using System.Data;
 using System.Threading.Tasks;
-using nU3.Connectivity;
+using nU3.Core.Interfaces;
 using nU3.Core.Logic;
 
 namespace nU3.Modules.EMR.OT.Worklist

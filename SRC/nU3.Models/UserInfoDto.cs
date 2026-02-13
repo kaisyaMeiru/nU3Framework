@@ -43,6 +43,11 @@ namespace nU3.Models
         public int UserAuth { get; set; }
 
         /// <summary>
+        /// 접속한 시설 코드 (012:서울, 015:은평, 011:여의도)
+        /// </summary>
+        public string InstitutionCode { get; set; }
+
+        /// <summary>
         /// 소속 부서 코드
         /// </summary>
         public int? DepartmentCode { get; set; }

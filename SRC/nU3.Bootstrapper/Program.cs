@@ -11,6 +11,7 @@ using nU3.Connectivity.Implementations;
 using nU3.Core.Services;
 using nU3.Models;
 using nU3.Bootstrapper.Services;
+using nU3.Core.Interfaces;
 
 namespace nU3.Bootstrapper
 {

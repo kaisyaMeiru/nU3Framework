@@ -40,6 +40,7 @@ namespace nU3.Core.Services
                 "nU3.Connectivity",
                 "System.Runtime",
                 "System.Runtime.InteropServices",
+                "Microsoft.Extensions.DependencyInjection",
                 "Microsoft.Extensions.DependencyInjection.Abstractions"
             };
 

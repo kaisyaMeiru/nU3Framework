@@ -1,11 +1,12 @@
+using nU3.Connectivity.Models;
+using nU3.Core.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Threading.Tasks;
-using nU3.Connectivity.Models;
-using nU3.Core.Interfaces;
+using static System.Net.WebRequestMethods;
 
 namespace nU3.Connectivity.Implementations
 {
@@ -31,8 +32,12 @@ namespace nU3.Connectivity.Implementations
             {
                 // Gateway URL 구성 (실제 환경에 맞게 조정 필요)
                 // 예: /api/services/{serviceId}/{method} 또는 단일 엔드포인트
+                //var url = $"/api/services/{serviceId}/{method}";
+
                 var url = $"/api/services/{serviceId}/{method}";
-                
+                url = $"https://emr012edu.cmcnu.or.kr/cmcnu/.live?submit_id=TRZMP00101&business_id=zz&instcd=012";
+                //https://emr012edu.cmcnu.or.kr/cmcnu/.live?
+
                 // 요청 래핑 (ValueObjectAssembler 구조)
                 // Java 측: ValueObjectAssembler pVOs 내에 "req" 키로 ValueObject를 기대함
                 var assembler = new ValueObjectAssembler();

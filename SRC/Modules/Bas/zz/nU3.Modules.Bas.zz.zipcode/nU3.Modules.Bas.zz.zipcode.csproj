@@ -10,7 +10,6 @@
   <ItemGroup>
     <PackageReference Include="DevExpress.Win" Version="23.2.9" />
     <PackageReference Include="DevExpress.Win.Design" Version="23.2.9" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>
