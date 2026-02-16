@@ -157,7 +157,6 @@ namespace nU3.Core.UI
             if (System.ComponentModel.LicenseManager.UsageMode == System.ComponentModel.LicenseUsageMode.Designtime)
                 return;
 
-            this.Dock = DockStyle.Fill;
             _disposables = new List<IDisposable>();
             _cancellationTokenSource = new CancellationTokenSource();
             _workContext = new WorkContext();
@@ -565,21 +564,21 @@ namespace nU3.Core.UI
 
 
         #region Common Event Bus Helpers
-        public void PublishPatientSelectedEvent(PatientInfoDto patient)
-        {
-            if (patient == null) return;
+        //public void PublishPatientSelectedEvent(PatientInfoDto patient)
+        //{
+        //    if (patient == null) return;
 
-            // EventBus를 통해 다른 모듈에 이벤트 발행
-            var evenPub = EventBus?.GetEvent<PatientSelectedEvent>();
-            evenPub?.Publish(new PatientSelectedEventPayload
-            {
-                Patient = patient,
-                Source = this.ProgramID,
-            });
+        //    // EventBus를 통해 다른 모듈에 이벤트 발행
+        //    var evenPub = EventBus?.GetEvent<nU3.Core.Events.Contracts.PatientSelectedEvent>();
+        //    evenPub?.Publish(new PatientSelectedEventPayload
+        //    {
+        //        Patient = patient,
+        //        Source = this.ProgramID,
+        //    });
 
-            LogInfo($"PatientSelectedEvent 발행: {patient.PatientName} ({patient.PatientId}) - {this.ProgramID}");
-            LogInfo($"Patient selected event published: {patient.PatientId}");
-        }
+        //    LogInfo($"PatientSelectedEvent 발행: {patient.PatientName} ({patient.PatientId}) - {this.ProgramID}");
+        //    LogInfo($"Patient selected event published: {patient.PatientId}");
+        //}
         #endregion
     }
 }

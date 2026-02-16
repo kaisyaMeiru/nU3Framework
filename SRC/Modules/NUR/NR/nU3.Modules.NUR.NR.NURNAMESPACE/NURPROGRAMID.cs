@@ -1,6 +1,7 @@
 // NOTE: This is a template source file consumed by the VSIX wizard.
 // It is NOT meant to compile inside the current solution.
 
+using DevExpress.XtraEditors;
 using nU3.Core.Attributes;
 using nU3.Core.Events;
 using nU3.Core.Logic;
@@ -36,7 +37,7 @@ namespace nU3.Modules.NUR.NR.NURNAMESPACE
             this.Context.CurrentPatient = e.Patient;
             this.Context.CurrentExam = null;
             
-            this.EventBus.GetEvent<NavigationRequestEvent>().Publish(new NavigationRequestEventPayload() { Context = Context.Clone(), Source = this.ProgramID, TargetScreenId = "EMR_IN_00002" });
+            //this.EventBus.GetEvent<NavigationRequestEvent>().Publish(new NavigationRequestEventPayload() { Context = Context.Clone(), Source = this.ProgramID, TargetScreenId = "EMR_IN_00002" });
 
         }
 

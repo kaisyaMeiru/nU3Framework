@@ -13,7 +13,7 @@ namespace nU3.Core.UI.Components.Controls
         public int MaxVisibleToasts { get; set; } = 5;
 
         [Category("Behavior")]
-        public int DefaultDuration { get; set; } = 5000;
+        public int DefaultDuration { get; set; } = 15000;
 
         [Category("Behavior")]
         public int Spacing { get; set; } = 10;
@@ -95,7 +95,8 @@ namespace nU3.Core.UI.Components.Controls
                     Title = title,
                     Type = type,
                     Timestamp = DateTime.Now
-                }
+                },
+                FormBorderStyle = FormBorderStyle.None,
             };
 
             toast.Click += OnToastClick;

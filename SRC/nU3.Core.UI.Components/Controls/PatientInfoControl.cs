@@ -89,25 +89,28 @@ namespace nU3.Core.UI.Components.Controls
         /// <summary>
         /// 환자 선택 이벤트 처리
         /// </summary>
-        /// <param name="context">환자 컨텍스트 (PatientId, PatientName, VisitNo)</param>
-        private void OnPatientSelected(PatientSelectedEventPayload context)
+        /// <param name="payload">환자 컨텍스트 (PatientId, PatientName, VisitNo)</param>
+        private void OnPatientSelected(PatientSelectedEventPayload payload)
         {
-            if (context == null) return;
+            if (payload == null) return;
 
-            LogInfo($"환자 선택 이벤트 수신: {context.Patient.PatientName} ({context.Patient.PatientId})");
+            if (payload.Source != this.OwnerProgramID)
+                return;
+
+            LogInfo($"환자 선택 이벤트 수신: {payload.Patient.PatientName} ({payload.Patient.PatientId})");
 
             // 이전 환자 ID와 비교하여 중복 이벤트 방지
-            if (_currentPatientId == context.Patient.PatientId)
+            if (_currentPatientId == payload.Patient.PatientId)
             {
-                LogInfo($"같은 환자 ID로 중복 이벤트 무시: {context.Patient.PatientId}");
+                LogInfo($"같은 환자 ID로 중복 이벤트 무시: {payload.Patient.PatientId}");
                 return;
             }
 
-            _currentPatientId = context.Patient.PatientId;
+            _currentPatientId = payload.Patient.PatientId;
 
 
             // 데모 데이터 조회 (실제로는 DB에서 조회)
-            SetPatientInfo(context.Patient);
+            SetPatientInfo(payload.Patient);
             //var patientInfo = GetPatientInfoByPatientId(context.Patient.PatientId);
             //if (patientInfo != null)
             //{

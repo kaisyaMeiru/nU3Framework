@@ -5,6 +5,7 @@ using nU3.Core.Events;
 using nU3.Core.UI;
 using nU3.Core.UI.Components.Events;
 using nU3.Core.UI.Controls;
+using nU3.Core.UI.Components.Controls;
 using nU3.Models;
 using nU3.Modules.OCS.IN.MainEntry.Controls;
 using System;
@@ -449,9 +450,51 @@ namespace nU3.Modules.OCS.IN.MainEntry
             ShowMessageBox("수술기록 팝업", "환자정보");
         }
 
+        private BaseWorkForm _familyHistoryPopup;
+
         private void ShowPatientFamilyHistory()
         {
-            ShowMessageBox("가족력 팝업", "환자정보");
+            if (_familyHistoryPopup != null && !_familyHistoryPopup.IsDisposed)
+            {
+                _familyHistoryPopup.BringToFront();
+                _familyHistoryPopup.Activate();
+                return;
+            }
+
+            _familyHistoryPopup = new BaseWorkForm();
+            _familyHistoryPopup.Text = "가족력 조회";
+            _familyHistoryPopup.Size = new Size(800, 600);
+            _familyHistoryPopup.StartPosition = FormStartPosition.CenterScreen;
+            _familyHistoryPopup.Owner= this.FindForm(); 
+            _familyHistoryPopup.SourceControl = this;
+
+            var control = new FamilyHistoryControl();
+            
+            // EventBus 수동 할당 제거 (BaseWorkComponent 개선으로 자동 할당 테스트)
+            // if (this.EventBus != null)
+            // {
+            //    control.EventBus = this.EventBus;
+            // }
+            
+            control.Dock = DockStyle.Fill;
+            _familyHistoryPopup.Controls.Add(control);
+
+            _familyHistoryPopup.Show(); // Modeless로 표시 (메인 화면 사용 가능)
+
+            // 현재 선택된 환자가 있다면 초기 데이터 로드
+            if (PatientListControl != null && !string.IsNullOrEmpty(PatientListControl.SelectedInNumber))
+            {
+               // 이벤트 버스를 통해 이미 전달되었을 수 있으나, 명시적으로 로드도 고려
+               // FamilyHistoryControl 내부에서 PatientSelectedEvent를 구독하므로
+               // 팝업이 뜬 상태에서 환자를 다시 선택하면 갱신됨.
+               // 팝업 뜨자마자 데이터를 보여주려면 현재 선택된 환자 정보를 주입하는 로직이 필요할 수 있음.
+               // 하지만 FamilyHistoryControl은 EventBased이므로, 
+               // 팝업 생성 후 이벤트를 재발행하거나, Control에 public method를 추가하여 호출해야 함.
+               // 여기서는 간단하게 Control의 LoadPatientInfo(string id)를 호출하는 것이 좋음.
+               
+               // FamilyHistoryControl에 LoadPatientInfo 메소드 추가 필요 (현재 이미 유사한 로직 있음)
+               control.LoadFamilyHistory(PatientListControl.GetSelectedPatient()?.PatientId);
+            }
         }
 
         private void ShowPatientPastHistory()

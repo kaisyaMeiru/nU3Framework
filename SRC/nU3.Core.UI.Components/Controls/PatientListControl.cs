@@ -68,11 +68,11 @@ namespace nU3.Core.UI.Components.Controls
             {
 
                 // EventBus를 통해 다른 모듈에 이벤트 발행
-                var evenPub = EventBus?.GetEvent<PatientSelectedEvent>();
+                var evenPub = EventBus?.GetEvent < nU3.Core.Events.Contracts.PatientSelectedEvent > ();
                 evenPub?.Publish(new PatientSelectedEventPayload
                 {
                         Patient = patient,
-                        Source = this.Name                    
+                        Source = this.OwnerProgramID,                    
                 });
 
                 LogInfo($"PatientSelectedEvent 발행: {patient.PatientName} ({patient.PatientId})");                

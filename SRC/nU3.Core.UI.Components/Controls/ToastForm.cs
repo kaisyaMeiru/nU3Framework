@@ -18,7 +18,7 @@ namespace nU3.Core.UI.Components.Controls
             FormBorderStyle = FormBorderStyle.FixedToolWindow;
             ShowInTaskbar = false;
             TopMost = true;
-            Size = new System.Drawing.Size(350, 120);
+            Size = new System.Drawing.Size(450, 250);
             StartPosition = FormStartPosition.Manual;
             BackColor = GetBackgroundColor(NotificationType.Info);
         }
@@ -54,7 +54,7 @@ namespace nU3.Core.UI.Components.Controls
                 Properties = { ReadOnly = true, BorderStyle = BorderStyles.NoBorder }
             };
             memoEdit.Properties.Appearance.TextOptions.WordWrap = DevExpress.Utils.WordWrap.Wrap;
-            memoEdit.Height = 60;
+            memoEdit.Height = 100;
             messageItem.Control = memoEdit;
             messageItem.TextVisible = false;
 
@@ -87,6 +87,11 @@ namespace nU3.Core.UI.Components.Controls
         private void OnCloseTimerTick(object? sender, EventArgs e)
         {
             Close();
+        }
+
+        private void InitializeComponent()
+        {
+
         }
 
         protected override void Dispose(bool disposing)

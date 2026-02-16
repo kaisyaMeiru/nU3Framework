@@ -19,11 +19,24 @@ using nU3.Shell.Configuration;
 using System.Threading.Tasks;
 using nU3.Core.Logging;
 using nU3.Core.Events.Contracts;
+using nU3.Core.Pipes;
+using nU3.Core.UI.Components.Controls;
 
 namespace nU3.Shell
 {
-    public partial class nUShell : BaseWorkForm
+    public partial class nUShell : BaseWorkForm, IBaseWorkComponent
     {
+        #region IBaseWorkComponent Implementation
+        /// <summary>
+        /// 상위(Owner) 이벤트 버스 구현 (자신이 가진 EventBus 반환)
+        /// </summary>
+        public override IEventAggregator OwnerEventBus => _eventAggregator;
+
+        /// <summary>
+        /// 상위(Owner) 프로그램 ID 구현 (메인 셸)
+        /// </summary>
+        public override string OwnerProgramID => "MAIN_SHELL";
+        #endregion
         private readonly IMenuRepository _menuRepo;
         private readonly IModuleRepository _moduleRepo;
         private readonly ISecurityRepository _securityRepo; 
@@ -39,6 +52,14 @@ namespace nU3.Shell
         private bool _loggingEnabled;
         private bool _uploadOnError;
         private bool _serverConnectionEnabled;
+        
+        /// <summary>
+        /// 애플리케이션 시작 시 전달된 URI (예: nu3://open?programid=...)
+        /// </summary>
+        public string? StartupUri { get; set; }
+
+        private NamedPipeServer _pipeServer;
+        private NotificationControl _notificationControl;
 
         public nUShell()
         {
@@ -77,12 +98,14 @@ namespace nU3.Shell
 
 
             InitializeLogging();
-            InitializeServerConnection();
+            // InitializeServerConnection(); // Moved to Load event to ensure Handle is created
             InitializeErrorReporting();
             InitializeShellAppearance();
+            InitializePipeServer();
             UpdateStatusBar();
 
             this.FormClosing += MainShellForm_FormClosing;
+            this.FormClosed += MainShellForm_FormClosed;
             this.Load += MainShellForm_Load;
 
             // 모듈 버전 충돌 이벤트 구독
@@ -124,30 +147,36 @@ namespace nU3.Shell
                     {
                         var connected = await ConnectivityManager.Instance.TestConnectionAsync();
 
-                        this.Invoke((System.Windows.Forms.MethodInvoker)delegate
+                        if (this.IsHandleCreated && !this.IsDisposed)
                         {
-                            if (connected)
+                            this.Invoke((System.Windows.Forms.MethodInvoker)delegate
                             {
-                                barStaticItemServer.Caption = $"🟢 {config.BaseUrl}";
-                                LogManager.Info($"서버 연결 성공: {config.BaseUrl}", "Shell");
-                                _serverConnectionEnabled = true;
-                            }
-                            else
-                            {
-                                barStaticItemServer.Caption = $"🟡 {config.BaseUrl} (응답 없음)";
-                                LogManager.Warning($"서버 연결 실패: {config.BaseUrl}", "Shell");
-                                _serverConnectionEnabled = false;
-                            }
-                        });
+                                if (connected)
+                                {
+                                    barStaticItemServer.Caption = $"🟢 {config.BaseUrl}";
+                                    LogManager.Info($"서버 연결 성공: {config.BaseUrl}", "Shell");
+                                    _serverConnectionEnabled = true;
+                                }
+                                else
+                                {
+                                    barStaticItemServer.Caption = $"🟡 {config.BaseUrl} (응답 없음)";
+                                    LogManager.Warning($"서버 연결 실패: {config.BaseUrl}", "Shell");
+                                    _serverConnectionEnabled = false;
+                                }
+                            });
+                        }
                     }
                     catch (Exception ex)
                     {
-                        this.Invoke((System.Windows.Forms.MethodInvoker)delegate
+                        if (this.IsHandleCreated && !this.IsDisposed)
                         {
-                            barStaticItemServer.Caption = $"🔴 {config.BaseUrl} (오류)";
-                            LogManager.Error($"서버 연결 오류: {ex.Message}", "Shell", ex);
-                            _serverConnectionEnabled = false;
-                        });
+                            this.Invoke((System.Windows.Forms.MethodInvoker)delegate
+                            {
+                                barStaticItemServer.Caption = $"🔴 {config.BaseUrl} (오류)";
+                                LogManager.Error($"서버 연결 오류: {ex.Message}", "Shell", ex);
+                                _serverConnectionEnabled = false;
+                            });
+                        }
                     }
                 });
             }
@@ -435,6 +464,111 @@ namespace nU3.Shell
             xtraTabControlMain.AppearancePage.HeaderActive.Options.UseFont = true;
 
             barStaticItemVersion.Caption = $"v{Assembly.GetExecutingAssembly().GetName().Version}";
+
+            // 알림 컨트롤 초기화
+            _notificationControl = new NotificationControl(this.components);
+            _notificationControl.Position = NotificationPosition.BottomRight;
+        }
+
+
+
+        private void InitializePipeServer()
+        {
+            try
+            {
+                _pipeServer = new NamedPipeServer();
+                _pipeServer.OnMessageReceived += OnPipeMessageReceived;
+                _pipeServer.Start("nU3_Shell_Pipe");
+                LogManager.Info("셸에서 Named Pipe 서버 초기화됨", "Shell");
+            }
+            catch (Exception ex)
+            {
+                LogManager.Error($"Named Pipe 서버 초기화 실패: {ex.Message}", "Shell", ex);
+            }
+        }
+
+        private void OnPipeMessageReceived(object sender, string message)
+        {
+             // UI Safe Update
+             this.Invoke(new Action(() => {
+                 // URI 처리 (다른 인스턴스에서 전달됨)
+                 if (message.StartsWith("URI|"))
+                 {
+                     string uri = message.Substring(4);
+                     LogManager.Info($"파이프를 통해 URI 수신: {uri}", "Shell");
+                     
+                     // 창 활성화
+                     if (this.WindowState == FormWindowState.Minimized)
+                         this.WindowState = FormWindowState.Normal;
+                     this.Activate();
+                     this.BringToFront();
+
+                     ProcessStartupUri(uri);
+                     return;
+                 }
+
+                 UpdateStatusMessage($"[Device] {message}");
+                 
+                 LogManager.Info($"파이프를 통해 수신됨: {message}", "Shell");
+
+                 if (!string.IsNullOrEmpty(message))
+                 {
+                     string[] parts = message.Split('|');
+                     // Expected: ExamResult|PID|Name|Values
+                     if (parts.Length >= 4 && parts[0] == "ExamResult")
+                     {
+                         string pid = parts[1];
+                         string name = parts[2];
+                         string values = parts[3];
+                         
+                         _notificationControl.ShowSuccess($"환자: {name} ({pid})\n결과: {values}", "검사 결과 수신");
+                     }
+                     else
+                     {
+                         _notificationControl.ShowInfo(message, "알림");
+                     }
+                 }
+             }));
+        }
+
+        private void ProcessStartupUri(string uri)
+        {
+            if (string.IsNullOrWhiteSpace(uri)) return;
+
+            try
+            {
+                // Format: nu3://open?programid=EMR_OT_WORKLIST
+                LogManager.Info($"시작 URI 처리 중: {uri}", "Shell");
+
+                var uriObj = new Uri(uri);
+                if (uriObj.Scheme.Equals("nu3", StringComparison.OrdinalIgnoreCase))
+                {
+                    // 쿼리 문자열 수동 파싱 (System.Web 의존성 방지)
+                    var query = uriObj.Query; // ?programid=...
+                    if (!string.IsNullOrEmpty(query))
+                    {
+                        var queryParts = query.TrimStart('?').Split('&');
+                        foreach (var part in queryParts)
+                        {
+                            var kv = part.Split('=');
+                            if (kv.Length == 2 && kv[0].Equals("programid", StringComparison.OrdinalIgnoreCase))
+                            {
+                                string progId = kv[1];
+                                if (!string.IsNullOrEmpty(progId))
+                                {
+                                    this.Invoke(new Action(() => {
+                                        OpenProgram(progId);
+                                    }));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LogManager.Error($"시작 URI 처리 실패: {ex.Message}", "Shell", ex);
+            }
         }
 
         private void MainShellForm_Load(object sender, EventArgs e)
@@ -472,8 +606,18 @@ namespace nU3.Shell
 
             LogManager.Info("메인 셸 로딩 완료", "Shell");
 
+            // 서버 연결 초기화 (UI 핸들 생성 후 실행)
+            InitializeServerConnection();
+
             // 로그인 오딧
             LogManager.LogAction(AuditAction.Login, "Shell", "MainShellForm", $"사용자 로그인: {DateTime.Now:yyyy-MM-dd HH:mm:ss}");
+
+            // 시작 URI 처리
+            if (!string.IsNullOrEmpty(StartupUri))
+            {
+                ProcessStartupUri(StartupUri);
+                StartupUri = null; // 처리 후 초기화
+            }
         }
 
         private void SubscribeToEvents()
@@ -1180,8 +1324,16 @@ namespace nU3.Shell
 
                             var uploadTask = Task.Run(async () =>
                             {
-                                // 대기 중인 모든 로그 업로드
-                                await ConnectivityManager.Instance.Log.UploadAllPendingLogsAsync();
+                                try
+                                {
+                                    // 대기 중인 모든 로그 업로드
+                                    await ConnectivityManager.Instance.Log.UploadAllPendingLogsAsync();
+                                }
+                                catch (Exception ex)
+                                {
+                                    // Task.Run 내부 예외가 UnobservedTaskException이 되지 않도록 처리
+                                    LogManager.Warning($"종료 중 백그라운드 로그 업로드 실패: {ex.Message}", "Shell");
+                                }
                             });
 
                             // 최대 10초 대기
@@ -1584,6 +1736,12 @@ namespace nU3.Shell
                     lifecycleAware.OnDeactivated();
                 }
             }
+        }
+
+        private void MainShellForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            _pipeServer?.Stop();
+            _pipeServer?.Dispose();
         }
 
         private void XtraTabControlMain_CloseButtonClick(object sender, EventArgs e)
