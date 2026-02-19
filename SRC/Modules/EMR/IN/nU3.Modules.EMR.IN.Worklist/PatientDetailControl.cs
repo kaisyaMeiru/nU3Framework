@@ -90,7 +90,6 @@ namespace nU3.Modules.EMR.IN.Worklist
             if (EventBus == null)
                 return;
 
-            // TODO: 실제 구독 해제 로직 필요 (WeakReference 형태의 PubSubEvent 사용 시 자동 해제 고려)
 
             AddEventLog("이벤트 구독 해제 완료");
         }
@@ -484,16 +483,5 @@ namespace nU3.Modules.EMR.IN.Worklist
 
         #endregion
 
-        private void InitializeComponent()
-        {
-            SuspendLayout();
-            // 
-            // PatientDetailControl
-            // 
-            Name = "PatientDetailControl";
-            Size = new Size(1603, 814);
-            ResumeLayout(false);
-
-        }
     }
 }

@@ -15,7 +15,7 @@ using System.Windows.Forms;
 namespace nU3.Core.UI
 {
     /// <summary>
-    /// 병원 MDI 자식 작업 화면의 기본 클래스입니다.
+    /// MDI 자식 작업 화면의 기본 클래스입니다.
     /// 화면 생명주기(활성화/비활성화), 컨텍스트 공유, 리소스 해제 등을 관리합니다.
     /// </summary>
     public class BaseWorkControl : XtraUserControl, IBaseWorkControl, IBaseWorkControlExpand, IDisposable

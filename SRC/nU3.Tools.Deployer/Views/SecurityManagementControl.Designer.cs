@@ -64,6 +64,8 @@ namespace nU3.Tools.Deployer.Views
             splitMain = new DevExpress.XtraEditors.SplitContainerControl();
             dgvModules = new nU3.Core.UI.Controls.nU3GridControl();
             gvModules = new nU3.Core.UI.Controls.nU3GridView();
+            nU3PanelControl1 = new nU3.Core.UI.Controls.nU3PanelControl();
+            nU3SimpleButton1 = new nU3.Core.UI.Controls.nU3SimpleButton();
             splitRight = new DevExpress.XtraEditors.SplitContainerControl();
             tabTargets = new DevExpress.XtraTab.XtraTabControl();
             pageUsers = new DevExpress.XtraTab.XtraTabPage();
@@ -100,6 +102,8 @@ namespace nU3.Tools.Deployer.Views
             splitMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvModules).BeginInit();
             ((System.ComponentModel.ISupportInitialize)gvModules).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)nU3PanelControl1).BeginInit();
+            nU3PanelControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitRight).BeginInit();
             ((System.ComponentModel.ISupportInitialize)splitRight.Panel1).BeginInit();
             splitRight.Panel1.SuspendLayout();
@@ -141,6 +145,7 @@ namespace nU3.Tools.Deployer.Views
             // splitMain.Panel1
             // 
             splitMain.Panel1.Controls.Add(dgvModules);
+            splitMain.Panel1.Controls.Add(nU3PanelControl1);
             splitMain.Panel1.Text = "Panel1";
             // 
             // splitMain.Panel2
@@ -154,10 +159,10 @@ namespace nU3.Tools.Deployer.Views
             // dgvModules
             // 
             dgvModules.Dock = System.Windows.Forms.DockStyle.Fill;
-            dgvModules.Location = new System.Drawing.Point(0, 0);
+            dgvModules.Location = new System.Drawing.Point(0, 28);
             dgvModules.MainView = gvModules;
             dgvModules.Name = "dgvModules";
-            dgvModules.Size = new System.Drawing.Size(400, 852);
+            dgvModules.Size = new System.Drawing.Size(400, 824);
             dgvModules.TabIndex = 0;
             dgvModules.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] { gvModules });
             // 
@@ -168,6 +173,26 @@ namespace nU3.Tools.Deployer.Views
             gvModules.OptionsBehavior.Editable = false;
             gvModules.OptionsView.ShowGroupPanel = false;
             gvModules.FocusedRowChanged += gvModules_FocusedRowChanged;
+            // 
+            // nU3PanelControl1
+            // 
+            nU3PanelControl1.Controls.Add(nU3SimpleButton1);
+            nU3PanelControl1.Dock = System.Windows.Forms.DockStyle.Top;
+            nU3PanelControl1.Location = new System.Drawing.Point(0, 0);
+            nU3PanelControl1.Name = "nU3PanelControl1";
+            nU3PanelControl1.Size = new System.Drawing.Size(400, 28);
+            nU3PanelControl1.TabIndex = 1;
+            // 
+            // nU3SimpleButton1
+            // 
+            nU3SimpleButton1.AuthId = "";
+            nU3SimpleButton1.Dock = System.Windows.Forms.DockStyle.Left;
+            nU3SimpleButton1.Location = new System.Drawing.Point(2, 2);
+            nU3SimpleButton1.Name = "nU3SimpleButton1";
+            nU3SimpleButton1.Size = new System.Drawing.Size(75, 24);
+            nU3SimpleButton1.TabIndex = 0;
+            nU3SimpleButton1.Text = "매뉴갱신";
+            nU3SimpleButton1.Click += nU3SimpleButton1_Click;
             // 
             // splitRight
             // 
@@ -455,6 +480,8 @@ namespace nU3.Tools.Deployer.Views
             splitMain.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dgvModules).EndInit();
             ((System.ComponentModel.ISupportInitialize)gvModules).EndInit();
+            ((System.ComponentModel.ISupportInitialize)nU3PanelControl1).EndInit();
+            nU3PanelControl1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitRight.Panel1).EndInit();
             splitRight.Panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitRight.Panel2).EndInit();
@@ -488,5 +515,7 @@ namespace nU3.Tools.Deployer.Views
             ((System.ComponentModel.ISupportInitialize)chkCancel.Properties).EndInit();
             ResumeLayout(false);
         }
+        private Core.UI.Controls.nU3PanelControl nU3PanelControl1;
+        private Core.UI.Controls.nU3SimpleButton nU3SimpleButton1;
     }
 }

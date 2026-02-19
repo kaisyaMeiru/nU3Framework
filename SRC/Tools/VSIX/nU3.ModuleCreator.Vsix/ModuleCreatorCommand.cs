@@ -33,17 +33,17 @@ namespace nU3.ModuleCreator.Vsix
             }
         }
 
-        private void Execute(object sender, EventArgs e)
+        private async void Execute(object sender, EventArgs e)
         {
-            ThreadHelper.ThrowIfNotOnUIThread();
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
             using (var form = new WizardForm())
             {
                 if (form.ShowDialog() != DialogResult.OK)
                     return;
 
-                var dte = (DTE)package.GetServiceAsync(typeof(DTE)).Result;
-                if (dte?.Solution == null || string.IsNullOrEmpty(dte.Solution.FullName))
+                var dte = await package.GetServiceAsync(typeof(DTE)) as DTE;
+                if (dte == null || dte.Solution == null || string.IsNullOrEmpty(dte.Solution.FullName))
                 {
                     MessageBox.Show("먼저 솔루션을 열어주세요.");
                     return;
@@ -110,6 +110,10 @@ namespace nU3.ModuleCreator.Vsix
                     {
                         relPath = Path.Combine(Path.GetDirectoryName(relPath), tokens["$bizlogicclassname$"] + ".cs");
                     }
+                    else if (string.Equals(Path.GetFileName(relPath), "ZipCodeSearchControl.resx", StringComparison.OrdinalIgnoreCase))
+                    {
+                        relPath = Path.Combine(Path.GetDirectoryName(relPath), tokens["$controlclassname$"] + ".resx");
+                    }
 
                     // Replace tokens in path
                     foreach (var kv in tokens)
@@ -126,13 +130,27 @@ namespace nU3.ModuleCreator.Vsix
                     File.WriteAllText(destPath, content);
                 }
 
-                // Add to solution
+                // Add to solution in nested folders
                 var csprojPath = Path.Combine(targetDir, projectName + ".csproj");
                 if (File.Exists(csprojPath))
                 {
                     try 
                     {
-                        dte.Solution.AddFromFile(csprojPath);
+                        await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                        
+                        // Modules -> System -> SubSystem hierarchy
+                        var modulesFolder = GetOrCreateSolutionFolder(dte.Solution, "Modules");
+                        var systemFolder = GetOrCreateSolutionFolder(modulesFolder, form.SystemName);
+                        var subSystemFolder = GetOrCreateSolutionFolder(systemFolder, form.SubSystem);
+
+                        if (subSystemFolder.Object is EnvDTE80.SolutionFolder solFolder)
+                        {
+                            solFolder.AddFromFile(csprojPath);
+                        }
+                        else
+                        {
+                            dte.Solution.AddFromFile(csprojPath);
+                        }
                     }
                     catch (Exception ex)
                     {
@@ -140,6 +158,37 @@ namespace nU3.ModuleCreator.Vsix
                     }
                 }
             }
+        }
+
+        private static Project GetOrCreateSolutionFolder(object parent, string folderName)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            if (parent is Solution solution)
+            {
+                var sol2 = (EnvDTE80.Solution2)solution;
+                foreach (Project p in sol2.Projects)
+                {
+                    if (p.Name == folderName && p.Kind == EnvDTE80.ProjectKinds.vsProjectKindSolutionFolder)
+                        return p;
+                }
+                return sol2.AddSolutionFolder(folderName);
+            }
+            else if (parent is Project parentPrj)
+            {
+                foreach (ProjectItem item in parentPrj.ProjectItems)
+                {
+                    if (item.SubProject != null && item.SubProject.Name == folderName && item.SubProject.Kind == EnvDTE80.ProjectKinds.vsProjectKindSolutionFolder)
+                        return item.SubProject;
+                }
+
+                if (parentPrj.Object is EnvDTE80.SolutionFolder solFolder)
+                {
+                    return solFolder.AddSolutionFolder(folderName);
+                }
+            }
+
+            return null;
         }
 
         private static string GetRelativePath(string baseDir, string fullPath)

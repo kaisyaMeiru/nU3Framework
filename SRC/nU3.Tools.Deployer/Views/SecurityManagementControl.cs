@@ -22,7 +22,7 @@ namespace nU3.Tools.Deployer.Views
         private readonly ISecurityRepository _securityRepo;
         private readonly IProgramRepository _progRepo;
         private readonly IModuleRepository _moduleRepo;
-        
+
         private string _currentTargetType = ""; // "USER"(사용자) 또는 "ROLE"(역할) 또는 "DEPT"(부서)
         private string _currentTargetId = "";
         private string _currentTargetName = "";
@@ -78,10 +78,33 @@ namespace nU3.Tools.Deployer.Views
             AddGridColumn(gvModules, "ProgId", "프로그램ID", 100);
             AddGridColumn(gvModules, "ProgName", "프로그램명", 150);
             AddGridColumn(gvModules, "ModuleName", "모듈", 100);
-            
+
             // 필터 허용
             gvModules.OptionsView.ShowAutoFilterRow = true;
         }
+
+        //private void SetupToolbar()
+        //{
+        //    // Modules List Toolbar
+        //    var pnlModulesTop = new DevExpress.XtraEditors.PanelControl();
+        //    pnlModulesTop.Dock = DockStyle.Top;
+        //    pnlModulesTop.Size = new Size(400, 35);
+        //    pnlModulesTop.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.NoBorder;
+
+        //    var btnRefresh = new nU3SimpleButton();
+        //    btnRefresh.Text = "메뉴갱신";
+        //    btnRefresh.Size = new Size(80, 23);
+        //    btnRefresh.Location = new Point(5, 5);
+        //    btnRefresh.Click += (s, e) => LoadModules();
+
+        //    pnlModulesTop.Controls.Add(btnRefresh);
+
+        //    splitMain.Panel1.Controls.Add(pnlModulesTop);
+
+
+        //    dgvModules.BringToFront();
+        //    pnlModulesTop.BringToFront();
+        //}
 
         private void AddGridColumn(GridView view, string fieldName, string caption, int width)
         {
@@ -170,7 +193,7 @@ namespace nU3.Tools.Deployer.Views
         {
             var roles = (List<SecurityRoleDto>)dgvRoles.DataSource ?? new List<SecurityRoleDto>();
             var depts = (List<SecurityDeptDto>)dgvDepts.DataSource ?? new List<SecurityDeptDto>();
-            
+
             using var form = new AddUserForm(roles, depts);
             if (form.ShowDialog() == DialogResult.OK)
             {
@@ -182,8 +205,8 @@ namespace nU3.Tools.Deployer.Views
                         return;
                     }
 
-                    _securityRepo.AddSecurityUser(new SecurityUserDto 
-                    { 
+                    _securityRepo.AddSecurityUser(new SecurityUserDto
+                    {
                         UserId = form.UserId,
                         Username = form.Username,
                         Email = form.Email,
@@ -212,7 +235,7 @@ namespace nU3.Tools.Deployer.Views
             using var form = new EditUserForm(user, roles, depts, userDeptCodes);
             if (form.ShowDialog() == DialogResult.OK)
             {
-                 try
+                try
                 {
                     _securityRepo.UpdateSecurityUser(new SecurityUserDto
                     {
@@ -276,7 +299,7 @@ namespace nU3.Tools.Deployer.Views
 
                     _securityRepo.AddSecurityUser(user, "1234", new List<string> { dept });
                 }
-                
+
                 LoadUsers();
                 XtraMessageBox.Show("테스트 데이터 생성 완료");
             }
@@ -365,8 +388,8 @@ namespace nU3.Tools.Deployer.Views
             // Retrieving name from grid is possible but requires lookup.
             // Let's just show ID for now or try to get name from grid row if possible.
             var progName = "";
-             var prog = gvModules.GetFocusedRow() as SecurityProgDto;
-             if (prog != null) progName = prog.ProgName;
+            var prog = gvModules.GetFocusedRow() as SecurityProgDto;
+            if (prog != null) progName = prog.ProgName;
 
             lblCurrentTarget.Text = $"모듈: {progName} ({moduleInfo}) | 대상: {_currentTargetName}";
         }
@@ -463,15 +486,15 @@ namespace nU3.Tools.Deployer.Views
             private System.Windows.Forms.ComboBox cmbRole = new System.Windows.Forms.ComboBox();
             private CheckedComboBoxEdit cmbDepts = new CheckedComboBoxEdit();
             private nU3SimpleButton btnSave = new nU3SimpleButton { Text = "저장" };
-            
+
             public string UserId => txtId.Text;
             public string Username => txtName.Text;
             public string Password => txtPwd.Text;
             public string Email => txtEmail.Text;
             public string SelectedRoleCode => (cmbRole.SelectedItem as SecurityRoleDto)?.RoleCode ?? "";
-            public List<string> SelectedDeptCodes 
+            public List<string> SelectedDeptCodes
             {
-                get 
+                get
                 {
                     var checkedItems = cmbDepts.Properties.Items.Where(i => i.CheckState == CheckState.Checked).ToList();
                     return checkedItems.Select(i => i.Value.ToString()).ToList();
@@ -483,7 +506,7 @@ namespace nU3.Tools.Deployer.Views
                 Text = "사용자 추가";
                 Size = new Size(350, 350);
                 StartPosition = FormStartPosition.CenterParent;
-                
+
                 var layout = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 2, Padding = new Padding(10) };
                 layout.Controls.Add(new nU3LabelControl { Text = "ID:" }); layout.Controls.Add(txtId);
                 layout.Controls.Add(new nU3LabelControl { Text = "이름:" }); layout.Controls.Add(txtName);
@@ -496,7 +519,7 @@ namespace nU3.Tools.Deployer.Views
                 cmbRole.DisplayMember = "RoleName";
                 cmbRole.ValueMember = "RoleCode";
                 cmbRole.Dock = DockStyle.Fill;
-                
+
                 cmbDepts.Properties.DataSource = depts;
                 cmbDepts.Properties.DisplayMember = "DeptName";
                 cmbDepts.Properties.ValueMember = "DeptCode";
@@ -505,9 +528,10 @@ namespace nU3.Tools.Deployer.Views
                 txtId.Dock = DockStyle.Fill; txtName.Dock = DockStyle.Fill; txtPwd.Dock = DockStyle.Fill; txtEmail.Dock = DockStyle.Fill;
 
                 var pnlBtn = new FlowLayoutPanel { Dock = DockStyle.Bottom, FlowDirection = FlowDirection.RightToLeft };
-                btnSave.Click += (s, e) => {
-                    if(string.IsNullOrWhiteSpace(txtId.Text)) { XtraMessageBox.Show("ID를 입력하세요"); return; }
-                    DialogResult = DialogResult.OK; Close(); 
+                btnSave.Click += (s, e) =>
+                {
+                    if (string.IsNullOrWhiteSpace(txtId.Text)) { XtraMessageBox.Show("ID를 입력하세요"); return; }
+                    DialogResult = DialogResult.OK; Close();
                 };
                 pnlBtn.Controls.Add(btnSave);
 
@@ -525,9 +549,9 @@ namespace nU3.Tools.Deployer.Views
 
             public string Email => txtEmail.Text;
             public string SelectedRoleCode => (cmbRole.SelectedItem as SecurityRoleDto)?.RoleCode ?? "";
-            public List<string> SelectedDeptCodes 
+            public List<string> SelectedDeptCodes
             {
-                get 
+                get
                 {
                     var checkedItems = cmbDepts.Properties.Items.Where(i => i.CheckState == CheckState.Checked).ToList();
                     return checkedItems.Select(i => i.Value.ToString()).ToList();
@@ -549,19 +573,20 @@ namespace nU3.Tools.Deployer.Views
                 cmbRole.DisplayMember = "RoleName";
                 cmbRole.ValueMember = "RoleCode";
                 cmbRole.Dock = DockStyle.Fill;
-                
+
                 cmbDepts.Properties.DataSource = depts;
                 cmbDepts.Properties.DisplayMember = "DeptName";
                 cmbDepts.Properties.ValueMember = "DeptCode";
                 cmbDepts.Dock = DockStyle.Fill;
-                
+
                 txtEmail.Dock = DockStyle.Fill;
                 txtEmail.Text = user.Email;
 
-                foreach(var r in roles) {
+                foreach (var r in roles)
+                {
                     if (r.RoleCode == user.RoleCode) { cmbRole.SelectedItem = r; break; }
                 }
-                
+
                 if (userDeptCodes != null && userDeptCodes.Count > 0)
                 {
                     cmbDepts.SetEditValue(string.Join(cmbDepts.Properties.SeparatorChar.ToString(), userDeptCodes));
@@ -576,5 +601,10 @@ namespace nU3.Tools.Deployer.Views
             }
         }
         #endregion
+
+        private void nU3SimpleButton1_Click(object sender, EventArgs e)
+        {
+            LoadModules();
+        }
     }
 }

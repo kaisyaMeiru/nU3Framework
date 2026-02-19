@@ -76,7 +76,6 @@ namespace nU3.Core.UI.Components.Controls
                 });
 
                 LogInfo($"PatientSelectedEvent 발행: {patient.PatientName} ({patient.PatientId})");                
-                LogInfo($"Patient selected event published: {patient.PatientId}");
             }
 
             // 인스턴스 이벤트 발생            

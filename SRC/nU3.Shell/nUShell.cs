@@ -1336,8 +1336,8 @@ namespace nU3.Shell
                                 }
                             });
 
-                            // 최대 10초 대기
-                            if (!uploadTask.Wait(TimeSpan.FromSeconds(10)))
+                            // 최대 2초 대기
+                            if (!uploadTask.Wait(TimeSpan.FromSeconds(2)))
                             {
                                 LogManager.Warning("종료 중 로그 업로드 타임아웃", "Shell");
                             }
