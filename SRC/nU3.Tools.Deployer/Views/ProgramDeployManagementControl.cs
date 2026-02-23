@@ -335,7 +335,7 @@ namespace nU3.Tools.Deployer.Views
             public string ValidationStatus { get; init; } = string.Empty;
             public string ValidationErrors { get; init; } = string.Empty;
 
-            public static ScanGridRow FromModule(ModuleFileItem item, bool isExpanded, string validationSummary = null)
+            public static ScanGridRow FromModule(ModuleFileItem item, bool isExpanded, string? validationSummary = null)
             {
                 return new ScanGridRow
                 {
@@ -355,7 +355,7 @@ namespace nU3.Tools.Deployer.Views
                 };
             }
 
-            public static ScanGridRow FromProgram(string moduleId, ProgramDto p, int index, string validationErrors = null)
+            public static ScanGridRow FromProgram(string moduleId, ProgramDto p, int index, string? validationErrors = null)
             {
                 return new ScanGridRow
                 {

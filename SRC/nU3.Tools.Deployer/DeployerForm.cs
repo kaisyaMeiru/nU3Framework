@@ -233,8 +233,16 @@ namespace nU3.Tools.Deployer
             securityControl.Dock = DockStyle.Fill;
             tabSecurity.Controls.Add(securityControl);
 
+            // 5. 도메인 공통 배포 (New)
+            var tabDomainCommon = new XtraTabPage { Text = "도메인 공통 배포" };
+            var domainCommonControl = new Views.DomainCommonDeployControl();
+            domainCommonControl.Initialize(_componentRepo, _configuration, _fileTransfer);
+            domainCommonControl.Dock = DockStyle.Fill;
+            tabDomainCommon.Controls.Add(domainCommonControl);
+
             tabMain.TabPages.Add(tabDeploy);
             tabMain.TabPages.Add(tabComponent);
+            tabMain.TabPages.Add(tabDomainCommon); // Add new tab
             tabMain.TabPages.Add(tabMenu);
             tabMain.TabPages.Add(tabSecurity);
 

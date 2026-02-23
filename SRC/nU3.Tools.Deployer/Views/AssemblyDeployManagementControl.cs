@@ -372,7 +372,7 @@ namespace nU3.Tools.Deployer.Views
             }
         }
 
-        private async Task RunDeployAsync(string[] filePaths, string rootDirectory = null)
+        private async Task RunDeployAsync(string[] filePaths, string? rootDirectory = null)
         {
             if (filePaths.Length == 0)
                 return;
@@ -397,7 +397,7 @@ namespace nU3.Tools.Deployer.Views
             }
         }
 
-        private async Task<(int success, int failed)> DeployFilesAsync(string[] filePaths, string rootDirectory = null)
+        private async Task<(int success, int failed)> DeployFilesAsync(string[] filePaths, string? rootDirectory = null)
         {
             int success = 0;
             int failed = 0;
@@ -440,7 +440,7 @@ namespace nU3.Tools.Deployer.Views
             return (success, failed);
         }
 
-        private async Task DeployFileAsync(string filePath, string homeDirectory, string rootDirectory = null)
+        private async Task DeployFileAsync(string filePath, string homeDirectory, string? rootDirectory = null)
         {
             var fileInfo = new FileInfo(filePath);
             var fileName = fileInfo.Name;

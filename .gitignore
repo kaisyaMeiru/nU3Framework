@@ -403,3 +403,5 @@ FodyWeavers.xsd
 obfuscar_exe/
 obfuscar/
 /X-Reference
+/.agent/skills/DevExpress-skill/reference/DevExpress.WindowsForms.v23.2
+/.agent/skills/DevExpress-skill/reference/Example_CS

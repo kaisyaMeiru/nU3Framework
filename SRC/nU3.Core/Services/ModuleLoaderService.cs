@@ -38,6 +38,7 @@ namespace nU3.Core.Services
                 "nU3.Core.UI",
                 "nU3.Models",
                 "nU3.Connectivity",
+                "nU3.Business.Common",
                 "System.Runtime",
                 "System.Runtime.InteropServices",
                 "Microsoft.Extensions.DependencyInjection",
@@ -47,6 +48,13 @@ namespace nU3.Core.Services
             if (sharedAssemblies.Any(name => assemblyName.Name?.StartsWith(name) == true))
             {
                 return null; // 기본 컨텍스트에서 로드하도록 함
+            }
+
+            // [Domain Common] *.Common 패턴의 어셈블리는 공유로 처리 (Default Context)
+            if (assemblyName.Name != null && 
+               (assemblyName.Name.EndsWith(".Common") || assemblyName.Name.Contains(".Modules.Common")))
+            {
+                return null;
             }
 
             string assemblyPath = _resolver.ResolveAssemblyToPath(assemblyName);
@@ -134,6 +142,9 @@ namespace nU3.Core.Services
 
             _cachePath = PathConstants.CacheDirectory;
             _shadowCopyDirectory = Path.Combine(_cachePath, PathConstants.ShadowDirectoryStr);
+
+            // [Domain Common] 위치가 변경된(Modules/EMR) 공유 어셈블리를 로드하기 위해 이벤트 등록
+            AppDomain.CurrentDomain.AssemblyResolve += OnAssemblyResolve;
 
             Debug.WriteLine($"[ModuleLoader] 서비스 초기화됨. 실행 경로: {_runtimePath}");
             if (_skipModuleUpdates)
@@ -946,6 +957,133 @@ namespace nU3.Core.Services
                 RequestedVersion = requestedVersion,
                 Timestamp = DateTime.Now
             });
+        }
+
+        /// <summary>
+        /// 기본 Load Context에서 어셈블리를 찾지 못했을 때 호출됩니다.
+        /// Domain Common (예: nU3.Modules.EMR.Common.dll)이 Modules 하위 폴더에 있는 경우 이를 찾아 로드합니다.
+        /// </summary>
+        private Assembly? OnAssemblyResolve(object? sender, ResolveEventArgs args)
+        {
+            // 1. 이름 파싱
+            var assemblyName = new AssemblyName(args.Name);
+            string name = assemblyName.Name ?? "";
+
+            // 2. Domain Common 패턴인지 확인
+            if (name.EndsWith(".Common") || name.Contains(".Modules.Common"))
+            {
+                Debug.WriteLine($"[ModuleLoader] AssemblyResolve: '{name}' 찾기 시도 (Modules 폴더 검색)");
+
+                // [NEW] 2.1 서버에서 온디맨드 다운로드 시도
+                // 로컬에 없거나 버전이 맞지 않으면 다운로드합니다.
+                string? downloadedPath = EnsureDomainCommonDownloaded(name);
+                if (!string.IsNullOrEmpty(downloadedPath) && File.Exists(downloadedPath))
+                {
+                    Debug.WriteLine($"[ModuleLoader] AssemblyResolve: 온디맨드 다운로드 완료 -> {downloadedPath}");
+                    return Assembly.LoadFrom(downloadedPath);
+                }
+
+                // 3. Modules 폴더 내에서 해당 DLL 검색 (재귀) - 기존 로직 유지 (Fallback)
+                // 주의: 성능 이슈가 있을 수 있으므로 캐싱하거나 특정 깊이까지만 검색 권장
+                // 여기서는 간단히 Modules 디렉토리 전체를 검색합니다.
+                string modulesRoot = Path.Combine(_runtimePath, MODULES_DIR);
+                if (Directory.Exists(modulesRoot))
+                {
+                    try 
+                    {
+                        // "nU3.Modules.EMR.Common.dll" 찾기
+                        var files = Directory.GetFiles(modulesRoot, $"{name}.dll", SearchOption.AllDirectories);
+                        var targetFile = files.FirstOrDefault();
+
+                        if (!string.IsNullOrEmpty(targetFile))
+                        {
+                            Debug.WriteLine($"[ModuleLoader] AssemblyResolve: 발견됨 -> {targetFile}");
+                            // Default Context로 로드
+                            return Assembly.LoadFrom(targetFile);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine($"[ModuleLoader] AssemblyResolve: 검색 중 오류 - {ex.Message}");
+                    }
+                }
+                
+                Debug.WriteLine($"[ModuleLoader] AssemblyResolve: '{name}'을(를) 찾을 수 없습니다.");
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Domain Common 모듈(예: nU3.Modules.EMR.Common)이 로컬에 없거나 최신이 아닐 경우 서버에서 다운로드합니다.
+        /// </summary>
+        private string? EnsureDomainCommonDownloaded(string assemblyName)
+        {
+            if (_compRepo == null || _fileTransfer == null || _skipModuleUpdates)
+                return null;
+
+            try
+            {
+                // ComponentId는 "AssemblyName.dll" 형식으로 가정 (DomainCommonDeployControl에서 그렇게 저장함)
+                string componentId = $"{assemblyName}.dll";
+
+                // 1. 컴포넌트 정보 조회
+                var component = _compRepo.GetComponent(componentId);
+                if (component == null)
+                {
+                    // 정확한 매칭이 안되면, 혹시 모르니 DB에서 FileName으로 검색? (성능 이슈 가능성)
+                    // 지금은 ID 매칭만 시도
+                    return null;
+                }
+
+                // 2. 활성 버전 조회
+                var activeVer = _compRepo.GetActiveVersions()
+                    .FirstOrDefault(v => v.ComponentId == componentId);
+                
+                if (activeVer == null) return null;
+
+                // 3. 로컬 파일 경로 확인
+                // InstallPath: "Modules/EMR/nU3.Modules.EMR.Common.dll"
+                string installPathRel = component.InstallPath;
+                if (string.IsNullOrEmpty(installPathRel)) 
+                    installPathRel = Path.Combine(MODULES_DIR, component.GroupName ?? "Common", component.FileName);
+
+                string runtimeFile = Path.Combine(_runtimePath, installPathRel);
+                string runtimeDir = Path.GetDirectoryName(runtimeFile);
+
+                // 4. 로컬 유효성 검사
+                if (File.Exists(runtimeFile))
+                {
+                    string localHash = CalculateFileHash(runtimeFile);
+                    if (string.Equals(localHash, activeVer.FileHash, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return runtimeFile; // 이미 최신 버전이 있음
+                    }
+                    Debug.WriteLine($"[ModuleLoader] '{assemblyName}' 해시 불일치. 업데이트 필요.");
+                }
+
+                // 5. 다운로드 시도
+                Debug.WriteLine($"[ModuleLoader] '{assemblyName}' 온디맨드 다운로드 시작...");
+
+                string cacheFile = Path.Combine(_cachePath, component.FileName);
+                string serverPath = activeVer.StoragePath; // "Patch/Modules/EMR/..."
+
+                // Cache 다운로드 (UpdateSingleModule 로직과 유사하지만 Component 기준)
+                if (DownloadToCache(serverPath, cacheFile, component.ComponentName, activeVer.Version))
+                {
+                    // Runtime 배포
+                    if (!Directory.Exists(runtimeDir)) Directory.CreateDirectory(runtimeDir);
+                    DeployToRuntime(cacheFile, runtimeFile, component.ComponentName, activeVer.Version);
+                    
+                    return runtimeFile;
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[ModuleLoader] EnsureDomainCommonDownloaded 오류: {ex.Message}");
+            }
+
+            return null;
         }
     }
 

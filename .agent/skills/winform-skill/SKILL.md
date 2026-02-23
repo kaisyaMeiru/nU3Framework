@@ -1,21 +1,33 @@
 ---
 name: winform-skill
-description: DevExpress ÄÁÆ®·ÑÀ» Á÷Á¢ »ç¿ëÇÏÁö ¾Ê°í, Wrapping µÈ Custom ControlÀ» ±â¹ÝÀ¸·Î WinForms ¾ÖÇÃ¸®ÄÉÀÌ¼ÇÀ» ¼³°è/±¸Çö
+description: DevExpress ì»¨íŠ¸ë¡¤ì„ ì§ì ‘ ì‚¬ìš©í•˜ì§€ ì•Šê³ , Wrapping ëœ Custom Control(nU3Control)ì„ ê¸°ë°˜ìœ¼ë¡œ WinForms ì• í”Œë¦¬ì¼€ì´ì…˜ì„ ì„¤ê³„/êµ¬í˜„í•©ë‹ˆë‹¤.
 ---
 
-# winform-skill
+# WinForm Skill
 
-DevExpress ÄÁÆ®·ÑÀ» Á÷Á¢ »ç¿ëÇÏÁö ¾Ê°í, Wrapping µÈ nU3Control ±â¹ÝÀ¸·Î WinForms ¾ÖÇÃ¸®ÄÉÀÌ¼ÇÀ» Á¦ÀÛ.
-¸¸¾à ºüÁø Wrapping ÄÁÆ®·ÑÀÌ ÀÖ´Â °æ¿ì, nU3Control »ý¼ºÇØ¼­ Á¦ÀÛ. Factory Chain¿¡¼­ ºüÁú ¼ö ÀÖÀ¸´Ï Á¡°Ë.
+ì´ ìŠ¤í‚¬ì€ DevExpress ì»¨íŠ¸ë¡¤ì„ ì§ì ‘ ì‚¬ìš©í•˜ì§€ ì•Šê³ , Wrapping ëœ **nU3Control** ê¸°ë°˜ìœ¼ë¡œ WinForms ì• í”Œë¦¬ì¼€ì´ì…˜ì„ ì œìž‘í•©ë‹ˆë‹¤.
 
-## When to use this skill
+## Policies Enforced
+1. **nU3Control Only**: ëª¨ë“  UI ì»¨íŠ¸ë¡¤ì€ nU3Controlì„ ì‚¬ìš©í•©ë‹ˆë‹¤. DevExpress Native ì»¨íŠ¸ë¡¤ ì‚¬ìš© ê¸ˆì§€.
+2. **Factory Chain Check**: í•„ìš”í•œ nU3Controlì´ Factory Chainì— ì—†ìœ¼ë©´ ìƒˆë¡œ ìƒì„±í•©ë‹ˆë‹¤.
+3. **Design-Code Separation**: ë””ìžì¸ ì½”ë“œì™€ ë¹„í•˜ì¸ë“œ ì½”ë“œë¥¼ ì™„ì „ížˆ ë¶„ë¦¬í•©ë‹ˆë‹¤.
 
-- nU3 Framework¿¡ È­¸é¸ðµâ(¾÷¹«È­¸é)À» °³¹ßÇÒ ¶§´Â Ç×»ó ÀÌ ½ºÅ³À» »ç¿ë.
-- ÀÏ°üµÈ µðÀÚÀÎ ¹× ÄÁÆ®·ÑÀ» »ç¿ëÇØ¼­ ÅëÀÏ¼º °®Ãá µðÀÚÀÎ ÀÛ¼º.
+## Instructions
 
+1. **Do not use DevExpress Native Controls** â€” ëª¨ë“  ì»¨íŠ¸ë¡¤ì€ nU3Controlë¡œ ëŒ€ì²´í•´ì•¼ í•©ë‹ˆë‹¤.
+2. **Check Factory Chain**:
+Factoryì— ì—†ëŠ” ì»¨íŠ¸ë¡¤ì€ ì¦‰ì‹œ nU3Controlë¡œ Wrapping ìƒì„±.
+3. **Design Code Rules**:
+- ë””ìžì¸ ì½”ë“œì™€ ë¹„í•˜ì¸ë“œ ì½”ë“œ ì™„ì „ ë¶„ë¦¬
+- ëžŒë‹¤ì‹ ì‚¬ìš© ê¸ˆì§€ (ë””ìžì¸ ì½”ë“œ ë‚´)
+- ì´ë²¤íŠ¸ í•¸ë“¤ëŸ¬ëŠ” ë¹„í•˜ì¸ë“œ ì½”ë“œì—ì„œë§Œ ì²˜ë¦¬
+4. **Fallback Method**:
+ì˜ˆ: `GridControl` â†’ `nU3GridControl`
+5. **Interpret Results**:
+- nU3Controlë¡œ ì™„ì „ ë³€í™˜ â†’ í™”ë©´ ëª¨ë“ˆ ì™„ë£Œ
+- Factory ëˆ„ë½ â†’ ì¦‰ì‹œ nU3Control ìƒì„± ë° ë“±ë¡
+## When to Use
+- **nU3 Framework ì—…ë¬´í™”ë©´ ê°œë°œ ì‹œ í•­ìƒ ì‚¬ìš©**
+- **ì¼ê´€ëœ ë””ìžì¸/ì»¨íŠ¸ë¡¤ í†µì¼ì„± í™•ë³´**
 
-## How to use it
-
-- ¸ðµç µðÀÚÀÎÄÚµå´Â ºñÇÏÀÎµåÄÚµå¿Í ºÐ¸®ÇÏ°í, ¶÷´Ù½ÄÀ» ³ÖÁö ¾Êµµ·Ï ÇÑ´Ù.
-- µðÀÚÀÎ ÄÚµå »ý¼º ÈÄ DevExpress Native ÄÁÆ®·ÑÀÌ ÀÖ³ª È®ÀÎÇÑ´Ù.
-- ÀÏ¹ÝÀûÀÎ »ç¿ë¹ýÀº DevExpress¿Í µ¿ÀÏÇÏ¹Ç·Î ¸¸¾à, nU3Control »ç¿ë¹ýÀ» ¸ð¸£´Â °æ¿ì, DevExpress·Î ÀÛ¼º ÈÄ nU3 Á¢µÎ¾î¸¦ ºÙ¿©¼­ ÇØ°áÇÏ´Â ¹æ¹ýÀ» ÇØº»´Ù.
+ì´ ìŠ¤í‚¬ì€ nU3 Frameworkì˜ í™”ë©´ëª¨ë“ˆ ê°œë°œì—ì„œ **ë””ìžì¸ í†µì¼ì„±**ê³¼ **ìœ ì§€ë³´ìˆ˜ì„±**ì„ ë³´ìž¥í•˜ê¸° ìœ„í•´ í•„ìˆ˜ìž…ë‹ˆë‹¤.

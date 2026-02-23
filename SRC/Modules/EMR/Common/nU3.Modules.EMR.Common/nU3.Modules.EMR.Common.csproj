@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\nU3.Business.Common\nU3.Business.Common.csproj" />
+    <ProjectReference Include="..\..\..\..\nU3.Core.UI\nU3.Core.UI.csproj" />
+    <ProjectReference Include="..\..\..\..\nU3.Core\nU3.Core.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+
+</Project>

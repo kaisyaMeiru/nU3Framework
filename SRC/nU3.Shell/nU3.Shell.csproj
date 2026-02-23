@@ -14,6 +14,8 @@
 		<ProjectReference Include="..\nU3.Data\nU3.Data.csproj" />
 		<ProjectReference Include="..\nU3.Core.UI\nU3.Core.UI.csproj" />
 		<ProjectReference Include="..\nU3.Models\nU3.Models.csproj" />
+		<ProjectReference Include="..\nU3.Business.Common\nU3.Business.Common.csproj" />
+
 	</ItemGroup>
 
 	<ItemGroup>

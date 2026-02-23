@@ -1,0 +1,34 @@
+<Project>
+  <PropertyGroup>
+    <!-- Module version is read from version.txt in this directory -->
+    <ModuleVersionFile>$(MSBuildThisFileDirectory)version.txt</ModuleVersionFile>
+    <ModuleVersion Condition="Exists('$(ModuleVersionFile)')">$([System.IO.File]::ReadAllText('$(ModuleVersionFile)').Trim())</ModuleVersion>
+
+    <!-- Apply to assembly/package versions -->
+    <Version Condition="'$(ModuleVersion)' != ''">$(ModuleVersion)</Version>
+    <AssemblyVersion Condition="'$(ModuleVersion)' != ''">$(ModuleVersion)</AssemblyVersion>
+    <FileVersion Condition="'$(ModuleVersion)' != ''">$(ModuleVersion)</FileVersion>
+    <InformationalVersion Condition="'$(ModuleVersion)' != ''">$(ModuleVersion)</InformationalVersion>
+	<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+
+    <!-- Optional: external host folder to copy outputs (DLL, PDB, XML). Leave empty to disable. Can be overridden per-developer via .user or environment. -->
+    <ExternalDebugHostPath Condition=" '$(ExternalDebugHostPath)' == '' "></ExternalDebugHostPath>
+    <!-- When set to a non-empty path and building Debug configuration, outputs will be copied. -->
+    <CopyOutputsToExternalHost Condition=" '$(CopyOutputsToExternalHost)' == '' ">false</CopyOutputsToExternalHost>
+  </PropertyGroup>
+
+  <!-- Copy DLL + PDB (and optional XML) to ExternalDebugHostPath after build when enabled -->
+  <Target Name="CopyOutputsToExternalHost" AfterTargets="Build"
+          Condition=" '$(CopyOutputsToExternalHost)' == 'true' and '$(ExternalDebugHostPath)' != '' and '$(Configuration)' == 'Debug' ">
+    <Message Text="Copying outputs for $(MSBuildProjectName) to $(ExternalDebugHostPath)" Importance="High" />
+    <MakeDir Directories="$(ExternalDebugHostPath)" Condition="!Exists('$(ExternalDebugHostPath)')" />
+
+    <ItemGroup>
+      <_OutputsToCopy Include="$(TargetDir)$(TargetName)$(TargetExt)" />
+      <_OutputsToCopy Include="$(TargetDir)$(TargetName).pdb" Condition="Exists('$(TargetDir)$(TargetName).pdb')" />
+      <_OutputsToCopy Include="$(TargetDir)$(TargetName).xml" Condition="Exists('$(TargetDir)$(TargetName).xml')" />
+    </ItemGroup>
+
+    <Copy SourceFiles="@(_OutputsToCopy)" DestinationFolder="$(ExternalDebugHostPath)" SkipUnchangedFiles="true" />
+  </Target>
+</Project>
