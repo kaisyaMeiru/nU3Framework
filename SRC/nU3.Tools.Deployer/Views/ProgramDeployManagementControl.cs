@@ -46,6 +46,7 @@ namespace nU3.Tools.Deployer.Views
 
         private BindingList<ProgramEditRow> _programEditRows = new();
         private string? _selectedScanModuleId;
+        private string? _selectedScanProgId;   // 좌측에서 선택된 프로그램 ID
 
         private List<DbGridRow> _dbGridRows = new();
         private readonly HashSet<string> _expandedDbModuleIds = new(StringComparer.OrdinalIgnoreCase);
@@ -66,7 +67,7 @@ namespace nU3.Tools.Deployer.Views
             var serverEnabled = true;
             // 코드상으로 고정: 서버 경로는 항상 'Modules'
             _serverModulePath = nU3.Core.Services.ModuleLoaderService.MODULES_DIR;
-            _useServerTransfer =  true && serverEnabled;
+            _useServerTransfer = true && serverEnabled;
 
             InitializeComponent();
 
@@ -101,11 +102,11 @@ namespace nU3.Tools.Deployer.Views
             if (!chkUpdated.Checked) return true;
 
             if (string.IsNullOrWhiteSpace(m.ModuleId))
-                return true; 
+                return true;
 
             var dbVer = _dbActiveVersions.FirstOrDefault(v => string.Equals(v.ModuleId, m.ModuleId, StringComparison.OrdinalIgnoreCase));
             if (dbVer == null)
-                return true; 
+                return true;
 
             return !string.Equals(dbVer.Version ?? string.Empty, m.Version ?? string.Empty, StringComparison.OrdinalIgnoreCase);
         }
@@ -124,9 +125,9 @@ namespace nU3.Tools.Deployer.Views
                     continue;
                 }
 
-                var isExpanded       = !string.IsNullOrWhiteSpace(m.ModuleId) && _expandedModuleIds.Contains(m.ModuleId);
+                var isExpanded = !string.IsNullOrWhiteSpace(m.ModuleId) && _expandedModuleIds.Contains(m.ModuleId);
                 var validationSummary = _moduleValidationErrors.TryGetValue(m.ModuleId ?? string.Empty, out var errors) ? errors : null;
-                var dbVer            = _dbActiveVersions.FirstOrDefault(v => string.Equals(v.ModuleId, m.ModuleId, StringComparison.OrdinalIgnoreCase));
+                var dbVer = _dbActiveVersions.FirstOrDefault(v => string.Equals(v.ModuleId, m.ModuleId, StringComparison.OrdinalIgnoreCase));
 
                 _scanGridRows.Add(ScanGridRow.FromModule(m, isExpanded, validationSummary, dbVer));
 
@@ -152,74 +153,74 @@ namespace nU3.Tools.Deployer.Views
             colToggle.Width = 24;
             colToggle.OptionsColumn.FixedWidth = true;
 
-            var colCat = gvModuleFiles.Columns.AddVisible("Category",  "시스템");
+            var colCat = gvModuleFiles.Columns.AddVisible("Category", "시스템");
             colCat.Width = 52;
 
             var colSub = gvModuleFiles.Columns.AddVisible("SubSystem", "서브");
             colSub.Width = 52;
 
             // 모듈 전용
-            var colDll  = gvModuleFiles.Columns.AddVisible("DllFileName", "DLL 파일명");
+            var colDll = gvModuleFiles.Columns.AddVisible("DllFileName", "DLL 파일명");
             colDll.Width = 200;
 
-            var colMN   = gvModuleFiles.Columns.AddVisible("ModuleName",  "모듈명");
+            var colMN = gvModuleFiles.Columns.AddVisible("ModuleName", "모듈명");
             colMN.Width = 180;
 
-            var colVer  = gvModuleFiles.Columns.AddVisible("Version",     "파일버전");
+            var colVer = gvModuleFiles.Columns.AddVisible("Version", "파일버전");
             colVer.Width = 76;
 
-            var colDbV  = gvModuleFiles.Columns.AddVisible("DbVersion",   "DB버전");
+            var colDbV = gvModuleFiles.Columns.AddVisible("DbVersion", "DB버전");
             colDbV.Width = 76;
 
-            var colPCnt = gvModuleFiles.Columns.AddVisible("ProgCount",   "화면수");
+            var colPCnt = gvModuleFiles.Columns.AddVisible("ProgCount", "화면수");
             colPCnt.Width = 46;
             colPCnt.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
-            colPCnt.AppearanceCell.TextOptions.HAlignment   = DevExpress.Utils.HorzAlignment.Center;
+            colPCnt.AppearanceCell.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
 
-            var colSync = gvModuleFiles.Columns.AddVisible("SyncMark",    "동기상태");
+            var colSync = gvModuleFiles.Columns.AddVisible("SyncMark", "동기상태");
             colSync.Width = 72;
-            colSync.AppearanceCell.TextOptions.HAlignment   = DevExpress.Utils.HorzAlignment.Center;
+            colSync.AppearanceCell.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
 
             // 프로그램 전용
-            var colNo   = gvModuleFiles.Columns.AddVisible("ProgNo",      "#");
+            var colNo = gvModuleFiles.Columns.AddVisible("ProgNo", "#");
             colNo.Width = 28;
             colNo.OptionsColumn.FixedWidth = true;
             colNo.AppearanceCell.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
 
-            var colPId  = gvModuleFiles.Columns.AddVisible("ProgId",      "프로그램 ID");
+            var colPId = gvModuleFiles.Columns.AddVisible("ProgId", "프로그램 ID");
             colPId.Width = 140;
 
-            var colPN   = gvModuleFiles.Columns.AddVisible("ProgName",    "화면명");
+            var colPN = gvModuleFiles.Columns.AddVisible("ProgName", "화면명");
             colPN.Width = 180;
 
-            var colCls  = gvModuleFiles.Columns.AddVisible("ClassName",   "클래스명");
+            var colCls = gvModuleFiles.Columns.AddVisible("ClassName", "클래스명");
             colCls.Width = 200;
 
-            var colAuth = gvModuleFiles.Columns.AddVisible("AuthLevelText","권한");
+            var colAuth = gvModuleFiles.Columns.AddVisible("AuthLevelText", "권한");
             colAuth.Width = 52;
             colAuth.AppearanceCell.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
 
             // 검증 (공통, 마지막)
-            var colValid = gvModuleFiles.Columns.AddVisible("ValidMark",  "검증");
+            var colValid = gvModuleFiles.Columns.AddVisible("ValidMark", "검증");
             colValid.Width = 36;
             colValid.OptionsColumn.FixedWidth = true;
             colValid.AppearanceCell.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
 
             // ModuleId (참조용)
-            var colMid  = gvModuleFiles.Columns.AddVisible("ModuleId",    "모듈 ID");
+            var colMid = gvModuleFiles.Columns.AddVisible("ModuleId", "모듈 ID");
             colMid.Width = 220;
 
-            gvModuleFiles.OptionsBehavior.Editable           = false;
-            gvModuleFiles.OptionsView.ShowGroupPanel          = false;
+            gvModuleFiles.OptionsBehavior.Editable = false;
+            gvModuleFiles.OptionsView.ShowGroupPanel = false;
             gvModuleFiles.OptionsView.EnableAppearanceEvenRow = false;
-            gvModuleFiles.OptionsView.EnableAppearanceOddRow  = false;
-            gvModuleFiles.OptionsView.RowAutoHeight           = false;
+            gvModuleFiles.OptionsView.EnableAppearanceOddRow = false;
+            gvModuleFiles.OptionsView.RowAutoHeight = false;
             gvModuleFiles.RowHeight = 20;
 
-            gvModuleFiles.RowCellClick   += GvModuleFiles_RowCellClick;
-            gvModuleFiles.DoubleClick    += GvModuleFiles_DoubleClick;
+            gvModuleFiles.RowCellClick += GvModuleFiles_RowCellClick;
+            gvModuleFiles.DoubleClick += GvModuleFiles_DoubleClick;
             gvModuleFiles.CustomDrawCell += GvModuleFiles_CustomDrawCell;
-            gvModuleFiles.RowStyle       += GvModuleFiles_RowStyle;
+            gvModuleFiles.RowStyle += GvModuleFiles_RowStyle;
             gvModuleFiles.SelectionChanged += GvModuleFiles_SelectionChanged;
         }
 
@@ -243,10 +244,10 @@ namespace nU3.Tools.Deployer.Views
         {
             var view = sender as GridView;
             if (view == null) return;
-            
+
             var pt = view.GridControl.PointToClient(Control.MousePosition);
             var hitInfo = view.CalcHitInfo(pt);
-            
+
             if (!hitInfo.InRow) return;
 
             var row = view.GetRow(hitInfo.RowHandle) as ScanGridRow;
@@ -299,7 +300,7 @@ namespace nU3.Tools.Deployer.Views
             _expandedModuleIds.Add(moduleId);
 
             // Toggle 아이콘 갱신
-            var item  = _scannedFiles.FirstOrDefault(f => string.Equals(f.ModuleId, moduleId, StringComparison.OrdinalIgnoreCase));
+            var item = _scannedFiles.FirstOrDefault(f => string.Equals(f.ModuleId, moduleId, StringComparison.OrdinalIgnoreCase));
             var dbVer = _dbActiveVersions.FirstOrDefault(v => string.Equals(v.ModuleId, moduleId, StringComparison.OrdinalIgnoreCase));
             if (item != null)
             {
@@ -321,7 +322,7 @@ namespace nU3.Tools.Deployer.Views
             _expandedModuleIds.Remove(moduleId);
 
             // Toggle 아이콘 갱신
-            var item  = _scannedFiles.FirstOrDefault(f => string.Equals(f.ModuleId, moduleId, StringComparison.OrdinalIgnoreCase));
+            var item = _scannedFiles.FirstOrDefault(f => string.Equals(f.ModuleId, moduleId, StringComparison.OrdinalIgnoreCase));
             var dbVer = _dbActiveVersions.FirstOrDefault(v => string.Equals(v.ModuleId, moduleId, StringComparison.OrdinalIgnoreCase));
             if (item != null)
             {
@@ -365,21 +366,66 @@ namespace nU3.Tools.Deployer.Views
 
             var hasValidationError = !string.IsNullOrWhiteSpace(row.ValidationErrors);
 
-            if (!row.IsModule)
+            // ── 기본 배경 ─────────────────────────────────────────────────
+            if (row.IsModule)
             {
-                e.Appearance.BackColor = hasValidationError
-                    ? Color.FromArgb(255, 240, 240)
-                    : Color.FromArgb(248, 248, 248);
-                // Font cannot be easily changed per row in RowStyle without handling CustomDrawCell, but simple style works.
-                // Indentation simulation logic was here, but we can't easily do padding in RowStyle.
-                // DevExpress handles hierarchy better, but for this port we stick to flat list.
+                if (row.HasValidationError)
+                {
+                    e.Appearance.BackColor = Color.FromArgb(255, 220, 220);
+                    e.Appearance.ForeColor = Color.FromArgb(150, 0, 0);
+                }
+                else if (row.IsNewModule)
+                {
+                    e.Appearance.BackColor = Color.FromArgb(230, 250, 230);
+                    e.Appearance.ForeColor = Color.FromArgb(0, 100, 0);
+                }
+                else if (row.NeedsUpdate)
+                {
+                    e.Appearance.BackColor = Color.FromArgb(255, 245, 220);
+                    e.Appearance.ForeColor = Color.FromArgb(130, 80, 0);
+                }
+                else
+                {
+                    e.Appearance.BackColor = Color.FromArgb(235, 242, 250);
+                    e.Appearance.ForeColor = Color.FromArgb(30, 60, 100);
+                }
+                e.Appearance.Font = new Font(e.Appearance.Font, FontStyle.Bold);
             }
             else
             {
                 e.Appearance.BackColor = hasValidationError
-                    ? Color.FromArgb(255, 230, 230)
-                    : Color.White;
+                    ? Color.FromArgb(255, 235, 235)
+                    : Color.FromArgb(250, 250, 255);
+                e.Appearance.ForeColor = hasValidationError
+                    ? Color.FromArgb(150, 0, 0)
+                    : Color.FromArgb(30, 30, 80);
+            }
+
+            // ── 선택 하이라이트 (붉은색 계통) ─────────────────────────────
+            var isSelectedModule = !string.IsNullOrWhiteSpace(_selectedScanModuleId) &&
+                                   string.Equals(row.ModuleId, _selectedScanModuleId, StringComparison.OrdinalIgnoreCase);
+            var isSelectedProg   = !row.IsModule &&
+                                   !string.IsNullOrWhiteSpace(_selectedScanProgId) &&
+                                   string.Equals(row.ProgId, _selectedScanProgId, StringComparison.OrdinalIgnoreCase);
+
+            if (isSelectedProg)
+            {
+                // 프로그램 선택: 선명한 로즈
+                e.Appearance.BackColor = Color.FromArgb(255, 180, 180);
+                e.Appearance.ForeColor = Color.FromArgb(120, 0, 0);
                 e.Appearance.Font = new Font(e.Appearance.Font, FontStyle.Bold);
+            }
+            else if (isSelectedModule && row.IsModule)
+            {
+                // 모듈 선택: 진한 크림즌
+                e.Appearance.BackColor = Color.FromArgb(200, 50, 50);
+                e.Appearance.ForeColor = Color.White;
+            }
+            else if (isSelectedModule && !row.IsModule)
+            {
+                // 선택 모듈 소속 프로그램: 연한 살구
+                e.Appearance.BackColor = Color.FromArgb(255, 220, 210);
+                e.Appearance.ForeColor = Color.FromArgb(100, 30, 20);
             }
         }
 
@@ -388,72 +434,72 @@ namespace nU3.Tools.Deployer.Views
             public bool IsModule { get; init; }
 
             // ── 공통 ────────────────────────────────────────────────────────
-            public string Toggle    { get; init; } = string.Empty; // ▶/▼/○ (모듈), │ (프로그램)
-            public string ModuleId  { get; init; } = string.Empty;
-            public string Category  { get; init; } = string.Empty;
+            public string Toggle { get; init; } = string.Empty; // ▶/▼/○ (모듈), │ (프로그램)
+            public string ModuleId { get; init; } = string.Empty;
+            public string Category { get; init; } = string.Empty;
             public string SubSystem { get; init; } = string.Empty;
 
             // ── 모듈 전용 컬럼 ──────────────────────────────────────────────
-            public string DllFileName  { get; init; } = string.Empty; // DLL 파일명
-            public string ModuleName   { get; init; } = string.Empty; // 모듈명
-            public string Version      { get; init; } = string.Empty; // 파일 버전
-            public string DbVersion    { get; init; } = string.Empty; // DB 배포 버전
-            public string ProgCount    { get; init; } = string.Empty; // 화면 수 (N개)
-            public string SyncMark     { get; init; } = string.Empty; // ✓ 동일 / ↑ 업데이트 필요 / ★ 신규
+            public string DllFileName { get; init; } = string.Empty; // DLL 파일명
+            public string ModuleName { get; init; } = string.Empty; // 모듈명
+            public string Version { get; init; } = string.Empty; // 파일 버전
+            public string DbVersion { get; init; } = string.Empty; // DB 배포 버전
+            public string ProgCount { get; init; } = string.Empty; // 화면 수 (N개)
+            public string SyncMark { get; init; } = string.Empty; // ✓ 동일 / ↑ 업데이트 필요 / ★ 신규
 
             // ── 프로그램 전용 컬럼 ──────────────────────────────────────────
-            public string ProgNo       { get; init; } = string.Empty; // 순번
-            public string ProgId       { get; init; } = string.Empty; // 프로그램 ID
-            public string ProgName     { get; init; } = string.Empty; // 화면명
-            public string ClassName    { get; init; } = string.Empty; // 클래스명
-            public string AuthLevelText{ get; init; } = string.Empty; // 권한 텍스트
+            public string ProgNo { get; init; } = string.Empty; // 순번
+            public string ProgId { get; init; } = string.Empty; // 프로그램 ID
+            public string ProgName { get; init; } = string.Empty; // 화면명
+            public string ClassName { get; init; } = string.Empty; // 클래스명
+            public string AuthLevelText { get; init; } = string.Empty; // 권한 텍스트
 
             // ── 검증 (모듬/프로그램 공통) ────────────────────────────────────
-            public string ValidMark    { get; init; } = string.Empty; // ✓ 정상 / ⚠ 오류
+            public string ValidMark { get; init; } = string.Empty; // ✓ 정상 / ⚠ 오류
             public string ValidationErrors { get; init; } = string.Empty; // 오류 상세 (더블클릭용)
 
             // ── 스캔 상태 플래그 (스타일링용) ───────────────────────────────
             public bool HasValidationError => !string.IsNullOrWhiteSpace(ValidationErrors);
-            public bool IsNewModule        { get; init; } // DB에 없는 신규
-            public bool NeedsUpdate        { get; init; } // DB와 버전 다름
+            public bool IsNewModule { get; init; } // DB에 없는 신규
+            public bool NeedsUpdate { get; init; } // DB와 버전 다름
 
             public static ScanGridRow FromModule(
                 ModuleFileItem item, bool isExpanded, string? validationSummary,
                 ModuleVerDto? dbVer)
             {
-                var isNew       = dbVer == null && !string.IsNullOrWhiteSpace(item.ModuleId);
+                var isNew = dbVer == null && !string.IsNullOrWhiteSpace(item.ModuleId);
                 var needsUpdate = dbVer != null &&
                                   !string.Equals(dbVer.Version ?? string.Empty,
-                                                 item.Version  ?? string.Empty,
+                                                 item.Version ?? string.Empty,
                                                  StringComparison.OrdinalIgnoreCase);
 
-                var syncMark = isNew        ? "★ 신규"
-                             : needsUpdate  ? "↑ 업데이트"
+                var syncMark = isNew ? "★ 신규"
+                             : needsUpdate ? "↑ 업데이트"
                              : string.IsNullOrWhiteSpace(item.ModuleId) ? "?"
                              : "✓";
 
                 return new ScanGridRow
                 {
-                    IsModule    = true,
-                    Toggle      = item.ProgramCount <= 0 ? "○" : (isExpanded ? "▼" : "▶"),
-                    ModuleId    = item.ModuleId    ?? string.Empty,
-                    Category    = item.SystemType  ?? string.Empty,
-                    SubSystem   = item.SubSystem   ?? string.Empty,
-                    DllFileName = item.FileName    ?? string.Empty,
-                    ModuleName  = item.ModuleName  ?? string.Empty,
-                    Version     = item.Version     ?? string.Empty,
-                    DbVersion   = dbVer?.Version   ?? "(미등록)",
-                    ProgCount   = item.ProgramCount > 0 ? $"{item.ProgramCount}개" : "-",
-                    SyncMark    = syncMark,
-                    ValidMark   = string.IsNullOrWhiteSpace(validationSummary) ? "✓" : "⚠",
+                    IsModule = true,
+                    Toggle = item.ProgramCount <= 0 ? "○" : (isExpanded ? "▼" : "▶"),
+                    ModuleId = item.ModuleId ?? string.Empty,
+                    Category = item.SystemType ?? string.Empty,
+                    SubSystem = item.SubSystem ?? string.Empty,
+                    DllFileName = item.FileName ?? string.Empty,
+                    ModuleName = item.ModuleName ?? string.Empty,
+                    Version = item.Version ?? string.Empty,
+                    DbVersion = dbVer?.Version ?? "(미등록)",
+                    ProgCount = item.ProgramCount > 0 ? $"{item.ProgramCount}개" : "-",
+                    SyncMark = syncMark,
+                    ValidMark = string.IsNullOrWhiteSpace(validationSummary) ? "✓" : "⚠",
                     ValidationErrors = validationSummary ?? string.Empty,
                     IsNewModule = isNew,
                     NeedsUpdate = needsUpdate,
                     // 프로그램 전용 컬럼은 비움
-                    ProgNo      = string.Empty,
-                    ProgId      = string.Empty,
-                    ProgName    = string.Empty,
-                    ClassName   = string.Empty,
+                    ProgNo = string.Empty,
+                    ProgId = string.Empty,
+                    ProgName = string.Empty,
+                    ClassName = string.Empty,
                     AuthLevelText = string.Empty,
                 };
             }
@@ -470,25 +516,25 @@ namespace nU3.Tools.Deployer.Views
 
                 return new ScanGridRow
                 {
-                    IsModule    = false,
-                    Toggle      = string.Empty,
-                    ModuleId    = moduleId,
-                    Category    = p.SystemType ?? string.Empty,
-                    SubSystem   = p.SubSystem  ?? string.Empty,
+                    IsModule = false,
+                    Toggle = string.Empty,
+                    ModuleId = moduleId,
+                    Category = p.SystemType ?? string.Empty,
+                    SubSystem = p.SubSystem ?? string.Empty,
                     // 모듈 전용 컬럼은 비움
                     DllFileName = string.Empty,
-                    ModuleName  = string.Empty,
-                    Version     = string.Empty,
-                    DbVersion   = string.Empty,
-                    ProgCount   = string.Empty,
-                    SyncMark    = string.Empty,
+                    ModuleName = string.Empty,
+                    Version = string.Empty,
+                    DbVersion = string.Empty,
+                    ProgCount = string.Empty,
+                    SyncMark = string.Empty,
                     // 프로그램 전용 컬럼
-                    ProgNo      = (index + 1).ToString(),
-                    ProgId      = p.ProgId     ?? string.Empty,
-                    ProgName    = p.ProgName   ?? string.Empty,
-                    ClassName   = p.ClassName  ?? string.Empty,
+                    ProgNo = (index + 1).ToString(),
+                    ProgId = p.ProgId ?? string.Empty,
+                    ProgName = p.ProgName ?? string.Empty,
+                    ClassName = p.ClassName ?? string.Empty,
                     AuthLevelText = authText,
-                    ValidMark   = string.IsNullOrWhiteSpace(validationErrors) ? "✓" : "⚠",
+                    ValidMark = string.IsNullOrWhiteSpace(validationErrors) ? "✓" : "⚠",
                     ValidationErrors = validationErrors ?? string.Empty,
                 };
             }
@@ -567,7 +613,7 @@ namespace nU3.Tools.Deployer.Views
         {
             if (_moduleRepo == null) return;
 
-            _dbMasters        = _moduleRepo.GetAllModules();
+            _dbMasters = _moduleRepo.GetAllModules();
             _dbActiveVersions = _moduleRepo.GetActiveVersions();
 
             RefreshFilterSubSystems();
@@ -753,9 +799,9 @@ namespace nU3.Tools.Deployer.Views
         {
             var view = sender as GridView;
             if (view == null) return;
-            
+
             if (view.SelectedRowsCount <= 0) return;
-            
+
             var rowHandle = view.GetSelectedRows()[0];
             var row = view.GetRow(rowHandle) as ScanGridRow;
             if (row == null) return;
@@ -763,54 +809,60 @@ namespace nU3.Tools.Deployer.Views
             if (string.IsNullOrWhiteSpace(row.ModuleId)) return;
 
             _selectedScanModuleId = row.ModuleId;
+            _selectedScanProgId   = row.IsModule ? null : row.ProgId;
+
             RefreshCenterForSelectedScanModule(row.ModuleId);
-            ScrollDbGridToModule(row.ModuleId);
+
+            if (row.IsModule)
+                ScrollDbGridToModule(row.ModuleId);
+            else
+                ScrollDbGridToProgram(row.ModuleId, row.ProgId);
         }
 
         private void RefreshCenterForSelectedScanModule(string moduleId)
         {
             var dbMst = _dbMasters.FirstOrDefault(m => string.Equals(m.ModuleId, moduleId, StringComparison.OrdinalIgnoreCase));
-            var scan  = _scannedFiles.FirstOrDefault(s => string.Equals(s.ModuleId, moduleId, StringComparison.OrdinalIgnoreCase));
+            var scan = _scannedFiles.FirstOrDefault(s => string.Equals(s.ModuleId, moduleId, StringComparison.OrdinalIgnoreCase));
 
             if (dbMst != null)
             {
-                cboCategory.Text   = dbMst.Category;
-                txtSubSystem.Text  = dbMst.SubSystem;
-                txtModuleId.Text   = dbMst.ModuleId;
+                cboCategory.Text = dbMst.Category;
+                txtSubSystem.Text = dbMst.SubSystem;
+                txtModuleId.Text = dbMst.ModuleId;
                 txtModuleName.Text = dbMst.ModuleName;
-                txtFileName.Text   = dbMst.FileName;
+                txtFileName.Text = dbMst.FileName;
             }
             else if (scan != null)
             {
-                cboCategory.Text   = scan.SystemType;
-                txtSubSystem.Text  = scan.SubSystem;
-                txtModuleId.Text   = scan.ModuleId;
+                cboCategory.Text = scan.SystemType;
+                txtSubSystem.Text = scan.SubSystem;
+                txtModuleId.Text = scan.ModuleId;
                 txtModuleName.Text = scan.ModuleName;
-                txtFileName.Text   = scan.FileName;
+                txtFileName.Text = scan.FileName;
             }
 
             var dbVer = _dbActiveVersions.FirstOrDefault(v => string.Equals(v.ModuleId, moduleId, StringComparison.OrdinalIgnoreCase));
             if (dbVer != null)
             {
                 txtActiveVersion.Text = dbVer.Version;
-                txtFileHash.Text      = dbVer.FileHash;
-                txtFileSize.Text      = dbVer.FileSize.ToString();
-                txtStoragePath.Text   = dbVer.StoragePath;
-                txtDeployDesc.Text    = dbVer.DeployDesc;
+                txtFileHash.Text = dbVer.FileHash;
+                txtFileSize.Text = dbVer.FileSize.ToString();
+                txtStoragePath.Text = dbVer.StoragePath;
+                txtDeployDesc.Text = dbVer.DeployDesc;
             }
             else
             {
                 txtActiveVersion.Text = scan?.Version ?? string.Empty;
-                txtFileHash.Text      = string.Empty;
-                txtFileSize.Text      = scan?.SizeBytes.ToString() ?? string.Empty;
-                txtStoragePath.Text   = string.Empty;
-                txtDeployDesc.Text    = string.Empty;
+                txtFileHash.Text = string.Empty;
+                txtFileSize.Text = scan?.SizeBytes.ToString() ?? string.Empty;
+                txtStoragePath.Text = string.Empty;
+                txtDeployDesc.Text = string.Empty;
             }
 
             // _programEditRows는 저장(SaveModule) 시에만 사용 - dgvDbVersions와 무관
-            var progRepo       = Program.ServiceProvider.GetRequiredService<IProgramRepository>();
-            var dbModuleProgs  = progRepo.GetProgramsByModuleId(moduleId);
-            var dbByProgId     = dbModuleProgs
+            var progRepo = Program.ServiceProvider.GetRequiredService<IProgramRepository>();
+            var dbModuleProgs = progRepo.GetProgramsByModuleId(moduleId);
+            var dbByProgId = dbModuleProgs
                 .Where(p => !string.IsNullOrWhiteSpace(p.ProgId))
                 .GroupBy(p => p.ProgId, StringComparer.OrdinalIgnoreCase)
                 .ToDictionary(g => g.Key, g => g.First(), StringComparer.OrdinalIgnoreCase);
@@ -821,20 +873,20 @@ namespace nU3.Tools.Deployer.Views
             {
                 foreach (var sp in scannedProgs)
                 {
-                    var progId     = sp.ProgId     ?? string.Empty;
-                    var screenName = sp.ProgName   ?? string.Empty;
-                    var className  = sp.ClassName  ?? string.Empty;
-                    var auth       = sp.AuthLevel;
+                    var progId = sp.ProgId ?? string.Empty;
+                    var screenName = sp.ProgName ?? string.Empty;
+                    var className = sp.ClassName ?? string.Empty;
+                    var auth = sp.AuthLevel;
 
                     dbByProgId.TryGetValue(progId, out var dbp);
                     var status = dbp == null ? "NEW" : "OK";
-                    var diffs  = new List<string>();
+                    var diffs = new List<string>();
 
                     if (dbp != null)
                     {
-                        if (!string.Equals(dbp.ModuleId   ?? string.Empty, moduleId,    StringComparison.OrdinalIgnoreCase)) diffs.Add($"MODULE_ID:{dbp.ModuleId}->{moduleId}");
-                        if (!string.Equals(dbp.ProgName   ?? string.Empty, screenName,  StringComparison.OrdinalIgnoreCase)) diffs.Add("PROG_NAME");
-                        if (!string.Equals(dbp.ClassName  ?? string.Empty, className,   StringComparison.OrdinalIgnoreCase)) diffs.Add("CLASS_NAME");
+                        if (!string.Equals(dbp.ModuleId ?? string.Empty, moduleId, StringComparison.OrdinalIgnoreCase)) diffs.Add($"MODULE_ID:{dbp.ModuleId}->{moduleId}");
+                        if (!string.Equals(dbp.ProgName ?? string.Empty, screenName, StringComparison.OrdinalIgnoreCase)) diffs.Add("PROG_NAME");
+                        if (!string.Equals(dbp.ClassName ?? string.Empty, className, StringComparison.OrdinalIgnoreCase)) diffs.Add("CLASS_NAME");
                         if (dbp.AuthLevel != auth) diffs.Add($"AUTH:{dbp.AuthLevel}->{auth}");
                         if (diffs.Count > 0) status = "UPDATE";
                     }
@@ -842,12 +894,12 @@ namespace nU3.Tools.Deployer.Views
                     _programEditRows.Add(new ProgramEditRow
                     {
                         ModuleId = moduleId,
-                        ProgId   = progId,
+                        ProgId = progId,
                         ProgName = screenName,
                         ClassName = className,
                         AuthLevel = auth,
-                        DbStatus  = status,
-                        DiffText  = string.Join(", ", diffs)
+                        DbStatus = status,
+                        DiffText = string.Join(", ", diffs)
                     });
                 }
             }
@@ -859,7 +911,7 @@ namespace nU3.Tools.Deployer.Views
 
         private sealed class ProgramEditRow
         {
-            public string DbStatus { get; set; } = string.Empty; 
+            public string DbStatus { get; set; } = string.Empty;
             public string DiffText { get; set; } = string.Empty;
             public string ModuleId { get; set; } = string.Empty;
             public string ProgId { get; set; } = string.Empty;
@@ -1186,49 +1238,49 @@ namespace nU3.Tools.Deployer.Views
         // 모듈 행과 프로그램 행이 별도 컬럼을 사용하도록 필드를 분리
         private sealed class DbGridRow
         {
-            public bool   IsModule   { get; init; }
+            public bool IsModule { get; init; }
 
             // ── 공통 ──────────────────────────────────────────────────────
             // [+/-] 토글 텍스트 (모듈 행에만 표시)
-            public string Toggle     { get; init; } = string.Empty;
-            public string ModuleId   { get; init; } = string.Empty;
-            public string Category   { get; init; } = string.Empty;
-            public string SubSystem  { get; init; } = string.Empty;
+            public string Toggle { get; init; } = string.Empty;
+            public string ModuleId { get; init; } = string.Empty;
+            public string Category { get; init; } = string.Empty;
+            public string SubSystem { get; init; } = string.Empty;
 
             // ── 모듈 전용 컬럼 ────────────────────────────────────────────
-            public string DllFileName  { get; init; } = string.Empty;  // DLL 파일명
-            public string ModuleName   { get; init; } = string.Empty;  // 모듈명
-            public string Version      { get; init; } = string.Empty;  // 배포 버전
-            public string ProgCount    { get; init; } = string.Empty;  // 프로그램 수 (N개)
+            public string DllFileName { get; init; } = string.Empty;  // DLL 파일명
+            public string ModuleName { get; init; } = string.Empty;  // 모듈명
+            public string Version { get; init; } = string.Empty;  // 배포 버전
+            public string ProgCount { get; init; } = string.Empty;  // 프로그램 수 (N개)
 
             // ── 프로그램 전용 컬럼 ────────────────────────────────────────
-            public string ProgNo       { get; init; } = string.Empty;  // 순번
-            public string ProgId       { get; init; } = string.Empty;  // 프로그램 ID
-            public string ProgName     { get; init; } = string.Empty;  // 화면명
-            public string ClassName    { get; init; } = string.Empty;  // 클래스명
-            public string AuthLevelText{ get; init; } = string.Empty;  // 권한 (1=일반, 2=관리자...)
-            public string ActiveMark   { get; init; } = string.Empty;  // ● 활성 / ○ 비활성
+            public string ProgNo { get; init; } = string.Empty;  // 순번
+            public string ProgId { get; init; } = string.Empty;  // 프로그램 ID
+            public string ProgName { get; init; } = string.Empty;  // 화면명
+            public string ClassName { get; init; } = string.Empty;  // 클래스명
+            public string AuthLevelText { get; init; } = string.Empty;  // 권한 (1=일반, 2=관리자...)
+            public string ActiveMark { get; init; } = string.Empty;  // ● 활성 / ○ 비활성
 
             public static DbGridRow FromModule(ModuleMstDto m, ModuleVerDto? ver, bool isExpanded, int progCount)
             {
                 return new DbGridRow
                 {
-                    IsModule    = true,
-                    Toggle      = progCount <= 0 ? "○" : (isExpanded ? "▼" : "▶"),
-                    ModuleId    = m.ModuleId    ?? string.Empty,
-                    Category    = m.Category    ?? string.Empty,
-                    SubSystem   = m.SubSystem   ?? string.Empty,
-                    DllFileName = m.FileName    ?? string.Empty,
-                    ModuleName  = m.ModuleName  ?? string.Empty,
-                    Version     = ver?.Version  ?? "(미배포)",
-                    ProgCount   = progCount > 0 ? $"{progCount}개" : "-",
+                    IsModule = true,
+                    Toggle = progCount <= 0 ? "○" : (isExpanded ? "▼" : "▶"),
+                    ModuleId = m.ModuleId ?? string.Empty,
+                    Category = m.Category ?? string.Empty,
+                    SubSystem = m.SubSystem ?? string.Empty,
+                    DllFileName = m.FileName ?? string.Empty,
+                    ModuleName = m.ModuleName ?? string.Empty,
+                    Version = ver?.Version ?? "(미배포)",
+                    ProgCount = progCount > 0 ? $"{progCount}개" : "-",
                     // 프로그램 전용 컬럼은 비움
-                    ProgNo      = string.Empty,
-                    ProgId      = string.Empty,
-                    ProgName    = string.Empty,
-                    ClassName   = string.Empty,
+                    ProgNo = string.Empty,
+                    ProgId = string.Empty,
+                    ProgName = string.Empty,
+                    ClassName = string.Empty,
                     AuthLevelText = string.Empty,
-                    ActiveMark  = string.Empty,
+                    ActiveMark = string.Empty,
                 };
             }
 
@@ -1244,23 +1296,23 @@ namespace nU3.Tools.Deployer.Views
 
                 return new DbGridRow
                 {
-                    IsModule    = false,
-                    Toggle      = string.Empty,
-                    ModuleId    = p.ModuleId    ?? string.Empty,
-                    Category    = p.SystemType  ?? string.Empty,
-                    SubSystem   = p.SubSystem   ?? string.Empty,
+                    IsModule = false,
+                    Toggle = string.Empty,
+                    ModuleId = p.ModuleId ?? string.Empty,
+                    Category = p.SystemType ?? string.Empty,
+                    SubSystem = p.SubSystem ?? string.Empty,
                     // 모듈 전용 컬럼은 비움
                     DllFileName = string.Empty,
-                    ModuleName  = string.Empty,
-                    Version     = string.Empty,
-                    ProgCount   = string.Empty,
+                    ModuleName = string.Empty,
+                    Version = string.Empty,
+                    ProgCount = string.Empty,
                     // 프로그램 전용 컬럼
-                    ProgNo      = (index + 1).ToString(),
-                    ProgId      = p.ProgId      ?? string.Empty,
-                    ProgName    = p.ProgName    ?? string.Empty,
-                    ClassName   = p.ClassName   ?? string.Empty,
+                    ProgNo = (index + 1).ToString(),
+                    ProgId = p.ProgId ?? string.Empty,
+                    ProgName = p.ProgName ?? string.Empty,
+                    ClassName = p.ClassName ?? string.Empty,
                     AuthLevelText = authText,
-                    ActiveMark  = p.IsActive == "Y" ? "●" : "○",
+                    ActiveMark = p.IsActive == "Y" ? "●" : "○",
                 };
             }
         }
@@ -1274,69 +1326,69 @@ namespace nU3.Tools.Deployer.Views
             gvDbVersions.Columns.Clear();
 
             // 공통
-            var colToggle = gvDbVersions.Columns.AddVisible("Toggle",     "");
+            var colToggle = gvDbVersions.Columns.AddVisible("Toggle", "");
             colToggle.Width = 24;
             colToggle.OptionsColumn.FixedWidth = true;
 
-            var colCategory = gvDbVersions.Columns.AddVisible("Category",  "시스템");
+            var colCategory = gvDbVersions.Columns.AddVisible("Category", "시스템");
             colCategory.Width = 52;
 
-            var colSub      = gvDbVersions.Columns.AddVisible("SubSystem", "서브");
+            var colSub = gvDbVersions.Columns.AddVisible("SubSystem", "서브");
             colSub.Width = 52;
 
             // 모듈 전용
-            var colDll      = gvDbVersions.Columns.AddVisible("DllFileName",  "DLL 파일명");
+            var colDll = gvDbVersions.Columns.AddVisible("DllFileName", "DLL 파일명");
             colDll.Width = 200;
 
-            var colMName    = gvDbVersions.Columns.AddVisible("ModuleName",   "모듈명");
+            var colMName = gvDbVersions.Columns.AddVisible("ModuleName", "모듈명");
             colMName.Width = 180;
 
-            var colVer      = gvDbVersions.Columns.AddVisible("Version",      "배포버전");
+            var colVer = gvDbVersions.Columns.AddVisible("Version", "배포버전");
             colVer.Width = 80;
 
-            var colPCnt     = gvDbVersions.Columns.AddVisible("ProgCount",    "화면수");
+            var colPCnt = gvDbVersions.Columns.AddVisible("ProgCount", "화면수");
             colPCnt.Width = 46;
             colPCnt.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
-            colPCnt.AppearanceCell.TextOptions.HAlignment   = DevExpress.Utils.HorzAlignment.Center;
+            colPCnt.AppearanceCell.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
 
             // 프로그램 전용
-            var colNo       = gvDbVersions.Columns.AddVisible("ProgNo",       "#");
+            var colNo = gvDbVersions.Columns.AddVisible("ProgNo", "#");
             colNo.Width = 28;
             colNo.OptionsColumn.FixedWidth = true;
             colNo.AppearanceCell.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
 
-            var colProgId   = gvDbVersions.Columns.AddVisible("ProgId",       "프로그램 ID");
+            var colProgId = gvDbVersions.Columns.AddVisible("ProgId", "프로그램 ID");
             colProgId.Width = 140;
 
-            var colProgName = gvDbVersions.Columns.AddVisible("ProgName",     "화면명");
+            var colProgName = gvDbVersions.Columns.AddVisible("ProgName", "화면명");
             colProgName.Width = 180;
 
-            var colClass    = gvDbVersions.Columns.AddVisible("ClassName",    "클래스명");
+            var colClass = gvDbVersions.Columns.AddVisible("ClassName", "클래스명");
             colClass.Width = 200;
 
-            var colAuth     = gvDbVersions.Columns.AddVisible("AuthLevelText","권한");
+            var colAuth = gvDbVersions.Columns.AddVisible("AuthLevelText", "권한");
             colAuth.Width = 52;
             colAuth.AppearanceCell.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
 
-            var colActive   = gvDbVersions.Columns.AddVisible("ActiveMark",   "활성");
+            var colActive = gvDbVersions.Columns.AddVisible("ActiveMark", "활성");
             colActive.Width = 36;
             colActive.OptionsColumn.FixedWidth = true;
             colActive.AppearanceCell.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
 
             // ModuleId 는 마지막에 (참조용, 너비 최소)
-            var colMid      = gvDbVersions.Columns.AddVisible("ModuleId",     "모듈 ID");
+            var colMid = gvDbVersions.Columns.AddVisible("ModuleId", "모듈 ID");
             colMid.Width = 220;
 
-            gvDbVersions.OptionsBehavior.Editable             = false;
-            gvDbVersions.OptionsView.ShowGroupPanel            = false;
-            gvDbVersions.OptionsView.EnableAppearanceEvenRow   = false;
-            gvDbVersions.OptionsView.EnableAppearanceOddRow    = false;
-            gvDbVersions.OptionsView.RowAutoHeight             = false;
+            gvDbVersions.OptionsBehavior.Editable = false;
+            gvDbVersions.OptionsView.ShowGroupPanel = false;
+            gvDbVersions.OptionsView.EnableAppearanceEvenRow = false;
+            gvDbVersions.OptionsView.EnableAppearanceOddRow = false;
+            gvDbVersions.OptionsView.RowAutoHeight = false;
             gvDbVersions.RowHeight = 20;
 
-            gvDbVersions.RowCellClick    += GvDbVersions_RowCellClick;
-            gvDbVersions.CustomDrawCell  += GvDbVersions_CustomDrawCell;
-            gvDbVersions.RowStyle        += GvDbVersions_RowStyle;
+            gvDbVersions.RowCellClick += GvDbVersions_RowCellClick;
+            gvDbVersions.CustomDrawCell += GvDbVersions_CustomDrawCell;
+            gvDbVersions.RowStyle += GvDbVersions_RowStyle;
         }
 
         // ── CustomDrawCell: 프로그램 행 들여쓰기 시각화 ─────────────────────
@@ -1361,7 +1413,7 @@ namespace nU3.Tools.Deployer.Views
         {
             if (_moduleRepo == null) return;
 
-            var progRepo    = Program.ServiceProvider.GetRequiredService<IProgramRepository>();
+            var progRepo = Program.ServiceProvider.GetRequiredService<IProgramRepository>();
             var allPrograms = progRepo.GetAllPrograms();
 
             var progsByModule = allPrograms
@@ -1373,11 +1425,11 @@ namespace nU3.Tools.Deployer.Views
                 .GroupBy(v => v.ModuleId, StringComparer.OrdinalIgnoreCase)
                 .ToDictionary(g => g.Key, g => g.First(), StringComparer.OrdinalIgnoreCase);
 
-            var category  = SelectedCategory;
+            var category = SelectedCategory;
             var subSystem = SelectedSubSystem;
 
             var filteredModules = _dbMasters
-                .Where(m => category  == null || string.Equals(m.Category,  category,  StringComparison.OrdinalIgnoreCase))
+                .Where(m => category == null || string.Equals(m.Category, category, StringComparison.OrdinalIgnoreCase))
                 .Where(m => subSystem == null || string.Equals(m.SubSystem, subSystem, StringComparison.OrdinalIgnoreCase))
                 .OrderBy(m => m.Category)
                 .ThenBy(m => m.SubSystem)
@@ -1390,7 +1442,7 @@ namespace nU3.Tools.Deployer.Views
             {
                 verByModule.TryGetValue(m.ModuleId, out var ver);
                 progsByModule.TryGetValue(m.ModuleId, out var progs);
-                var progCount  = progs?.Count ?? 0;
+                var progCount = progs?.Count ?? 0;
                 var isExpanded = _expandedDbModuleIds.Contains(m.ModuleId);
 
                 _dbGridRows.Add(DbGridRow.FromModule(m, ver, isExpanded, progCount));
@@ -1407,7 +1459,7 @@ namespace nU3.Tools.Deployer.Views
 
         private void RebindDbGrid(bool preserveScroll)
         {
-            var topRow     = preserveScroll ? gvDbVersions.TopRowIndex      : 0;
+            var topRow = preserveScroll ? gvDbVersions.TopRowIndex : 0;
             var focusedRow = preserveScroll ? gvDbVersions.FocusedRowHandle : -1;
 
             dgvDbVersions.DataSource = null;
@@ -1446,7 +1498,7 @@ namespace nU3.Tools.Deployer.Views
         private void ExpandDbModuleRow(int rowIndex, string moduleId)
         {
             var progRepo = Program.ServiceProvider.GetRequiredService<IProgramRepository>();
-            var progs    = progRepo.GetProgramsByModuleId(moduleId)
+            var progs = progRepo.GetProgramsByModuleId(moduleId)
                                    .OrderBy(p => p.ProgId)
                                    .ToList();
 
@@ -1491,11 +1543,12 @@ namespace nU3.Tools.Deployer.Views
             var row = (sender as GridView)?.GetRow(e.RowHandle) as DbGridRow;
             if (row == null) return;
 
+            // ── 기본 배경 ─────────────────────────────────────────────────
             if (row.IsModule)
             {
-                e.Appearance.BackColor  = Color.FromArgb(235, 242, 250);  // 연한 파란-회색
-                e.Appearance.ForeColor  = Color.FromArgb(30, 60, 100);
-                e.Appearance.Font       = new Font(e.Appearance.Font, FontStyle.Bold);
+                e.Appearance.BackColor = Color.FromArgb(235, 242, 250);
+                e.Appearance.ForeColor = Color.FromArgb(30, 60, 100);
+                e.Appearance.Font = new Font(e.Appearance.Font, FontStyle.Bold);
             }
             else
             {
@@ -1507,13 +1560,31 @@ namespace nU3.Tools.Deployer.Views
                     : Color.FromArgb(150, 150, 150);
             }
 
-            // 좌측 스캔에서 선택된 모듈 하이라이트
-            if (!string.IsNullOrWhiteSpace(_selectedScanModuleId) &&
-                string.Equals(row.ModuleId, _selectedScanModuleId, StringComparison.OrdinalIgnoreCase))
+            // ── 선택 하이라이트 (붉은색 계통) ─────────────────────────────
+            var isSelectedModule = !string.IsNullOrWhiteSpace(_selectedScanModuleId) &&
+                                   string.Equals(row.ModuleId, _selectedScanModuleId, StringComparison.OrdinalIgnoreCase);
+            var isSelectedProg   = !row.IsModule &&
+                                   !string.IsNullOrWhiteSpace(_selectedScanProgId) &&
+                                   string.Equals(row.ProgId, _selectedScanProgId, StringComparison.OrdinalIgnoreCase);
+
+            if (isSelectedProg)
             {
-                e.Appearance.BackColor = row.IsModule
-                    ? Color.FromArgb(180, 215, 255)
-                    : Color.FromArgb(215, 232, 255);
+                // 프로그램 선택: 선명한 로즈
+                e.Appearance.BackColor = Color.FromArgb(255, 180, 180);
+                e.Appearance.ForeColor = Color.FromArgb(120, 0, 0);
+                e.Appearance.Font = new Font(e.Appearance.Font, FontStyle.Bold);
+            }
+            else if (isSelectedModule && row.IsModule)
+            {
+                // 모듈 선택: 진한 크림즌
+                e.Appearance.BackColor = Color.FromArgb(200, 50, 50);
+                e.Appearance.ForeColor = Color.White;
+            }
+            else if (isSelectedModule && !row.IsModule)
+            {
+                // 선택 모듈 소속 프로그램: 연한 살구
+                e.Appearance.BackColor = Color.FromArgb(255, 220, 210);
+                e.Appearance.ForeColor = Color.FromArgb(100, 30, 20);
             }
         }
 
@@ -1526,7 +1597,47 @@ namespace nU3.Tools.Deployer.Views
                     string.Equals(_dbGridRows[i].ModuleId, moduleId, StringComparison.OrdinalIgnoreCase))
                 {
                     gvDbVersions.FocusedRowHandle = i;
-                    gvDbVersions.TopRowIndex      = Math.Max(0, i - 2);
+                    gvDbVersions.TopRowIndex = Math.Max(0, i - 2);
+                    gvDbVersions.RefreshData();
+                    return;
+                }
+            }
+        }
+
+        // ── 좌측에서 프로그램 선택 시 DB 그리드에서 해당 프로그램으로 스크롤 ─
+        private void ScrollDbGridToProgram(string moduleId, string progId)
+        {
+            if (string.IsNullOrWhiteSpace(progId)) return;
+
+            // 1. 해당 모듈이 DB 그리드에 펼쳐져 있는지 확인, 없으면 먼저 펼침
+            var moduleRowIndex = -1;
+            for (var i = 0; i < _dbGridRows.Count; i++)
+            {
+                if (_dbGridRows[i].IsModule &&
+                    string.Equals(_dbGridRows[i].ModuleId, moduleId, StringComparison.OrdinalIgnoreCase))
+                {
+                    moduleRowIndex = i;
+                    break;
+                }
+            }
+
+            if (moduleRowIndex < 0) return;
+
+            if (!_expandedDbModuleIds.Contains(moduleId))
+            {
+                ExpandDbModuleRow(moduleRowIndex, moduleId);
+                RebindDbGrid(preserveScroll: false);
+            }
+
+            // 2. 프로그램 행 찾아 스크롤
+            for (var i = 0; i < _dbGridRows.Count; i++)
+            {
+                if (!_dbGridRows[i].IsModule &&
+                    string.Equals(_dbGridRows[i].ModuleId, moduleId, StringComparison.OrdinalIgnoreCase) &&
+                    string.Equals(_dbGridRows[i].ProgId, progId, StringComparison.OrdinalIgnoreCase))
+                {
+                    gvDbVersions.FocusedRowHandle = i;
+                    gvDbVersions.TopRowIndex = Math.Max(0, i - 3);
                     gvDbVersions.RefreshData();
                     return;
                 }

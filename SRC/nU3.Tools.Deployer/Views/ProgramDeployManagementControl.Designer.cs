@@ -71,6 +71,8 @@ namespace nU3.Tools.Deployer.Views
             btnScanModules = new nU3.Core.UI.Controls.nU3SimpleButton();
             chkUpdated = new nU3.Core.UI.Controls.nU3CheckEdit();
             lblModulesRoot = new nU3.Core.UI.Controls.nU3LabelControl();
+            dgvDbVersions = new nU3.Core.UI.Controls.nU3GridControl();
+            gvDbVersions = new nU3.Core.UI.Controls.nU3GridView();
             tblEdit = new System.Windows.Forms.TableLayoutPanel();
             txtModuleId = new nU3.Core.UI.Controls.nU3TextEdit();
             lblName = new nU3.Core.UI.Controls.nU3LabelControl();
@@ -92,19 +94,17 @@ namespace nU3.Tools.Deployer.Views
             txtDeployDesc = new nU3.Core.UI.Controls.nU3TextEdit();
             lblCat = new nU3.Core.UI.Controls.nU3LabelControl();
             lblId = new nU3.Core.UI.Controls.nU3LabelControl();
-            dgvDbVersions = new nU3.Core.UI.Controls.nU3GridControl();
-            gvDbVersions = new nU3.Core.UI.Controls.nU3GridView();
-            pnlFilter = new DevExpress.XtraEditors.PanelControl();
-            cboFilterCategory = new nU3.Core.UI.Controls.nU3ComboBoxEdit();
-            lblFilterCategory = new nU3.Core.UI.Controls.nU3LabelControl();
-            lblFilterSubSystem = new nU3.Core.UI.Controls.nU3LabelControl();
-            cboFilterSubSystem = new nU3.Core.UI.Controls.nU3ComboBoxEdit();
             tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             btnRefresh = new nU3.Core.UI.Controls.nU3SimpleButton();
             btnDelete = new nU3.Core.UI.Controls.nU3SimpleButton();
             btnSmartUpload = new nU3.Core.UI.Controls.nU3SimpleButton();
             btnAdd = new nU3.Core.UI.Controls.nU3SimpleButton();
             btnBulkUpload = new nU3.Core.UI.Controls.nU3SimpleButton();
+            pnlFilter = new DevExpress.XtraEditors.PanelControl();
+            cboFilterCategory = new nU3.Core.UI.Controls.nU3ComboBoxEdit();
+            lblFilterCategory = new nU3.Core.UI.Controls.nU3LabelControl();
+            lblFilterSubSystem = new nU3.Core.UI.Controls.nU3LabelControl();
+            cboFilterSubSystem = new nU3.Core.UI.Controls.nU3ComboBoxEdit();
             ((System.ComponentModel.ISupportInitialize)splitMain).BeginInit();
             ((System.ComponentModel.ISupportInitialize)splitMain.Panel1).BeginInit();
             splitMain.Panel1.SuspendLayout();
@@ -117,6 +117,8 @@ namespace nU3.Tools.Deployer.Views
             pnlScanTop.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)txtModulesRoot.Properties).BeginInit();
             ((System.ComponentModel.ISupportInitialize)chkUpdated.Properties).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dgvDbVersions).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)gvDbVersions).BeginInit();
             tblEdit.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)txtModuleId.Properties).BeginInit();
             ((System.ComponentModel.ISupportInitialize)txtModuleName.Properties).BeginInit();
@@ -128,13 +130,11 @@ namespace nU3.Tools.Deployer.Views
             ((System.ComponentModel.ISupportInitialize)txtFileSize.Properties).BeginInit();
             ((System.ComponentModel.ISupportInitialize)txtStoragePath.Properties).BeginInit();
             ((System.ComponentModel.ISupportInitialize)txtDeployDesc.Properties).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)dgvDbVersions).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)gvDbVersions).BeginInit();
+            tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pnlFilter).BeginInit();
             pnlFilter.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)cboFilterCategory.Properties).BeginInit();
             ((System.ComponentModel.ISupportInitialize)cboFilterSubSystem.Properties).BeginInit();
-            tableLayoutPanel1.SuspendLayout();
             SuspendLayout();
             // 
             // splitMain
@@ -146,14 +146,14 @@ namespace nU3.Tools.Deployer.Views
             // splitMain.Panel1
             // 
             splitMain.Panel1.Controls.Add(dgvModuleFiles);
-            splitMain.Panel1.Controls.Add(tblEdit);
-            splitMain.Panel1.Controls.Add(tableLayoutPanel1);
             splitMain.Panel1.Controls.Add(pnlScanTop);
             splitMain.Panel1.Text = "Panel1";
             // 
             // splitMain.Panel2
             // 
             splitMain.Panel2.Controls.Add(dgvDbVersions);
+            splitMain.Panel2.Controls.Add(tblEdit);
+            splitMain.Panel2.Controls.Add(tableLayoutPanel1);
             splitMain.Panel2.Controls.Add(pnlFilter);
             splitMain.Panel2.Text = "Panel2";
             splitMain.Size = new System.Drawing.Size(2214, 1207);
@@ -166,7 +166,7 @@ namespace nU3.Tools.Deployer.Views
             dgvModuleFiles.Location = new System.Drawing.Point(0, 40);
             dgvModuleFiles.MainView = gvModuleFiles;
             dgvModuleFiles.Name = "dgvModuleFiles";
-            dgvModuleFiles.Size = new System.Drawing.Size(725, 802);
+            dgvModuleFiles.Size = new System.Drawing.Size(725, 1167);
             dgvModuleFiles.TabIndex = 0;
             dgvModuleFiles.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] { gvModuleFiles });
             // 
@@ -248,6 +248,23 @@ namespace nU3.Tools.Deployer.Views
             lblModulesRoot.TabIndex = 0;
             lblModulesRoot.Text = "Modules:";
             // 
+            // dgvDbVersions
+            // 
+            dgvDbVersions.Dock = System.Windows.Forms.DockStyle.Fill;
+            dgvDbVersions.Location = new System.Drawing.Point(0, 40);
+            dgvDbVersions.MainView = gvDbVersions;
+            dgvDbVersions.Name = "dgvDbVersions";
+            dgvDbVersions.Size = new System.Drawing.Size(1479, 802);
+            dgvDbVersions.TabIndex = 0;
+            dgvDbVersions.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] { gvDbVersions });
+            // 
+            // gvDbVersions
+            // 
+            gvDbVersions.GridControl = dgvDbVersions;
+            gvDbVersions.Name = "gvDbVersions";
+            gvDbVersions.OptionsBehavior.Editable = false;
+            gvDbVersions.OptionsView.ShowGroupPanel = false;
+            // 
             // tblEdit
             // 
             tblEdit.BackColor = System.Drawing.SystemColors.ActiveCaption;
@@ -288,7 +305,7 @@ namespace nU3.Tools.Deployer.Views
             tblEdit.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
             tblEdit.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
             tblEdit.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
-            tblEdit.Size = new System.Drawing.Size(725, 272);
+            tblEdit.Size = new System.Drawing.Size(1479, 272);
             tblEdit.TabIndex = 0;
             // 
             // txtModuleId
@@ -298,7 +315,7 @@ namespace nU3.Tools.Deployer.Views
             txtModuleId.Location = new System.Drawing.Point(103, 3);
             txtModuleId.Name = "txtModuleId";
             txtModuleId.Properties.AutoHeight = false;
-            txtModuleId.Size = new System.Drawing.Size(619, 21);
+            txtModuleId.Size = new System.Drawing.Size(1373, 21);
             txtModuleId.TabIndex = 1;
             // 
             // lblName
@@ -320,7 +337,7 @@ namespace nU3.Tools.Deployer.Views
             txtModuleName.Location = new System.Drawing.Point(103, 30);
             txtModuleName.Name = "txtModuleName";
             txtModuleName.Properties.AutoHeight = false;
-            txtModuleName.Size = new System.Drawing.Size(619, 21);
+            txtModuleName.Size = new System.Drawing.Size(1373, 21);
             txtModuleName.TabIndex = 3;
             // 
             // cboCategory
@@ -331,7 +348,7 @@ namespace nU3.Tools.Deployer.Views
             cboCategory.Name = "cboCategory";
             cboCategory.Properties.AutoHeight = false;
             cboCategory.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] { new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo) });
-            cboCategory.Size = new System.Drawing.Size(619, 21);
+            cboCategory.Size = new System.Drawing.Size(1373, 21);
             cboCategory.TabIndex = 5;
             // 
             // lblSub
@@ -352,7 +369,7 @@ namespace nU3.Tools.Deployer.Views
             txtSubSystem.Location = new System.Drawing.Point(103, 84);
             txtSubSystem.Name = "txtSubSystem";
             txtSubSystem.Properties.AutoHeight = false;
-            txtSubSystem.Size = new System.Drawing.Size(619, 21);
+            txtSubSystem.Size = new System.Drawing.Size(1373, 21);
             txtSubSystem.TabIndex = 7;
             // 
             // lblFile
@@ -373,7 +390,7 @@ namespace nU3.Tools.Deployer.Views
             txtFileName.Location = new System.Drawing.Point(103, 111);
             txtFileName.Name = "txtFileName";
             txtFileName.Properties.AutoHeight = false;
-            txtFileName.Size = new System.Drawing.Size(619, 21);
+            txtFileName.Size = new System.Drawing.Size(1373, 21);
             txtFileName.TabIndex = 9;
             // 
             // lblVer
@@ -394,7 +411,7 @@ namespace nU3.Tools.Deployer.Views
             txtActiveVersion.Location = new System.Drawing.Point(103, 138);
             txtActiveVersion.Name = "txtActiveVersion";
             txtActiveVersion.Properties.AutoHeight = false;
-            txtActiveVersion.Size = new System.Drawing.Size(619, 21);
+            txtActiveVersion.Size = new System.Drawing.Size(1373, 21);
             txtActiveVersion.TabIndex = 11;
             // 
             // lblHash
@@ -415,7 +432,7 @@ namespace nU3.Tools.Deployer.Views
             txtFileHash.Location = new System.Drawing.Point(103, 165);
             txtFileHash.Name = "txtFileHash";
             txtFileHash.Properties.AutoHeight = false;
-            txtFileHash.Size = new System.Drawing.Size(619, 21);
+            txtFileHash.Size = new System.Drawing.Size(1373, 21);
             txtFileHash.TabIndex = 13;
             // 
             // lblSize
@@ -436,7 +453,7 @@ namespace nU3.Tools.Deployer.Views
             txtFileSize.Location = new System.Drawing.Point(103, 192);
             txtFileSize.Name = "txtFileSize";
             txtFileSize.Properties.AutoHeight = false;
-            txtFileSize.Size = new System.Drawing.Size(619, 21);
+            txtFileSize.Size = new System.Drawing.Size(1373, 21);
             txtFileSize.TabIndex = 15;
             // 
             // lblStorage
@@ -457,7 +474,7 @@ namespace nU3.Tools.Deployer.Views
             txtStoragePath.Location = new System.Drawing.Point(103, 219);
             txtStoragePath.Name = "txtStoragePath";
             txtStoragePath.Properties.AutoHeight = false;
-            txtStoragePath.Size = new System.Drawing.Size(619, 21);
+            txtStoragePath.Size = new System.Drawing.Size(1373, 21);
             txtStoragePath.TabIndex = 17;
             // 
             // lblDeployDesc
@@ -478,7 +495,7 @@ namespace nU3.Tools.Deployer.Views
             txtDeployDesc.Location = new System.Drawing.Point(103, 246);
             txtDeployDesc.Name = "txtDeployDesc";
             txtDeployDesc.Properties.AutoHeight = false;
-            txtDeployDesc.Size = new System.Drawing.Size(619, 23);
+            txtDeployDesc.Size = new System.Drawing.Size(1373, 23);
             txtDeployDesc.TabIndex = 19;
             // 
             // lblCat
@@ -491,7 +508,7 @@ namespace nU3.Tools.Deployer.Views
             lblCat.Name = "lblCat";
             lblCat.Size = new System.Drawing.Size(94, 21);
             lblCat.TabIndex = 4;
-            lblCat.Text = "카테고리:";
+            lblCat.Text = "시스템:";
             // 
             // lblId
             // 
@@ -505,22 +522,81 @@ namespace nU3.Tools.Deployer.Views
             lblId.TabIndex = 0;
             lblId.Text = "ModuleId:";
             // 
-            // dgvDbVersions
+            // tableLayoutPanel1
             // 
-            dgvDbVersions.Dock = System.Windows.Forms.DockStyle.Fill;
-            dgvDbVersions.Location = new System.Drawing.Point(0, 40);
-            dgvDbVersions.MainView = gvDbVersions;
-            dgvDbVersions.Name = "dgvDbVersions";
-            dgvDbVersions.Size = new System.Drawing.Size(1479, 1167);
-            dgvDbVersions.TabIndex = 0;
-            dgvDbVersions.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] { gvDbVersions });
+            tableLayoutPanel1.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            tableLayoutPanel1.ColumnCount = 3;
+            tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            tableLayoutPanel1.Controls.Add(btnRefresh, 0, 0);
+            tableLayoutPanel1.Controls.Add(btnDelete, 2, 0);
+            tableLayoutPanel1.Controls.Add(btnSmartUpload, 1, 0);
+            tableLayoutPanel1.Controls.Add(btnAdd, 2, 1);
+            tableLayoutPanel1.Controls.Add(btnBulkUpload, 1, 1);
+            tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            tableLayoutPanel1.Location = new System.Drawing.Point(0, 1114);
+            tableLayoutPanel1.Name = "tableLayoutPanel1";
+            tableLayoutPanel1.RowCount = 2;
+            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            tableLayoutPanel1.Size = new System.Drawing.Size(1479, 93);
+            tableLayoutPanel1.TabIndex = 5;
             // 
-            // gvDbVersions
+            // btnRefresh
             // 
-            gvDbVersions.GridControl = dgvDbVersions;
-            gvDbVersions.Name = "gvDbVersions";
-            gvDbVersions.OptionsBehavior.Editable = false;
-            gvDbVersions.OptionsView.ShowGroupPanel = false;
+            btnRefresh.AuthId = "";
+            btnRefresh.Dock = System.Windows.Forms.DockStyle.Fill;
+            btnRefresh.Location = new System.Drawing.Point(3, 3);
+            btnRefresh.Name = "btnRefresh";
+            btnRefresh.Size = new System.Drawing.Size(487, 40);
+            btnRefresh.TabIndex = 2;
+            btnRefresh.Text = "새로고침";
+            btnRefresh.Click += BtnRefresh_Click;
+            // 
+            // btnDelete
+            // 
+            btnDelete.AuthId = "";
+            btnDelete.Dock = System.Windows.Forms.DockStyle.Fill;
+            btnDelete.Location = new System.Drawing.Point(989, 3);
+            btnDelete.Name = "btnDelete";
+            btnDelete.Size = new System.Drawing.Size(487, 40);
+            btnDelete.TabIndex = 3;
+            btnDelete.Text = "삭제";
+            btnDelete.Click += BtnDelete_Click;
+            // 
+            // btnSmartUpload
+            // 
+            btnSmartUpload.AuthId = "";
+            btnSmartUpload.Dock = System.Windows.Forms.DockStyle.Fill;
+            btnSmartUpload.Location = new System.Drawing.Point(496, 3);
+            btnSmartUpload.Name = "btnSmartUpload";
+            btnSmartUpload.Size = new System.Drawing.Size(487, 40);
+            btnSmartUpload.TabIndex = 1;
+            btnSmartUpload.Text = "스마트 업로드";
+            btnSmartUpload.Click += BtnSmartUpload_Click;
+            // 
+            // btnAdd
+            // 
+            btnAdd.AuthId = "";
+            btnAdd.Dock = System.Windows.Forms.DockStyle.Fill;
+            btnAdd.Location = new System.Drawing.Point(989, 49);
+            btnAdd.Name = "btnAdd";
+            btnAdd.Size = new System.Drawing.Size(487, 41);
+            btnAdd.TabIndex = 4;
+            btnAdd.Text = "저장";
+            btnAdd.Click += BtnAdd_Click;
+            // 
+            // btnBulkUpload
+            // 
+            btnBulkUpload.AuthId = "";
+            btnBulkUpload.Dock = System.Windows.Forms.DockStyle.Fill;
+            btnBulkUpload.Location = new System.Drawing.Point(496, 49);
+            btnBulkUpload.Name = "btnBulkUpload";
+            btnBulkUpload.Size = new System.Drawing.Size(487, 41);
+            btnBulkUpload.TabIndex = 5;
+            btnBulkUpload.Text = "일괄 업로드";
+            btnBulkUpload.Click += btnBulkUpload_Click;
             // 
             // pnlFilter
             // 
@@ -574,82 +650,6 @@ namespace nU3.Tools.Deployer.Views
             cboFilterSubSystem.TabIndex = 3;
             cboFilterSubSystem.SelectedIndexChanged += CboFilter_Changed;
             // 
-            // tableLayoutPanel1
-            // 
-            tableLayoutPanel1.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            tableLayoutPanel1.ColumnCount = 3;
-            tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            tableLayoutPanel1.Controls.Add(btnRefresh, 0, 0);
-            tableLayoutPanel1.Controls.Add(btnDelete, 2, 0);
-            tableLayoutPanel1.Controls.Add(btnSmartUpload, 1, 0);
-            tableLayoutPanel1.Controls.Add(btnAdd, 2, 1);
-            tableLayoutPanel1.Controls.Add(btnBulkUpload, 1, 1);
-            tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            tableLayoutPanel1.Location = new System.Drawing.Point(0, 1114);
-            tableLayoutPanel1.Name = "tableLayoutPanel1";
-            tableLayoutPanel1.RowCount = 2;
-            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            tableLayoutPanel1.Size = new System.Drawing.Size(725, 93);
-            tableLayoutPanel1.TabIndex = 5;
-            // 
-            // btnRefresh
-            // 
-            btnRefresh.AuthId = "";
-            btnRefresh.Dock = System.Windows.Forms.DockStyle.Fill;
-            btnRefresh.Location = new System.Drawing.Point(3, 3);
-            btnRefresh.Name = "btnRefresh";
-            btnRefresh.Size = new System.Drawing.Size(235, 40);
-            btnRefresh.TabIndex = 2;
-            btnRefresh.Text = "새로고침";
-            btnRefresh.Click += BtnRefresh_Click;
-            // 
-            // btnDelete
-            // 
-            btnDelete.AuthId = "";
-            btnDelete.Dock = System.Windows.Forms.DockStyle.Fill;
-            btnDelete.Location = new System.Drawing.Point(485, 3);
-            btnDelete.Name = "btnDelete";
-            btnDelete.Size = new System.Drawing.Size(237, 40);
-            btnDelete.TabIndex = 3;
-            btnDelete.Text = "삭제";
-            btnDelete.Click += BtnDelete_Click;
-            // 
-            // btnSmartUpload
-            // 
-            btnSmartUpload.AuthId = "";
-            btnSmartUpload.Dock = System.Windows.Forms.DockStyle.Fill;
-            btnSmartUpload.Location = new System.Drawing.Point(244, 3);
-            btnSmartUpload.Name = "btnSmartUpload";
-            btnSmartUpload.Size = new System.Drawing.Size(235, 40);
-            btnSmartUpload.TabIndex = 1;
-            btnSmartUpload.Text = "스마트 업로드";
-            btnSmartUpload.Click += BtnSmartUpload_Click;
-            // 
-            // btnAdd
-            // 
-            btnAdd.AuthId = "";
-            btnAdd.Dock = System.Windows.Forms.DockStyle.Fill;
-            btnAdd.Location = new System.Drawing.Point(485, 49);
-            btnAdd.Name = "btnAdd";
-            btnAdd.Size = new System.Drawing.Size(237, 41);
-            btnAdd.TabIndex = 4;
-            btnAdd.Text = "저장";
-            btnAdd.Click += BtnAdd_Click;
-            // 
-            // btnBulkUpload
-            // 
-            btnBulkUpload.AuthId = "";
-            btnBulkUpload.Dock = System.Windows.Forms.DockStyle.Fill;
-            btnBulkUpload.Location = new System.Drawing.Point(244, 49);
-            btnBulkUpload.Name = "btnBulkUpload";
-            btnBulkUpload.Size = new System.Drawing.Size(235, 41);
-            btnBulkUpload.TabIndex = 5;
-            btnBulkUpload.Text = "일괄 업로드";
-            btnBulkUpload.Click += btnBulkUpload_Click;
-            // 
             // ProgramDeployManagementControl
             // 
             Controls.Add(splitMain);
@@ -667,6 +667,8 @@ namespace nU3.Tools.Deployer.Views
             pnlScanTop.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)txtModulesRoot.Properties).EndInit();
             ((System.ComponentModel.ISupportInitialize)chkUpdated.Properties).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dgvDbVersions).EndInit();
+            ((System.ComponentModel.ISupportInitialize)gvDbVersions).EndInit();
             tblEdit.ResumeLayout(false);
             tblEdit.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)txtModuleId.Properties).EndInit();
@@ -679,13 +681,11 @@ namespace nU3.Tools.Deployer.Views
             ((System.ComponentModel.ISupportInitialize)txtFileSize.Properties).EndInit();
             ((System.ComponentModel.ISupportInitialize)txtStoragePath.Properties).EndInit();
             ((System.ComponentModel.ISupportInitialize)txtDeployDesc.Properties).EndInit();
-            ((System.ComponentModel.ISupportInitialize)dgvDbVersions).EndInit();
-            ((System.ComponentModel.ISupportInitialize)gvDbVersions).EndInit();
+            tableLayoutPanel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)pnlFilter).EndInit();
             pnlFilter.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)cboFilterCategory.Properties).EndInit();
             ((System.ComponentModel.ISupportInitialize)cboFilterSubSystem.Properties).EndInit();
-            tableLayoutPanel1.ResumeLayout(false);
             ResumeLayout(false);
 
         }
