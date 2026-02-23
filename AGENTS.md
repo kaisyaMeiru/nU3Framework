@@ -226,7 +226,7 @@ SRC/
 ├── nU3.Tools.Deployer/ # Deployment tool
 ├── Servers/           # Server projects (Host, Connectivity)
 ├── Modules/           # Business modules (EMR, ADM, OT, etc.)
-└── Tools/             # Utilities (DbTest)
+└── Tools/             # Utilities 
 ```
 
 **Key Dependencies**: DevExpress WinForms v23.2.9, Microsoft.Extensions.DependencyInjection v8.0.0, System.Data.SqlClient, System.Net.Http.Json
