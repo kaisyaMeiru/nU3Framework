@@ -1,9 +1,10 @@
+# GEMINI.md - Project Context & Guide
+
 # nU3.Framework - Agentic Coding Agent Instructions
 
 > **Framework**: nU3.Framework (Medical IS Framework)  
 > **Tech Stack**: .NET 8.0, WinForms, DevExpress 23.2.9, ASP.NET Core  
-> **Purpose**: Guide for AI coding agents operating in this repository  
-> **Location**: `/mnt/c/Project2_OPERATION/05.Framework/nU3.Framework`
+> **Purpose**: Guide for AI coding agents operating in this repository.
 
 ---
 
@@ -11,8 +12,6 @@
 
 ### Build Commands
 ```bash
-# Working directory: /mnt/c/Project2_OPERATION/05.Framework/nU3.Framework/SRC
-
 # Build entire solution
 dotnet build nU3.Framework.sln --configuration Release
 dotnet build nU3.Framework.sln --configuration Debug
@@ -23,41 +22,29 @@ dotnet build nU3.Core/nU3.Core.csproj
 # Restore packages / Clean
 dotnet restore nU3.Framework.sln
 dotnet clean nU3.Framework.sln
-
-# Check build warnings only
-dotnet build --verbosity quiet 2>&1 | grep -i "warning"
 ```
 
 ### Test Commands
 ```bash
-# Current state: Manual test tool only (no xUnit/NUnit/MSTest)
-# The DbTest project is a console app for database integration testing
+# NOTE: Only DbTest project exists (no xUnit/NUnit yet)
 
-# Run DbTest console tool
-dotnet run --project SRC/Tools/DbTest/DbTest.csproj
+# Run DbTest project
+dotnet build Tools/DbTest/DbTest.csproj
 
-# When adding unit tests (recommended):
-# 1. Add test project: SRC/Tests/[ProjectName].UnitTests
-# 2. Add PackageReference: Microsoft.NET.Test.Sdk, xunit, xunit.runner.visualstudio
-# 3. Run: dotnet test
-# 4. Run specific test: dotnet test --filter "FullyQualifiedName~TestMethodName"
+# Run specific test (when test framework added)
+dotnet test --filter "FullyQualified.TestMethodName"
+dotnet test --filter "Category=Unit" --verbosity normal
 ```
 
 ### Lint/Analysis Commands
 ```bash
-# Current state: Manual enforcement via AGENTS.md (no automated analyzers)
+# Check for compiler warnings
+dotnet build --verbosity quiet 2>&1 | findstr /C /warning
 
 # Check for obsolete packages
-dotnet list package --deprecated --include-transitive
+dotnet list package --deprecated
 
-# Check for vulnerable packages
-dotnet list package --vulnerable
-
-# Manual code inspection (no .editorconfig or StyleCop configured)
-# To add automated analysis:
-# 1. Add .editorconfig at repo root
-# 2. Add StyleCop.Analyzers PackageReference to Directory.Build.props
-# 3. Set <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+# Use Visual Studio → Build → Analyze Solution for Code Clones
 ```
 
 ---
@@ -266,31 +253,45 @@ SRC/
 - 윈폼 디자이너에서 디자인 가능하도록 디자인 코드를 분리해야 한다
 - 디자인 코드에는 람다식이 들어가면 안된다
 
-### 제약조건
-- GITHUB 명령어를 마음대로 사용하지 말것.
+---
+
 
 
 ### Devexpress MCP 
+---
 description: 'Answer questions about DevExpress UI Components and their API using the dxdocs server'
 ---
-You are a .NET programmer and DevExpress product expert.
+
+You are a .NET/JavaScript programmer and DevExpress product expert.
+
 Your task is to answer questions about DevExpress components and their APIs using dxdocs MCP server tools.
 
 When replying to **ANY** question about DevExpress components, use the dxdocs server to construct your answer.
 
 ## Workflow:
+
 1. **Call devexpress_docs_search** to obtain help topics related to the user's question
 2. **Call devexpress_docs_get_content** to fetch and read the most relevant help topics
 3. **Reflect on the obtained content** and how it relates to the question
 4. **Provide a comprehensive answer** based solely on retrieved information
 
 ## Constraints:
+
 - **Use devexpress_docs_search only once** per question to avoid redundant queries
 - **Answer questions based solely** on information obtained from MCP server tools
 - If relevant code examples are available in documentation, **include those code examples**
 - **Reference specific DevExpress controls and properties** mentioned in the docs
-- If a user specifies a version (such as v24.2 or 24.2), invoke MCP server tools corresponding to that version (for example, "dxdocs24_2")
+- If a user specifies a version (such as v23.2 or 23.2), invoke MCP server tools corresponding to that version (for example, "dxdocs23_2")
 
----
 
-**Last Updated**: 2026-02-05
+## Skills
+
+커스텀 검증 및 유지보수 스킬은 `.agent/skills/`에 정의되어 있습니다.
+
+| Skill | Purpose |
+|-------|---------|
+| `cc-feature-implementer-skill` | 품질 게이트와 증분적 전달 구조를 갖춘 단계별 기능 계획을 수립합니다. 기능 계획 수립, 작업 구성, 작업 분할, 로드맵 작성 또는 개발 전략 수립 시 사용합니다. 키워드: 계획, 기획, 단계, 분할, 전략, 로드맵, 구성, 구조, 개요. |
+| `verify-implementation-skill` | 프로젝트의 모든 verify 스킬을 순차 실행하여 통합 검증 보고서를 생성합니다 |
+| `manage-skills` | 세션 변경사항을 분석하고, 검증 스킬을 생성/업데이트하며, CLAUDE.md를 관리합니다 |
+
+
