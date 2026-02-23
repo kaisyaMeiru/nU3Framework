@@ -5,7 +5,7 @@ namespace nU3.Modules.EMR.Common.Models
     /// <summary>
     /// EMR 도메인 전반에서 사용되는 환자 요약 정보 DTO
     /// </summary>
-    public class PatientSummaryDto
+    public class EmrPatientSummaryDto
     {
         public string PatientId { get; set; } = string.Empty;
         public string PatientName { get; set; } = string.Empty;

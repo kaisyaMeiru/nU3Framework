@@ -1,12 +1,12 @@
-namespace nU3.Core.UI.Components.Controls
+﻿namespace nU3.Core.UI.Components.Controls
 {
     partial class PatientInfoControl
     {
-        /// <summary> 필수 디자이너 변수입니다. </summary>
+        /// <summary> ?꾩닔 ?붿옄?대꼫 蹂?섏엯?덈떎. </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary> 사용 중인 모든 리소스를 정리합니다. </summary>
-        /// <param name="disposing">관리되는 리소스를 삭제해야 하면 true이고, 그렇지 않으면 false입니다.</param>
+        /// <summary> ?ъ슜 以묒씤 紐⑤뱺 由ъ냼?ㅻ? ?뺣━?⑸땲?? </summary>
+        /// <param name="disposing">愿由щ릺??由ъ냼?ㅻ? ??젣?댁빞 ?섎㈃ true?닿퀬, 洹몃젃吏 ?딆쑝硫?false?낅땲??</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -18,7 +18,7 @@ namespace nU3.Core.UI.Components.Controls
 
         #region 구성 요소 디자이너에서 생성한 코드
 
-        /// <summary> 디자이너 지원에 필요한 메서드입니다. 이 메서드의 내용을 코드 편집기로 수정하지 마십시오. </summary>
+        /// <summary> ?붿옄?대꼫 吏?먯뿉 ?꾩슂??硫붿꽌?쒖엯?덈떎. ??硫붿꽌?쒖쓽 ?댁슜??코드 ?몄쭛湲곕줈 ?섏젙?섏? 留덉떗?쒖삤. </summary>
         private void InitializeComponent()
         {
             grpPatientInfo = new nU3.Core.UI.Controls.nU3GroupControl();

@@ -2,7 +2,7 @@
   <!-- Centralized deploy target: auto-compute module subpath from project name and copy the project's main assembly to the framework drop -->
   <PropertyGroup>
     <!-- Default deploy folder; can be overridden per-project or via Directory.Build.props -->
-    <DeployOutputDir Condition="'$(DeployOutputDir)' == ''">$(ProjectDir)..\..\..\..\nU3.Shell\bin\$(Configuration)\</DeployOutputDir>
+	  <DeployOutputDir Condition="'$(DeployOutputDir)' == ''">C:\nU3Framework\</DeployOutputDir>
 
     <!-- Try to extract module and submodule parts from the project name, e.g. nU3.Modules.EMR.COMMON -> EMR a -->
     <_Module1>$([System.Text.RegularExpressions.Regex]::Match($(MSBuildProjectName), 'Modules\.([^\.]+)\.').Groups[1].Value)</_Module1>

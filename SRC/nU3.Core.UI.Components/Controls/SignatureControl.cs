@@ -1,4 +1,5 @@
-using DevExpress.XtraEditors;
+﻿using DevExpress.XtraEditors;
+using nU3.Core.UI;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -7,18 +8,18 @@ namespace nU3.Core.UI.Components.Controls
 {
     [ToolboxItem(true)]
     [ToolboxBitmap(typeof(SignatureControl))]
-    public partial class SignatureControl : XtraUserControl
+    public partial class SignatureControl : BaseWorkComponent
     {
-        private PanelControl? _signaturePanel;
-        private SimpleButton? _clearButton;
-        private SimpleButton? _saveButton;
-        private SimpleButton? _undoButton;
-        private CheckEdit? _confirmCheckEdit;
-        private LabelControl? _statusLabel;
-        private MemoEdit? _commentEdit;
-        private PanelControl? _buttonPanel;
-        private PanelControl? _commentPanel;
-        private LabelControl? _commentLabel;
+        private nU3.Core.UI.Controls.nU3PanelControl? _signaturePanel;
+        private nU3.Core.UI.Controls.nU3SimpleButton? _clearButton;
+        private nU3.Core.UI.Controls.nU3SimpleButton? _saveButton;
+        private nU3.Core.UI.Controls.nU3SimpleButton? _undoButton;
+        private nU3.Core.UI.Controls.nU3CheckEdit? _confirmCheckEdit;
+        private nU3.Core.UI.Controls.nU3LabelControl? _statusLabel;
+        private nU3.Core.UI.Controls.nU3MemoEdit? _commentEdit;
+        private nU3.Core.UI.Controls.nU3PanelControl? _buttonPanel;
+        private nU3.Core.UI.Controls.nU3PanelControl? _commentPanel;
+        private nU3.Core.UI.Controls.nU3LabelControl? _commentLabel;
 
         private Bitmap? _signatureBitmap;
         private Graphics? _signatureGraphics;
@@ -286,7 +287,7 @@ namespace nU3.Core.UI.Components.Controls
 
             if (!_hasSignature)
             {
-                _statusLabel.Text = "서명 필드에 서명하세요";
+                _statusLabel.Text = "서명 패드에 서명하세요.";
                 _statusLabel.Appearance.ForeColor = Color.Gray;
             }
             else if (RequireConfirmation && !(_confirmCheckEdit?.Checked ?? false))

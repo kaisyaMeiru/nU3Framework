@@ -1,4 +1,5 @@
-using DevExpress.XtraEditors;
+﻿using DevExpress.XtraEditors;
+using nU3.Core.UI;
 using DevExpress.XtraEditors.Controls;
 using nU3.Models;
 using System.ComponentModel;
@@ -7,7 +8,7 @@ namespace nU3.Core.UI.Components.Controls
 {
     [ToolboxItem(true)]
     [ToolboxBitmap(typeof(DateRangeControl))]
-    public partial class DateRangeControl : XtraUserControl
+    public partial class DateRangeControl : BaseWorkComponent
     {
         public event EventHandler? DateRangeChanged;
 

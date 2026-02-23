@@ -24,7 +24,7 @@ namespace nU3.Modules.EMR.CO.EmrCommon
             searchControl.PatientSelected += SearchControl_PatientSelected;
         }
 
-        private void SearchControl_PatientSelected(object? sender, PatientSummaryDto e)
+        private void SearchControl_PatientSelected(object? sender, EmrPatientSummaryDto e)
         {
             string message = $"[Screen 1] 환자 선택 이벤트 수신:\r\n" +
                              $"- 이름: {e.PatientName}\r\n" +

@@ -1,11 +1,12 @@
 using DevExpress.XtraEditors;
+using nU3.Core.UI;
 using System.ComponentModel;
 
 namespace nU3.Core.UI.Components.Controls
 {
     [ToolboxItem(true)]
     [ToolboxBitmap(typeof(SearchControl))]
-    public partial class SearchBarControl : XtraUserControl
+    public partial class SearchBarControl : BaseWorkComponent
     {
         public event EventHandler<SearchEventArgs>? Search;
         public event EventHandler? Cleared;

@@ -1,4 +1,4 @@
-using DevExpress.XtraEditors;
+﻿using DevExpress.XtraEditors;
 using DevExpress.XtraEditors.Controls;
 using DevExpress.XtraEditors.Repository;
 using DevExpress.XtraGrid;
@@ -35,7 +35,7 @@ namespace nU3.Core.UI.Components.Controls
         private void InitializeComponent()
         {
             this.SuspendLayout();
-            this._headerPanel = new DevExpress.XtraEditors.PanelControl();
+            this._headerPanel = new nU3.Core.UI.Controls.nU3PanelControl();
             ((System.ComponentModel.ISupportInitialize)(this._headerPanel)).BeginInit();
             this._headerPanel.SuspendLayout();
             this._headerPanel.Dock = System.Windows.Forms.DockStyle.Top;
@@ -43,20 +43,20 @@ namespace nU3.Core.UI.Components.Controls
             this._headerPanel.Name = "_headerPanel";
             this._headerPanel.Size = new System.Drawing.Size(500, 120);
             this._headerPanel.TabIndex = 0;
-            this._selectedLabel = new DevExpress.XtraEditors.LabelControl();
+            this._selectedLabel = new nU3.Core.UI.Controls.nU3LabelControl();
             this._selectedLabel.Location = new System.Drawing.Point(10, 10);
             this._selectedLabel.Name = "_selectedLabel";
             this._selectedLabel.Size = new System.Drawing.Size(84, 14);
             this._selectedLabel.TabIndex = 0;
-            this._selectedLabel.Text = "선택된 항목:";
-            this._selectedPanel = new DevExpress.XtraEditors.PanelControl();
+            this._selectedLabel.Text = "선택항목:";
+            this._selectedPanel = new nU3.Core.UI.Controls.nU3PanelControl();
             ((System.ComponentModel.ISupportInitialize)(this._selectedPanel)).BeginInit();
             this._selectedPanel.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.NoBorder;
             this._selectedPanel.Location = new System.Drawing.Point(10, 35);
             this._selectedPanel.Name = "_selectedPanel";
             this._selectedPanel.Size = new System.Drawing.Size(480, 75);
             this._selectedPanel.TabIndex = 1;
-            this._searchControl = new DevExpress.XtraEditors.SearchControl();
+            this._searchControl = new nU3.Core.UI.Controls.nU3SearchControl();
             ((System.ComponentModel.ISupportInitialize)(this._searchControl.Properties)).BeginInit();
             this._searchControl.Dock = System.Windows.Forms.DockStyle.Top;
             this._searchControl.Location = new System.Drawing.Point(0, 120);
@@ -66,14 +66,14 @@ namespace nU3.Core.UI.Components.Controls
             new DevExpress.XtraEditors.Repository.SearchButton()});
             this._searchControl.Size = new System.Drawing.Size(500, 20);
             this._searchControl.TabIndex = 1;
-            this._gridControl = new DevExpress.XtraGrid.GridControl();
+            this._gridControl = new nU3.Core.UI.Controls.nU3GridControl();
             ((System.ComponentModel.ISupportInitialize)(this._gridControl)).BeginInit();
             this._gridControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this._gridControl.Location = new System.Drawing.Point(0, 140);
             this._gridControl.Name = "_gridControl";
             this._gridControl.Size = new System.Drawing.Size(500, 260);
             this._gridControl.TabIndex = 2;
-            this._gridView = new DevExpress.XtraGrid.Views.Grid.GridView();
+            this._gridView = new nU3.Core.UI.Controls.nU3GridView();
             this._gridControl.MainView = this._gridView;
             this._gridView.GridControl = this._gridControl;
             this._gridView.Name = "_gridView";
@@ -82,7 +82,7 @@ namespace nU3.Core.UI.Components.Controls
             this._gridView.OptionsSelection.CheckBoxSelectorColumnWidth = 40;
             this._gridView.OptionsView.ShowGroupPanel = false;
             
-            var colSelected = new DevExpress.XtraGrid.Columns.GridColumn();
+            var colSelected = new nU3.Core.UI.Controls.nU3GridColumn();
             colSelected.Caption = "선택";
             colSelected.FieldName = "IsSelected";
             colSelected.Name = "colIsSelected";
@@ -94,7 +94,7 @@ namespace nU3.Core.UI.Components.Controls
             repositoryItemCheckEdit.Name = "repositoryItemCheckEdit";
             colSelected.ColumnEdit = repositoryItemCheckEdit;
             
-            var colDisplayText = new DevExpress.XtraGrid.Columns.GridColumn();
+            var colDisplayText = new nU3.Core.UI.Controls.nU3GridColumn();
             colDisplayText.Caption = "항목";
             colDisplayText.FieldName = "DisplayText";
             colDisplayText.Name = "colDisplayText";
@@ -102,7 +102,7 @@ namespace nU3.Core.UI.Components.Controls
             colDisplayText.VisibleIndex = 1;
             colDisplayText.Width = 200;
             
-            var colValue = new DevExpress.XtraGrid.Columns.GridColumn();
+            var colValue = new nU3.Core.UI.Controls.nU3GridColumn();
             colValue.Caption = "값";
             colValue.FieldName = "Value";
             colValue.Name = "colValue";
@@ -110,7 +110,7 @@ namespace nU3.Core.UI.Components.Controls
             colValue.VisibleIndex = 2;
             colValue.Width = 200;
             
-            this._gridView.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] {
+            this._gridView.Columns.AddRange(new nU3.Core.UI.Controls.nU3GridColumn[] {
                 colSelected,
                 colDisplayText,
                 colValue

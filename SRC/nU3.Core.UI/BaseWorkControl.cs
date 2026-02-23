@@ -5,6 +5,7 @@ using nU3.Core.Events;
 using nU3.Core.Interfaces;
 using nU3.Core.Logging;
 using nU3.Core.Services;
+using nU3.Core.UI.Controls;
 using nU3.Models;
 using System;
 using System.Collections.Generic;
@@ -149,13 +150,18 @@ namespace nU3.Core.UI
 
         #endregion
 
-        #region Constructor
+        #region Constructor        
+        public nU3LayoutControl MainLayoutControl;
+        public DevExpress.XtraLayout.LayoutControlGroup Root;
 
         public BaseWorkControl()
         {
             // 디자인 모드에서는 초기화 스킵
             if (System.ComponentModel.LicenseManager.UsageMode == System.ComponentModel.LicenseUsageMode.Designtime)
                 return;
+
+            LayoutInit();
+            this.Dock = DockStyle.None;
 
             _disposables = new List<IDisposable>();
             _cancellationTokenSource = new CancellationTokenSource();
@@ -166,6 +172,10 @@ namespace nU3.Core.UI
                 LogManager.Debug($"BaseWorkControl created: {this.GetType().Name}", "UI");
             }
             catch { }
+        }
+
+        private void LayoutInit()
+        {                      
         }
 
         #endregion
@@ -504,6 +514,43 @@ namespace nU3.Core.UI
             {
                 return false;
             }
+        }
+
+        private void InitializeComponent()
+        {
+            MainLayoutControl = new nU3LayoutControl();
+            Root = new DevExpress.XtraLayout.LayoutControlGroup();
+            ((System.ComponentModel.ISupportInitialize)MainLayoutControl).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)Root).BeginInit();
+            SuspendLayout();
+            // 
+            // MainLayoutControl
+            // 
+            MainLayoutControl.Dock = DockStyle.Fill;
+            MainLayoutControl.Location = new System.Drawing.Point(0, 0);
+            MainLayoutControl.Name = "MainLayoutControl";
+            MainLayoutControl.Root = Root;
+            MainLayoutControl.Size = new System.Drawing.Size(708, 500);
+            MainLayoutControl.TabIndex = 0;
+            MainLayoutControl.Text = "nU3LayoutControl1";
+            // 
+            // Root
+            // 
+            Root.EnableIndentsWithoutBorders = DevExpress.Utils.DefaultBoolean.True;
+            Root.GroupBordersVisible = false;
+            Root.Name = "Root";
+            Root.Size = new System.Drawing.Size(708, 500);
+            Root.TextVisible = false;
+            // 
+            // BaseWorkControl
+            // 
+            Controls.Add(MainLayoutControl);
+            Name = "BaseWorkControl";
+            Size = new System.Drawing.Size(708, 500);
+            ((System.ComponentModel.ISupportInitialize)MainLayoutControl).EndInit();
+            ((System.ComponentModel.ISupportInitialize)Root).EndInit();
+            ResumeLayout(false);
+
         }
 
         /// <summary>

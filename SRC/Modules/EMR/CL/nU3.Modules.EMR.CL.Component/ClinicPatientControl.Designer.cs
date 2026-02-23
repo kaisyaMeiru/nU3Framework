@@ -4,18 +4,18 @@ namespace nU3.Modules.EMR.CL.Component
     {
         private System.ComponentModel.IContainer _components = null;
 
-        private DevExpress.XtraLayout.LayoutControl _layoutControl = null!;
+        private nU3.Core.UI.Controls.nU3LayoutControl _layoutControl = null!;
         private nU3.Core.UI.Components.Controls.PatientSelectorControl _patientSelector = null!;
-        private DevExpress.XtraEditors.SimpleButton _btnClear = null!;
-        private DevExpress.XtraEditors.LabelControl _lblSelectedPatient = null!;
+        private nU3.Core.UI.Controls.nU3SimpleButton _btnClear = null!;
+        private nU3.Core.UI.Controls.nU3LabelControl _lblSelectedPatient = null!;
 
-        private DevExpress.XtraLayout.LayoutControlGroup _rootGroup = null!;
-        private DevExpress.XtraLayout.LayoutControlGroup _patientGroup = null!;
-        private DevExpress.XtraLayout.LayoutControlItem _patientControlItem = null!;
-        private DevExpress.XtraLayout.LayoutControlGroup _infoGroup = null!;
-        private DevExpress.XtraLayout.LayoutControlItem _infoItem = null!;
-        private DevExpress.XtraLayout.LayoutControlGroup _buttonGroup = null!;
-        private DevExpress.XtraLayout.LayoutControlItem _buttonItem = null!;
+        private nU3.Core.UI.Controls.nU3LayoutControlGroup _rootGroup = null!;
+        private nU3.Core.UI.Controls.nU3LayoutControlGroup _patientGroup = null!;
+        private nU3.Core.UI.Controls.nU3LayoutControlItem _patientControlItem = null!;
+        private nU3.Core.UI.Controls.nU3LayoutControlGroup _infoGroup = null!;
+        private nU3.Core.UI.Controls.nU3LayoutControlItem _infoItem = null!;
+        private nU3.Core.UI.Controls.nU3LayoutControlGroup _buttonGroup = null!;
+        private nU3.Core.UI.Controls.nU3LayoutControlItem _buttonItem = null!;
 
         protected override void Dispose(bool disposing)
         {
@@ -30,17 +30,17 @@ namespace nU3.Modules.EMR.CL.Component
 
         private void InitializeComponent()
         {
-            _layoutControl = new DevExpress.XtraLayout.LayoutControl();
+            _layoutControl = new nU3.Core.UI.Controls.nU3LayoutControl();
             _patientSelector = new nU3.Core.UI.Components.Controls.PatientSelectorControl();
-            _lblSelectedPatient = new DevExpress.XtraEditors.LabelControl();
-            _btnClear = new DevExpress.XtraEditors.SimpleButton();
-            _rootGroup = new DevExpress.XtraLayout.LayoutControlGroup();
-            _patientGroup = new DevExpress.XtraLayout.LayoutControlGroup();
-            _patientControlItem = new DevExpress.XtraLayout.LayoutControlItem();
-            _infoGroup = new DevExpress.XtraLayout.LayoutControlGroup();
-            _infoItem = new DevExpress.XtraLayout.LayoutControlItem();
-            _buttonGroup = new DevExpress.XtraLayout.LayoutControlGroup();
-            _buttonItem = new DevExpress.XtraLayout.LayoutControlItem();
+            _lblSelectedPatient = new nU3.Core.UI.Controls.nU3LabelControl();
+            _btnClear = new nU3.Core.UI.Controls.nU3SimpleButton();
+            _rootGroup = new nU3.Core.UI.Controls.nU3LayoutControlGroup();
+            _patientGroup = new nU3.Core.UI.Controls.nU3LayoutControlGroup();
+            _patientControlItem = new nU3.Core.UI.Controls.nU3LayoutControlItem();
+            _infoGroup = new nU3.Core.UI.Controls.nU3LayoutControlGroup();
+            _infoItem = new nU3.Core.UI.Controls.nU3LayoutControlItem();
+            _buttonGroup = new nU3.Core.UI.Controls.nU3LayoutControlGroup();
+            _buttonItem = new nU3.Core.UI.Controls.nU3LayoutControlItem();
             ((System.ComponentModel.ISupportInitialize)_layoutControl).BeginInit();
             _layoutControl.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)_rootGroup).BeginInit();

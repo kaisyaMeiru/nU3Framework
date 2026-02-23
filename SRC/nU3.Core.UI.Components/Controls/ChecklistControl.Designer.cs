@@ -1,6 +1,7 @@
-#pragma warning disable CS8669
+﻿#pragma warning disable CS8669
 #pragma warning disable CS0246
 using DevExpress.XtraLayout;
+using nU3.Core.UI.Controls;
 
 namespace nU3.Core.UI.Components.Controls
 {
@@ -8,34 +9,32 @@ namespace nU3.Core.UI.Components.Controls
     {
         private System.ComponentModel.IContainer? _components = null;
 
-        private DevExpress.XtraLayout.LayoutControl? _layoutControl;
-        private DevExpress.XtraEditors.SimpleButton? _checkAllButton;
-        private DevExpress.XtraEditors.SimpleButton? _uncheckAllButton;
-        private DevExpress.XtraEditors.SimpleButton? _clearButton;
-        private DevExpress.XtraEditors.PanelControl? _buttonPanel;
+        private nU3.Core.UI.Controls.nU3LayoutControl? _layoutControl;
+        private nU3.Core.UI.Controls.nU3SimpleButton? _checkAllButton;
+        private nU3.Core.UI.Controls.nU3SimpleButton? _uncheckAllButton;
+        private nU3.Core.UI.Controls.nU3SimpleButton? _clearButton;
+        private nU3.Core.UI.Controls.nU3PanelControl? _buttonPanel;
 
-        private DevExpress.XtraLayout.LayoutControlGroup? _rootGroup;
-        private DevExpress.XtraLayout.LayoutControlGroup? _buttonGroup;
-        private DevExpress.XtraLayout.LayoutControlItem? _checkAllButtonItem;
-        private DevExpress.XtraLayout.LayoutControlItem? _uncheckAllButtonItem;
-        private DevExpress.XtraLayout.LayoutControlItem? _clearButtonItem;
+        private LayoutControlGroup? _rootGroup;
+        private LayoutControlGroup? _buttonGroup;
+        private LayoutControlItem? _checkAllButtonItem;
+        private LayoutControlItem? _uncheckAllButtonItem;
+        private LayoutControlItem? _clearButtonItem;
 
         private void InitializeComponent()
         {
-            this._components = new System.ComponentModel.Container();
-            this.SuspendLayout();
-
-            this.Name = "ChecklistControl";
-            this.Size = new System.Drawing.Size(400, 300);
-
-            InitializeControls();
-
-            this.ResumeLayout(false);
+            SuspendLayout();
+            // 
+            // ChecklistControl
+            // 
+            Name = "ChecklistControl";
+            Size = new Size(1463, 931);
+            ResumeLayout(false);
         }
 
         private void InitializeControls()
         {
-            _layoutControl = new DevExpress.XtraLayout.LayoutControl();
+            _layoutControl = new nU3.Core.UI.Controls.nU3LayoutControl();
             this._components.Add(_layoutControl);
             _layoutControl.Dock = System.Windows.Forms.DockStyle.Fill;
             _layoutControl.Parent = this;
@@ -50,13 +49,13 @@ namespace nU3.Core.UI.Components.Controls
 
         private void InitializeButtonPanel()
         {
-            _buttonPanel = new DevExpress.XtraEditors.PanelControl();
+            _buttonPanel = new nU3.Core.UI.Controls.nU3PanelControl();
             this._components.Add(_buttonPanel);
             _buttonPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
             _buttonPanel.Height = 40;
             _buttonPanel.Parent = this;
 
-            _checkAllButton = new DevExpress.XtraEditors.SimpleButton();
+            _checkAllButton = new nU3.Core.UI.Controls.nU3SimpleButton();
             this._components.Add(_checkAllButton);
             _checkAllButton.Text = "전체선택";
             _checkAllButton.Width = 80;
@@ -64,7 +63,7 @@ namespace nU3.Core.UI.Components.Controls
             _checkAllButton.Parent = _buttonPanel;
             _checkAllButton.Click += new System.EventHandler(this.OnCheckAll);
 
-            _uncheckAllButton = new DevExpress.XtraEditors.SimpleButton();
+            _uncheckAllButton = new nU3.Core.UI.Controls.nU3SimpleButton();
             this._components.Add(_uncheckAllButton);
             _uncheckAllButton.Text = "전체해제";
             _uncheckAllButton.Width = 80;
@@ -72,7 +71,7 @@ namespace nU3.Core.UI.Components.Controls
             _uncheckAllButton.Parent = _buttonPanel;
             _uncheckAllButton.Click += new System.EventHandler(this.OnUncheckAll);
 
-            _clearButton = new DevExpress.XtraEditors.SimpleButton();
+            _clearButton = new nU3.Core.UI.Controls.nU3SimpleButton();
             this._components.Add(_clearButton);
             _clearButton.Text = "초기화";
             _clearButton.Width = 80;

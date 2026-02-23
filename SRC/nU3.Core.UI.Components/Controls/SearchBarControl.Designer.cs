@@ -1,4 +1,4 @@
-using DevExpress.XtraEditors;
+﻿using DevExpress.XtraEditors;
 using DevExpress.XtraEditors.Controls;
 
 namespace nU3.Core.UI.Components.Controls
@@ -32,7 +32,7 @@ namespace nU3.Core.UI.Components.Controls
         private void InitializeComponent()
         {
             this.SuspendLayout();
-            this._mainPanel = new DevExpress.XtraEditors.PanelControl();
+            this._mainPanel = new nU3.Core.UI.Controls.nU3PanelControl();
             ((System.ComponentModel.ISupportInitialize)(this._mainPanel)).BeginInit();
             this._mainPanel.SuspendLayout();
             this._mainPanel.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -40,7 +40,7 @@ namespace nU3.Core.UI.Components.Controls
             this._mainPanel.Name = "_mainPanel";
             this._mainPanel.Size = new System.Drawing.Size(610, 50);
             this._mainPanel.TabIndex = 0;
-            this._searchTypeCombo = new DevExpress.XtraEditors.ComboBoxEdit();
+            this._searchTypeCombo = new nU3.Core.UI.Controls.nU3ComboBoxEdit();
             ((System.ComponentModel.ISupportInitialize)(this._searchTypeCombo.Properties)).BeginInit();
             this._searchTypeCombo.Location = new System.Drawing.Point(10, 13);
             this._searchTypeCombo.Name = "_searchTypeCombo";
@@ -53,20 +53,20 @@ namespace nU3.Core.UI.Components.Controls
             "주민번호"});
             this._searchTypeCombo.Size = new System.Drawing.Size(100, 20);
             this._searchTypeCombo.TabIndex = 0;
-            this._searchEdit = new DevExpress.XtraEditors.TextEdit();
+            this._searchEdit = new nU3.Core.UI.Controls.nU3TextEdit();
             ((System.ComponentModel.ISupportInitialize)(this._searchEdit.Properties)).BeginInit();
             this._searchEdit.Location = new System.Drawing.Point(120, 13);
             this._searchEdit.Name = "_searchEdit";
             this._searchEdit.Properties.NullValuePrompt = "검색어를 입력하세요...";
             this._searchEdit.Size = new System.Drawing.Size(300, 20);
             this._searchEdit.TabIndex = 1;
-            this._searchButton = new DevExpress.XtraEditors.SimpleButton();
+            this._searchButton = new nU3.Core.UI.Controls.nU3SimpleButton();
             this._searchButton.Location = new System.Drawing.Point(430, 11);
             this._searchButton.Name = "_searchButton";
             this._searchButton.Size = new System.Drawing.Size(80, 23);
             this._searchButton.TabIndex = 2;
             this._searchButton.Text = "검색";
-            this._clearButton = new DevExpress.XtraEditors.SimpleButton();
+            this._clearButton = new nU3.Core.UI.Controls.nU3SimpleButton();
             this._clearButton.Location = new System.Drawing.Point(520, 11);
             this._clearButton.Name = "_clearButton";
             this._clearButton.Size = new System.Drawing.Size(80, 23);
@@ -90,10 +90,10 @@ namespace nU3.Core.UI.Components.Controls
 
         #endregion
 
-        private PanelControl? _mainPanel;
-        private ComboBoxEdit? _searchTypeCombo;
-        private TextEdit? _searchEdit;
-        private SimpleButton? _searchButton;
-        private SimpleButton? _clearButton;
+        private nU3.Core.UI.Controls.nU3PanelControl? _mainPanel;
+        private nU3.Core.UI.Controls.nU3ComboBoxEdit? _searchTypeCombo;
+        private nU3.Core.UI.Controls.nU3TextEdit? _searchEdit;
+        private nU3.Core.UI.Controls.nU3SimpleButton? _searchButton;
+        private nU3.Core.UI.Controls.nU3SimpleButton? _clearButton;
     }
 }

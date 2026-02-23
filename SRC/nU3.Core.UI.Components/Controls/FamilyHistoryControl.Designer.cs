@@ -1,4 +1,4 @@
-namespace nU3.Core.UI.Components.Controls
+﻿namespace nU3.Core.UI.Components.Controls
 {
     partial class FamilyHistoryControl
     {
@@ -28,13 +28,13 @@ namespace nU3.Core.UI.Components.Controls
         /// </summary>
         private void InitializeComponent()
         {
-            gridControl1 = new DevExpress.XtraGrid.GridControl();
-            gridView1 = new DevExpress.XtraGrid.Views.Grid.GridView();
-            colRelation = new DevExpress.XtraGrid.Columns.GridColumn();
-            colDiseaseName = new DevExpress.XtraGrid.Columns.GridColumn();
-            colDiagnosisDate = new DevExpress.XtraGrid.Columns.GridColumn();
-            colStatus = new DevExpress.XtraGrid.Columns.GridColumn();
-            colNote = new DevExpress.XtraGrid.Columns.GridColumn();
+            gridControl1 = new nU3.Core.UI.Controls.nU3GridControl();
+            gridView1 = new nU3.Core.UI.Controls.nU3GridView();
+            colRelation = new nU3.Core.UI.Controls.nU3GridColumn();
+            colDiseaseName = new nU3.Core.UI.Controls.nU3GridColumn();
+            colDiagnosisDate = new nU3.Core.UI.Controls.nU3GridColumn();
+            colStatus = new nU3.Core.UI.Controls.nU3GridColumn();
+            colNote = new nU3.Core.UI.Controls.nU3GridColumn();
             ((System.ComponentModel.ISupportInitialize)gridControl1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)gridView1).BeginInit();
             SuspendLayout();
@@ -46,13 +46,13 @@ namespace nU3.Core.UI.Components.Controls
             gridControl1.MainView = gridView1;
             gridControl1.Margin = new Padding(3, 4, 3, 4);
             gridControl1.Name = "gridControl1";
-            gridControl1.Size = new Size(1464, 848);
+            gridControl1.Size = new Size(1463, 931);
             gridControl1.TabIndex = 0;
             gridControl1.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] { gridView1 });
             // 
             // gridView1
             // 
-            gridView1.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] { colRelation, colDiseaseName, colDiagnosisDate, colStatus, colNote });
+            gridView1.Columns.AddRange(new nU3.Core.UI.Controls.nU3GridColumn[] { colRelation, colDiseaseName, colDiagnosisDate, colStatus, colNote });
             gridView1.DetailHeight = 437;
             gridView1.GridControl = gridControl1;
             gridView1.Name = "gridView1";
@@ -112,7 +112,7 @@ namespace nU3.Core.UI.Components.Controls
             Controls.Add(gridControl1);
             Margin = new Padding(3, 4, 3, 4);
             Name = "FamilyHistoryControl";
-            Size = new Size(1464, 848);
+            Size = new Size(1463, 931);
             ((System.ComponentModel.ISupportInitialize)gridControl1).EndInit();
             ((System.ComponentModel.ISupportInitialize)gridView1).EndInit();
             ResumeLayout(false);
@@ -121,12 +121,12 @@ namespace nU3.Core.UI.Components.Controls
 
         #endregion
 
-        private DevExpress.XtraGrid.GridControl gridControl1;
-        private DevExpress.XtraGrid.Views.Grid.GridView gridView1;
-        private DevExpress.XtraGrid.Columns.GridColumn colRelation;
-        private DevExpress.XtraGrid.Columns.GridColumn colDiseaseName;
-        private DevExpress.XtraGrid.Columns.GridColumn colDiagnosisDate;
-        private DevExpress.XtraGrid.Columns.GridColumn colStatus;
-        private DevExpress.XtraGrid.Columns.GridColumn colNote;
+        private nU3.Core.UI.Controls.nU3GridControl gridControl1;
+        private nU3.Core.UI.Controls.nU3GridView gridView1;
+        private nU3.Core.UI.Controls.nU3GridColumn colRelation;
+        private nU3.Core.UI.Controls.nU3GridColumn colDiseaseName;
+        private nU3.Core.UI.Controls.nU3GridColumn colDiagnosisDate;
+        private nU3.Core.UI.Controls.nU3GridColumn colStatus;
+        private nU3.Core.UI.Controls.nU3GridColumn colNote;
     }
 }

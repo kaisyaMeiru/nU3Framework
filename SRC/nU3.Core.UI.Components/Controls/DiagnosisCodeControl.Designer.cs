@@ -1,4 +1,4 @@
-using DevExpress.XtraEditors;
+﻿using DevExpress.XtraEditors;
 using DevExpress.XtraGrid;
 using DevExpress.XtraGrid.Columns;
 using DevExpress.XtraGrid.Views.Grid;
@@ -41,7 +41,7 @@ namespace nU3.Core.UI.Components.Controls
             // 
             // _selectionPanel
             // 
-            this._selectionPanel = new PanelControl();
+            this._selectionPanel = new nU3.Core.UI.Controls.nU3PanelControl();
             ((System.ComponentModel.ISupportInitialize)(this._selectionPanel)).BeginInit();
             this._selectionPanel.SuspendLayout();
             this._selectionPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -52,17 +52,17 @@ namespace nU3.Core.UI.Components.Controls
             // 
             // _selectedLabel
             // 
-            var _selectedLabel = new LabelControl();
+            var _selectedLabel = new nU3.Core.UI.Controls.nU3LabelControl();
             _selectedLabel.Location = new System.Drawing.Point(10, 10);
             _selectedLabel.Name = "_selectedLabel";
             _selectedLabel.Size = new System.Drawing.Size(112, 14);
             _selectedLabel.TabIndex = 0;
-            _selectedLabel.Text = "선택된 진단코드:";
+            _selectedLabel.Text = "선택한 진단코드:";
             this._selectionPanel.Controls.Add(_selectedLabel);
             // 
             // _codeEdit
             // 
-            this._codeEdit = new TextEdit();
+            this._codeEdit = new nU3.Core.UI.Controls.nU3TextEdit();
             ((System.ComponentModel.ISupportInitialize)(this._codeEdit.Properties)).BeginInit();
             this._codeEdit.Location = new System.Drawing.Point(10, 40);
             this._codeEdit.Name = "_codeEdit";
@@ -74,7 +74,7 @@ namespace nU3.Core.UI.Components.Controls
             // 
             // _nameEdit
             // 
-            this._nameEdit = new TextEdit();
+            this._nameEdit = new nU3.Core.UI.Controls.nU3TextEdit();
             ((System.ComponentModel.ISupportInitialize)(this._nameEdit.Properties)).BeginInit();
             this._nameEdit.Location = new System.Drawing.Point(120, 40);
             this._nameEdit.Name = "_nameEdit";
@@ -86,7 +86,7 @@ namespace nU3.Core.UI.Components.Controls
             // 
             // _addButton
             // 
-            this._addButton = new SimpleButton();
+            this._addButton = new nU3.Core.UI.Controls.nU3SimpleButton();
             this._addButton.Location = new System.Drawing.Point(530, 35);
             this._addButton.Name = "_addButton";
             this._addButton.Size = new System.Drawing.Size(80, 23);
@@ -96,7 +96,7 @@ namespace nU3.Core.UI.Components.Controls
             // 
             // _removeButton
             // 
-            this._removeButton = new SimpleButton();
+            this._removeButton = new nU3.Core.UI.Controls.nU3SimpleButton();
             this._removeButton.Location = new System.Drawing.Point(620, 35);
             this._removeButton.Name = "_removeButton";
             this._removeButton.Size = new System.Drawing.Size(80, 23);
@@ -106,7 +106,7 @@ namespace nU3.Core.UI.Components.Controls
             // 
             // _clearButton
             // 
-            this._clearButton = new SimpleButton();
+            this._clearButton = new nU3.Core.UI.Controls.nU3SimpleButton();
             this._clearButton.Location = new System.Drawing.Point(620, 75);
             this._clearButton.Name = "_clearButton";
             this._clearButton.Size = new System.Drawing.Size(80, 23);
@@ -116,7 +116,7 @@ namespace nU3.Core.UI.Components.Controls
             // 
             // _selectedCodeGrid
             // 
-            this._selectedCodeGrid = new GridControl();
+            this._selectedCodeGrid = new nU3.Core.UI.Controls.nU3GridControl();
             ((System.ComponentModel.ISupportInitialize)(this._selectedCodeGrid)).BeginInit();
             this._selectedCodeGrid.Location = new System.Drawing.Point(10, 110);
             this._selectedCodeGrid.Name = "_selectedCodeGrid";
@@ -125,7 +125,7 @@ namespace nU3.Core.UI.Components.Controls
             // 
             // _selectedCodeView
             // 
-            this._selectedCodeView = new GridView(this._selectedCodeGrid);
+            this._selectedCodeView = new nU3.Core.UI.Controls.nU3GridView(this._selectedCodeGrid);
             ((System.ComponentModel.ISupportInitialize)(this._selectedCodeView)).BeginInit();
             this._selectedCodeView.Name = "_selectedCodeView";
             this._selectedCodeView.OptionsBehavior.Editable = false;
@@ -136,7 +136,7 @@ namespace nU3.Core.UI.Components.Controls
             // 
             // _searchControl
             // 
-            this._searchControl = new SearchControl();
+            this._searchControl = new nU3.Core.UI.Controls.nU3SearchControl();
             ((System.ComponentModel.ISupportInitialize)(this._searchControl.Properties)).BeginInit();
             this._searchControl.Dock = System.Windows.Forms.DockStyle.Top;
             this._searchControl.Location = new System.Drawing.Point(0, 0);
@@ -147,7 +147,7 @@ namespace nU3.Core.UI.Components.Controls
             // 
             // _codeGrid
             // 
-            this._codeGrid = new GridControl();
+            this._codeGrid = new nU3.Core.UI.Controls.nU3GridControl();
             ((System.ComponentModel.ISupportInitialize)(this._codeGrid)).BeginInit();
             this._codeGrid.Dock = System.Windows.Forms.DockStyle.Fill;
             this._codeGrid.Location = new System.Drawing.Point(0, 40);
@@ -157,7 +157,7 @@ namespace nU3.Core.UI.Components.Controls
             // 
             // _codeView
             // 
-            this._codeView = new GridView(this._codeGrid);
+            this._codeView = new nU3.Core.UI.Controls.nU3GridView(this._codeGrid);
             ((System.ComponentModel.ISupportInitialize)(this._codeView)).BeginInit();
             this._codeView.Name = "_codeView";
             this._codeView.OptionsBehavior.Editable = false;
@@ -165,7 +165,7 @@ namespace nU3.Core.UI.Components.Controls
             // 
             // colCode
             // 
-            this.colCode = new GridColumn();
+            this.colCode = new nU3.Core.UI.Controls.nU3GridColumn();
             this.colCode.FieldName = "Code";
             this.colCode.Caption = "코드";
             this.colCode.VisibleIndex = 0;
@@ -174,7 +174,7 @@ namespace nU3.Core.UI.Components.Controls
             // 
             // colName
             // 
-            this.colName = new GridColumn();
+            this.colName = new nU3.Core.UI.Controls.nU3GridColumn();
             this.colName.FieldName = "Name";
             this.colName.Caption = "진단명";
             this.colName.VisibleIndex = 1;
@@ -182,14 +182,14 @@ namespace nU3.Core.UI.Components.Controls
             // 
             // colCategory
             // 
-            this.colCategory = new GridColumn();
+            this.colCategory = new nU3.Core.UI.Controls.nU3GridColumn();
             this.colCategory.FieldName = "Category";
             this.colCategory.Caption = "카테고리";
             this.colCategory.VisibleIndex = 2;
             this.colCategory.Width = 150;
             this.colCategory.Name = "colCategory";
             
-            this._codeView.Columns.AddRange(new GridColumn[] { this.colCode, this.colName, this.colCategory });
+            this._codeView.Columns.AddRange(new nU3.Core.UI.Controls.nU3GridColumn[] { this.colCode, this.colName, this.colCategory });
             this._codeGrid.MainView = this._codeView;
             ((System.ComponentModel.ISupportInitialize)(this._codeView)).EndInit();
             // 
@@ -213,20 +213,20 @@ namespace nU3.Core.UI.Components.Controls
 
         #endregion
 
-        private GridControl? _codeGrid;
-        private GridView? _codeView;
-        private GridControl? _selectedCodeGrid;
-        private GridView? _selectedCodeView;
-        private SearchControl? _searchControl;
-        private TextEdit? _codeEdit;
-        private TextEdit? _nameEdit;
-        private SimpleButton? _addButton;
-        private SimpleButton? _removeButton;
-        private SimpleButton? _clearButton;
-        private PanelControl? _selectionPanel;
-        private GridColumn? colCode;
-        private GridColumn? colName;
-        private GridColumn? colCategory;
+        private nU3.Core.UI.Controls.nU3GridControl? _codeGrid;
+        private nU3.Core.UI.Controls.nU3GridView? _codeView;
+        private nU3.Core.UI.Controls.nU3GridControl? _selectedCodeGrid;
+        private nU3.Core.UI.Controls.nU3GridView? _selectedCodeView;
+        private nU3.Core.UI.Controls.nU3SearchControl? _searchControl;
+        private nU3.Core.UI.Controls.nU3TextEdit? _codeEdit;
+        private nU3.Core.UI.Controls.nU3TextEdit? _nameEdit;
+        private nU3.Core.UI.Controls.nU3SimpleButton? _addButton;
+        private nU3.Core.UI.Controls.nU3SimpleButton? _removeButton;
+        private nU3.Core.UI.Controls.nU3SimpleButton? _clearButton;
+        private nU3.Core.UI.Controls.nU3PanelControl? _selectionPanel;
+        private nU3.Core.UI.Controls.nU3GridColumn? colCode;
+        private nU3.Core.UI.Controls.nU3GridColumn? colName;
+        private nU3.Core.UI.Controls.nU3GridColumn? colCategory;
 
         private BindingList<Models.DiagnosisCode>? _availableCodes;
         private BindingList<Models.DiagnosisCode>? _selectedCodes;

@@ -1,17 +1,19 @@
-#nullable enable
+﻿#nullable enable
 using System.ComponentModel;
 using System.Linq;
 using DevExpress.XtraEditors;
+using nU3.Core.UI;
 using DevExpress.XtraEditors.Controls;
 using DevExpress.XtraEditors.Repository;
 using DevExpress.XtraLayout;
+using nU3.Core.UI;
 using nU3.Core.UI.Components.Events;
 
 namespace nU3.Core.UI.Components.Controls
 {
     [ToolboxItem(true)]
     [ToolboxBitmap(typeof(ChecklistControl))]
-    public partial class ChecklistControl : XtraUserControl
+    public partial class ChecklistControl : BaseWorkComponent
     {
         private readonly BindingList<ChecklistItem> _items = new();
 
@@ -164,9 +166,9 @@ namespace nU3.Core.UI.Components.Controls
             }
         }
 
-        private CheckEdit CreateCheckBox(ChecklistItem item)
+        private nU3.Core.UI.Controls.nU3CheckEdit CreateCheckBox(ChecklistItem item)
         {
-            var checkEdit = new CheckEdit
+            var checkEdit = new nU3.Core.UI.Controls.nU3CheckEdit
             {
                 Text = item.Text,
                 Checked = item.IsChecked,
@@ -180,7 +182,7 @@ namespace nU3.Core.UI.Components.Controls
 
         private void OnCheckBoxChecked(object? sender, EventArgs e)
         {
-            var checkEdit = sender as CheckEdit;
+            var checkEdit = sender as nU3.Core.UI.Controls.nU3CheckEdit;
             if (checkEdit != null)
             {
                 var item = checkEdit.Tag as ChecklistItem;

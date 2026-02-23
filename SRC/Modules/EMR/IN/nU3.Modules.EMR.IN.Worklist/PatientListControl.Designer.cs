@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Drawing;
 using System.Windows.Forms;
 using DevExpress.XtraGrid;
@@ -10,8 +10,8 @@ namespace nU3.Modules.EMR.IN.Worklist
 {
     public partial class PatientListControl
     {
-        private GridControl gridControl;
-        private GridView gridView;
+        private nU3.Core.UI.Controls.nU3GridControl gridControl;
+        private nU3.Core.UI.Controls.nU3GridView gridView;
         private DevExpress.XtraEditors.SimpleButton btnRefresh;
         private DevExpress.XtraEditors.SimpleButton btnSearch;
         private DevExpress.XtraEditors.TextEdit txtSearch;
@@ -21,131 +21,131 @@ namespace nU3.Modules.EMR.IN.Worklist
         {
             this.SuspendLayout();
 
-            // Å¸ÀÌÆ² ·¹ÀÌºí
+            // íƒ€ì´í‹€ ë ˆì´ë¸”
             lblTitle = new Label
             {
-                Text = "È¯ÀÚ ¸ñ·Ï (ÀÌº¥Æ® ¹ßÇàÀÚ)",
+                Text = "í™˜ì ëª©ë¡ (ì´ë²¤íŠ¸ ë°œí–‰ì)",
                 Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold),
                 Location = new Point(20, 20),
                 Size = new Size(400, 30),
                 ForeColor = Color.FromArgb(0, 122, 204)
             };
 
-            // °Ë»ö ÅØ½ºÆ®¹Ú½º
+            // ê²€ìƒ‰ í…ìŠ¤íŠ¸ë°•ìŠ¤
             txtSearch = new DevExpress.XtraEditors.TextEdit
             {
                 Location = new Point(20, 60),
                 Size = new Size(200, 20)
             };
-            txtSearch.Properties.NullValuePrompt = "È¯ÀÚ¸í ¶Ç´Â ID °Ë»ö...";
+            txtSearch.Properties.NullValuePrompt = "í™˜ìëª… ë˜ëŠ” ID ê²€ìƒ‰...";
 
-            // °Ë»ö ¹öÆ°
+            // ê²€ìƒ‰ ë²„íŠ¼
             btnSearch = new DevExpress.XtraEditors.SimpleButton
             {
-                Text = "°Ë»ö",
+                Text = "ê²€ìƒ‰",
                 Location = new Point(230, 58),
                 Size = new Size(80, 24)
             };
             btnSearch.Click += BtnSearch_Click;
 
-            // »õ·Î°íÄ§ ¹öÆ°
+            // ìƒˆë¡œê³ ì¹¨ ë²„íŠ¼
             btnRefresh = new DevExpress.XtraEditors.SimpleButton
             {
-                Text = "»õ·Î°íÄ§",
+                Text = "ìƒˆë¡œê³ ì¹¨",
                 Location = new Point(320, 58),
                 Size = new Size(100, 24)
             };
             btnRefresh.Click += BtnRefresh_Click;
 
-            // ±×¸®µå ÄÁÆ®·Ñ
-            gridControl = new GridControl
+            // ê·¸ë¦¬ë“œ ì»¨íŠ¸ë¡¤
+            gridControl = new nU3.Core.UI.Controls.nU3GridControl
             {
                 Location = new Point(20, 100),
                 Size = new Size(760, 480),
                 Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right
             };
 
-            gridView = new GridView(gridControl)
+            gridView = new nU3.Core.UI.Controls.nU3GridView(gridControl)
             {
                 OptionsBehavior = { Editable = false },
                 OptionsView = { ShowGroupPanel = false }
             };
             gridControl.MainView = gridView;
 
-            // ÄÃ·³ ¼³Á¤
+            // ì»¬ëŸ¼ ì„¤ì •
             SetupGridColumns();
 
-            // ÄÃ·³ ¼³Á¤ ¸Ş¼­µå´Â ÀÌ ÆÄÀÏ ³»¿¡ Á¸Àç
+            // ì»¬ëŸ¼ ì„¤ì • ë©”ì„œë“œëŠ” ì´ íŒŒì¼ ë‚´ì— ì¡´ì¬
             void SetupGridColumns()
             {
                 gridView.Columns.Clear();
 
-                gridView.Columns.Add(new GridColumn
+                gridView.Columns.Add(new nU3.Core.UI.Controls.nU3GridColumn
                 {
                     FieldName = "PatientId",
-                    Caption = "È¯ÀÚ ID",
+                    Caption = "í™˜ì ID",
                     Visible = true,
                     Width = 100
                 });
 
-                gridView.Columns.Add(new GridColumn
+                gridView.Columns.Add(new nU3.Core.UI.Controls.nU3GridColumn
                 {
                     FieldName = "PatientName",
-                    Caption = "È¯ÀÚ¸í",
+                    Caption = "í™˜ìëª…",
                     Visible = true,
                     Width = 120
                 });
 
-                gridView.Columns.Add(new GridColumn
+                gridView.Columns.Add(new nU3.Core.UI.Controls.nU3GridColumn
                 {
                     FieldName = "BirthDate",
-                    Caption = "»ı³â¿ùÀÏ",
+                    Caption = "ìƒë…„ì›”ì¼",
                     Visible = true,
                     Width = 100,
                     DisplayFormat = { FormatString = "yyyy-MM-dd", FormatType = FormatType.DateTime }
                 });
 
-                gridView.Columns.Add(new GridColumn
+                gridView.Columns.Add(new nU3.Core.UI.Controls.nU3GridColumn
                 {
                     FieldName = "Gender",
-                    Caption = "¼ºº°",
+                    Caption = "ì„±ë³„",
                     Visible = true,
                     Width = 60
                 });
 
-                gridView.Columns.Add(new GridColumn
+                gridView.Columns.Add(new nU3.Core.UI.Controls.nU3GridColumn
                 {
                     FieldName = "MobileNumber",
-                    Caption = "ÈŞ´ëÀüÈ­",
+                    Caption = "íœ´ëŒ€ì „í™”",
                     Visible = true,
                     Width = 120
                 });
 
-                gridView.Columns.Add(new GridColumn
+                gridView.Columns.Add(new nU3.Core.UI.Controls.nU3GridColumn
                 {
                     FieldName = "PhoneNumber",
-                    Caption = "ÀÏ¹İÀüÈ­",
+                    Caption = "ì¼ë°˜ì „í™”",
                     Visible = true,
                     Width = 120
                 });
 
-                gridView.Columns.Add(new GridColumn
+                gridView.Columns.Add(new nU3.Core.UI.Controls.nU3GridColumn
                 {
                     FieldName = "Address",
-                    Caption = "ÁÖ¼Ò",
+                    Caption = "ì£¼ì†Œ",
                     Visible = true,
                     Width = 240
                 });
             }
 
-            // ÀÌº¥Æ® ÇÚµé·¯ µî·Ï
+            // ì´ë²¤íŠ¸ í•¸ë“¤ëŸ¬ ë“±ë¡
             gridView.FocusedRowChanged += GridView_FocusedRowChanged;
             gridView.DoubleClick += GridView_DoubleClick;
 
-            // »ùÇÃ µ¥ÀÌÅÍ ·Îµå
+            // ìƒ˜í”Œ ë°ì´í„° ë¡œë“œ
             LoadSampleData();
 
-            // ÄÁÆ®·Ñ Ãß°¡
+            // ì»¨íŠ¸ë¡¤ ì¶”ê°€
             this.Controls.AddRange(new Control[]
             {
                 lblTitle,

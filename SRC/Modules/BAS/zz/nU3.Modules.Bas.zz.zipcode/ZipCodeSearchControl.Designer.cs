@@ -17,33 +17,33 @@ namespace nU3.Modules.Bas.zz.zipcode
 
         private void InitializeComponent()
         {
-            layoutControl1 = new DevExpress.XtraLayout.LayoutControl();
-            radioGroupType = new DevExpress.XtraEditors.RadioGroup();
-            cboSearchCondition = new DevExpress.XtraEditors.ComboBoxEdit();
-            txtSearchTerm = new DevExpress.XtraEditors.TextEdit();
-            cboCity = new DevExpress.XtraEditors.ComboBoxEdit();
-            txtRoadName = new DevExpress.XtraEditors.TextEdit();
-            txtBldNo = new DevExpress.XtraEditors.TextEdit();
-            txtBldNm = new DevExpress.XtraEditors.TextEdit();
-            gridControlResult = new DevExpress.XtraGrid.GridControl();
-            gridViewResult = new DevExpress.XtraGrid.Views.Grid.GridView();
-            txtDetailAddress = new DevExpress.XtraEditors.TextEdit();
-            btnSearch = new DevExpress.XtraEditors.SimpleButton();
-            btnVerify = new DevExpress.XtraEditors.SimpleButton();
-            layoutControlGroup1 = new DevExpress.XtraLayout.LayoutControlGroup();
-            layoutControlItemRadio = new DevExpress.XtraLayout.LayoutControlItem();
-            layoutControlGroupLot = new DevExpress.XtraLayout.LayoutControlGroup();
-            layoutControlItemCondition = new DevExpress.XtraLayout.LayoutControlItem();
-            layoutControlItemTerm = new DevExpress.XtraLayout.LayoutControlItem();
-            layoutControlGroupRoad = new DevExpress.XtraLayout.LayoutControlGroup();
-            layoutControlItemCity = new DevExpress.XtraLayout.LayoutControlItem();
-            layoutControlItemRoadName = new DevExpress.XtraLayout.LayoutControlItem();
-            layoutControlItemBldNo = new DevExpress.XtraLayout.LayoutControlItem();
-            layoutControlItemBldNm = new DevExpress.XtraLayout.LayoutControlItem();
-            layoutControlItemGrid = new DevExpress.XtraLayout.LayoutControlItem();
-            layoutControlItemDetail = new DevExpress.XtraLayout.LayoutControlItem();
-            layoutControlItemSearch = new DevExpress.XtraLayout.LayoutControlItem();
-            layoutControlItemVerify = new DevExpress.XtraLayout.LayoutControlItem();
+            layoutControl1 = new nU3.Core.UI.Controls.nU3LayoutControl();
+            radioGroupType = new nU3.Core.UI.Controls.nU3RadioGroup();
+            cboSearchCondition = new nU3.Core.UI.Controls.nU3ComboBoxEdit();
+            txtSearchTerm = new nU3.Core.UI.Controls.nU3TextEdit();
+            cboCity = new nU3.Core.UI.Controls.nU3ComboBoxEdit();
+            txtRoadName = new nU3.Core.UI.Controls.nU3TextEdit();
+            txtBldNo = new nU3.Core.UI.Controls.nU3TextEdit();
+            txtBldNm = new nU3.Core.UI.Controls.nU3TextEdit();
+            gridControlResult = new nU3.Core.UI.Controls.nU3GridControl();
+            gridViewResult = new nU3.Core.UI.Controls.nU3GridView();
+            txtDetailAddress = new nU3.Core.UI.Controls.nU3TextEdit();
+            btnSearch = new nU3.Core.UI.Controls.nU3SimpleButton();
+            btnVerify = new nU3.Core.UI.Controls.nU3SimpleButton();
+            layoutControlGroup1 = new nU3.Core.UI.Controls.nU3LayoutControlGroup();
+            layoutControlItemRadio = new nU3.Core.UI.Controls.nU3LayoutControlItem();
+            layoutControlGroupLot = new nU3.Core.UI.Controls.nU3LayoutControlGroup();
+            layoutControlItemCondition = new nU3.Core.UI.Controls.nU3LayoutControlItem();
+            layoutControlItemTerm = new nU3.Core.UI.Controls.nU3LayoutControlItem();
+            layoutControlGroupRoad = new nU3.Core.UI.Controls.nU3LayoutControlGroup();
+            layoutControlItemCity = new nU3.Core.UI.Controls.nU3LayoutControlItem();
+            layoutControlItemRoadName = new nU3.Core.UI.Controls.nU3LayoutControlItem();
+            layoutControlItemBldNo = new nU3.Core.UI.Controls.nU3LayoutControlItem();
+            layoutControlItemBldNm = new nU3.Core.UI.Controls.nU3LayoutControlItem();
+            layoutControlItemGrid = new nU3.Core.UI.Controls.nU3LayoutControlItem();
+            layoutControlItemDetail = new nU3.Core.UI.Controls.nU3LayoutControlItem();
+            layoutControlItemSearch = new nU3.Core.UI.Controls.nU3LayoutControlItem();
+            layoutControlItemVerify = new nU3.Core.UI.Controls.nU3LayoutControlItem();
             emptySpaceItem1 = new DevExpress.XtraLayout.EmptySpaceItem();
             ((System.ComponentModel.ISupportInitialize)layoutControl1).BeginInit();
             layoutControl1.SuspendLayout();
@@ -368,40 +368,40 @@ namespace nU3.Modules.Bas.zz.zipcode
 
         #endregion
 
-        private DevExpress.XtraLayout.LayoutControl layoutControl1;
-        private DevExpress.XtraLayout.LayoutControlGroup layoutControlGroup1;
+        private nU3.Core.UI.Controls.nU3LayoutControl layoutControl1;
+        private nU3.Core.UI.Controls.nU3LayoutControlGroup layoutControlGroup1;
         
-        private DevExpress.XtraEditors.RadioGroup radioGroupType;
-        private DevExpress.XtraLayout.LayoutControlItem layoutControlItemRadio;
+        private nU3.Core.UI.Controls.nU3RadioGroup radioGroupType;
+        private nU3.Core.UI.Controls.nU3LayoutControlItem layoutControlItemRadio;
         
-        private DevExpress.XtraEditors.ComboBoxEdit cboSearchCondition;
-        private DevExpress.XtraEditors.TextEdit txtSearchTerm;
-        private DevExpress.XtraLayout.LayoutControlGroup layoutControlGroupLot;
-        private DevExpress.XtraLayout.LayoutControlItem layoutControlItemCondition;
-        private DevExpress.XtraLayout.LayoutControlItem layoutControlItemTerm;
+        private nU3.Core.UI.Controls.nU3ComboBoxEdit cboSearchCondition;
+        private nU3.Core.UI.Controls.nU3TextEdit txtSearchTerm;
+        private nU3.Core.UI.Controls.nU3LayoutControlGroup layoutControlGroupLot;
+        private nU3.Core.UI.Controls.nU3LayoutControlItem layoutControlItemCondition;
+        private nU3.Core.UI.Controls.nU3LayoutControlItem layoutControlItemTerm;
         
-        private DevExpress.XtraEditors.ComboBoxEdit cboCity;
-        private DevExpress.XtraEditors.TextEdit txtRoadName;
-        private DevExpress.XtraEditors.TextEdit txtBldNo;
-        private DevExpress.XtraEditors.TextEdit txtBldNm;
-        private DevExpress.XtraLayout.LayoutControlGroup layoutControlGroupRoad;
-        private DevExpress.XtraLayout.LayoutControlItem layoutControlItemCity;
-        private DevExpress.XtraLayout.LayoutControlItem layoutControlItemRoadName;
-        private DevExpress.XtraLayout.LayoutControlItem layoutControlItemBldNo;
-        private DevExpress.XtraLayout.LayoutControlItem layoutControlItemBldNm;
+        private nU3.Core.UI.Controls.nU3ComboBoxEdit cboCity;
+        private nU3.Core.UI.Controls.nU3TextEdit txtRoadName;
+        private nU3.Core.UI.Controls.nU3TextEdit txtBldNo;
+        private nU3.Core.UI.Controls.nU3TextEdit txtBldNm;
+        private nU3.Core.UI.Controls.nU3LayoutControlGroup layoutControlGroupRoad;
+        private nU3.Core.UI.Controls.nU3LayoutControlItem layoutControlItemCity;
+        private nU3.Core.UI.Controls.nU3LayoutControlItem layoutControlItemRoadName;
+        private nU3.Core.UI.Controls.nU3LayoutControlItem layoutControlItemBldNo;
+        private nU3.Core.UI.Controls.nU3LayoutControlItem layoutControlItemBldNm;
         
-        private DevExpress.XtraGrid.GridControl gridControlResult;
-        private DevExpress.XtraGrid.Views.Grid.GridView gridViewResult;
-        private DevExpress.XtraLayout.LayoutControlItem layoutControlItemGrid;
+        private nU3.Core.UI.Controls.nU3GridControl gridControlResult;
+        private nU3.Core.UI.Controls.nU3GridView gridViewResult;
+        private nU3.Core.UI.Controls.nU3LayoutControlItem layoutControlItemGrid;
         
-        private DevExpress.XtraEditors.TextEdit txtDetailAddress;
-        private DevExpress.XtraLayout.LayoutControlItem layoutControlItemDetail;
+        private nU3.Core.UI.Controls.nU3TextEdit txtDetailAddress;
+        private nU3.Core.UI.Controls.nU3LayoutControlItem layoutControlItemDetail;
         
-        private DevExpress.XtraEditors.SimpleButton btnSearch;
-        private DevExpress.XtraLayout.LayoutControlItem layoutControlItemSearch;
+        private nU3.Core.UI.Controls.nU3SimpleButton btnSearch;
+        private nU3.Core.UI.Controls.nU3LayoutControlItem layoutControlItemSearch;
 
-        private DevExpress.XtraEditors.SimpleButton btnVerify;
-        private DevExpress.XtraLayout.LayoutControlItem layoutControlItemVerify;
+        private nU3.Core.UI.Controls.nU3SimpleButton btnVerify;
+        private nU3.Core.UI.Controls.nU3LayoutControlItem layoutControlItemVerify;
 
         private DevExpress.XtraLayout.EmptySpaceItem emptySpaceItem1;
     }

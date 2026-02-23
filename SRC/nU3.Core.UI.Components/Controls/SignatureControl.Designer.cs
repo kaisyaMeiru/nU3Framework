@@ -1,4 +1,4 @@
-using DevExpress.XtraEditors;
+﻿using DevExpress.XtraEditors;
 using DevExpress.XtraEditors.Controls;
 
 namespace nU3.Core.UI.Components.Controls
@@ -51,7 +51,7 @@ namespace nU3.Core.UI.Components.Controls
             // 
             // _signaturePanel
             // 
-            this._signaturePanel = new DevExpress.XtraEditors.PanelControl();
+            this._signaturePanel = new nU3.Core.UI.Controls.nU3PanelControl();
             ((System.ComponentModel.ISupportInitialize)(this._signaturePanel)).BeginInit();
             this._signaturePanel.SuspendLayout();
             this._signaturePanel.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -62,7 +62,7 @@ namespace nU3.Core.UI.Components.Controls
             // 
             // _buttonPanel
             // 
-            this._buttonPanel = new DevExpress.XtraEditors.PanelControl();
+            this._buttonPanel = new nU3.Core.UI.Controls.nU3PanelControl();
             ((System.ComponentModel.ISupportInitialize)(this._buttonPanel)).BeginInit();
             this._buttonPanel.SuspendLayout();
             this._buttonPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -73,7 +73,7 @@ namespace nU3.Core.UI.Components.Controls
             // 
             // _clearButton
             // 
-            this._clearButton = new DevExpress.XtraEditors.SimpleButton();
+            this._clearButton = new nU3.Core.UI.Controls.nU3SimpleButton();
             this._clearButton.Location = new System.Drawing.Point(10, 8);
             this._clearButton.Name = "_clearButton";
             this._clearButton.Size = new System.Drawing.Size(80, 23);
@@ -82,7 +82,7 @@ namespace nU3.Core.UI.Components.Controls
             // 
             // _undoButton
             // 
-            this._undoButton = new DevExpress.XtraEditors.SimpleButton();
+            this._undoButton = new nU3.Core.UI.Controls.nU3SimpleButton();
             this._undoButton.Location = new System.Drawing.Point(100, 8);
             this._undoButton.Name = "_undoButton";
             this._undoButton.Size = new System.Drawing.Size(80, 23);
@@ -91,7 +91,7 @@ namespace nU3.Core.UI.Components.Controls
             // 
             // _saveButton
             // 
-            this._saveButton = new DevExpress.XtraEditors.SimpleButton();
+            this._saveButton = new nU3.Core.UI.Controls.nU3SimpleButton();
             this._saveButton.Location = new System.Drawing.Point(390, 8);
             this._saveButton.Name = "_saveButton";
             this._saveButton.Size = new System.Drawing.Size(100, 23);
@@ -100,7 +100,7 @@ namespace nU3.Core.UI.Components.Controls
             // 
             // _commentPanel
             // 
-            this._commentPanel = new DevExpress.XtraEditors.PanelControl();
+            this._commentPanel = new nU3.Core.UI.Controls.nU3PanelControl();
             ((System.ComponentModel.ISupportInitialize)(this._commentPanel)).BeginInit();
             this._commentPanel.SuspendLayout();
             this._commentPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -111,16 +111,16 @@ namespace nU3.Core.UI.Components.Controls
             // 
             // _commentLabel
             // 
-            this._commentLabel = new DevExpress.XtraEditors.LabelControl();
+            this._commentLabel = new nU3.Core.UI.Controls.nU3LabelControl();
             this._commentLabel.Location = new System.Drawing.Point(10, 10);
             this._commentLabel.Name = "_commentLabel";
             this._commentLabel.Size = new System.Drawing.Size(56, 14);
             this._commentLabel.TabIndex = 0;
-            this._commentLabel.Text = "코멘트:";
+            this._commentLabel.Text = "코멘트";
             // 
             // _commentEdit
             // 
-            this._commentEdit = new DevExpress.XtraEditors.MemoEdit();
+            this._commentEdit = new nU3.Core.UI.Controls.nU3MemoEdit();
             ((System.ComponentModel.ISupportInitialize)(this._commentEdit.Properties)).BeginInit();
             this._commentEdit.Location = new System.Drawing.Point(10, 35);
             this._commentEdit.Name = "_commentEdit";
@@ -130,23 +130,23 @@ namespace nU3.Core.UI.Components.Controls
             // 
             // _confirmCheckEdit
             // 
-            this._confirmCheckEdit = new DevExpress.XtraEditors.CheckEdit();
+            this._confirmCheckEdit = new nU3.Core.UI.Controls.nU3CheckEdit();
             ((System.ComponentModel.ISupportInitialize)(this._confirmCheckEdit.Properties)).BeginInit();
             this._confirmCheckEdit.Location = new System.Drawing.Point(10, 200);
             this._confirmCheckEdit.Name = "_confirmCheckEdit";
-            this._confirmCheckEdit.Properties.Caption = "위 내용을 확인하고 서명합니다";
+            this._confirmCheckEdit.Properties.Caption = "위 내용을 확인하고 서명합니다.";
             this._confirmCheckEdit.Size = new System.Drawing.Size(300, 20);
             this._confirmCheckEdit.TabIndex = 3;
             // 
             // _statusLabel
             // 
-            this._statusLabel = new DevExpress.XtraEditors.LabelControl();
+            this._statusLabel = new nU3.Core.UI.Controls.nU3LabelControl();
             this._statusLabel.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
             this._statusLabel.Location = new System.Drawing.Point(10, 230);
             this._statusLabel.Name = "_statusLabel";
             this._statusLabel.Size = new System.Drawing.Size(480, 20);
             this._statusLabel.TabIndex = 4;
-            this._statusLabel.Text = "서명 필드에 서명하세요";
+            this._statusLabel.Text = "서명 패드에 서명하세요.";
             // 
             // SignatureControl
             // 

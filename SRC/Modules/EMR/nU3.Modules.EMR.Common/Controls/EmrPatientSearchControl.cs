@@ -8,7 +8,7 @@ namespace nU3.Modules.EMR.Common.Controls
 {
     public partial class EmrPatientSearchControl : BaseWorkComponent
     {
-        public event EventHandler<PatientSummaryDto>? PatientSelected;
+        public event EventHandler<EmrPatientSummaryDto>? PatientSelected;
 
         public EmrPatientSearchControl()
         {
@@ -38,7 +38,7 @@ namespace nU3.Modules.EMR.Common.Controls
             }
 
             // Dummy Search Logic for Example
-            var dummyPatient = new PatientSummaryDto
+            var dummyPatient = new EmrPatientSummaryDto
             {
                 PatientId = "12345678",
                 PatientName = "홍길동",

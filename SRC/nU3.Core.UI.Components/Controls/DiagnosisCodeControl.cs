@@ -1,4 +1,5 @@
-using DevExpress.XtraEditors;
+﻿using DevExpress.XtraEditors;
+using nU3.Core.UI;
 using DevExpress.XtraGrid.Views.Grid;
 using System.ComponentModel;
 
@@ -6,7 +7,7 @@ namespace nU3.Core.UI.Components.Controls
 {
     [ToolboxItem(true)]
     [ToolboxBitmap(typeof(DiagnosisCodeControl))]
-    public partial class DiagnosisCodeControl : XtraUserControl
+    public partial class DiagnosisCodeControl : BaseWorkComponent
     {
         public event EventHandler<Events.DiagnosisCodeSelectedEventArgs>? DiagnosisCodeSelected;
 
@@ -62,7 +63,7 @@ namespace nU3.Core.UI.Components.Controls
 
             _selectedCodeView.Columns.Clear();
 
-            var colCode = new DevExpress.XtraGrid.Columns.GridColumn
+            var colCode = new nU3.Core.UI.Controls.nU3GridColumn
             {
                 FieldName = "Code",
                 Caption = "코드",
@@ -70,14 +71,14 @@ namespace nU3.Core.UI.Components.Controls
                 Width = 100
             };
 
-            var colName = new DevExpress.XtraGrid.Columns.GridColumn
+            var colName = new nU3.Core.UI.Controls.nU3GridColumn
             {
                 FieldName = "Name",
                 Caption = "진단명",
                 VisibleIndex = 1
             };
 
-            var colCategory = new DevExpress.XtraGrid.Columns.GridColumn
+            var colCategory = new nU3.Core.UI.Controls.nU3GridColumn
             {
                 FieldName = "Category",
                 Caption = "카테고리",

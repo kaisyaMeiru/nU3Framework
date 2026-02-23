@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Data;
 using DevExpress.XtraEditors;
 using nU3.Core.Events;
@@ -36,7 +36,7 @@ namespace nU3.Core.UI.Components.Controls
         /// 이벤트 소스 식별자 (BaseWorkComponent에서 제공하는 프로퍼티를 재정의)
         /// </summary>
         [Category("Data")]
-        [Description("이벤트 전파 시 식별자")]
+        [Description("이벤트 소스 식별자")]
         public new string EventSource
         {
             get => base.EventSource;
@@ -65,11 +65,11 @@ namespace nU3.Core.UI.Components.Controls
         /// </summary>
         private void SubscribeToPatientSelectedEvent()
         {
-            // 디자인 모드에서는 구독 안 함
+            // 디자인 모드에서는 구독 안함
             if (DesignMode || LicenseManager.UsageMode == LicenseUsageMode.Designtime)
                 return;
 
-            // EventBus가 할당되지 않았으면 부모에서 상속받기
+            // EventBus가 할당되지 않았다면 부모로부터 상속받기
             if (EventBus == null)
                 AssignEventBusFromParent();
 
@@ -114,14 +114,14 @@ namespace nU3.Core.UI.Components.Controls
             //var patientInfo = GetPatientInfoByPatientId(context.Patient.PatientId);
             //if (patientInfo != null)
             //{
-            //    // 환자 정보 표시
+            //    // ?섏옄 ?뺣낫 ?쒖떆
             //    SetPatientInfo(context.Patient);
             //}
             //else
             //{
-            //    // 환자 정보가 없으면 초기화
+            //    // ?섏옄 ?뺣낫媛 ?놁쑝硫?초기화
             //    ClearPatientInfo();
-            //    LogWarning($"환자 정보를 찾을 수 없음: {context.Patient.PatientId}");
+            //    LogWarning($"?섏옄 ?뺣낫瑜?李얠쓣 ???놁쓬: {context.Patient.PatientId}");
             //}
         }
 
@@ -191,7 +191,7 @@ namespace nU3.Core.UI.Components.Controls
         }
 
         /// <summary>
-        /// 환자 정보를 초기화합니다
+        /// 환자 정보를 초기화합니다.
         /// </summary>
         public void ClearPatientInfo()
         {
@@ -228,6 +228,7 @@ namespace nU3.Core.UI.Components.Controls
         private PatientInfoDto? GetPatientInfoByPatientId(string patientId)
         {
             // 데모 데이터
+            // 더미 데이터
             var patients = new List<PatientInfoDto>
             {
                 new PatientInfoDto
@@ -301,7 +302,7 @@ namespace nU3.Core.UI.Components.Controls
                 new PatientInfoDto
                 {
                     PatientId = "P001238",
-                    PatientName = "정수현",
+                    PatientName = "정수지",
                     Gender = 2,
                     BirthDate = new DateTime(1983, 3, 25),
                     PhoneNumber = "02-5678-9012",
@@ -309,7 +310,7 @@ namespace nU3.Core.UI.Components.Controls
                     Address = "서울특별시 관악구",
                     InNumber = "I2024005",
                     DeptName = "정형외과",
-                    DoctorName = "정의사",
+                    DoctorName = "윤의사",
                     RoomNo = "305",
                     AdmDate = new DateTime(2024, 2, 5),
                     DoctorID = "D004",

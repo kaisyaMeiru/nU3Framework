@@ -458,6 +458,18 @@ namespace nU3.Core.UI.Controls
         // Designer property
         public bool IsRequiredMarker { get; set; }
     }
+    #endregion
+
+    #region 15. SerachControl
+    [ToolboxItem(true)]
+    public class nU3SearchControl : SearchControl, InU3Control
+    {
+        public nU3SearchControl() : base() { }
+        public object? GetValue() => this.Text;
+        public void SetValue(object? value) => this.Text = value?.ToString();
+        public void Clear() => this.Text = string.Empty;
+        public string GetControlId() => this.Name;
+    }
 
     #endregion
 }

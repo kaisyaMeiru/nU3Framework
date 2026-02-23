@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -35,7 +35,7 @@ namespace nU3.Core.UI.Components.Controls
             public string Relation { get; set; } = string.Empty;
 
             /// <summary>
-            /// 진단명 (질환명)
+            /// 진단명(질환명)
             /// </summary>
             public string DiseaseName { get; set; } = string.Empty;
 
@@ -99,7 +99,7 @@ namespace nU3.Core.UI.Components.Controls
                 return;
 
             _currentPatientId = payload.Patient.PatientId;
-            LogInfo($"가족력 조회 요청: 환자명={payload.Patient.PatientName}, ID={_currentPatientId}");
+            LogInfo($"가족력 조회 요청: 환자명{payload.Patient.PatientName}, ID={_currentPatientId}");
 
             LoadFamilyHistory(_currentPatientId);
         }
@@ -120,7 +120,8 @@ namespace nU3.Core.UI.Components.Controls
             {
                 var historyList = GetDummyFamilyHistory(patientId);
                 gridControl1.DataSource = historyList;
-                gridView1.RefreshData();
+                if (gridControl1.MainView is DevExpress.XtraGrid.Views.Base.BaseView view)
+                    view.RefreshData();
                 
                 LogInfo($"가족력 데이터 로드 완료: {historyList.Count}건");
             }
@@ -131,8 +132,8 @@ namespace nU3.Core.UI.Components.Controls
             }
         }
 
-        /// <summary>
-        /// 덤프(Dummy) 데이터 생성
+        /// <summary>   
+        /// 더미(Dummy) 데이터 생성
         /// 실제 DB 연동 전 UI 확인용 데이터입니다.
         /// </summary>
         private List<FamilyHistoryDto> GetDummyFamilyHistory(string patientId)
@@ -194,7 +195,7 @@ namespace nU3.Core.UI.Components.Controls
         }
 
         /// <summary>
-        /// 컨트롤 초기화 (데이터 클리어)
+        /// 컨트롤 초기화(데이터 클리어)
         /// </summary>
         public void Clear()
         {

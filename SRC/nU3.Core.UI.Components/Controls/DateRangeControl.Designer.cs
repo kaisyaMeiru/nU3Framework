@@ -1,4 +1,4 @@
-using DevExpress.XtraEditors;
+﻿using DevExpress.XtraEditors;
 using DevExpress.XtraEditors.Controls;
 using System.ComponentModel;
 
@@ -42,133 +42,139 @@ namespace nU3.Core.UI.Components.Controls
         /// </summary>
         private void InitializeComponent()
         {
-            this.SuspendLayout();
+            _mainPanel = new nU3.Core.UI.Controls.nU3PanelControl();
+            _periodLabel = new nU3.Core.UI.Controls.nU3LabelControl();
+            _startDateEdit = new nU3.Core.UI.Controls.nU3DateEdit();
+            _toLabel = new nU3.Core.UI.Controls.nU3LabelControl();
+            _endDateEdit = new nU3.Core.UI.Controls.nU3DateEdit();
+            _todayButton = new nU3.Core.UI.Controls.nU3SimpleButton();
+            _thisWeekButton = new nU3.Core.UI.Controls.nU3SimpleButton();
+            _thisMonthButton = new nU3.Core.UI.Controls.nU3SimpleButton();
+            _clearButton = new nU3.Core.UI.Controls.nU3SimpleButton();
+            ((ISupportInitialize)_mainPanel).BeginInit();
+            _mainPanel.SuspendLayout();
+            SuspendLayout();
             // 
             // _mainPanel
             // 
-            this._mainPanel = new PanelControl();
-            ((System.ComponentModel.ISupportInitialize)(this._mainPanel)).BeginInit();
-            this._mainPanel.SuspendLayout();
-            this._mainPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this._mainPanel.Location = new System.Drawing.Point(0, 0);
-            this._mainPanel.Name = "_mainPanel";
-            this._mainPanel.Size = new System.Drawing.Size(400, 80);
-            this._mainPanel.TabIndex = 0;
+            _mainPanel.Controls.Add(_periodLabel);
+            _mainPanel.Controls.Add(_startDateEdit);
+            _mainPanel.Controls.Add(_toLabel);
+            _mainPanel.Controls.Add(_endDateEdit);
+            _mainPanel.Controls.Add(_todayButton);
+            _mainPanel.Controls.Add(_thisWeekButton);
+            _mainPanel.Controls.Add(_thisMonthButton);
+            _mainPanel.Controls.Add(_clearButton);
+            _mainPanel.Dock = DockStyle.Fill;
+            _mainPanel.Location = new Point(0, 0);
+            _mainPanel.Margin = new Padding(4, 3, 4, 3);
+            _mainPanel.Name = "_mainPanel";
+            _mainPanel.Size = new Size(1463, 931);
+            _mainPanel.TabIndex = 0;
             // 
             // _periodLabel
             // 
-            var _periodLabel = new LabelControl();
-            _periodLabel.Location = new System.Drawing.Point(10, 12);
+            _periodLabel.IsRequiredMarker = false;
+            _periodLabel.Location = new Point(12, 14);
+            _periodLabel.Margin = new Padding(4, 3, 4, 3);
             _periodLabel.Name = "_periodLabel";
-            _periodLabel.Size = new System.Drawing.Size(50, 14);
+            _periodLabel.Size = new Size(24, 14);
             _periodLabel.TabIndex = 0;
             _periodLabel.Text = "기간:";
-            this._mainPanel.Controls.Add(_periodLabel);
             // 
             // _startDateEdit
             // 
-            this._startDateEdit = new DateEdit();
-            ((System.ComponentModel.ISupportInitialize)(this._startDateEdit.Properties)).BeginInit();
-            this._startDateEdit.Location = new System.Drawing.Point(70, 10);
-            this._startDateEdit.Name = "_startDateEdit";
-            this._startDateEdit.Properties.AllowNullInput = DevExpress.Utils.DefaultBoolean.False;
-            this._startDateEdit.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this._startDateEdit.Properties.CalendarTimeProperties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this._startDateEdit.Size = new System.Drawing.Size(120, 20);
-            this._startDateEdit.TabIndex = 1;
-            ((System.ComponentModel.ISupportInitialize)(this._startDateEdit.Properties)).EndInit();
-            this._mainPanel.Controls.Add(this._startDateEdit);
+            _startDateEdit.EditValue = new DateTime(2026, 2, 23, 0, 0, 0, 0);
+            _startDateEdit.Location = new Point(82, 12);
+            _startDateEdit.Margin = new Padding(4, 3, 4, 3);
+            _startDateEdit.Name = "_startDateEdit";
+            _startDateEdit.Size = new Size(140, 20);
+            _startDateEdit.TabIndex = 1;
             // 
             // _toLabel
             // 
-            var _toLabel = new LabelControl();
-            _toLabel.Location = new System.Drawing.Point(200, 12);
+            _toLabel.IsRequiredMarker = false;
+            _toLabel.Location = new Point(233, 14);
+            _toLabel.Margin = new Padding(4, 3, 4, 3);
             _toLabel.Name = "_toLabel";
-            _toLabel.Size = new System.Drawing.Size(20, 14);
+            _toLabel.Size = new Size(9, 14);
             _toLabel.TabIndex = 2;
             _toLabel.Text = "~";
-            this._mainPanel.Controls.Add(_toLabel);
             // 
             // _endDateEdit
             // 
-            this._endDateEdit = new DateEdit();
-            ((System.ComponentModel.ISupportInitialize)(this._endDateEdit.Properties)).BeginInit();
-            this._endDateEdit.Location = new System.Drawing.Point(230, 10);
-            this._endDateEdit.Name = "_endDateEdit";
-            this._endDateEdit.Properties.AllowNullInput = DevExpress.Utils.DefaultBoolean.False;
-            this._endDateEdit.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this._endDateEdit.Properties.CalendarTimeProperties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this._endDateEdit.Size = new System.Drawing.Size(120, 20);
-            this._endDateEdit.TabIndex = 3;
-            ((System.ComponentModel.ISupportInitialize)(this._endDateEdit.Properties)).EndInit();
-            this._mainPanel.Controls.Add(this._endDateEdit);
+            _endDateEdit.EditValue = new DateTime(2026, 2, 23, 0, 0, 0, 0);
+            _endDateEdit.Location = new Point(268, 12);
+            _endDateEdit.Margin = new Padding(4, 3, 4, 3);
+            _endDateEdit.Name = "_endDateEdit";
+            _endDateEdit.Size = new Size(140, 20);
+            _endDateEdit.TabIndex = 3;
             // 
             // _todayButton
             // 
-            this._todayButton = new SimpleButton();
-            this._todayButton.Location = new System.Drawing.Point(10, 45);
-            this._todayButton.Name = "_todayButton";
-            this._todayButton.Size = new System.Drawing.Size(60, 23);
-            this._todayButton.TabIndex = 4;
-            this._todayButton.Text = "오늘";
-            this._mainPanel.Controls.Add(this._todayButton);
+            _todayButton.AuthId = "";
+            _todayButton.Location = new Point(12, 52);
+            _todayButton.Margin = new Padding(4, 3, 4, 3);
+            _todayButton.Name = "_todayButton";
+            _todayButton.Size = new Size(70, 27);
+            _todayButton.TabIndex = 4;
+            _todayButton.Text = "오늘";
             // 
             // _thisWeekButton
             // 
-            this._thisWeekButton = new SimpleButton();
-            this._thisWeekButton.Location = new System.Drawing.Point(80, 45);
-            this._thisWeekButton.Name = "_thisWeekButton";
-            this._thisWeekButton.Size = new System.Drawing.Size(60, 23);
-            this._thisWeekButton.TabIndex = 5;
-            this._thisWeekButton.Text = "이번주";
-            this._mainPanel.Controls.Add(this._thisWeekButton);
+            _thisWeekButton.AuthId = "";
+            _thisWeekButton.Location = new Point(93, 52);
+            _thisWeekButton.Margin = new Padding(4, 3, 4, 3);
+            _thisWeekButton.Name = "_thisWeekButton";
+            _thisWeekButton.Size = new Size(70, 27);
+            _thisWeekButton.TabIndex = 5;
+            _thisWeekButton.Text = "이번주";
             // 
             // _thisMonthButton
             // 
-            this._thisMonthButton = new SimpleButton();
-            this._thisMonthButton.Location = new System.Drawing.Point(150, 45);
-            this._thisMonthButton.Name = "_thisMonthButton";
-            this._thisMonthButton.Size = new System.Drawing.Size(60, 23);
-            this._thisMonthButton.TabIndex = 6;
-            this._thisMonthButton.Text = "이번달";
-            this._mainPanel.Controls.Add(this._thisMonthButton);
+            _thisMonthButton.AuthId = "";
+            _thisMonthButton.Location = new Point(175, 52);
+            _thisMonthButton.Margin = new Padding(4, 3, 4, 3);
+            _thisMonthButton.Name = "_thisMonthButton";
+            _thisMonthButton.Size = new Size(70, 27);
+            _thisMonthButton.TabIndex = 6;
+            _thisMonthButton.Text = "이번달";
             // 
             // _clearButton
             // 
-            this._clearButton = new SimpleButton();
-            this._clearButton.Location = new System.Drawing.Point(220, 45);
-            this._clearButton.Name = "_clearButton";
-            this._clearButton.Size = new System.Drawing.Size(60, 23);
-            this._clearButton.TabIndex = 7;
-            this._clearButton.Text = "초기화";
-            this._mainPanel.Controls.Add(this._clearButton);
+            _clearButton.AuthId = "";
+            _clearButton.Location = new Point(257, 52);
+            _clearButton.Margin = new Padding(4, 3, 4, 3);
+            _clearButton.Name = "_clearButton";
+            _clearButton.Size = new Size(70, 27);
+            _clearButton.TabIndex = 7;
+            _clearButton.Text = "초기화";
             // 
             // DateRangeControl
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this._mainPanel);
-            this.Name = "DateRangeControl";
-            this.Size = new System.Drawing.Size(400, 80);
-            ((System.ComponentModel.ISupportInitialize)(this._mainPanel)).EndInit();
-            this._mainPanel.ResumeLayout(false);
-            this._mainPanel.PerformLayout();
-            this.ResumeLayout(false);
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(_mainPanel);
+            Margin = new Padding(4, 3, 4, 3);
+            Name = "DateRangeControl";
+            Size = new Size(1463, 931);
+            ((ISupportInitialize)_mainPanel).EndInit();
+            _mainPanel.ResumeLayout(false);
+            _mainPanel.PerformLayout();
+            ResumeLayout(false);
 
         }
 
         #endregion
 
-        private PanelControl? _mainPanel;
-        private DateEdit? _startDateEdit;
-        private DateEdit? _endDateEdit;
-        private SimpleButton? _todayButton;
-        private SimpleButton? _thisWeekButton;
-        private SimpleButton? _thisMonthButton;
-        private SimpleButton? _clearButton;
+        private nU3.Core.UI.Controls.nU3PanelControl? _mainPanel;
+        private nU3.Core.UI.Controls.nU3DateEdit? _startDateEdit;
+        private nU3.Core.UI.Controls.nU3DateEdit? _endDateEdit;
+        private nU3.Core.UI.Controls.nU3SimpleButton? _todayButton;
+        private nU3.Core.UI.Controls.nU3SimpleButton? _thisWeekButton;
+        private nU3.Core.UI.Controls.nU3SimpleButton? _thisMonthButton;
+        private nU3.Core.UI.Controls.nU3SimpleButton? _clearButton;
+        private UI.Controls.nU3LabelControl _periodLabel;
+        private UI.Controls.nU3LabelControl _toLabel;
     }
 }

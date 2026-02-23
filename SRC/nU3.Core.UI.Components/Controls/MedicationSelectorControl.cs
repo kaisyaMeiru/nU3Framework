@@ -1,4 +1,5 @@
-using DevExpress.XtraEditors;
+﻿using DevExpress.XtraEditors;
+using nU3.Core.UI;
 using DevExpress.XtraGrid;
 using DevExpress.XtraGrid.Views.Grid;
 using System.ComponentModel;
@@ -7,22 +8,22 @@ namespace nU3.Core.UI.Components.Controls
 {
     [ToolboxItem(true)]
     [ToolboxBitmap(typeof(MedicationSelectorControl))]
-    public partial class MedicationSelectorControl : XtraUserControl
+    public partial class MedicationSelectorControl : BaseWorkComponent
     {
-        private GridControl? _medicationGrid;
-        private GridView? _medicationView;
-        private GridControl? _selectedMedicationGrid;
-        private GridView? _selectedMedicationView;
-        private SearchControl? _searchControl;
-        private TextEdit? _codeEdit;
-        private TextEdit? _nameEdit;
-        private TextEdit? _dosageEdit;
-        private SpinEdit? _quantityEdit;
-        private SimpleButton? _addButton;
-        private SimpleButton? _removeButton;
-        private SimpleButton? _clearButton;
-        private PanelControl? _selectionPanel;
-        private LabelControl? _selectedLabel;
+        private nU3.Core.UI.Controls.nU3GridControl? _medicationGrid;
+        private nU3.Core.UI.Controls.nU3GridView? _medicationView;
+        private nU3.Core.UI.Controls.nU3GridControl? _selectedMedicationGrid;
+        private nU3.Core.UI.Controls.nU3GridView? _selectedMedicationView;
+        private nU3.Core.UI.Controls.nU3SearchControl? _searchControl;
+        private nU3.Core.UI.Controls.nU3TextEdit? _codeEdit;
+        private nU3.Core.UI.Controls.nU3TextEdit? _nameEdit;
+        private nU3.Core.UI.Controls.nU3TextEdit? _dosageEdit;
+        private nU3.Core.UI.Controls.nU3SpinEdit? _quantityEdit;
+        private nU3.Core.UI.Controls.nU3SimpleButton? _addButton;
+        private nU3.Core.UI.Controls.nU3SimpleButton? _removeButton;
+        private nU3.Core.UI.Controls.nU3SimpleButton? _clearButton;
+        private nU3.Core.UI.Controls.nU3PanelControl? _selectionPanel;
+        private nU3.Core.UI.Controls.nU3LabelControl? _selectedLabel;
 
         private readonly BindingList<Medication> _medications = new();
         private readonly BindingList<MedicationPrescription> _selectedMedications = new();

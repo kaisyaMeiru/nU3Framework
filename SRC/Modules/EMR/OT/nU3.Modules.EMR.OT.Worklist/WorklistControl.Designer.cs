@@ -9,8 +9,8 @@ namespace nU3.Modules.EMR.OT.Worklist
     public partial class WorklistControl
     {
         // UI Components
-        private GridControl _gridControl;
-        private GridView _gridView;
+        private nU3.Core.UI.Controls.nU3GridControl _gridControl;
+        private nU3.Core.UI.Controls.nU3GridView _gridView;
         private Panel _topPanel;
         private Button _btnSearch;
         private Label _lblTitle;
@@ -20,8 +20,8 @@ namespace nU3.Modules.EMR.OT.Worklist
             _topPanel = new Panel();
             _lblTitle = new Label();
             _btnSearch = new Button();
-            _gridControl = new GridControl();
-            _gridView = new GridView();
+            _gridControl = new nU3.Core.UI.Controls.nU3GridControl();
+            _gridView = new nU3.Core.UI.Controls.nU3GridView();
             _topPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)_gridControl).BeginInit();
             ((System.ComponentModel.ISupportInitialize)_gridView).BeginInit();

@@ -84,15 +84,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "VSIX", "VSIX", "{83429F32-6
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "nU3.ModuleCreator.Vsix", "Tools\VSIX\nU3.ModuleCreator.Vsix\nU3.ModuleCreator.Vsix.csproj", "{A1B2C3D4-E5F6-4789-0123-456789ABCDEF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "nU3.Business.Common", "nU3.Business.Common\nU3.Business.Common.csproj", "{3029D35F-042F-4D21-969A-813252D7A474}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CO", "CO", "{6A85AAE1-B457-090C-2BB5-272A7CDC90CD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "nU3.Modules.EMR.CO.EmrCommon", "Modules\EMR\CO\nU3.Modules.EMR.CO.EmrCommon\nU3.Modules.EMR.CO.EmrCommon.csproj", "{DC1F53C5-86E2-46AE-B1A5-56794A1CB7F1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "nU3.Modules.EMR.CO.EmrCommon2", "Modules\EMR\CO\nU3.Modules.EMR.CO.EmrCommon2\nU3.Modules.EMR.CO.EmrCommon2.csproj", "{695B5A63-77EB-46FE-B018-9DBFA1E2E203}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "nU3.Modules.EMR.Common", "Modules\EMR\Common\nU3.Modules.EMR.Common\nU3.Modules.EMR.Common.csproj", "{85D70069-5B0A-7BE7-78D6-3D909D051AE5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "nU3.Modules.EMR.Common", "Modules\EMR\nU3.Modules.EMR.Common\nU3.Modules.EMR.Common.csproj", "{85D70069-5B0A-7BE7-78D6-3D909D051AE5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -320,18 +318,6 @@ Global
 		{A1B2C3D4-E5F6-4789-0123-456789ABCDEF}.Release|x64.Build.0 = Release|Any CPU
 		{A1B2C3D4-E5F6-4789-0123-456789ABCDEF}.Release|x86.ActiveCfg = Release|x86
 		{A1B2C3D4-E5F6-4789-0123-456789ABCDEF}.Release|x86.Build.0 = Release|x86
-		{3029D35F-042F-4D21-969A-813252D7A474}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3029D35F-042F-4D21-969A-813252D7A474}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3029D35F-042F-4D21-969A-813252D7A474}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{3029D35F-042F-4D21-969A-813252D7A474}.Debug|x64.Build.0 = Debug|Any CPU
-		{3029D35F-042F-4D21-969A-813252D7A474}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{3029D35F-042F-4D21-969A-813252D7A474}.Debug|x86.Build.0 = Debug|Any CPU
-		{3029D35F-042F-4D21-969A-813252D7A474}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3029D35F-042F-4D21-969A-813252D7A474}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3029D35F-042F-4D21-969A-813252D7A474}.Release|x64.ActiveCfg = Release|Any CPU
-		{3029D35F-042F-4D21-969A-813252D7A474}.Release|x64.Build.0 = Release|Any CPU
-		{3029D35F-042F-4D21-969A-813252D7A474}.Release|x86.ActiveCfg = Release|Any CPU
-		{3029D35F-042F-4D21-969A-813252D7A474}.Release|x86.Build.0 = Release|Any CPU
 		{DC1F53C5-86E2-46AE-B1A5-56794A1CB7F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DC1F53C5-86E2-46AE-B1A5-56794A1CB7F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DC1F53C5-86E2-46AE-B1A5-56794A1CB7F1}.Debug|x64.ActiveCfg = Debug|Any CPU

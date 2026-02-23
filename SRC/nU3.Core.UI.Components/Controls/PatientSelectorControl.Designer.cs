@@ -1,4 +1,4 @@
-using DevExpress.XtraEditors;
+﻿using DevExpress.XtraEditors;
 using DevExpress.XtraEditors.Controls;
 using DevExpress.XtraGrid;
 using DevExpress.XtraGrid.Columns;
@@ -35,19 +35,19 @@ namespace nU3.Core.UI.Components.Controls
 
         private void InitializeComponent()
         {
-            _headerPanel = new PanelControl();
-            _searchEdit = new TextEdit();
-            _searchButton = new SimpleButton();
-            _clearButton = new SimpleButton();
-            _buttonPanel = new PanelControl();
-            _selectButton = new SimpleButton();
-            _gridControl = new GridControl();
-            _gridView = new GridView();
-            colPatientId = new GridColumn();
-            colPatientName = new GridColumn();
-            colBirthDate = new GridColumn();
-            colGender = new GridColumn();
-            colPhoneNumber = new GridColumn();
+            _headerPanel = new nU3.Core.UI.Controls.nU3PanelControl();
+            _searchEdit = new nU3.Core.UI.Controls.nU3TextEdit();
+            _searchButton = new nU3.Core.UI.Controls.nU3SimpleButton();
+            _clearButton = new nU3.Core.UI.Controls.nU3SimpleButton();
+            _buttonPanel = new nU3.Core.UI.Controls.nU3PanelControl();
+            _selectButton = new nU3.Core.UI.Controls.nU3SimpleButton();
+            _gridControl = new nU3.Core.UI.Controls.nU3GridControl();
+            _gridView = new nU3.Core.UI.Controls.nU3GridView();
+            colPatientId = new nU3.Core.UI.Controls.nU3GridColumn();
+            colPatientName = new nU3.Core.UI.Controls.nU3GridColumn();
+            colBirthDate = new nU3.Core.UI.Controls.nU3GridColumn();
+            colGender = new nU3.Core.UI.Controls.nU3GridColumn();
+            colPhoneNumber = new nU3.Core.UI.Controls.nU3GridColumn();
             ((System.ComponentModel.ISupportInitialize)_headerPanel).BeginInit();
             _headerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)_buttonPanel).BeginInit();
@@ -196,10 +196,10 @@ namespace nU3.Core.UI.Components.Controls
 
             #endregion
         }
-        private GridColumn colPatientId;
-        private GridColumn colPatientName;
-        private GridColumn colBirthDate;
-        private GridColumn colGender;
-        private GridColumn colPhoneNumber;
+        private nU3.Core.UI.Controls.nU3GridColumn colPatientId;
+        private nU3.Core.UI.Controls.nU3GridColumn colPatientName;
+        private nU3.Core.UI.Controls.nU3GridColumn colBirthDate;
+        private nU3.Core.UI.Controls.nU3GridColumn colGender;
+        private nU3.Core.UI.Controls.nU3GridColumn colPhoneNumber;
     }
 }

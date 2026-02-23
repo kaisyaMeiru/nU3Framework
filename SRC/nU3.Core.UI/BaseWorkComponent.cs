@@ -108,7 +108,7 @@ namespace nU3.Core.UI
             if (System.ComponentModel.LicenseManager.UsageMode == System.ComponentModel.LicenseUsageMode.Designtime)
                 return;
 
-            this.Dock = DockStyle.Fill;
+            this.Dock = DockStyle.None;
         }
 
         #endregion

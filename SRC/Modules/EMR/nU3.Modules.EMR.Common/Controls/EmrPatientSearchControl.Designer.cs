@@ -59,7 +59,7 @@ namespace nU3.Modules.EMR.Common.Controls
             // 
             // btnSearch
             // 
-            btnSearch.Location = new Point(1215, 13);
+            btnSearch.Location = new Point(1215, 12);
             btnSearch.Name = "btnSearch";
             btnSearch.Size = new Size(315, 22);
             btnSearch.StyleController = layoutControl1;
@@ -69,9 +69,9 @@ namespace nU3.Modules.EMR.Common.Controls
             // 
             // txtKeyword
             // 
-            txtKeyword.Location = new Point(72, 13);
+            txtKeyword.Location = new Point(99, 12);
             txtKeyword.Name = "txtKeyword";
-            txtKeyword.Size = new Size(1139, 20);
+            txtKeyword.Size = new Size(1112, 20);
             txtKeyword.StyleController = layoutControl1;
             txtKeyword.TabIndex = 4;
             txtKeyword.KeyDown += txtKeyword_KeyDown;
@@ -91,8 +91,8 @@ namespace nU3.Modules.EMR.Common.Controls
             layoutControlItem1.Location = new Point(0, 0);
             layoutControlItem1.Name = "layoutControlItem1";
             layoutControlItem1.Size = new Size(1203, 26);
-            layoutControlItem1.Text = "환자 검색:";
-            layoutControlItem1.TextSize = new Size(48, 14);
+            layoutControlItem1.Text = "EMR 환자 검색:";
+            layoutControlItem1.TextSize = new Size(75, 14);
             // 
             // layoutControlItem2
             // 
@@ -108,15 +108,15 @@ namespace nU3.Modules.EMR.Common.Controls
             emptySpaceItem1.AllowHotTrack = false;
             emptySpaceItem1.Location = new Point(0, 26);
             emptySpaceItem1.Name = "emptySpaceItem1";
-            emptySpaceItem1.Size = new Size(1522, 883);
+            emptySpaceItem1.Size = new Size(1522, 885);
             emptySpaceItem1.TextSize = new Size(0, 0);
             // 
-            // PatientSearchControl
+            // EmrPatientSearchControl
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(layoutControl1);
-            Name = "PatientSearchControl";
+            Name = "EmrPatientSearchControl";
             Size = new Size(1542, 931);
             ((System.ComponentModel.ISupportInitialize)layoutControl1).EndInit();
             layoutControl1.ResumeLayout(false);

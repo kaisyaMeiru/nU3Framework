@@ -1,4 +1,4 @@
-#pragma warning disable CS8669
+﻿#pragma warning disable CS8669
 
 using System;
 using System.ComponentModel;
@@ -16,19 +16,19 @@ namespace nU3.Modules.EMR.CL.Component
     {
         private System.ComponentModel.IContainer _components = null;
 
-        private DevExpress.XtraLayout.LayoutControl _layoutControl = null!;
-        private DevExpress.XtraEditors.LabelControl _lblStatus = null!;
-        private DevExpress.XtraEditors.MemoEdit _txtEventLog = null!;
-        private DevExpress.XtraGrid.GridControl _gridStats = null!;
-        private DevExpress.XtraGrid.Views.Grid.GridView _gridViewStats = null!;
+        private nU3.Core.UI.Controls.nU3LayoutControl _layoutControl = null!;
+        private nU3.Core.UI.Controls.nU3LabelControl _lblStatus = null!;
+        private nU3.Core.UI.Controls.nU3MemoEdit _txtEventLog = null!;
+        private nU3.Core.UI.Controls.nU3GridControl _gridStats = null!;
+        private nU3.Core.UI.Controls.nU3GridView _gridViewStats = null!;
 
-        private DevExpress.XtraLayout.LayoutControlGroup _rootGroup = null!;
-        private DevExpress.XtraLayout.LayoutControlGroup _statusGroup = null!;
-        private DevExpress.XtraLayout.LayoutControlItem _statusItem = null!;
-        private DevExpress.XtraLayout.LayoutControlGroup _statsGroup = null!;
-        private DevExpress.XtraLayout.LayoutControlItem _statsItem = null!;
-        private DevExpress.XtraLayout.LayoutControlGroup _logGroup = null!;
-        private DevExpress.XtraLayout.LayoutControlItem _logItem = null!;
+        private nU3.Core.UI.Controls.nU3LayoutControlGroup _rootGroup = null!;
+        private nU3.Core.UI.Controls.nU3LayoutControlGroup _statusGroup = null!;
+        private nU3.Core.UI.Controls.nU3LayoutControlItem _statusItem = null!;
+        private nU3.Core.UI.Controls.nU3LayoutControlGroup _statsGroup = null!;
+        private nU3.Core.UI.Controls.nU3LayoutControlItem _statsItem = null!;
+        private nU3.Core.UI.Controls.nU3LayoutControlGroup _logGroup = null!;
+        private nU3.Core.UI.Controls.nU3LayoutControlItem _logItem = null!;
 
         protected override void Dispose(bool disposing)
         {
@@ -43,18 +43,18 @@ namespace nU3.Modules.EMR.CL.Component
 
         private void InitializeComponent()
         {
-            _layoutControl = new LayoutControl();
-            _lblStatus = new LabelControl();
-            _gridStats = new GridControl();
-            _gridViewStats = new GridView();
-            _txtEventLog = new MemoEdit();
-            _rootGroup = new LayoutControlGroup();
-            _statusGroup = new LayoutControlGroup();
-            _statusItem = new LayoutControlItem();
-            _statsGroup = new LayoutControlGroup();
-            _statsItem = new LayoutControlItem();
-            _logGroup = new LayoutControlGroup();
-            _logItem = new LayoutControlItem();
+            _layoutControl = new nU3.Core.UI.Controls.nU3LayoutControl();
+            _lblStatus = new nU3.Core.UI.Controls.nU3LabelControl();
+            _gridStats = new nU3.Core.UI.Controls.nU3GridControl();
+            _gridViewStats = new nU3.Core.UI.Controls.nU3GridView();
+            _txtEventLog = new nU3.Core.UI.Controls.nU3MemoEdit();
+            _rootGroup = new nU3.Core.UI.Controls.nU3LayoutControlGroup();
+            _statusGroup = new nU3.Core.UI.Controls.nU3LayoutControlGroup();
+            _statusItem = new nU3.Core.UI.Controls.nU3LayoutControlItem();
+            _statsGroup = new nU3.Core.UI.Controls.nU3LayoutControlGroup();
+            _statsItem = new nU3.Core.UI.Controls.nU3LayoutControlItem();
+            _logGroup = new nU3.Core.UI.Controls.nU3LayoutControlGroup();
+            _logItem = new nU3.Core.UI.Controls.nU3LayoutControlItem();
             ((ISupportInitialize)_layoutControl).BeginInit();
             _layoutControl.SuspendLayout();
             ((ISupportInitialize)_gridStats).BeginInit();
@@ -93,7 +93,7 @@ namespace nU3.Modules.EMR.CL.Component
             _lblStatus.Size = new Size(75, 18);
             _lblStatus.StyleController = _layoutControl;
             _lblStatus.TabIndex = 4;
-            _lblStatus.Text = "상태: 대기중";
+            _lblStatus.Text = "?곹깭: ?湲곗쨷";
             // 
             // _gridStats
             // 
@@ -137,7 +137,7 @@ namespace nU3.Modules.EMR.CL.Component
             _statusGroup.Location = new Point(0, 0);
             _statusGroup.Name = "_statusGroup";
             _statusGroup.Size = new Size(1508, 65);
-            _statusGroup.Text = "상태";
+            _statusGroup.Text = "?곹깭";
             // 
             // _statusItem
             // 
@@ -154,7 +154,7 @@ namespace nU3.Modules.EMR.CL.Component
             _statsGroup.Location = new Point(0, 65);
             _statsGroup.Name = "_statsGroup";
             _statsGroup.Size = new Size(1508, 453);
-            _statsGroup.Text = "진료 통계";
+            _statsGroup.Text = "吏꾨즺 ?듦퀎";
             // 
             // _statsItem
             // 
@@ -173,7 +173,7 @@ namespace nU3.Modules.EMR.CL.Component
             _logGroup.Location = new Point(0, 518);
             _logGroup.Name = "_logGroup";
             _logGroup.Size = new Size(1508, 257);
-            _logGroup.Text = "이벤트 로그";
+            _logGroup.Text = "?대깽??濡쒓렇";
             // 
             // _logItem
             // 

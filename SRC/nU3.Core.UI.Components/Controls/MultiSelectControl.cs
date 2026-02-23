@@ -1,4 +1,5 @@
-using DevExpress.XtraEditors;
+﻿using DevExpress.XtraEditors;
+using nU3.Core.UI;
 using DevExpress.XtraGrid;
 using DevExpress.XtraGrid.Views.Grid;
 using System.ComponentModel;
@@ -7,14 +8,14 @@ namespace nU3.Core.UI.Components.Controls
 {
     [ToolboxItem(true)]
     [ToolboxBitmap(typeof(MultiSelectControl))]
-    public partial class MultiSelectControl : XtraUserControl
+    public partial class MultiSelectControl : BaseWorkComponent
     {
-        private GridControl? _gridControl;
-        private GridView? _gridView;
-        private SearchControl? _searchControl;
-        private PanelControl? _headerPanel;
-        private PanelControl? _selectedPanel;
-        private LabelControl? _selectedLabel;
+        private nU3.Core.UI.Controls.nU3GridControl? _gridControl;
+        private nU3.Core.UI.Controls.nU3GridView? _gridView;
+        private nU3.Core.UI.Controls.nU3SearchControl? _searchControl;
+        private nU3.Core.UI.Controls.nU3PanelControl? _headerPanel;
+        private nU3.Core.UI.Controls.nU3PanelControl? _selectedPanel;
+        private nU3.Core.UI.Controls.nU3LabelControl? _selectedLabel;
 
         private readonly BindingList<SelectableItem> _allItems = new();
         private readonly BindingList<SelectableItem> _selectedItems = new();
@@ -147,9 +148,9 @@ namespace nU3.Core.UI.Components.Controls
             }
         }
 
-        private SimpleButton? CreateChip(SelectableItem item)
+        private nU3.Core.UI.Controls.nU3SimpleButton? CreateChip(SelectableItem item)
         {
-            var chip = new SimpleButton
+            var chip = new nU3.Core.UI.Controls.nU3SimpleButton
             {
                 Text = item.DisplayText,
                 ButtonStyle = DevExpress.XtraEditors.Controls.BorderStyles.Default,
@@ -186,7 +187,7 @@ namespace nU3.Core.UI.Components.Controls
 
         private void OnChipClick(object? sender, EventArgs e)
         {
-            if (sender is SimpleButton chip && chip.Tag is SelectableItem item)
+            if (sender is nU3.Core.UI.Controls.nU3SimpleButton chip && chip.Tag is SelectableItem item)
             {
                 item.IsSelected = false;
                 _selectedPanel?.Controls.Remove(chip);

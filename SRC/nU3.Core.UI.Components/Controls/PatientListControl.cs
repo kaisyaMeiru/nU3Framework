@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -44,7 +44,7 @@ namespace nU3.Core.UI.Components.Controls
         /// 이벤트 소스 식별자 (BaseWorkComponent에서 제공하는 프로퍼티를 재정의)
         /// </summary>
         [Category("Data")]
-        [Description("이벤트 전파 시 식별자")]
+        [Description("이벤트 소스 식별자")]
         public new string EventSource
         {
             get => base.EventSource;
@@ -97,7 +97,7 @@ namespace nU3.Core.UI.Components.Controls
             get => _selectedPatient;
         }
 
-        #region 하위 호환성을 위한 레거시 프로퍼티들
+        #region 하위 호환성을 위한 레거시 프로퍼티
         // OCS 모듈에서 기존에 사용하던 Selected* 프로퍼티 유지
         [Category("Data")]
         [Browsable(false)]
@@ -158,7 +158,7 @@ namespace nU3.Core.UI.Components.Controls
 
             EventBusUse = true;
 
-            this.Load += (s, e) => LoadDemoData();  
+            this.Load += (s, e) => LoadDemoData();  // 개발/테스트용 데모 데이터 로드
         }
 
         /// <summary>
@@ -166,7 +166,7 @@ namespace nU3.Core.UI.Components.Controls
         /// </summary>
         private void LoadDemoData()
         {
-            // 디자인 타임 체크
+            // 디자인모드 체크
             if (DesignMode || LicenseManager.UsageMode == LicenseUsageMode.Designtime)
                 return;
 
@@ -176,7 +176,6 @@ namespace nU3.Core.UI.Components.Controls
 
             try
             {
-                // PatientInfoDto 리스트 생성
                 var patients = new List<PatientInfoDto>
                 {
                     new PatientInfoDto
@@ -212,7 +211,7 @@ namespace nU3.Core.UI.Components.Controls
                         AdmDate = new DateTime(2024, 2, 2),
                         DoctorID = "D002",
                         DeptID = "SUR"
-                    },
+                     },
                     new PatientInfoDto
                     {
                         PatientId = "P001236",
@@ -250,7 +249,7 @@ namespace nU3.Core.UI.Components.Controls
                     new PatientInfoDto
                     {
                         PatientId = "P001238",
-                        PatientName = "정수현",
+                        PatientName = "정수지",
                         Gender = 2,
                         BirthDate = new DateTime(1983, 3, 25),
                         PhoneNumber = "02-5678-9012",
@@ -258,7 +257,7 @@ namespace nU3.Core.UI.Components.Controls
                         Address = "서울특별시 관악구",
                         InNumber = "I2024005",
                         DeptName = "정형외과",
-                        DoctorName = "정의사",
+                        DoctorName = "윤의사",
                         RoomNo = "305",
                         AdmDate = new DateTime(2024, 2, 5),
                         DoctorID = "D004",
@@ -270,7 +269,7 @@ namespace nU3.Core.UI.Components.Controls
             }
             catch (Exception ex)
             {
-                // 디자인 타임에서는 예외 무시
+                // 디자인모드에서는 예외 무시
                 System.Diagnostics.Debug.WriteLine($"LoadDemoData Error: {ex.Message}");
             }
         }
@@ -350,7 +349,7 @@ namespace nU3.Core.UI.Components.Controls
 
         private void gridView_FocusedRowChanged(object sender, DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventArgs e)
         {
-            // 디자인 타임 체크
+            // 디자인 모드 체크
             if (DesignMode || LicenseManager.UsageMode == LicenseUsageMode.Designtime)
                 return;
 
@@ -376,7 +375,7 @@ namespace nU3.Core.UI.Components.Controls
 
         private void gridView_DoubleClick(object sender, EventArgs e)
         {
-            //// 디자인 타임 체크
+            //// 디자인 모드 체크
             //if (DesignMode || LicenseManager.UsageMode == LicenseUsageMode.Designtime)
             //    return;
 
@@ -415,7 +414,7 @@ namespace nU3.Core.UI.Components.Controls
 
         private void btnRefresh_Click(object sender, EventArgs e)
         {
-            // 디자인 타임 체크
+            // 디자인 모드 체크
             if (DesignMode || LicenseManager.UsageMode == LicenseUsageMode.Designtime)
                 return;
 

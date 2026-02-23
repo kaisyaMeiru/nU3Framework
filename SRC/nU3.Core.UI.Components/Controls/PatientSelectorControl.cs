@@ -1,4 +1,5 @@
-using DevExpress.XtraEditors;
+﻿using DevExpress.XtraEditors;
+using nU3.Core.UI;
 using DevExpress.XtraGrid;
 using DevExpress.XtraGrid.Views.Grid;
 using nU3.Core.UI.Components.Events;
@@ -9,16 +10,16 @@ namespace nU3.Core.UI.Components.Controls
 {
     [ToolboxItem(true)]
     [ToolboxBitmap(typeof(PatientSelectorControl))]
-    public partial class PatientSelectorControl : XtraUserControl
+    public partial class PatientSelectorControl : BaseWorkComponent
     {
-        private GridControl? _gridControl;
-        private GridView? _gridView;
-        private TextEdit? _searchEdit;
-        private SimpleButton? _searchButton;
-        private SimpleButton? _clearButton;
-        private SimpleButton? _selectButton;
-        private PanelControl? _headerPanel;
-        private PanelControl? _buttonPanel;
+        private nU3.Core.UI.Controls.nU3GridControl? _gridControl;
+        private nU3.Core.UI.Controls.nU3GridView? _gridView;
+        private nU3.Core.UI.Controls.nU3TextEdit? _searchEdit;
+        private nU3.Core.UI.Controls.nU3SimpleButton? _searchButton;
+        private nU3.Core.UI.Controls.nU3SimpleButton? _clearButton;
+        private nU3.Core.UI.Controls.nU3SimpleButton? _selectButton;
+        private nU3.Core.UI.Controls.nU3PanelControl? _headerPanel;
+        private nU3.Core.UI.Controls.nU3PanelControl? _buttonPanel;
 
         private readonly BindingList<PatientInfoDto> _patients = new();
 
@@ -52,7 +53,7 @@ namespace nU3.Core.UI.Components.Controls
             // 그리드가 이미 생성된 경우 컬럼과 바인딩을 동기화
             if (_gridView != null)
             {
-                // 기존에 디자인 타임 컬럼을 사용하고 있으므로 PopulateColumns를 호출하면
+                // 기존에 디자인된 컬럼을 사용하고 있으므로 PopulateColumns를 호출하면
                 // 자동 생성 컬럼과 충돌할 수 있으니 필요시만 사용합니다.
                 // _gridView.PopulateColumns();
             }
@@ -100,8 +101,8 @@ namespace nU3.Core.UI.Components.Controls
 
         public void LoadPatients(string searchTerm = "", int offset = 0)
         {
-            // TODO: 구현 필요 - 현재는 단순히 그리드 데이터만 로드
-        // 실제 구현에서는 API 호출 등을 통해 데이터를 가져옵니다
+            // TODO: 구현 필요 - 현재는 단순하게 그리드 데이터만 로드
+            // 실제 구현에서는 API 호출 등을 통해 데이터를 가져옵니다.
             var filtered = _patients.Where(p =>
                 p.PatientName.Contains(searchTerm) ||
                 p.PatientId.Contains(searchTerm)).ToList();

@@ -29,12 +29,12 @@ namespace nU3.Modules.EMR.CO.EmrCommon
         /// </summary>
         private void InitializeComponent()
         {
-            this.layoutControl1 = new DevExpress.XtraLayout.LayoutControl();
+            this.layoutControl1 = new nU3.Core.UI.Controls.nU3LayoutControl();
             this.searchControl = new nU3.Modules.EMR.Common.Controls.EmrPatientSearchControl();
-            this.memoLogs = new DevExpress.XtraEditors.MemoEdit();
-            this.Root = new DevExpress.XtraLayout.LayoutControlGroup();
-            this.layoutControlItem1 = new DevExpress.XtraLayout.LayoutControlItem();
-            this.layoutControlItem2 = new DevExpress.XtraLayout.LayoutControlItem();
+            this.memoLogs = new nU3.Core.UI.Controls.nU3MemoEdit();
+            this.Root = new nU3.Core.UI.Controls.nU3LayoutControlGroup();
+            this.layoutControlItem1 = new nU3.Core.UI.Controls.nU3LayoutControlItem();
+            this.layoutControlItem2 = new nU3.Core.UI.Controls.nU3LayoutControlItem();
             this.simpleLabelItem1 = new DevExpress.XtraLayout.SimpleLabelItem();
 
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl1)).BeginInit();
@@ -131,12 +131,12 @@ namespace nU3.Modules.EMR.CO.EmrCommon
 
         #endregion
 
-        private DevExpress.XtraLayout.LayoutControl layoutControl1;
-        private DevExpress.XtraLayout.LayoutControlGroup Root;
+        private nU3.Core.UI.Controls.nU3LayoutControl layoutControl1;
+        private nU3.Core.UI.Controls.nU3LayoutControlGroup Root;
         private nU3.Modules.EMR.Common.Controls.EmrPatientSearchControl searchControl;
-        private DevExpress.XtraEditors.MemoEdit memoLogs;
-        private DevExpress.XtraLayout.LayoutControlItem layoutControlItem1;
-        private DevExpress.XtraLayout.LayoutControlItem layoutControlItem2;
+        private nU3.Core.UI.Controls.nU3MemoEdit memoLogs;
+        private nU3.Core.UI.Controls.nU3LayoutControlItem layoutControlItem1;
+        private nU3.Core.UI.Controls.nU3LayoutControlItem layoutControlItem2;
         private DevExpress.XtraLayout.SimpleLabelItem simpleLabelItem1;
     }
 }
