@@ -286,14 +286,7 @@ namespace nU3.Core.Services
             try
             {
                 EnsureInitialized();
-                // Assuming IDBAccessService has ConnectAsync or similar method.
-                // If not, we might need to cast or rely on basic operation check.
-                // return await DB.ConnectAsync(); 
-                // Placeholder: check if DB property is accessible and maybe run simple query if ConnectAsync missing
-                 // For now, assume it exists or implementation provides it via extension.
-                 // Actually, let's use a dummy query since ConnectAsync might not be in interface.
-                 // return await DB.CheckConnectionAsync();
-                 return true; // Skipping for now to avoid compilation error if method missing
+                return await DB.ConnectAsync();
             }
             catch
             {
@@ -306,7 +299,7 @@ namespace nU3.Core.Services
             try
             {
                 EnsureInitialized();
-                // var homeDir = await File.GetHomeDirectoryAsync();
+                var homeDir = await File.GetHomeDirectoryAsync();
                 return true;
             }
             catch
@@ -320,22 +313,50 @@ namespace nU3.Core.Services
             try
             {
                 EnsureInitialized();
-                // await Log.UploadLogFileAsync(tempFile, deleteAfterUpload: false);
-                return true;
+                var tempFile = System.IO.Path.GetTempFileName();
+                try
+                {
+                    await System.IO.File.WriteAllTextAsync(tempFile,
+                        $"Connection test at {DateTime.Now:yyyy-MM-dd HH:mm:ss}", cancellationToken);
+                    return await Log.UploadLogFileAsync(tempFile, deleteAfterUpload: false);
+                }
+                finally
+                {
+                    if (System.IO.File.Exists(tempFile))
+                        System.IO.File.Delete(tempFile);
+                }
             }
             catch
             {
                 return false;
             }
         }
-        
-        // ... TestAllConnectionsAsync ...
+
         public async Task<ConnectivityTestResult> TestAllConnectionsAsync(CancellationToken cancellationToken = default)
         {
-             var result = new ConnectivityTestResult { TestTime = DateTime.Now };
-             // simplified logic...
-             result.AllConnected = true;
-             return result;
+            var result = new ConnectivityTestResult { TestTime = DateTime.Now };
+
+            try
+            {
+                EnsureInitialized();
+
+                try { result.DBConnected = await TestDBConnectionAsync(cancellationToken); }
+                catch (Exception ex) { result.DBError = ex.Message; }
+
+                try { result.FileConnected = await TestFileConnectionAsync(cancellationToken); }
+                catch (Exception ex) { result.FileError = ex.Message; }
+
+                try { result.LogConnected = await TestLogConnectionAsync(cancellationToken); }
+                catch (Exception ex) { result.LogError = ex.Message; }
+
+                result.AllConnected = result.DBConnected && result.FileConnected && result.LogConnected;
+            }
+            catch (Exception ex)
+            {
+                result.GeneralError = ex.Message;
+            }
+
+            return result;
         }
 
         #endregion
