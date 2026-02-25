@@ -117,6 +117,23 @@ namespace nU3.Core.UI.Controls
 
     #region 4. Bar Items (Authorization Support)
 
+    /// <summary>
+    /// nU3 Framework 표준 BarManager
+    /// </summary>
+    [ToolboxItem(true)]
+    public class nU3BarManager : BarManager, InU3Control
+    {
+        public nU3BarManager() : base() { }
+        public nU3BarManager(IContainer container) : base(container) { }
+
+        #region InU3Control Implementation
+        public object? GetValue() => null;
+        public void SetValue(object? value) { }
+        public void Clear() { }
+        public string GetControlId() => "nU3BarManager" + GetHashCode();
+        #endregion
+    }
+
     public class nU3BarButtonItem : BarButtonItem
     {
         public nU3BarButtonItem() : base() { }

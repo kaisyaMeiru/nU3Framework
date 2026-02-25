@@ -18,7 +18,6 @@ namespace nU3.Shell.Forms
 {
     public partial class LoginForm : nU3Form
     {
-        private const string DemoSecret = "dev-secret-please-change-0123456789"; // demo secret (>=16 bytes)
         private readonly IAuthenticationService _authService;
 
         public LoginForm(IAuthenticationService authService)
@@ -29,16 +28,8 @@ namespace nU3.Shell.Forms
             this.Size = new System.Drawing.Size(429, 294);
 
             // 초기 로그인 화면에는 부서 목록을 표시하지 않습니다.
-            // 실제 사용 가능한 부서 목록은 IdP로부터 JWT를 수신한 후 추출하여 선택하도록 합니다.
-            try
-            {
-                if (this.Controls.Contains(cboDept)) cboDept.Visible = false;
-                if (this.Controls.Contains(lblDept)) lblDept.Visible = false;
-            }
-            catch
-            {
-                // ignore
-            }
+            try { if (this.Controls.Contains(cboDept)) cboDept.Visible = false; if (this.Controls.Contains(lblDept)) lblDept.Visible = false; }
+            catch { }
         }
 
         private async void BtnLogin_Click(object sender, EventArgs e)
@@ -46,90 +37,37 @@ namespace nU3.Shell.Forms
             string id = txtId.Text?.ToString() ?? string.Empty;
             string pwd = txtPwd.Text?.ToString() ?? string.Empty;
 
-            if (string.IsNullOrWhiteSpace(id))
-            {
-                MessageBox.Show("아이디를 입력하세요.", "로그인", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                this.DialogResult = DialogResult.None;
-                return;
-            }
+            if (string.IsNullOrWhiteSpace(id)) { MessageBox.Show("아이디를 입력하세요.", "로그인", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
 
-            // Use the injected AuthenticationService
+            // 서버 IDP를 통한 인증
             var authResult = await _authService.AuthenticateAsync(id, pwd);
 
-            if (!authResult.Success)
-            {
-                MessageBox.Show(authResult.ErrorMessage ?? "아이디 또는 비밀번호가 올바르지 않습니다.", "로그인 실패", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                this.DialogResult = DialogResult.None;
-                return;
-            }
+            if (!authResult.Success) { MessageBox.Show(authResult.ErrorMessage ?? "인증 실패", "로그인 실패", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
 
-            try
-            {
+            try {
                 string tokenString = authResult.Token!;
-                string[] deptCodes = authResult.DeptCodes!;
-                string[] roles = authResult.Roles!;
-
-                // 저장 및 검증 using JwtValidationHelper
                 nU3.Core.Security.UserSession.Current.SetJwt(tokenString);
 
-                var tvp = JwtValidationHelper.CreateSymmetricValidationParameters(DemoSecret, "local", "nU3");
-
-                var ok = nU3.Core.Security.UserSession.Current.ValidateJwtWithParameters(tvp);
-
-                if (!ok)
-                {
-                    MessageBox.Show("토큰 검증 실패", "오류", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    this.DialogResult = DialogResult.None;
-                    return;
-                }
-
-                // 다중 부서이므로 팝업을 띄워 선택하게 함
-                string? selectedDept = nU3.Core.Security.UserSession.Current.SetJwtAndEnsureDepartment(tokenString, available =>
-                {
-                    // Build display list from Department enum for mapping
+                string? selectedDept = nU3.Core.Security.UserSession.Current.SetJwtAndEnsureDepartment(tokenString, available => {
                     var map = new Dictionary<string, string>();
-                    foreach (Department d in Enum.GetValues(typeof(Department)))
-                    {
-                        var mem = typeof(Department).GetMember(d.ToString()).FirstOrDefault();
-                        var display = mem?.GetCustomAttributes(typeof(DisplayAttribute), false)
-                                     .OfType<DisplayAttribute>()
-                                     .FirstOrDefault()?.Name
-                                     ?? d.ToString();
-                        // 저장할 때는 정수 코드(1, 2, 3...)를 key로 사용
+                    foreach (Department d in Enum.GetValues(typeof(Department))) {
+                        var display = typeof(Department).GetMember(d.ToString()).FirstOrDefault()?.GetCustomAttributes(typeof(DisplayAttribute), false).OfType<DisplayAttribute>().FirstOrDefault()?.Name ?? d.ToString();
                         map[((int)d).ToString()] = display;
                     }
-
-                    using var dlg = new DeptSelectionDialog(available.Select(code => (code, map.ContainsKey(code) ? map[code] : code)).ToList())
-                    {
-                        Owner = this,
-                        Height = this.Height,
-                    };
+                    using var dlg = new DeptSelectionDialog(available.Select(code => (code, map.ContainsKey(code) ? map[code] : code)).ToList()) { Owner = this, Height = this.Height };
                     return dlg.ShowDialog(this) == DialogResult.OK ? dlg.SelectedDeptCode : null;
                 });
 
-                if (string.IsNullOrWhiteSpace(selectedDept))
-                {
-                    MessageBox.Show("접속 가능한 부서가 없거나 선택하지 않아 로그인을 취소합니다.", "로그인 취소", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    this.DialogResult = DialogResult.None;
-                    return;
-                }
+                if (string.IsNullOrWhiteSpace(selectedDept)) { MessageBox.Show("부서를 선택하지 않았습니다.", "로그인 취소", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
 
-                // 세션에 최종 설정
-                nU3.Core.Security.UserSession.Current.SetAvailableDepartments(deptCodes);
+                nU3.Core.Security.UserSession.Current.SetAvailableDepartments(authResult.DeptCodes!);
                 nU3.Core.Security.UserSession.Current.SelectDepartment(selectedDept);
-
-                // Determine auth level from roles (DB-driven). Admin -> 9, otherwise default 1.
-                var authLevel = (roles ?? Array.Empty<string>()).Any(r => string.Equals(r, "0", StringComparison.OrdinalIgnoreCase)) ? 9 : 1;
+                var authLevel = (authResult.Roles ?? Array.Empty<string>()).Any(r => r == "0") ? 9 : 1;
                 nU3.Core.Security.UserSession.Current.SetSession(id, id, selectedDept, authLevel);
 
                 this.DialogResult = DialogResult.OK;
                 this.Close();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"로그인 오류: {ex.Message}", "오류", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                this.DialogResult = DialogResult.None;
-            }
+            } catch (Exception ex) { MessageBox.Show($"로그인 오류: {ex.Message}", "오류", MessageBoxButtons.OK, MessageBoxIcon.Error); }
         }
 
         private class DeptItem

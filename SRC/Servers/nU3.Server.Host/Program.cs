@@ -313,6 +313,10 @@ builder.Services.AddScoped<ServerDBAccessService>(sp =>
 // IDBAccessService 인터페이스 등록 (ServerDBAccessService 재사용)
 builder.Services.AddScoped<IDBAccessService>(sp => sp.GetRequiredService<ServerDBAccessService>());
 
+// 사용자 저장소 및 인증 서비스 등록 (IDP 역할)
+builder.Services.AddScoped<nU3.Core.Repositories.IUserRepository, nU3.Data.Repositories.SQLiteUserRepository>();
+builder.Services.AddScoped<nU3.Core.Interfaces.IAuthenticationService, nU3.Server.Connectivity.Services.AuthenticationService>();
+
 // SQLite 스키마 초기화 서비스 등록
 builder.Services.AddScoped<SqliteSchemaService>();
 

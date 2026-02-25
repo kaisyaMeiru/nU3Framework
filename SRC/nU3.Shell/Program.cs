@@ -111,16 +111,20 @@ namespace nU3.Shell
             // 비즈니스 로직 팩토리
             services.AddSingleton<nU3.Core.Logic.IBizLogicFactory, nU3.Core.Logic.BizLogicFactory>();
             
-            // 인증 서비스
-            services.AddScoped<nU3.Core.Interfaces.IAuthenticationService, nU3.Core.Services.AuthenticationService>();
+            // 3. 네트워크 연결 설정
+            string baseUrl = configuration["ServerConnection:BaseUrl"] ?? "http://localhost:5000";
+
+            // 인증 서비스 (IDP 연동)
+            services.AddScoped<nU3.Core.Interfaces.IAuthenticationService>(sp => 
+                new nU3.Connectivity.Implementations.HttpAuthenticationClient(
+                    sp.GetRequiredService<System.Net.Http.HttpClient>(), 
+                    baseUrl
+                ));
 
             services.AddTransient<nUShell>();
             services.AddTransient<Forms.LoginForm>(); // 로그인 폼 등록
             services.AddSingleton<nU3.Core.Events.IEventAggregator, nU3.Core.Events.EventAggregator>();
 
-            // 3. 네트워크 연결 (HttpClient)
-            string baseUrl = configuration["ServerConnection:BaseUrl"] ?? "http://localhost:5000"; 
-            
             // 공유 HttpClient 등록
             services.AddSingleton(sp => new System.Net.Http.HttpClient 
             { 

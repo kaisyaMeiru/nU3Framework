@@ -199,4 +199,26 @@ namespace nU3.Core.UI.Controls
     }
 
     #endregion
+
+    #region 4. Docking
+
+    /// <summary>
+    /// nU3 Framework 표준 DockManager
+    /// </summary>
+    [ToolboxItem(true)]
+    public class nU3DockManager : DevExpress.XtraBars.Docking.DockManager, InU3Control
+    {
+        public nU3DockManager() : base() { }
+        public nU3DockManager(IContainer container) : base(container) { }
+        public nU3DockManager(System.Windows.Forms.ContainerControl form) : base(form) { }
+
+        #region InU3Control Implementation
+        public object? GetValue() => null;
+        public void SetValue(object? value) { }
+        public void Clear() { }
+        public string GetControlId() => "nU3DockManager" + GetHashCode();
+        #endregion
+    }
+
+    #endregion
 }

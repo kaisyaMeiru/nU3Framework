@@ -25,11 +25,14 @@
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.22" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
     <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.6.2" />
+    <PackageReference Include="System.Data.SQLite.Core" Version="1.0.118" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\nU3.Server.Connectivity\nU3.Server.Connectivity.csproj" />
     <ProjectReference Include="..\..\nU3.Connectivity\nU3.Connectivity.csproj" />
+    <ProjectReference Include="..\..\nU3.Data\nU3.Data.csproj" />
+    <ProjectReference Include="..\..\nU3.Core\nU3.Core.csproj" />
   </ItemGroup>
 
 </Project>

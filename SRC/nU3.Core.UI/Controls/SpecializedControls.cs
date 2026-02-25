@@ -195,12 +195,7 @@ namespace nU3.Core.UI.Controls
 
     #region 9. Managers (Components)
 
-    public class nU3DockManager : DockManager
-    {
-        public nU3DockManager() : base() { }
-        public nU3DockManager(IContainer container) : base(container) { }
-    }
-
+   
     public class nU3DocumentManager : DocumentManager
     {
         public nU3DocumentManager() : base() { }
