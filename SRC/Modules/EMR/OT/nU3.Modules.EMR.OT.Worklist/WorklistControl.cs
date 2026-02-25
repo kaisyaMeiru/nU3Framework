@@ -155,7 +155,7 @@ namespace nU3.Modules.EMR.OT.Worklist
                 {
                     // 강타입 이벤트 발행
                     var context = new PatientSelectedEventPayload() { Patient = new Models.PatientInfoDto() { PatientId = patientId, PatientName = patientName } } ;
-                    EventBus?.GetEvent<Core.Events.PatientSelectedEvent>().Publish(context);
+                    EventBus?.GetEvent<PatientSelectedEvent>().Publish(context);
 
                     Logger.Information($"환자 선택: {patientName} ({patientId})", ProgramID);
                 }

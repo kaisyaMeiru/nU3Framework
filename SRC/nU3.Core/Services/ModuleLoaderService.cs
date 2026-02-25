@@ -507,10 +507,17 @@ namespace nU3.Core.Services
 
         private void LoadModulesFromRuntime()
         {
-            if (!Directory.Exists(_runtimePath)) return;
+            string modulesPath = Path.Combine(_runtimePath, MODULES_DIR);
+            if (!Directory.Exists(modulesPath))
+            {
+                LogManager.Debug($"[ModuleLoader] 모듈 디렉토리가 존재하지 않습니다: {modulesPath}", "System");
+                return;
+            }
 
-            // Modules 폴더와 루트 폴더의 모든 DLL 검색
-            var dlls = Directory.GetFiles(_runtimePath, "*.dll", SearchOption.AllDirectories);
+            // 전체 실행 경로가 아닌 'Modules' 폴더만 한정하여 검색 (성능 최적화)
+            var dlls = Directory.GetFiles(modulesPath, "*.dll", SearchOption.AllDirectories);
+            LogManager.Info($"[ModuleLoader] 모듈 디렉토리에서 {dlls.Length}개의 후보 어셈블리를 발견했습니다.", "System");
+            
             foreach (var dll in dlls)
             {
                 LoadAssembly(dll, null, null);

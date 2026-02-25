@@ -5,12 +5,13 @@ using System.Windows.Forms;
 using nU3.Core.Logging;
 using nU3.Core.Services;
 using nU3.Core.UI.Shell.Services;
+using nU3.Models;
 
 namespace nU3.Core.UI.Shell
 {
     /// <summary>
-    /// ¼Ð ¼­ºñ½º(·Î±ë, ¿¬°á¼º, ¿À·ù ¸®Æ÷ÆÃ, Å©·¡½Ã ¸®Æ÷ÆÃ)¸¦ °ü¸®ÇÕ´Ï´Ù.
-    /// ¸ðµç ¼Ð Æû¿¡ ´ëÇÑ Áß¾Ó ÁýÁß½Ä ÃÊ±âÈ­ ¹× Á¤¸® ±â´ÉÀ» Á¦°øÇÕ´Ï´Ù.
+    /// ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½(ï¿½Î±ï¿½, ï¿½ï¿½ï¿½á¼º, ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, Å©ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.
+    /// ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ß¾ï¿½ ï¿½ï¿½ï¿½ß½ï¿½ ï¿½Ê±ï¿½È­ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.
     /// </summary>
     public class ShellServiceManager : IDisposable
     {
@@ -34,17 +35,17 @@ namespace nU3.Core.UI.Shell
         private bool _disposed;
 
         /// <summary>
-        /// ·Î±ë »ç¿ë ¿©ºÎ
+        /// ï¿½Î±ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         public bool LoggingEnabled => _loggingEnabled;
 
         /// <summary>
-        /// ¿À·ù ¸®Æ÷ÆÃ »ç¿ë ¿©ºÎ
+        /// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         public bool ErrorReportingEnabled => _errorReportingEnabled;
 
         /// <summary>
-        /// ¼­¹ö ¿¬°á »ç¿ë ¿©ºÎ
+        /// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         public bool ServerConnectionEnabled
         {
@@ -53,35 +54,35 @@ namespace nU3.Core.UI.Shell
         }
 
         /// <summary>
-        /// ¿À·ù ¹ß»ý ½Ã ¾÷·Îµå »ç¿ë ¿©ºÎ
+        /// ï¿½ï¿½ï¿½ï¿½ ï¿½ß»ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½Îµï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         public bool UploadOnError => _loggingSettings?.UploadOnError ?? false;
 
         /// <summary>
-        /// ÃÊ±âÈ­ ¿©ºÎ
+        /// ï¿½Ê±ï¿½È­ ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         public bool IsInitialized => _isInitialized;
 
         /// <summary>
-        /// Å©·¡½Ã ¸®Æ÷Æ® ¼­ºñ½º
+        /// Å©ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         public CrashReportService? CrashReporter => _crashReportService;
 
         /// <summary>
-        /// ÀÌ¸ÞÀÏ ¼­ºñ½º
+        /// ï¿½Ì¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         public EmailService? Email => _emailService;
 
         /// <summary>
-        /// ¼­¹ö ¿¬°á »óÅÂ º¯°æ ÀÌº¥Æ®
+        /// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ®
         /// </summary>
         public event EventHandler<ServerConnectionStatusEventArgs>? ServerConnectionStatusChanged;
 
         /// <summary>
-        /// »ý¼ºÀÚ
+        /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         /// </summary>
-        /// <param name="ownerForm">ÀÌ ¸Å´ÏÀú¸¦ ¼ÒÀ¯ÇÑ Æû</param>
-        /// <param name="shellName">·Î±ë¿¡ »ç¿ëÇÒ ¼Ð ÀÌ¸§</param>
+        /// <param name="ownerForm">ï¿½ï¿½ ï¿½Å´ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½</param>
+        /// <param name="shellName">ï¿½Î±ë¿¡ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ì¸ï¿½</param>
         public ShellServiceManager(Form ownerForm, string shellName)
         {
             _ownerForm = ownerForm ?? throw new ArgumentNullException(nameof(ownerForm));
@@ -89,19 +90,19 @@ namespace nU3.Core.UI.Shell
         }
 
         /// <summary>
-        /// ¸ðµç ¼­ºñ½º ÃÊ±âÈ­
+        /// ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­
         /// </summary>
         public void Initialize()
         {
             if (_isInitialized)
                 return;
 
-            // ¼³Á¤ ·Îµå
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½Îµï¿½
             _loggingSettings = ShellConfiguration.LoadLoggingSettings();
             _emailSettings = ShellConfiguration.LoadEmailSettings();
             _serverSettings = ShellConfiguration.LoadServerConnectionSettings();
 
-            // ÃÊ±âÈ­ ¼ø¼­
+            // ï¿½Ê±ï¿½È­ ï¿½ï¿½ï¿½ï¿½
             InitializeLogging();
             InitializeServerConnection();
             InitializeErrorReporting();
@@ -112,7 +113,7 @@ namespace nU3.Core.UI.Shell
         }
 
         /// <summary>
-        /// ·Î±ë ½Ã½ºÅÛ ÃÊ±âÈ­
+        /// ï¿½Î±ï¿½ ï¿½Ã½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­
         /// </summary>
         private void InitializeLogging()
         {
@@ -140,7 +141,7 @@ namespace nU3.Core.UI.Shell
         }
 
         /// <summary>
-        /// ¼­¹ö ¿¬°á ÃÊ±âÈ­
+        /// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­
         /// </summary>
         private void InitializeServerConnection()
         {
@@ -156,14 +157,14 @@ namespace nU3.Core.UI.Shell
 
                 LogManager.Info($"Initializing server connection: {_serverSettings.BaseUrl}", _shellName);
 
-                // ConnectivityManager ÃÊ±âÈ­
+                // ConnectivityManager ï¿½Ê±ï¿½È­
                 ConnectivityManager.Instance.Initialize(
                     _serverSettings.BaseUrl!,
                     enableLogCompression: true,
                     maxConcurrentConnections: _serverSettings.MaxConcurrentConnections
                 );
 
-                // ·Î±× ¸Þ½ÃÁö ÀÌº¥Æ® ±¸µ¶
+                // ï¿½Î±ï¿½ ï¿½Þ½ï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ® ï¿½ï¿½ï¿½ï¿½
                 ConnectivityManager.Instance.LogMessage += OnConnectivityLogMessage;
 
                 if (_serverSettings.AutoLogUpload)
@@ -171,7 +172,7 @@ namespace nU3.Core.UI.Shell
                     LogManager.Info("Auto log upload will be enabled", _shellName);
                 }
 
-                // ¿¬°á Å×½ºÆ® (ºñµ¿±â)
+                // ï¿½ï¿½ï¿½ï¿½ ï¿½×½ï¿½Æ® (ï¿½ñµ¿±ï¿½)
                 TestServerConnectionAsync();
             }
             catch (Exception ex)
@@ -222,7 +223,7 @@ namespace nU3.Core.UI.Shell
         }
 
         /// <summary>
-        /// ¿À·ù ¸®Æ÷ÆÃ ÃÊ±âÈ­ (Àü¿ª ¿¹¿Ü Ã³¸®±â)
+        /// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­ (ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½ï¿½ï¿½)
         /// </summary>
         private void InitializeErrorReporting()
         {
@@ -247,7 +248,7 @@ namespace nU3.Core.UI.Shell
         }
 
         /// <summary>
-        /// Å©·¡½Ã ¸®Æ÷ÆÃ ¼­ºñ½º ÃÊ±âÈ­
+        /// Å©ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­
         /// </summary>
         private void InitializeCrashReporting()
         {
@@ -325,7 +326,7 @@ namespace nU3.Core.UI.Shell
         #endregion
 
         /// <summary>
-        /// Ã³¸®µÇÁö ¾ÊÀº ¿¹¿Ü¸¦ Ã³¸®ÇÕ´Ï´Ù.
+        /// Ã³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ü¸ï¿½ Ã³ï¿½ï¿½ï¿½Õ´Ï´ï¿½.
         /// </summary>
         public void HandleUnhandledException(Exception exception, string source, string? additionalInfo = null)
         {
@@ -333,11 +334,11 @@ namespace nU3.Core.UI.Shell
             {
                 var info = additionalInfo ?? $"Source: {source}";
 
-                // ·Î±× ±â·Ï
+                // ï¿½Î±ï¿½ ï¿½ï¿½ï¿½
                 LogManager.Critical($"Unhandled Exception - {source}", "Error", exception);
                 LogManager.Critical($"Additional Info: {info}", "Error");
 
-                // ¼­¹ö¿¡ ·Î±× ¾÷·Îµå
+                // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Î±ï¿½ ï¿½ï¿½ï¿½Îµï¿½
                 if (_loggingEnabled && UploadOnError && _serverConnectionEnabled && ConnectivityManager.Instance.IsInitialized)
                 {
                     Task.Run(async () =>
@@ -354,18 +355,18 @@ namespace nU3.Core.UI.Shell
                     }).Wait(TimeSpan.FromSeconds(5));
                 }
 
-                // Å©·¡½Ã ¸®Æ÷Æ® Àü¼Û
+                // Å©ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
                 if (_crashReportService != null)
                 {
                     _crashReportService.ReportCrash(exception, info);
                 }
 
                 var result = MessageBox.Show(
-                    $"¿¹»óÄ¡ ¾ÊÀº ¿À·ù°¡ ¹ß»ýÇß½À´Ï´Ù.\n\n" +
-                    $"¿À·ù: {exception.Message}\n\n" +
-                    $"{(_errorReportingEnabled ? "¿¡·¯ ¸®Æ÷Æ®°¡ °ü¸®ÀÚ¿¡°Ô ÀÚµ¿À¸·Î Àü¼ÛµÇ¾ú½À´Ï´Ù.\n\n" : "")}" +
-                    $"ÇÁ·Î±×·¥À» Á¾·áÇÏ½Ã°Ú½À´Ï±î?",
-                    "¿À·ù ¹ß»ý",
+                    $"ï¿½ï¿½ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ß»ï¿½ï¿½ß½ï¿½ï¿½Ï´ï¿½.\n\n" +
+                    $"ï¿½ï¿½ï¿½ï¿½: {exception.Message}\n\n" +
+                    $"{(_errorReportingEnabled ? "ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ú¿ï¿½ï¿½ï¿½ ï¿½Úµï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ÛµÇ¾ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.\n\n" : "")}" +
+                    $"ï¿½ï¿½ï¿½Î±×·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï½Ã°Ú½ï¿½ï¿½Ï±ï¿½?",
+                    "ï¿½ï¿½ï¿½ï¿½ ï¿½ß»ï¿½",
                     MessageBoxButtons.YesNo,
                     MessageBoxIcon.Error);
 
@@ -382,7 +383,7 @@ namespace nU3.Core.UI.Shell
         }
 
         /// <summary>
-        /// ¸ðµç ¼­¹ö ¿¬°á Å×½ºÆ®
+        /// ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½×½ï¿½Æ®
         /// </summary>
         public async Task<ConnectivityTestResult?> TestAllConnectionsAsync(CancellationToken cancellationToken = default)
         {
@@ -393,7 +394,7 @@ namespace nU3.Core.UI.Shell
         }
 
         /// <summary>
-        /// ¸ðµç ¼­ºñ½º Á¾·á
+        /// ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         public void Shutdown()
         {
@@ -402,7 +403,7 @@ namespace nU3.Core.UI.Shell
 
             try
             {
-                // ¿¡·¯ ¸®Æ÷ÆÃ ÀÌº¥Æ® ±¸µ¶ ÇØÁ¦
+                // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ® ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
                 if (_errorReportingEnabled)
                 {
                     Application.ThreadException -= Application_ThreadException;
@@ -410,7 +411,7 @@ namespace nU3.Core.UI.Shell
                     TaskScheduler.UnobservedTaskException -= TaskScheduler_UnobservedTaskException;
                 }
 
-                // ¼­¹ö ¿¬°áµÈ °æ¿ì ´ë±â ÁßÀÎ ·Î±× ¾÷·Îµå
+                // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Î±ï¿½ ï¿½ï¿½ï¿½Îµï¿½
                 if (_serverConnectionEnabled && ConnectivityManager.Instance.IsInitialized)
                 {
                     try
@@ -436,15 +437,15 @@ namespace nU3.Core.UI.Shell
                         LogManager.Warning($"Failed to upload pending logs: {ex.Message}", _shellName);
                     }
 
-                    // ConnectivityManager ÀÌº¥Æ® ±¸µ¶ ÇØÁ¦
+                    // ConnectivityManager ï¿½Ìºï¿½Æ® ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
                     ConnectivityManager.Instance.LogMessage -= OnConnectivityLogMessage;
 
-                    // ConnectivityManager Á¤¸®
+                    // ConnectivityManager ï¿½ï¿½ï¿½ï¿½
                     ConnectivityManager.Instance.Dispose();
                     LogManager.Info("ConnectivityManager disposed", _shellName);
                 }
 
-                // LogManager Á¾·á
+                // LogManager ï¿½ï¿½ï¿½ï¿½
                 if (_loggingEnabled)
                 {
                     LogManager.Instance.Shutdown();
@@ -481,7 +482,7 @@ namespace nU3.Core.UI.Shell
     }
 
     /// <summary>
-    /// ¼­¹ö ¿¬°á »óÅÂ º¯°æ ÀÌº¥Æ® ÀÎ¼ö
+    /// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ® ï¿½Î¼ï¿½
     /// </summary>
     public class ServerConnectionStatusEventArgs : EventArgs
     {

@@ -6,7 +6,6 @@ using nU3.Core.UI.Components.Events;
 using nU3.Core.UI;
 using nU3.Core.UI.Controls;
 using nU3.Models;
-using PatientSelectedEvent = nU3.Core.Events.PatientSelectedEvent;
 using System.ComponentModel;
 
 namespace nU3.Core.UI.Components.Controls
@@ -90,7 +89,7 @@ namespace nU3.Core.UI.Components.Controls
         /// 환자 선택 이벤트 처리
         /// </summary>
         /// <param name="payload">환자 컨텍스트 (PatientId, PatientName, VisitNo)</param>
-        private void OnPatientSelected(PatientSelectedEventPayload payload)
+        private void OnPatientSelected(Core.Events.Contracts.PatientSelectedEventPayload payload)
         {
             if (payload == null) return;
 

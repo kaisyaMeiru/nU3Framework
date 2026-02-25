@@ -75,7 +75,7 @@ namespace nU3.Modules.EMR.IN.Worklist
             EventBus.GetEvent<PatientUpdatedEvent>()
                 .Subscribe(OnPatientUpdated);
 
-            EventBus.GetEvent<nU3.Core.Events.PatientSelectedEvent>()
+            EventBus.GetEvent<Core.Events.Contracts.PatientSelectedEvent>()
                 .Subscribe(OnPatientSelected);
 
             // 작업 컨텍스트 변경 이벤트 구독
@@ -119,7 +119,7 @@ namespace nU3.Modules.EMR.IN.Worklist
         /// <summary>
         /// 강타입 환자 선택 이벤트 처리기
         /// </summary>
-        private void OnPatientSelectedGeneric(PatientSelectedEventPayload context)
+        private void OnPatientSelectedGeneric(Core.Events.Contracts.PatientSelectedEventPayload context)
         {
             try
             {
@@ -163,7 +163,7 @@ namespace nU3.Modules.EMR.IN.Worklist
         /// </summary>
         private void OnPatientSelected(object payload)
         {
-            if (payload is not PatientSelectedEventPayload evt)
+            if (payload is not Core.Events.Contracts.PatientSelectedEventPayload evt)
                 return;
 
             // 동일 화면에서 발행된 이벤트는 무시

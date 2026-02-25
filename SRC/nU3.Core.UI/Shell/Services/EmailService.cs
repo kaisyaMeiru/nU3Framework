@@ -5,11 +5,12 @@ using System.Net.Mail;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using nU3.Models;
 
 namespace nU3.Core.UI.Shell.Services
 {
     /// <summary>
-    /// ¾Ë¸² ¹× ¸®Æ÷Æ® Àü¼ÛÀ» À§ÇÑ ÀÌ¸ÞÀÏ ¼­ºñ½ºÀÔ´Ï´Ù.
+    /// ï¿½Ë¸ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ô´Ï´ï¿½.
     /// </summary>
     public class EmailService : IDisposable
     {
@@ -18,7 +19,7 @@ namespace nU3.Core.UI.Shell.Services
         private bool _disposed;
 
         /// <summary>
-        /// ¼³Á¤À¸·Î ÀÌ¸ÞÀÏ ¼­ºñ½º¸¦ »ý¼ºÇÕ´Ï´Ù.
+        /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ñ½º¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.
         /// </summary>
         public EmailService(EmailSettings settings)
         {
@@ -26,7 +27,7 @@ namespace nU3.Core.UI.Shell.Services
         }
 
         /// <summary>
-        /// °£´ÜÇÑ ÀÌ¸ÞÀÏÀ» Àü¼ÛÇÕ´Ï´Ù.
+        /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¸ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.
         /// </summary>
         public async Task<bool> SendAsync(
             string to,
@@ -39,7 +40,7 @@ namespace nU3.Core.UI.Shell.Services
         }
 
         /// <summary>
-        /// Ã·ºÎÆÄÀÏ°ú ÇÔ²² ÀÌ¸ÞÀÏÀ» Àü¼ÛÇÕ´Ï´Ù.
+        /// Ã·ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½Ô²ï¿½ ï¿½Ì¸ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.
         /// </summary>
         public async Task<bool> SendAsync(
             string to,
@@ -61,7 +62,7 @@ namespace nU3.Core.UI.Shell.Services
 
                 message.To.Add(to);
 
-                // Ã·ºÎÆÄÀÏ Ãß°¡
+                // Ã·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½
                 if (attachmentPaths != null)
                 {
                     foreach (var path in attachmentPaths)
@@ -85,7 +86,7 @@ namespace nU3.Core.UI.Shell.Services
         }
 
         /// <summary>
-        /// ¿¡·¯ ¸®Æ÷Æ® ÀÌ¸ÞÀÏÀ» Àü¼ÛÇÕ´Ï´Ù.
+        /// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® ï¿½Ì¸ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.
         /// </summary>
         public async Task<bool> SendErrorReportAsync(
             ErrorReport report,
@@ -96,7 +97,7 @@ namespace nU3.Core.UI.Shell.Services
                 using var message = new MailMessage
                 {
                     From = new MailAddress(_settings.FromEmail, _settings.FromName),
-                    Subject = $"[nU3 Framework] ºñÁ¤»ó Á¾·á ¸®Æ÷Æ® - {DateTime.Now:yyyy-MM-dd HH:mm:ss}",
+                    Subject = $"[nU3 Framework] ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® - {DateTime.Now:yyyy-MM-dd HH:mm:ss}",
                     Body = BuildErrorReportHtml(report),
                     IsBodyHtml = true,
                     Priority = MailPriority.High
@@ -104,13 +105,13 @@ namespace nU3.Core.UI.Shell.Services
 
                 message.To.Add(_settings.ToEmail);
 
-                // ½ºÅ©¸°¼¦ Ã·ºÎ
+                // ï¿½ï¿½Å©ï¿½ï¿½ï¿½ï¿½ Ã·ï¿½ï¿½
                 if (!string.IsNullOrEmpty(report.ScreenshotPath) && File.Exists(report.ScreenshotPath))
                 {
                     message.Attachments.Add(new Attachment(report.ScreenshotPath));
                 }
 
-                // ·Î±× ÆÄÀÏ Ã·ºÎ
+                // ï¿½Î±ï¿½ ï¿½ï¿½ï¿½ï¿½ Ã·ï¿½ï¿½
                 if (!string.IsNullOrEmpty(report.LogFilePath) && File.Exists(report.LogFilePath))
                 {
                     message.Attachments.Add(new Attachment(report.LogFilePath));
@@ -149,35 +150,35 @@ namespace nU3.Core.UI.Shell.Services
         {
             var sb = new StringBuilder();
             sb.AppendLine("<html><body style='font-family: Segoe UI, Arial, sans-serif;'>");
-            sb.AppendLine("<h2 style='color: #d32f2f;'>nU3 Framework ºñÁ¤»ó Á¾·á ¸®Æ÷Æ®</h2>");
+            sb.AppendLine("<h2 style='color: #d32f2f;'>nU3 Framework ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®</h2>");
             sb.AppendLine("<hr/>");
 
-            sb.AppendLine("<h3>±âº» Á¤º¸</h3>");
+            sb.AppendLine("<h3>ï¿½âº» ï¿½ï¿½ï¿½ï¿½</h3>");
             sb.AppendLine("<table style='border-collapse: collapse; width: 100%;'>");
-            AppendTableRow(sb, "¹ß»ý ½Ã°£", report.Timestamp.ToString("yyyy-MM-dd HH:mm:ss"));
-            AppendTableRow(sb, "»ç¿ëÀÚ", report.UserId ?? "Unknown");
-            AppendTableRow(sb, "ÄÄÇ»ÅÍ¸í", report.MachineName);
-            AppendTableRow(sb, "¾ÖÇÃ¸®ÄÉÀÌ¼Ç", report.ApplicationName ?? "nU3 Framework");
-            AppendTableRow(sb, "¹öÀü", report.ApplicationVersion ?? "Unknown");
+            AppendTableRow(sb, "ï¿½ß»ï¿½ ï¿½Ã°ï¿½", report.Timestamp.ToString("yyyy-MM-dd HH:mm:ss"));
+            AppendTableRow(sb, "ï¿½ï¿½ï¿½ï¿½ï¿½", report.UserId ?? "Unknown");
+            AppendTableRow(sb, "ï¿½ï¿½Ç»ï¿½Í¸ï¿½", report.MachineName);
+            AppendTableRow(sb, "ï¿½ï¿½ï¿½Ã¸ï¿½ï¿½ï¿½ï¿½Ì¼ï¿½", report.ApplicationName ?? "nU3 Framework");
+            AppendTableRow(sb, "ï¿½ï¿½ï¿½ï¿½", report.ApplicationVersion ?? "Unknown");
             sb.AppendLine("</table>");
 
-            sb.AppendLine("<h3>¿¡·¯ Á¤º¸</h3>");
+            sb.AppendLine("<h3>ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½</h3>");
             sb.AppendLine("<table style='border-collapse: collapse; width: 100%;'>");
-            AppendTableRow(sb, "¿¡·¯ Å¸ÀÔ", report.ExceptionType ?? "Unknown");
-            AppendTableRow(sb, "¿¡·¯ ¸Þ½ÃÁö", report.ErrorMessage ?? "No message", "#d32f2f");
+            AppendTableRow(sb, "ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½ï¿½", report.ExceptionType ?? "Unknown");
+            AppendTableRow(sb, "ï¿½ï¿½ï¿½ï¿½ ï¿½Þ½ï¿½ï¿½ï¿½", report.ErrorMessage ?? "No message", "#d32f2f");
             sb.AppendLine("</table>");
 
-            sb.AppendLine("<h3>½ºÅÃ Æ®·¹ÀÌ½º</h3>");
+            sb.AppendLine("<h3>ï¿½ï¿½ï¿½ï¿½ Æ®ï¿½ï¿½ï¿½Ì½ï¿½</h3>");
             sb.AppendLine($"<pre style='background: #f5f5f5; padding: 15px; border: 1px solid #ddd; overflow-x: auto; font-size: 12px;'>{report.StackTrace}</pre>");
 
             if (!string.IsNullOrEmpty(report.AdditionalInfo))
             {
-                sb.AppendLine("<h3>Ãß°¡ Á¤º¸</h3>");
+                sb.AppendLine("<h3>ï¿½ß°ï¿½ ï¿½ï¿½ï¿½ï¿½</h3>");
                 sb.AppendLine($"<pre style='background: #f5f5f5; padding: 15px; border: 1px solid #ddd; overflow-x: auto; font-size: 12px;'>{report.AdditionalInfo}</pre>");
             }
 
             sb.AppendLine("<hr/>");
-            sb.AppendLine("<p style='color: #666; font-size: 12px;'>ÀÌ ¸ÞÀÏÀº nU3 FrameworkÀÇ ÀÚµ¿ ¿¡·¯ ¸®Æ÷ÆÃ ½Ã½ºÅÛ¿¡¼­ ¹ß¼ÛµÇ¾ú½À´Ï´Ù.</p>");
+            sb.AppendLine("<p style='color: #666; font-size: 12px;'>ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ nU3 Frameworkï¿½ï¿½ ï¿½Úµï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ã½ï¿½ï¿½Û¿ï¿½ï¿½ï¿½ ï¿½ß¼ÛµÇ¾ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.</p>");
             sb.AppendLine("</body></html>");
 
             return sb.ToString();
@@ -198,7 +199,7 @@ namespace nU3.Core.UI.Shell.Services
     }
 
     /// <summary>
-    /// ¿¡·¯ ¸®Æ÷Æ® µ¥ÀÌÅÍ
+    /// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     /// </summary>
     public class ErrorReport
     {
@@ -215,7 +216,7 @@ namespace nU3.Core.UI.Shell.Services
         public string? LogFilePath { get; set; }
 
         /// <summary>
-        /// ¿¹¿Ü·ÎºÎÅÍ ¿¡·¯ ¸®Æ÷Æ®¸¦ »ý¼ºÇÕ´Ï´Ù.
+        /// ï¿½ï¿½ï¿½Ü·Îºï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.
         /// </summary>
         public static ErrorReport FromException(Exception exception, string? additionalInfo = null)
         {

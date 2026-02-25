@@ -2,69 +2,71 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using System.IO;
+using System.Text.Json;
+using System.Threading.Tasks;
+
+using DevExpress.XtraBars;
+using DevExpress.XtraTab;
+using DevExpress.XtraTab.ViewInfo;
+using DevExpress.XtraEditors;
+
 using nU3.Core.Repositories;
 using nU3.Core.UI;
 using nU3.Core.Interfaces;
 using nU3.Core.Events;
-using nU3.Models;
-using System.Reflection;
-using nU3.Core.Attributes;
-using DevExpress.XtraBars;
-using DevExpress.XtraTab;
-using DevExpress.XtraTab.ViewInfo;
 using nU3.Core.Services;
-using DevExpress.XtraEditors;
-using nU3.Shell.Helpers;
-using nU3.Shell.Configuration;
-using System.Threading.Tasks;
 using nU3.Core.Logging;
 using nU3.Core.Events.Contracts;
-using nU3.Core.Pipes;
-using nU3.Core.UI.Components.Controls;
-using nU3.Core.Helpers;
 using nU3.Core.UI.Helpers;
-using System.ComponentModel.DataAnnotations;
-using System.Text.Json;
-using System.IO;
+using nU3.Core.Security;
+using nU3.Core.Helpers;
+using nU3.Core.Pipes;
+using nU3.Core.UI.Interfaces;
+using nU3.Core.UI.Services;
+using nU3.Core.UI.Components.Controls;
+using nU3.Shell.Helpers;
+using nU3.Shell.Configuration;
+using nU3.Models;
 
 namespace nU3.Shell
 {
     /// <summary>
-    /// nU3 Framework 메인 셸 폼
+    /// nU3 Framework 메인 셸 폼.
+    /// 핵심 로직이 Core 서비스로 분리되어 있으며, UI 제어 및 이벤트 핸들링을 담당합니다.
     /// </summary>
-    public partial class nUShell : BaseWorkForm, IBaseWorkComponent
+    public partial class nUShell : BaseWorkForm, IBaseWorkComponent, IShellView
     {
-        #region IBaseWorkComponent 구현
-        public override IEventAggregator OwnerEventBus => _eventAggregator;
-        public override string OwnerProgramID => "MAIN_SHELL";
-        #endregion
+        #region Fields & Services
 
-        #region 필드 및 속성
         private readonly IMenuRepository _menuRepo;
-        private readonly IModuleRepository _moduleRepo;
-        private readonly ISecurityRepository _securityRepo;
-        private readonly IUserRepository _userRepo;
         private readonly IEventAggregator _eventAggregator;
-        private readonly ModuleLoaderService _moduleLoader;
         private readonly IServiceProvider _serviceProvider;
+
+        private readonly IWorkContextService _workContextService;
+        private readonly IGlobalExceptionService _exceptionService;
+        private readonly INavigationService _navigationService;
+        private readonly ModuleLoaderService _moduleLoader;
 
         private readonly Dictionary<string, Type> _openTabs = new Dictionary<string, Type>();
         private bool _initialized;
-        private JsonDocument? _appConfig; // 통합 설정 객체
+        private JsonDocument? _appConfig;
 
-        private CrashReporter? _crashReporter;
-        private EmailSettings? _emailSettings;
-        private bool _errorReportingEnabled;
-        private bool _loggingEnabled;
-        private bool _uploadOnError;
-        private bool _serverConnectionEnabled;
-
-        public string? StartupUri { get; set; }
         private NamedPipeServer? _pipeServer;
         private NotificationControl? _notificationControl;
+        private CrashReporter? _crashReporter;
+        private bool _loggingEnabled;
+        private bool _serverConnectionEnabled;
+
         #endregion
 
-        #region 생성자 및 단계별 초기화
+        #region Properties
+        public override IEventAggregator OwnerEventBus => _eventAggregator;
+        public override string OwnerProgramID => "MAIN_SHELL";
+        public string? StartupUri { get; set; }
+        #endregion
+
+        #region Constructors
 
         public nUShell()
         {
@@ -75,42 +77,76 @@ namespace nU3.Shell
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public nUShell(
             IMenuRepository menuRepo,
-            IModuleRepository moduleRepo,
-            ISecurityRepository securityRepo,
-            IUserRepository userRepo,
             IEventAggregator eventAggregator,
-            ModuleLoaderService moduleLoader,
-            IServiceProvider serviceProvider)
+            IServiceProvider serviceProvider,
+            IWorkContextService workContextService,
+            IGlobalExceptionService exceptionService,
+            INavigationService navigationService,
+            ModuleLoaderService moduleLoader)
             : this()
         {
             _menuRepo = menuRepo;
-            _moduleRepo = moduleRepo;
-            _securityRepo = securityRepo;
-            _userRepo = userRepo;
             _eventAggregator = eventAggregator;
-            _moduleLoader = moduleLoader;
             _serviceProvider = serviceProvider;
+            _workContextService = workContextService;
+            _exceptionService = exceptionService;
+            _navigationService = navigationService;
+            _moduleLoader = moduleLoader;
 
-            // [초기화 1단계] 설정 로드
+            // 서비스 초기화
+            _navigationService.Initialize(this);
+
+            // 단계별 초기화 프로세스
             LoadAppConfiguration();
-
-            // [초기화 2단계] 로깅 시스템
             InitializeLogging();
-
-            // [초기화 3단계] 예외 처리
             InitializeErrorReporting();
 
-            // [초기화 4단계] UI 및 기본 서비스
             InitializeShellAppearance();
             InitializePipeServer();
             UpdateStatusBar();
 
+            // 폼 이벤트 연결
             this.FormClosing += MainShellForm_FormClosing;
+            this.FormClosed += MainShellForm_FormClosed;
             this.Load += MainShellForm_Load;
-            _moduleLoader.VersionConflict += OnModuleVersionConflict;
 
-            LogManager.Info("메인 셸 시스템 초기화 완료 (생성자)", "Shell");
+            if (_moduleLoader != null)
+                _moduleLoader.VersionConflict += OnModuleVersionConflict;
+
+            LogManager.Info("메인 셸 시스템 초기화 완료", "Shell");
         }
+
+        #endregion
+
+        #region IShellView 구현 (내비게이션 엔진용)
+
+        public bool IsProgramOpen(string programId) => FindTabByProgId(programId) != null;
+
+        public void ActivateProgram(string programId)
+        {
+            var page = FindTabByProgId(programId);
+            if (page != null)
+            {
+                xtraTabControlMain.SelectedTabPage = page;
+                ActivateTabContent(page);
+            }
+        }
+
+        public void ShowContent(Control content, string programId, string? displayName)
+        {
+            var newPage = new XtraTabPage { Text = displayName ?? programId, Tag = programId };
+            newPage.Controls.Add(content);
+            xtraTabControlMain.TabPages.Add(newPage);
+            xtraTabControlMain.SelectedTabPage = newPage;
+            _openTabs[programId] = content.GetType();
+
+            ActivateTabContent(newPage);
+            UpdateShellTitle(newPage);
+        }
+
+        #endregion
+
+        #region Initialization Logic
 
         private void LoadAppConfiguration()
         {
@@ -121,7 +157,7 @@ namespace nU3.Shell
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"설정 로드 실패: {ex.Message}");
+                LogManager.Error("설정 로드 실패", "Shell", ex);
             }
         }
 
@@ -140,7 +176,6 @@ namespace nU3.Shell
                     fileTransferService: null,
                     enableAutoUpload: GetConfigBoolValue(lc, "ServerUpload", "AutoUpload")
                 );
-                _uploadOnError = GetConfigBoolValue(lc, "ServerUpload", "UploadOnError");
                 LogManager.Info("로깅 시스템이 준비되었습니다.", "Shell");
             }
             catch { _loggingEnabled = false; }
@@ -151,70 +186,74 @@ namespace nU3.Shell
             if (_appConfig == null) return;
             try
             {
-                _emailSettings = ExtractEmailSettings();
-                if (_emailSettings != null)
+                var emailSettings = ExtractEmailSettings();
+                if (emailSettings != null)
                 {
-                    _errorReportingEnabled = true;
-                    _crashReporter = new CrashReporter(this, _emailSettings);
+                    _crashReporter = new CrashReporter(this, emailSettings);
+                    bool enabled = GetConfigBoolValue(_appConfig.RootElement, "ErrorReporting", "Enabled");
+                    bool uploadOnError = GetConfigBoolValue(_appConfig.RootElement, "Logging", "ServerUpload", "UploadOnError");
 
-                    Application.ThreadException += (s, e) => HandleUnhandledException(e.Exception, "UI Thread");
-                    AppDomain.CurrentDomain.UnhandledException += (s, e) => { if (e.ExceptionObject is Exception ex) HandleUnhandledException(ex, "AppDomain"); };
-                    TaskScheduler.UnobservedTaskException += (s, e) => { HandleUnhandledException(e.Exception, "Task"); e.SetObserved(); };
+                    _exceptionService.Initialize(enabled, uploadOnError, emailSettings, _crashReporter);
+                    _exceptionService.RegisterGlobalHandlers();
+
+                    // WinForms 전용 UI 스레드 예외 핸들러
+                    Application.ThreadException += (s, e) => _exceptionService.HandleException(e.Exception, "UI Thread");
 
                     _crashReporter.CleanupOldLogs(30);
-                    LogManager.Info("에러 리포팅 시스템 활성화됨", "Shell");
+                    LogManager.Info("에러 리포팅 시스템이 활성화되었습니다.", "Shell");
                 }
             }
             catch (Exception ex) { LogManager.Error("에러 리포팅 초기화 실패", "Shell", ex); }
         }
 
-        private EmailSettings? ExtractEmailSettings()
+        private void InitializeShellAppearance()
         {
-            try
-            {
-                if (!_appConfig!.RootElement.TryGetProperty("ErrorReporting", out var er)) return null;
-                if (!er.TryGetProperty("Enabled", out var e) || !e.GetBoolean()) return null;
-                var ec = er.GetProperty("Email");
-                return new EmailSettings
-                {
-                    SmtpServer = ec.GetProperty("SmtpServer").GetString() ?? "",
-                    SmtpPort = ec.GetProperty("SmtpPort").GetInt32(),
-                    EnableSsl = ec.GetProperty("EnableSsl").GetBoolean(),
-                    Username = ec.GetProperty("Username").GetString(),
-                    Password = ec.GetProperty("Password").GetString(),
-                    FromEmail = ec.GetProperty("FromEmail").GetString(),
-                    FromName = ec.GetProperty("FromName").GetString(),
-                    ToEmail = ec.GetProperty("ToEmail").GetString()
-                };
-            }
-            catch { return null; }
+            _notificationControl = new NotificationControl(this.components) { Position = NotificationPosition.BottomRight };
         }
+
+        private void InitializePipeServer()
+        {
+            try { _pipeServer = new NamedPipeServer(); _pipeServer.Start("nU3_Shell_Pipe"); } catch { }
+        }
+
         #endregion
 
-        #region 메인 라이프사이클 (Load/Closing)
+        #region Main Life Cycle Events
 
         private void MainShellForm_Load(object sender, EventArgs e)
         {
             if (_initialized) return; _initialized = true;
-            LogManager.Info("메인 셸 로딩 시작", "Shell");
+            LogManager.Info("메인 셸 로딩 프로세스 시작", "Shell");
 
-            ShowSplashMessage("모듈 데이터를 로드하고 있습니다...");
-            _moduleLoader.LoadAllModules();
-
-            ShowSplashMessage("사용자 메뉴를 구성하고 있습니다...");
-            BuildMenu();
-            SubscribeToEvents();
-
-            InitializeServerConnection();
-            HideSplashMessage();
-
-            if (LogManager.Instance.Logger != null)
+            try
             {
-                LogManager.Instance.Logger.MessageLogged += (s, msg) => this.SafeInvoke(() => UpdateStatusMessage(msg));
-            }
+                ShowSplashMessage("시스템 모듈을 구성하고 있습니다...");
+                // Modules 폴더만 스캔하도록 최적화된 로드 (가장 큰 속도 개선 포인트)
+                _moduleLoader.LoadAllModules();
 
-            LogManager.LogAction(AuditAction.Login, "Shell", "MainShell", "시스템 로그인 완료");
-            if (!string.IsNullOrEmpty(StartupUri)) ProcessStartupUri(StartupUri);
+                ShowSplashMessage("사용자 메뉴를 생성하고 있습니다...");
+                BuildMenu();
+
+                SubscribeToEvents();
+                InitializeServerConnection();
+
+                if (LogManager.Instance.Logger != null)
+                {
+                    LogManager.Instance.Logger.MessageLogged += (s, msg) => this.SafeInvoke(() => UpdateStatusMessage(msg));
+                }
+
+                LogManager.LogAction(AuditAction.Login, "Shell", "MainShell", "시스템 로그인 완료");
+                if (!string.IsNullOrEmpty(StartupUri)) ProcessStartupUri(StartupUri);
+            }
+            catch (Exception ex)
+            {
+                LogManager.Error("셸 로딩 중 오류 발생", "Shell", ex);
+                XtraMessageBox.Show("시스템 로드 중 문제가 발생했습니다.\n로그를 확인해 주세요.", "로드 오류");
+            }
+            finally
+            {
+                HideSplashMessage();
+            }
         }
 
         private void InitializeServerConnection()
@@ -255,7 +294,7 @@ namespace nU3.Shell
             }
             catch (Exception ex)
             {
-                LogManager.Error($"서버 초기화 실패: {ex.Message}", "Shell");
+                LogManager.Error("서버 연결 초기화 실패", "Shell", ex);
                 barStaticItemServer.Caption = "🔴 서버: 오류";
             }
         }
@@ -276,9 +315,15 @@ namespace nU3.Shell
             }
         }
 
+        private void MainShellForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            _pipeServer?.Stop();
+            _pipeServer?.Dispose();
+        }
+
         #endregion
 
-        #region 디자이너 이벤트 핸들러 복구
+        #region UI Event Handlers (Designer Referenced)
 
         private void XtraTabControlMain_SelectedPageChanged(object sender, TabPageChangedEventArgs e)
         {
@@ -311,92 +356,290 @@ namespace nU3.Shell
 
         #endregion
 
-        #region 화면 및 메뉴 관리 로직
+        #region Tab & Navigation Helpers
+
+        private void OpenProgram(string progId, string? displayName = null, Core.Context.WorkContext? context = null)
+        {
+            _navigationService.OpenProgramAsync(progId, displayName, context).Forget();
+        }
+
+        private void CloseTab(XtraTabPage page)
+        {
+            var control = page.Controls.Count > 0 ? page.Controls[0] : null;
+            if (control is ILifecycleAware la && !la.CanClose()) return;
+            if (control is IResourceManager rm) try { rm.ReleaseResources(); } catch { }
+
+            if (page.Tag is string pid) _openTabs.Remove(pid);
+            xtraTabControlMain.TabPages.Remove(page);
+            page.Dispose();
+        }
+
+        private void ActivateTabContent(XtraTabPage page)
+        {
+            if (page.Controls.Count > 0 && page.Controls[0] is ILifecycleAware la) la.OnActivated();
+        }
+
+        private void DeactivateTabContent(XtraTabPage page)
+        {
+            if (page.Controls.Count > 0 && page.Controls[0] is ILifecycleAware la) la.OnDeactivated();
+        }
+
+        private XtraTabPage? FindTabByProgId(string id) =>
+            xtraTabControlMain.TabPages.FirstOrDefault(p => string.Equals(p.Tag as string, id, StringComparison.OrdinalIgnoreCase));
+
+        #endregion
+
+        #region Menu Management
 
         private void BuildMenu()
         {
-            var user = nU3.Core.Security.UserSession.Current;
-            var manager = barManager1; if (manager == null) return;
+            LogManager.Info("[BuildMenu] 메뉴 구성 시작", "Shell");
+            var user = UserSession.Current;
+            var manager = barManager1;
+
+            if (manager == null || barMainMenu == null)
+            {
+                LogManager.Error("[BuildMenu] 필수 UI 컴포넌트(BarManager/MainMenu)가 초기화되지 않았습니다.", "Shell");
+                return;
+            }
+
             manager.BeginUpdate();
             try
             {
-                foreach (var item in manager.Items.Cast<BarItem>().Where(i => i != barStaticItemUser && i != barStaticItemTime && i != barStaticItemServer && i != barStaticItemVersion).ToList())
-                    manager.Items.Remove(item);
                 barMainMenu.ItemLinks.Clear();
 
+                if (user == null || !user.IsLoggedIn)
+                {
+                    LogManager.Warning("[BuildMenu] 유효한 사용자 세션이 없습니다.", "Shell");
+                    return;
+                }
+
+                LogManager.Info($"[BuildMenu] 사용자: {user.UserId}, 권한: {user.AuthLevel}, 부서: {user.SelectedDeptCode}", "Shell");
+
+                // 1. 데이터 취득
                 if (string.IsNullOrWhiteSpace(user.SelectedDeptCode))
                 {
-                    AddEmptyMenuNotice(manager, "시스템 (부서 미선택)", "로그인 시 부서를 선택해야 합니다.");
+                    LogManager.Info("[BuildMenu] 부서 미선택 - 안내 메뉴 표시", "Shell");
+                    AddEmptyMenuNotice(manager, "시스템 (부서 미선택)", "로그인 시 부서를 선택해야 메뉴가 활성화됩니다.");
                     return;
                 }
 
                 var allMenus = _menuRepo.GetMenusByUserAndDept(user.UserId, user.SelectedDeptCode);
-                if (allMenus.Count == 0) allMenus = _menuRepo.GetAllMenus();
-
-                var filteredMenus = allMenus.Where(m => m.AuthLevel <= user.AuthLevel).OrderBy(m => m.SortOrd).ToList();
-                foreach (var m in filteredMenus.Where(m => m.ParentId == null))
+                if (allMenus == null || allMenus.Count == 0)
                 {
-                    var sub = CreateBarSubMenu(manager, m.MenuName);
-                    BuildBarMenuRecursive(sub, m.MenuId, filteredMenus, user.AuthLevel, manager);
-                    if (!string.IsNullOrEmpty(m.ProgId)) sub.AddItem(CreateBarButtonItem(manager, m.MenuName, (s, e) => OpenProgram(m.ProgId, m.MenuName)));
-                    if (sub.ItemLinks.Count > 0) barMainMenu.AddItem(sub);
+                    LogManager.Info("[BuildMenu] 사용자 전용 메뉴가 없어 전체 메뉴를 로드합니다.", "Shell");
+                    allMenus = _menuRepo.GetAllMenus();
                 }
-            }
-            finally { AddSystemMenu(manager); manager.EndUpdate(); }
-        }
 
-        private void OpenProgram(string progId, string? displayName = null)
-        {
-            var type = _moduleLoader.GetProgramType(progId);
-            if (type == null)
-            {
-                XtraMessageBox.Show($"프로그램 '{progId}'을(를) 로드할 수 없습니다.", "실행 오류", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+                if (allMenus == null || allMenus.Count == 0)
+                {
+                    LogManager.Warning("[BuildMenu] 표시할 메뉴 데이터가 데이터베이스에 존재하지 않습니다.", "Shell");
+                    return;
+                }
 
-            var page = FindTabByProgId(progId);
-            if (page != null) { xtraTabControlMain.SelectedTabPage = page; ActivateTabContent(page); return; }
+                // 2. 권한 필터링 (레벨 0은 관리자로 간주하여 모두 허용)
+                var filteredMenus = allMenus                    
+                    .OrderBy(m => m.SortOrd)
+                    .ToList();
 
-            try
-            {
-                var content = CreateProgramContent(type, progId);
-                var newPage = new XtraTabPage { Text = displayName ?? progId, Tag = progId };
-                newPage.Controls.Add(content); xtraTabControlMain.TabPages.Add(newPage); xtraTabControlMain.SelectedTabPage = newPage;
-                _openTabs[progId] = type;
-                ActivateTabContent(newPage);
+                LogManager.Info($"[BuildMenu] 로드된 {allMenus.Count}개 중 {filteredMenus.Count}개 메뉴가 사용자 권한에 부합합니다.", "Shell");
+
+                // 3. 트리 구성 (루트 메뉴 검색)
+                var roots = filteredMenus.Where(m => string.IsNullOrWhiteSpace(m.ParentId)).ToList();
+                LogManager.Info($"[BuildMenu] {roots.Count}개의 최상위 메뉴를 처리합니다.", "Shell");
+
+                foreach (var menuDto in roots)
+                {
+                    var subMenu = CreateBarSubMenu(manager, menuDto.MenuName);
+
+                    // 재귀적으로 하위 구성 (ID 매칭 강화)
+                    BuildBarMenuRecursive(subMenu, menuDto.MenuId, filteredMenus, user.AuthLevel, manager);
+
+                    // 하위 메뉴가 있거나 루트 자체가 실행 가능한 경우에만 추가
+                    bool hasProgram = !string.IsNullOrWhiteSpace(menuDto.ProgId);
+                    bool hasChildren = subMenu.ItemLinks.Count > 0;
+
+                    if (hasProgram || hasChildren)
+                    {
+                        if (hasProgram)
+                        {
+                            subMenu.AddItem(CreateBarButtonItem(manager, menuDto.MenuName, (s, e) => OpenProgram(menuDto.ProgId!, menuDto.MenuName)));
+                        }
+
+                        barMainMenu.ItemLinks.Add(subMenu);
+                        LogManager.Debug($"[BuildMenu] 상단 메뉴 추가: {menuDto.MenuName}", "Shell");
+                    }
+                }
             }
             catch (Exception ex)
             {
-                LogManager.Error($"화면 실행 실패: {progId}", "Shell", ex);
-                XtraMessageBox.Show($"실행 오류: {ex.Message}", "오류", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                LogManager.Error("[BuildMenu] 메뉴 빌드 중 치명적 오류", "Shell", ex);
+            }
+            finally
+            {
+                AddSystemCommonMenu(manager);
+                manager.EndUpdate();
+                barMainMenu.Visible = true;
+                LogManager.Info("[BuildMenu] 메뉴 빌드 프로세스 완료", "Shell");
             }
         }
 
-        private Control CreateProgramContent(Type t, string id)
+        private void BuildBarMenuRecursive(BarSubItem parent, string parentId, List<MenuDto> all, int auth, BarManager m)
         {
-            var c = (Control)Microsoft.Extensions.DependencyInjection.ActivatorUtilities.CreateInstance(_serviceProvider, t);
-            if (typeof(Form).IsAssignableFrom(t))
+            if (string.IsNullOrWhiteSpace(parentId)) return;
+
+            // ID 비교 시 Trim 및 대소문자 무시 적용으로 매칭 성공률 극대화
+            var children = all.Where(x => string.Equals(x.ParentId?.Trim(), parentId.Trim(), StringComparison.OrdinalIgnoreCase))
+                              .OrderBy(x => x.SortOrd);
+
+            foreach (var child in children)
             {
-                var f = (Form)c; f.TopLevel = false; f.FormBorderStyle = FormBorderStyle.None; f.Dock = DockStyle.Fill; f.Show();
+                if (!string.IsNullOrWhiteSpace(child.ProgId))
+                {
+                    parent.AddItem(CreateBarButtonItem(m, child.MenuName, (s, e) => OpenProgram(child.ProgId!, child.MenuName)));
+                }
+                else
+                {
+                    var group = CreateBarSubMenu(m, child.MenuName);
+                    BuildBarMenuRecursive(group, child.MenuId, all, auth, m);
+
+                    // 내용이 있는 그룹만 부모에 추가
+                    if (group.ItemLinks.Count > 0)
+                    {
+                        parent.AddItem(group);
+                    }
+                }
             }
-            else
+        }
+
+        private void AddSystemCommonMenu(BarManager m)
+        {
+            if (barMainMenu == null) return;
+
+            var s = CreateBarSubMenu(m, "시스템");
+            s.AddItem(CreateBarButtonItem(m, "메뉴 새로고침", (x, y) => BuildMenu()));
+            s.AddItem(CreateBarButtonItem(m, "모든 탭 닫기", (x, y) => { while (xtraTabControlMain.TabPages.Count > 0) CloseTab(xtraTabControlMain.TabPages[0]); }));
+
+            // [추가] 개발자용 테스트 메뉴 (개발 환경인 경우에만 노출)
+            if (IsDevelopmentMode())
             {
-                if (c is BaseWorkControl wc) wc.EventBus = _eventAggregator;
-                if (c is IWorkContextProvider cp) cp.InitializeContext(CreateWorkContext(id));
-                c.Dock = DockStyle.Fill;
+                var devMenu = CreateBarSubMenu(m, "개발자 도구");
+                devMenu.AddItem(CreateBarButtonItem(m, "서버 연결 상세 테스트", (x, y) => RunServerConnectionTest()));
+                devMenu.AddItem(CreateBarButtonItem(m, "로컬 로그 폴더 열기", (x, y) => OpenLogFolder()));
+                devMenu.AddItem(CreateBarButtonItem(m, "모듈 전체 재검색/로드", (x, y) => _moduleLoader.LoadAllModules()));
+                s.AddItem(devMenu);
             }
-            return c;
+
+            s.AddItem(CreateBarButtonItem(m, "로그아웃", (x, y) => this.Close()));
+
+            barMainMenu.ItemLinks.Add(s);
+        }
+
+        private bool IsDevelopmentMode()
+        {
+            try
+            {
+                if (_appConfig != null && _appConfig.RootElement.TryGetProperty("Environment", out var env))
+                {
+                    var mode = env.GetProperty("Mode").GetString();
+                    return string.Equals(mode, "Development", StringComparison.OrdinalIgnoreCase);
+                }
+            }
+            catch { }
+            return false;
+        }
+
+        private async void RunServerConnectionTest()
+        {
+            ShowSplashMessage("서버 연결 테스트 중...");
+            try
+            {
+                var result = await ConnectivityManager.Instance.TestAllConnectionsAsync();
+
+                string msg = $"[서버 연결 테스트 결과]\n\n" +
+                             $"전체 성공: {result.AllConnected}\n" +
+                             $"DB 연결: {(result.DBConnected ? "🔵" : "❌")}\n" +
+                             $"파일 서버: {(result.FileConnected ? "🔵" : "❌")}\n" +
+                             $"로그 서버: {(result.LogConnected ? "🔵" : "❌")}\n\n" +
+                             $"테스트 시각: {result.TestTime:yyyy-MM-dd HH:mm:ss}";
+
+                XtraMessageBox.Show(msg, "테스트 결과", MessageBoxButtons.OK, result.AllConnected ? MessageBoxIcon.Information : MessageBoxIcon.Warning);
+            }
+            catch (Exception ex)
+            {
+                XtraMessageBox.Show($"테스트 중 오류 발생: {ex.Message}", "오류", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                HideSplashMessage();
+            }
+        }
+
+        private void OpenLogFolder()
+        {
+            try
+            {
+                string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Logs");
+                if (LogManager.Instance.Logger is FileLogger fl)
+                {
+                    var filePath = fl.GetLogFilePath();
+                    if (!string.IsNullOrEmpty(filePath)) path = Path.GetDirectoryName(filePath) ?? path;
+                }
+
+                if (Directory.Exists(path))
+                {
+                    System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo { FileName = path, UseShellExecute = true });
+                }
+                else
+                {
+                    XtraMessageBox.Show("로그 폴더를 찾을 수 없습니다.", "알림");
+                }
+            }
+            catch (Exception ex) { LogManager.Error("로그 폴더 열기 실패", "Shell", ex); }
+        }
+
+        private void AddEmptyMenuNotice(BarManager manager, string rootText, string notice)
+        {
+            if (barMainMenu == null) return;
+
+            var root = CreateBarSubMenu(manager, rootText);
+            var item = CreateBarButtonItem(manager, notice, (s, e) => XtraMessageBox.Show(notice, "알림"));
+            root.AddItem(item);
+            barMainMenu.ItemLinks.Add(root);
         }
 
         #endregion
 
-        #region 유틸리티 및 헬퍼
+        #region Event Handling & Subscriptions
 
-        private void SafeInvoke(Action action) => nU3.Core.UI.Helpers.UIHelper.SafeInvoke(this, action);
+        private void SubscribeToEvents()
+        {
+            _eventAggregator.GetEvent<NavigationRequestEvent>().Subscribe(p => { if (p is NavigationRequestEventPayload e) OpenProgram(e.TargetScreenId, null, e.Context); });
+            _eventAggregator.GetEvent<CloseScreenRequestEvent>().Subscribe(p => { if (p is CloseScreenRequestEventPayload e) { var pg = FindTabByProgId(e.ScreenId); if (pg != null) CloseTab(pg); } });
+            _eventAggregator.GetEvent<ModuleActivatedEvent>().Subscribe(p => { if (p is ModuleActivatedEventPayload e) SafeInvoke(() => this.Text = $"nU3 HIS - [{e.ProgId}] v{e.Version}"); });
+            _eventAggregator.GetEvent<Core.Events.Contracts.PatientSelectedEvent>().Subscribe(p => { if (p is PatientSelectedEventPayload e) UpdateStatusMessage($"환자 선택: {e.Patient.PatientName}"); });
+        }
+
+        private void OnModuleVersionConflict(object sender, ModuleVersionConflictEventArgs e)
+        {
+            this.SafeInvoke(() =>
+            {
+                if (XtraMessageBox.Show($"⚠️ 모듈 버전 불일치 감지 (로드:v{e.CurrentVersion}, 요청:v{e.RequestedVersion})\n\n재시작하시겠습니까?", "버전 충돌", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                {
+                    Application.Restart(); Environment.Exit(0);
+                }
+            });
+        }
+
+        #endregion
+
+        #region UI Utilities & Helpers
+
+        private void SafeInvoke(Action action) => UIHelper.SafeInvoke(this, action);
 
         private void UpdateStatusBar()
         {
-            var u = nU3.Core.Security.UserSession.Current;
+            var u = UserSession.Current;
             if (u != null) barStaticItemUser.Caption = $"👤 {u.UserId} (Lv {u.AuthLevel})";
             barStaticItemTime.Caption = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
         }
@@ -411,132 +654,47 @@ namespace nU3.Shell
 
         private BarButtonItem CreateBarButtonItem(BarManager m, string t, ItemClickEventHandler c) { var b = new BarButtonItem(m, t); b.ItemClick += c; return b; }
 
-        private XtraTabPage? FindTabByProgId(string id) => xtraTabControlMain.TabPages.FirstOrDefault(p => string.Equals(p.Tag as string, id, StringComparison.OrdinalIgnoreCase));
-
         private void UpdateShellTitle(XtraTabPage page)
         {
             string baseTitle = "nU3 Healthcare Information System";
             if (page.Controls.Count > 0 && page.Controls[0] is BaseWorkControl wc)
-            {
                 this.Text = $"{baseTitle} - [{wc.ProgramID}] {wc.ProgramTitle} v{wc.GetType().Assembly.GetName().Version}";
-            }
             else this.Text = $"{baseTitle} - {page.Text}";
+        }
+
+        private void ProcessStartupUri(string uri)
+        {
+            try { var u = new Uri(uri); var query = u.Query.TrimStart('?').Split('&').Select(x => x.Split('=')).ToDictionary(x => x[0], x => x[1]); if (query.ContainsKey("programid")) OpenProgram(query["programid"]); } catch { }
         }
 
         private string? GetConfigValue(JsonElement p, string s, string k) { try { return p.GetProperty(s).GetProperty(k).GetString(); } catch { return null; } }
 
         private bool GetConfigBoolValue(JsonElement p, string s, string k) { try { return p.GetProperty(s).GetProperty(k).GetBoolean(); } catch { return false; } }
 
-        #endregion
+        private bool GetConfigBoolValue(JsonElement p, string s1, string s2, string k) { try { return p.GetProperty(s1).GetProperty(s2).GetProperty(k).GetBoolean(); } catch { return false; } }
 
-        #region 기타 내부 연동 로직
-
-        private void SubscribeToEvents()
+        private nU3.Models.EmailSettings? ExtractEmailSettings()
         {
-            _eventAggregator.GetEvent<NavigationRequestEvent>().Subscribe(p => { if (p is NavigationRequestEventPayload e) OpenProgram(e.TargetScreenId); });
-            _eventAggregator.GetEvent<CloseScreenRequestEvent>().Subscribe(p => { if (p is CloseScreenRequestEventPayload e) { var pg = FindTabByProgId(e.ScreenId); if (pg != null) CloseTab(pg); } });
-            _eventAggregator.GetEvent<ModuleActivatedEvent>().Subscribe(p => { if (p is ModuleActivatedEventPayload e) SafeInvoke(() => this.Text = $"nU3 HIS - [{e.ProgId}] v{e.Version}"); });
-            _eventAggregator.GetEvent<Core.Events.Contracts.PatientSelectedEvent>().Subscribe(p => { if (p is PatientSelectedEventPayload e) UpdateStatusMessage($"환자 선택: {e.Patient.PatientName}"); });
-        }
-
-        private void HandleUnhandledException(Exception ex, string src)
-        {
+            if (_appConfig == null) return null;
             try
             {
-                LogManager.Critical($"미처리 예외 ({src}): {ex.Message}", "Error", ex);
-                if (_loggingEnabled && _uploadOnError && _serverConnectionEnabled)
+                if (!_appConfig.RootElement.TryGetProperty("ErrorReporting", out var er)) return null;
+                if (!er.TryGetProperty("Email", out var ec)) return null;
+                return new nU3.Models.EmailSettings
                 {
-                    Task.Run(async () => await ConnectivityManager.Instance.Log.UploadCurrentLogImmediatelyAsync()).Wait(TimeSpan.FromSeconds(3));
-                }
-                if (_errorReportingEnabled && _crashReporter != null) _crashReporter.ReportCrashAsync(ex, $"출처: {src}").Wait(TimeSpan.FromSeconds(5));
-                XtraMessageBox.Show($"시스템에 예상치 못한 오류가 발생했습니다.\n\n{ex.Message}", "치명적 오류", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    SmtpServer = ec.GetProperty("SmtpServer").GetString() ?? "smtp.gmail.com",
+                    SmtpPort = ec.GetProperty("SmtpPort").GetInt32(),
+                    EnableSsl = ec.GetProperty("EnableSsl").GetBoolean(),
+                    Username = ec.GetProperty("Username").GetString(),
+                    Password = ec.GetProperty("Password").GetString(),
+                    FromEmail = ec.GetProperty("FromEmail").GetString(),
+                    FromName = ec.GetProperty("FromName").GetString() ?? "nU3 Framework",
+                    ToEmail = ec.GetProperty("ToEmail").GetString(),
+                    TimeoutMs = ec.TryGetProperty("TimeoutMs", out var t) ? t.GetInt32() : 30000
+                };
             }
-            catch { }
+            catch { return null; }
         }
-
-        private void OnModuleVersionConflict(object sender, ModuleVersionConflictEventArgs e)
-        {
-            SafeInvoke(() =>
-            {
-                if (XtraMessageBox.Show($"⚠️ 모듈 버전 불일치 감지 (로드:v{e.CurrentVersion}, 요청:v{e.RequestedVersion})\n\n재시작하시겠습니까?", "버전 충돌", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
-                {
-                    Application.Restart(); Environment.Exit(0);
-                }
-            });
-        }
-
-        private void BuildBarMenuRecursive(BarSubItem parent, string parentId, List<MenuDto> all, int auth, BarManager m)
-        {
-            foreach (var child in all.Where(x => x.ParentId == parentId && x.AuthLevel <= auth).OrderBy(x => x.SortOrd))
-            {
-                if (!string.IsNullOrEmpty(child.ProgId)) parent.AddItem(CreateBarButtonItem(m, child.MenuName, (s, e) => OpenProgram(child.ProgId, child.MenuName)));
-                else { var group = CreateBarSubMenu(m, child.MenuName); parent.AddItem(group); BuildBarMenuRecursive(group, child.MenuId, all, auth, m); }
-            }
-        }
-
-        private nU3.Core.Context.WorkContext CreateWorkContext(string id)
-        {
-            var ctx = new nU3.Core.Context.WorkContext { CurrentUser = GetCurrentUserWithRole() };
-            if (ctx.CurrentUser != null) ctx.Permissions = CreatePermissions(ctx.CurrentUser.UserId, ctx.CurrentUser.AuthLevel, ctx.CurrentUser.RoleCode, id);
-            return ctx;
-        }
-
-        private UserInfoDto? GetCurrentUserWithRole()
-        {
-            var cur = nU3.Core.Security.UserSession.Current; if (cur == null) return null;
-            var u = _userRepo.GetUserById(cur.UserId);
-            return new UserInfoDto { UserId = cur.UserId, UserName = cur.UserName, AuthLevel = cur.AuthLevel, RoleCode = u?.RoleCode ?? "" };
-        }
-
-        private nU3.Core.Context.ModulePermissions CreatePermissions(string uid, int lv, string rc, string pid)
-        {
-            if (lv == 0) { var p = new nU3.Core.Context.ModulePermissions(); p.GrantAll(); return p; }
-            try
-            {
-                var d = _securityRepo.GetEffectivePermission(uid, rc, pid);
-                if (d != null) return new nU3.Core.Context.ModulePermissions { CanRead = d.CanRead, CanCreate = d.CanCreate, CanUpdate = d.CanUpdate, CanDelete = d.CanDelete, CanPrint = d.CanPrint, CanExport = d.CanExport, CanApprove = d.CanApprove, CanCancel = d.CanCancel };
-            }
-            catch { }
-            return new nU3.Core.Context.ModulePermissions { CanRead = true };
-        }
-
-        private void CloseTab(XtraTabPage page)
-        {
-            var control = page.Controls.Count > 0 ? page.Controls[0] : null;
-            if (control is ILifecycleAware la && !la.CanClose()) return;
-            if (control is IResourceManager rm) try { rm.ReleaseResources(); } catch { }
-            if (page.Tag is string pid) _openTabs.Remove(pid);
-            xtraTabControlMain.TabPages.Remove(page); page.Dispose();
-        }
-
-        private void AddSystemMenu(BarManager m)
-        {
-            var s = CreateBarSubMenu(m, "시스템");
-            s.AddItem(CreateBarButtonItem(m, "메뉴 새로고침", (x, y) => BuildMenu()));
-            s.AddItem(CreateBarButtonItem(m, "모든 탭 닫기", (x, y) => { while (xtraTabControlMain.TabPages.Count > 0) CloseTab(xtraTabControlMain.TabPages[0]); }));
-            s.AddItem(CreateBarButtonItem(m, "종료", (x, y) => this.Close()));
-            barMainMenu.AddItem(s);
-        }
-
-        private void AddEmptyMenuNotice(BarManager manager, string rootText, string notice)
-        {
-            var root = new BarSubItem(manager, rootText);
-            var item = new BarButtonItem(manager, notice);
-            item.ItemClick += (s, e) => XtraMessageBox.Show(notice, "알림");
-            root.AddItem(item); barMainMenu.AddItem(root);
-        }
-
-        private void ActivateTabContent(XtraTabPage p) { if (p.Controls.Count > 0 && p.Controls[0] is ILifecycleAware la) la.OnActivated(); }
-
-        private void DeactivateTabContent(XtraTabPage p) { if (p.Controls.Count > 0 && p.Controls[0] is ILifecycleAware la) la.OnDeactivated(); }
-
-        private void MainShellForm_FormClosed(object sender, FormClosedEventArgs e) { _pipeServer?.Stop(); _pipeServer?.Dispose(); }
-
-        private void InitializePipeServer() { try { _pipeServer = new NamedPipeServer(); _pipeServer.Start("nU3_Shell_Pipe"); } catch { } }
-
-        private void InitializeShellAppearance() { _notificationControl = new NotificationControl(this.components) { Position = NotificationPosition.BottomRight }; }
-
-        private void ProcessStartupUri(string uri) { try { var u = new Uri(uri); var query = u.Query.TrimStart('?').Split('&').Select(x => x.Split('=')).ToDictionary(x => x[0], x => x[1]); if (query.ContainsKey("programid")) OpenProgram(query["programid"]); } catch { } }
 
         #endregion
     }

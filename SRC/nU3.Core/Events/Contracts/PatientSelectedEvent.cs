@@ -1,4 +1,5 @@
 using nU3.Core.Events;
+using nU3.Models;
 
 namespace nU3.Core.Events.Contracts
 {
@@ -10,4 +11,17 @@ namespace nU3.Core.Events.Contracts
     public class PatientSelectedEvent : PubSubEvent<PatientSelectedEventPayload>
     {
     }
+
+    /// <summary>
+    /// 환자 선택 이벤트 페이로드
+    /// </summary>
+    public class PatientSelectedEventPayload
+    {
+        public PatientInfoDto Patient { get; set; }
+        public string Source { get; set; }
+
+        public List<string> Target { get; set; } = new List<string>();
+    }
+
+
 }

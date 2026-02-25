@@ -16,6 +16,7 @@ using System.Drawing;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using nU3.Core.Events.Contracts;
 
 namespace nU3.Modules.OCS.IN.MainEntry
 {

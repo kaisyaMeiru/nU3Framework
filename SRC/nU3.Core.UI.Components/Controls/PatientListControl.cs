@@ -11,7 +11,6 @@ using nU3.Models;
 using nU3.Core.Events.Contracts;
 using nU3.Core.Events;
 using nU3.Core.Enums;
-using PatientSelectedEvent = nU3.Core.Events.PatientSelectedEvent;
 using System.ComponentModel.DataAnnotations;
 using DevExpress.XtraGrid.Views.Base;
 

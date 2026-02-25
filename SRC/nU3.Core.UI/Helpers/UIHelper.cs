@@ -9,6 +9,26 @@ namespace nU3.Core.UI.Helpers
     /// </summary>
     public static class UIHelper
     {
+        public static readonly System.Drawing.Font StandardFont = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular);
+        public static readonly System.Drawing.Font HeaderFont = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
+
+        public static void ApplyStandardGridSettings(DataGridView grid)
+        {
+            grid.BackgroundColor = System.Drawing.Color.White;
+            grid.BorderStyle = BorderStyle.None;
+            grid.AlternatingRowsDefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(240, 240, 240);
+            grid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+        }
+
+        public static void ApplyTheme(Control control)
+        {
+            control.Font = StandardFont;
+            foreach (Control child in control.Controls)
+            {
+                ApplyTheme(child);
+            }
+        }
+
         public static void SafeInvoke(this Control control, Action action)
         {
             if (control == null || control.IsDisposed || control.Disposing) return;

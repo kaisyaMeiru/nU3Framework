@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\nU3.Core\nU3.Core.csproj" />
+    <ProjectReference Include="..\nU3.Models\nU3.Models.csproj" />
   </ItemGroup>
 
   <ItemGroup>

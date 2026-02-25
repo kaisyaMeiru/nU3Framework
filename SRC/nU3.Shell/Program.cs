@@ -108,6 +108,11 @@ namespace nU3.Shell
             services.AddScoped<ISecurityRepository, SQLiteSecurityRepository>();   // 보안 저장소
             services.AddSingleton<nU3.Core.Services.ModuleLoaderService>();        // DLL 모듈 로더 서비스
 
+            // 핵심 시스템 서비스 (리팩토링으로 추가됨)
+            services.AddSingleton<nU3.Core.Services.IWorkContextService, nU3.Core.Services.WorkContextService>();
+            services.AddSingleton<nU3.Core.Services.IGlobalExceptionService, nU3.Core.Services.GlobalExceptionService>();
+            services.AddSingleton<nU3.Core.UI.Services.INavigationService, nU3.Core.UI.Services.NavigationService>();
+
             // 비즈니스 로직 팩토리
             services.AddSingleton<nU3.Core.Logic.IBizLogicFactory, nU3.Core.Logic.BizLogicFactory>();
             

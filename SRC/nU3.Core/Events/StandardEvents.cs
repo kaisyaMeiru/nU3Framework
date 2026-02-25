@@ -1,24 +1,7 @@
 using nU3.Models;
 
 namespace nU3.Core.Events
-{
-    /// <summary>
-    /// 환자 선택 이벤트
-    /// Payload: PatientSelectedEventPayload
-    /// </summary>
-    public class PatientSelectedEvent : PubSubEvent { }
-
-    /// <summary>
-    /// 환자 선택 이벤트 페이로드
-    /// </summary>
-    public class PatientSelectedEventPayload
-    {
-        public PatientInfoDto Patient { get; set; }
-        public string Source { get; set; }
-
-        public List<string> Target { get; set; } = new List<string>();
-    }
-
+{        
     /// <summary>
     /// 환자 정보 업데이트 이벤트
     /// Payload: PatientUpdatedEventPayload

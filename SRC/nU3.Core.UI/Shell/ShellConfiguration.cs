@@ -1,11 +1,12 @@
 using System;
 using System.IO;
 using System.Text.Json;
+using nU3.Models;
 
 namespace nU3.Core.UI.Shell
 {
     /// <summary>
-    /// appsettings.json¿¡¼­ ¼Ğ ±¸¼ºÀ» ·ÎµåÇÏ±â À§ÇÑ ÇïÆÛ Å¬·¡½ºÀÔ´Ï´Ù.
+    /// appsettings.jsonì—ì„œ ì„¤ì •ì„ ë¡œë“œí•˜ê¸° ìœ„í•œ ìœ í‹¸ë¦¬í‹° í´ë˜ìŠ¤ì…ë‹ˆë‹¤.
     /// </summary>
     public static class ShellConfiguration
     {
@@ -14,7 +15,7 @@ namespace nU3.Core.UI.Shell
         private static readonly TimeSpan CacheDuration = TimeSpan.FromMinutes(5);
 
         /// <summary>
-        /// appsettings.json¿¡¼­ ±¸¼º ¹®¼­¸¦ ·ÎµåÇÕ´Ï´Ù.
+        /// appsettings.jsonì—ì„œ ì „ì²´ ì„¤ì •ì„ ë¡œë“œí•©ë‹ˆë‹¤.
         /// </summary>
         public static JsonDocument? LoadConfiguration(bool useCache = true)
         {
@@ -40,17 +41,6 @@ namespace nU3.Core.UI.Shell
             }
         }
 
-        /// <summary>
-        /// ±¸¼º Ä³½Ã¸¦ Áö¿ó´Ï´Ù.
-        /// </summary>
-        public static void ClearCache()
-        {
-            _cachedConfig = null;
-        }
-
-        /// <summary>
-        /// ±¸¼º¿¡¼­ ¹®ÀÚ¿­ °ªÀ» °¡Á®¿É´Ï´Ù.
-        /// </summary>
         public static string? GetConfigValue(JsonElement parent, string section, string key)
         {
             try
@@ -59,8 +49,7 @@ namespace nU3.Core.UI.Shell
                 {
                     if (sectionElement.TryGetProperty(key, out var valueElement))
                     {
-                        var value = valueElement.GetString();
-                        return string.IsNullOrWhiteSpace(value) ? null : value;
+                        return valueElement.GetString();
                     }
                 }
             }
@@ -68,9 +57,6 @@ namespace nU3.Core.UI.Shell
             return null;
         }
 
-        /// <summary>
-        /// ±¸¼º¿¡¼­ boolean °ªÀ» °¡Á®¿É´Ï´Ù.
-        /// </summary>
         public static bool GetConfigBoolValue(JsonElement parent, string section, string key, bool defaultValue = false)
         {
             try
@@ -87,9 +73,6 @@ namespace nU3.Core.UI.Shell
             return defaultValue;
         }
 
-        /// <summary>
-        /// ±¸¼º¿¡¼­ Á¤¼ö °ªÀ» °¡Á®¿É´Ï´Ù.
-        /// </summary>
         public static int GetConfigIntValue(JsonElement parent, string section, string key, int defaultValue = 0)
         {
             try
@@ -107,24 +90,18 @@ namespace nU3.Core.UI.Shell
         }
 
         /// <summary>
-        /// ¿¡·¯ ¸®Æ÷ÆÃÀ» À§ÇÑ ÀÌ¸ŞÀÏ ¼³Á¤À» ·ÎµåÇÕ´Ï´Ù.
+        /// ì—ëŸ¬ ë¦¬í¬íŒ…ì„ ìœ„í•œ ì´ë©”ì¼ ì„¤ì •ì„ ë¡œë“œí•©ë‹ˆë‹¤.
         /// </summary>
         public static EmailSettings? LoadEmailSettings()
         {
             try
             {
                 var config = LoadConfiguration();
-                if (config == null)
-                    return null;
+                if (config == null) return null;
 
-                if (!config.RootElement.TryGetProperty("ErrorReporting", out var errorReporting))
-                    return null;
-
-                if (!errorReporting.TryGetProperty("Enabled", out var enabled) || !enabled.GetBoolean())
-                    return null;
-
-                if (!errorReporting.TryGetProperty("Email", out var emailConfig))
-                    return null;
+                if (!config.RootElement.TryGetProperty("ErrorReporting", out var errorReporting)) return null;
+                if (!errorReporting.TryGetProperty("Enabled", out var enabled) || !enabled.GetBoolean()) return null;
+                if (!errorReporting.TryGetProperty("Email", out var emailConfig)) return null;
 
                 return new EmailSettings
                 {
@@ -133,9 +110,9 @@ namespace nU3.Core.UI.Shell
                     EnableSsl = GetBoolProperty(emailConfig, "EnableSsl", true),
                     Username = GetStringProperty(emailConfig, "Username"),
                     Password = GetStringProperty(emailConfig, "Password"),
-                    FromEmail = GetStringProperty(emailConfig, "FromEmail") ?? "",
+                    FromEmail = GetStringProperty(emailConfig, "FromEmail"),
                     FromName = GetStringProperty(emailConfig, "FromName", "nU3 Framework"),
-                    ToEmail = GetStringProperty(emailConfig, "ToEmail") ?? "",
+                    ToEmail = GetStringProperty(emailConfig, "ToEmail"),
                     TimeoutMs = GetIntProperty(emailConfig, "TimeoutMs", 30000)
                 };
             }
@@ -146,15 +123,14 @@ namespace nU3.Core.UI.Shell
         }
 
         /// <summary>
-        /// ¼­¹ö ¿¬°á ¼³Á¤À» ·ÎµåÇÕ´Ï´Ù.
+        /// ì„œë²„ ì—°ê²° ì„¤ì •ì„ ë¡œë“œí•©ë‹ˆë‹¤.
         /// </summary>
         public static ServerConnectionSettings LoadServerConnectionSettings()
         {
             try
             {
                 var config = LoadConfiguration();
-                if (config == null)
-                    return new ServerConnectionSettings();
+                if (config == null) return new ServerConnectionSettings();
 
                 if (!config.RootElement.TryGetProperty("ServerConnection", out var serverConfig))
                     return new ServerConnectionSettings();
@@ -176,15 +152,14 @@ namespace nU3.Core.UI.Shell
         }
 
         /// <summary>
-        /// ·Î±ë ±¸¼º ¼³Á¤À» ·ÎµåÇÕ´Ï´Ù.
+        /// ë¡œê¹… ì„¤ì •ì„ ë¡œë“œí•©ë‹ˆë‹¤.
         /// </summary>
         public static LoggingSettings LoadLoggingSettings()
         {
             try
             {
                 var config = LoadConfiguration();
-                if (config == null)
-                    return new LoggingSettings();
+                if (config == null) return new LoggingSettings();
 
                 if (!config.RootElement.TryGetProperty("Logging", out var loggingConfig))
                     return new LoggingSettings();
@@ -209,41 +184,19 @@ namespace nU3.Core.UI.Shell
 
         private static string? GetStringProperty(JsonElement element, string key, string? defaultValue = null)
         {
-            try
-            {
-                if (element.TryGetProperty(key, out var value))
-                {
-                    var str = value.GetString();
-                    return string.IsNullOrWhiteSpace(str) ? defaultValue : str;
-                }
-            }
-            catch { }
+            try { if (element.TryGetProperty(key, out var v)) return v.GetString() ?? defaultValue; } catch { }
             return defaultValue;
         }
 
         private static bool GetBoolProperty(JsonElement element, string key, bool defaultValue = false)
         {
-            try
-            {
-                if (element.TryGetProperty(key, out var value))
-                {
-                    return value.GetBoolean();
-                }
-            }
-            catch { }
+            try { if (element.TryGetProperty(key, out var v)) return v.GetBoolean(); } catch { }
             return defaultValue;
         }
 
         private static int GetIntProperty(JsonElement element, string key, int defaultValue = 0)
         {
-            try
-            {
-                if (element.TryGetProperty(key, out var value))
-                {
-                    return value.GetInt32();
-                }
-            }
-            catch { }
+            try { if (element.TryGetProperty(key, out var v)) return v.ValueKind == JsonValueKind.Number ? v.GetInt32() : defaultValue; } catch { }
             return defaultValue;
         }
 
@@ -252,9 +205,6 @@ namespace nU3.Core.UI.Shell
 
     #region Settings Classes
 
-    /// <summary>
-    /// ¼­¹ö ¿¬°á ¼³Á¤
-    /// </summary>
     public class ServerConnectionSettings
     {
         public bool Enabled { get; set; }
@@ -265,25 +215,6 @@ namespace nU3.Core.UI.Shell
         public int MaxConcurrentConnections { get; set; } = 10;
     }
 
-    /// <summary>
-    /// ¿¡·¯ ¸®Æ÷ÆÃÀ» À§ÇÑ ÀÌ¸ŞÀÏ ¼³Á¤
-    /// </summary>
-    public class EmailSettings
-    {
-        public string SmtpServer { get; set; } = "smtp.gmail.com";
-        public int SmtpPort { get; set; } = 587;
-        public bool EnableSsl { get; set; } = true;
-        public string? Username { get; set; }
-        public string? Password { get; set; }
-        public string FromEmail { get; set; } = "";
-        public string FromName { get; set; } = "nU3 Framework";
-        public string ToEmail { get; set; } = "";
-        public int TimeoutMs { get; set; } = 30000;
-    }
-
-    /// <summary>
-    /// ·Î±ë ¼³Á¤
-    /// </summary>
     public class LoggingSettings
     {
         public bool Enabled { get; set; } = true;

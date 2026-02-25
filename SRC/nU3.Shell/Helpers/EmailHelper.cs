@@ -5,6 +5,8 @@ using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 
+using nU3.Models;
+
 namespace nU3.Shell.Helpers
 {
     public static class EmailHelper
@@ -17,7 +19,7 @@ namespace nU3.Shell.Helpers
                 {
                     message.From = new MailAddress(settings.FromEmail, settings.FromName);
                     message.To.Add(settings.ToEmail);
-                    message.Subject = $"[nU3 Framework] ¿À·ù ¸®Æ÷Æ® - {DateTime.Now:yyyy-MM-dd HH:mm:ss}";
+                    message.Subject = $"[nU3 Framework] ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® - {DateTime.Now:yyyy-MM-dd HH:mm:ss}";
                     message.IsBodyHtml = true;
                     message.Body = BuildErrorReportHtml(report);
                     message.Priority = MailPriority.High;
@@ -59,34 +61,34 @@ namespace nU3.Shell.Helpers
         {
             var sb = new StringBuilder();
             sb.AppendLine("<html><body style='font-family: Segoe UI, Arial, sans-serif;'>");
-            sb.AppendLine("<h2 style='color: #d32f2f;'>nU3 Framework ¿À·ù ¸®Æ÷Æ®</h2>");
+            sb.AppendLine("<h2 style='color: #d32f2f;'>nU3 Framework ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®</h2>");
             sb.AppendLine("<hr/>");
             
-            sb.AppendLine("<h3>±âº» Á¤º¸</h3>");
+            sb.AppendLine("<h3>ï¿½âº» ï¿½ï¿½ï¿½ï¿½</h3>");
             sb.AppendLine("<table style='border-collapse: collapse; width: 100%;'>");
-            sb.AppendLine($"<tr><td style='padding: 8px; border: 1px solid #ddd; background: #f5f5f5; width: 150px;'><strong>¹ß»ý ½Ã°£</strong></td><td style='padding: 8px; border: 1px solid #ddd;'>{report.Timestamp:yyyy-MM-dd HH:mm:ss}</td></tr>");
-            sb.AppendLine($"<tr><td style='padding: 8px; border: 1px solid #ddd; background: #f5f5f5;'><strong>»ç¿ëÀÚ</strong></td><td style='padding: 8px; border: 1px solid #ddd;'>{report.UserId}</td></tr>");
-            sb.AppendLine($"<tr><td style='padding: 8px; border: 1px solid #ddd; background: #f5f5f5;'><strong>È£½ºÆ®</strong></td><td style='padding: 8px; border: 1px solid #ddd;'>{report.MachineName}</td></tr>");
-            sb.AppendLine($"<tr><td style='padding: 8px; border: 1px solid #ddd; background: #f5f5f5;'><strong>¾ÖÇÃ¸®ÄÉÀÌ¼Ç ¹öÀü</strong></td><td style='padding: 8px; border: 1px solid #ddd;'>{report.ApplicationVersion}</td></tr>");
+            sb.AppendLine($"<tr><td style='padding: 8px; border: 1px solid #ddd; background: #f5f5f5; width: 150px;'><strong>ï¿½ß»ï¿½ ï¿½Ã°ï¿½</strong></td><td style='padding: 8px; border: 1px solid #ddd;'>{report.Timestamp:yyyy-MM-dd HH:mm:ss}</td></tr>");
+            sb.AppendLine($"<tr><td style='padding: 8px; border: 1px solid #ddd; background: #f5f5f5;'><strong>ï¿½ï¿½ï¿½ï¿½ï¿½</strong></td><td style='padding: 8px; border: 1px solid #ddd;'>{report.UserId}</td></tr>");
+            sb.AppendLine($"<tr><td style='padding: 8px; border: 1px solid #ddd; background: #f5f5f5;'><strong>È£ï¿½ï¿½Æ®</strong></td><td style='padding: 8px; border: 1px solid #ddd;'>{report.MachineName}</td></tr>");
+            sb.AppendLine($"<tr><td style='padding: 8px; border: 1px solid #ddd; background: #f5f5f5;'><strong>ï¿½ï¿½ï¿½Ã¸ï¿½ï¿½ï¿½ï¿½Ì¼ï¿½ ï¿½ï¿½ï¿½ï¿½</strong></td><td style='padding: 8px; border: 1px solid #ddd;'>{report.ApplicationVersion}</td></tr>");
             sb.AppendLine("</table>");
 
-            sb.AppendLine("<h3>¿À·ù Á¤º¸</h3>");
+            sb.AppendLine("<h3>ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½</h3>");
             sb.AppendLine("<table style='border-collapse: collapse; width: 100%;'>");
-            sb.AppendLine($"<tr><td style='padding: 8px; border: 1px solid #ddd; background: #f5f5f5; width: 150px;'><strong>¿¹¿Ü Å¸ÀÔ</strong></td><td style='padding: 8px; border: 1px solid #ddd;'>{report.ExceptionType}</td></tr>");
-            sb.AppendLine($"<tr><td style='padding: 8px; border: 1px solid #ddd; background: #f5f5f5;'><strong>¿À·ù ¸Þ½ÃÁö</strong></td><td style='padding: 8px; border: 1px solid #ddd; color: #d32f2f;'>{report.ErrorMessage}</td></tr>");
+            sb.AppendLine($"<tr><td style='padding: 8px; border: 1px solid #ddd; background: #f5f5f5; width: 150px;'><strong>ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½ï¿½</strong></td><td style='padding: 8px; border: 1px solid #ddd;'>{report.ExceptionType}</td></tr>");
+            sb.AppendLine($"<tr><td style='padding: 8px; border: 1px solid #ddd; background: #f5f5f5;'><strong>ï¿½ï¿½ï¿½ï¿½ ï¿½Þ½ï¿½ï¿½ï¿½</strong></td><td style='padding: 8px; border: 1px solid #ddd; color: #d32f2f;'>{report.ErrorMessage}</td></tr>");
             sb.AppendLine("</table>");
 
-            sb.AppendLine("<h3>½ºÅÃ Æ®·¹ÀÌ½º</h3>");
+            sb.AppendLine("<h3>ï¿½ï¿½ï¿½ï¿½ Æ®ï¿½ï¿½ï¿½Ì½ï¿½</h3>");
             sb.AppendLine($"<pre style='background: #f5f5f5; padding: 15px; border: 1px solid #ddd; overflow-x: auto; font-size: 12px;'>{report.StackTrace}</pre>");
 
             if (!string.IsNullOrEmpty(report.AdditionalInfo))
             {
-                sb.AppendLine("<h3>Ãß°¡ Á¤º¸</h3>");
+                sb.AppendLine("<h3>ï¿½ß°ï¿½ ï¿½ï¿½ï¿½ï¿½</h3>");
                 sb.AppendLine($"<pre style='background: #f5f5f5; padding: 15px; border: 1px solid #ddd; overflow-x: auto; font-size: 12px;'>{report.AdditionalInfo}</pre>");
             }
 
             sb.AppendLine("<hr/>");
-            sb.AppendLine("<p style='color: #666; font-size: 12px;'>ÀÌ ÀÌ¸ÞÀÏÀº nU3 Framework¿¡ ÀÇÇØ ÀÚµ¿À¸·Î »ý¼ºµÇ¾ú½À´Ï´Ù.</p>");
+            sb.AppendLine("<p style='color: #666; font-size: 12px;'>ï¿½ï¿½ ï¿½Ì¸ï¿½ï¿½ï¿½ï¿½ï¿½ nU3 Frameworkï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Úµï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ç¾ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.</p>");
             sb.AppendLine("</body></html>");
 
             return sb.ToString();
@@ -105,17 +107,5 @@ namespace nU3.Shell.Helpers
         public string AdditionalInfo { get; set; }
         public string ScreenshotPath { get; set; }
         public string LogFilePath { get; set; }
-    }
-
-    public class EmailSettings
-    {
-        public string SmtpServer { get; set; } = "smtp.gmail.com";
-        public int SmtpPort { get; set; } = 587;
-        public bool EnableSsl { get; set; } = true;
-        public string Username { get; set; }
-        public string Password { get; set; }
-        public string FromEmail { get; set; }
-        public string FromName { get; set; } = "nU3 Framework Error Reporter";
-        public string ToEmail { get; set; }
     }
 }

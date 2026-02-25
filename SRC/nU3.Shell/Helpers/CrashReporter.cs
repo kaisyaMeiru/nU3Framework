@@ -5,9 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+using nU3.Core.Interfaces;
+using nU3.Models;
+
 namespace nU3.Shell.Helpers
 {
-    public class CrashReporter
+    public class CrashReporter : ICrashReporter
     {
         private readonly Form _mainForm;
         private readonly EmailSettings _emailSettings;
@@ -78,7 +81,7 @@ namespace nU3.Shell.Helpers
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Crash º¸°í ½ÇÆÐ: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Crash ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½: {ex.Message}");
                 return false;
             }
         }
@@ -89,33 +92,33 @@ namespace nU3.Shell.Helpers
             {
                 var sb = new StringBuilder();
                 sb.AppendLine("=".PadRight(80, '='));
-                sb.AppendLine("nU3 Framework - Å©·¡½Ã ¸®Æ÷Æ®");
+                sb.AppendLine("nU3 Framework - Å©ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®");
                 sb.AppendLine("=".PadRight(80, '='));
                 sb.AppendLine();
-                sb.AppendLine($"Å¸ÀÓ½ºÅÆÇÁ: {DateTime.Now:yyyy-MM-dd HH:mm:ss.fff}");
-                sb.AppendLine($"À¯Àú: {GetCurrentUserId()}");
-                sb.AppendLine($"¸Ó½Å: {Environment.MachineName}");
-                sb.AppendLine($"¿î¿µÃ¼Á¦ ¹öÀü: {Environment.OSVersion}");
-                sb.AppendLine($"CLR ¹öÀü: {Environment.Version}");
-                sb.AppendLine($"¾ÖÇÃ¸®ÄÉÀÌ¼Ç ¹öÀü: {GetApplicationVersion()}");
-                sb.AppendLine($"ÀÛ¾÷ µð·ºÅä¸®: {Environment.CurrentDirectory}");
-                sb.AppendLine($"¸í·É ÁÙ: {Environment.CommandLine}");
+                sb.AppendLine($"Å¸ï¿½Ó½ï¿½ï¿½ï¿½ï¿½ï¿½: {DateTime.Now:yyyy-MM-dd HH:mm:ss.fff}");
+                sb.AppendLine($"ï¿½ï¿½ï¿½ï¿½: {GetCurrentUserId()}");
+                sb.AppendLine($"ï¿½Ó½ï¿½: {Environment.MachineName}");
+                sb.AppendLine($"ï¿½î¿µÃ¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½: {Environment.OSVersion}");
+                sb.AppendLine($"CLR ï¿½ï¿½ï¿½ï¿½: {Environment.Version}");
+                sb.AppendLine($"ï¿½ï¿½ï¿½Ã¸ï¿½ï¿½ï¿½ï¿½Ì¼ï¿½ ï¿½ï¿½ï¿½ï¿½: {GetApplicationVersion()}");
+                sb.AppendLine($"ï¿½Û¾ï¿½ ï¿½ï¿½ï¿½ä¸®: {Environment.CurrentDirectory}");
+                sb.AppendLine($"ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½: {Environment.CommandLine}");
                 sb.AppendLine();
                 sb.AppendLine("-".PadRight(80, '-'));
-                sb.AppendLine("¿¹¿Ü Á¤º¸");
+                sb.AppendLine("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
                 sb.AppendLine("-".PadRight(80, '-'));
-                sb.AppendLine($"À¯Çü: {exception.GetType().FullName}");
-                sb.AppendLine($"¸Þ½ÃÁö: {exception.Message}");
-                sb.AppendLine($"ÃâÃ³: {exception.Source}");
+                sb.AppendLine($"ï¿½ï¿½ï¿½ï¿½: {exception.GetType().FullName}");
+                sb.AppendLine($"ï¿½Þ½ï¿½ï¿½ï¿½: {exception.Message}");
+                sb.AppendLine($"ï¿½ï¿½Ã³: {exception.Source}");
                 sb.AppendLine();
-                sb.AppendLine("½ºÅÃ ÃßÀû:");
+                sb.AppendLine("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½:");
                 sb.AppendLine(exception.ToString());
                 sb.AppendLine();
 
                 if (!string.IsNullOrEmpty(additionalInfo))
                 {
                     sb.AppendLine("-".PadRight(80, '-'));
-                    sb.AppendLine("Ãß°¡ Á¤º¸");
+                    sb.AppendLine("ï¿½ß°ï¿½ ï¿½ï¿½ï¿½ï¿½");
                     sb.AppendLine("-".PadRight(80, '-'));
                     sb.AppendLine(additionalInfo);
                     sb.AppendLine();
@@ -135,11 +138,11 @@ namespace nU3.Shell.Helpers
             try
             {
                 var user = nU3.Core.Security.UserSession.Current;
-                return user?.UserId ?? "¾Ë ¼ö ¾øÀ½";
+                return user?.UserId ?? "ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½";
             }
             catch
             {
-                return "¾Ë ¼ö ¾øÀ½";
+                return "ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½";
             }
         }
 
@@ -147,11 +150,11 @@ namespace nU3.Shell.Helpers
         {
             try
             {
-                return Assembly.GetEntryAssembly()?.GetName().Version?.ToString() ?? "¾Ë ¼ö ¾øÀ½";
+                return Assembly.GetEntryAssembly()?.GetName().Version?.ToString() ?? "ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½";
             }
             catch
             {
-                return "¾Ë ¼ö ¾øÀ½";
+                return "ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½";
             }
         }
 

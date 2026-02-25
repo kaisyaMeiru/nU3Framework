@@ -136,6 +136,22 @@ namespace nU3.Models
     /// <summary>
     /// 업데이트 진행 단계
     /// </summary>
+    /// <summary>
+    /// 에러 리포팅을 위한 이메일 설정 정보
+    /// </summary>
+    public class EmailSettings
+    {
+        public string SmtpServer { get; set; } = "smtp.gmail.com";
+        public int SmtpPort { get; set; } = 587;
+        public bool EnableSsl { get; set; } = true;
+        public string? Username { get; set; }
+        public string? Password { get; set; }
+        public string? FromEmail { get; set; }
+        public string? FromName { get; set; } = "nU3 Framework";
+        public string? ToEmail { get; set; }
+        public int TimeoutMs { get; set; } = 30000;
+    }
+
     public enum UpdatePhase
     {
         Checking,

@@ -5,12 +5,13 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using nU3.Models;
 
 namespace nU3.Core.UI.Shell.Services
 {
     /// <summary>
-    /// Ãæµ¹(Å©·¡½Ã) ¸®Æ÷Æ® ¼­ºñ½º
-    /// ½ºÅ©¸°¼¦À» Ä¸Ã³ÇÏ°í, ·Î±× ÆÄÀÏÀ» »ý¼ºÇÏ¸ç, ¿À·ù º¸°í¼­¸¦ Àü¼ÛÇÏ´Â ±â´ÉÀ» Á¦°øÇÕ´Ï´Ù.
+    /// ï¿½æµ¹(Å©ï¿½ï¿½ï¿½ï¿½) ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
+    /// ï¿½ï¿½Å©ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ä¸Ã³ï¿½Ï°ï¿½, ï¿½Î±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¸ï¿½, ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.
     /// </summary>
     public class CrashReportService : IDisposable
     {
@@ -22,26 +23,26 @@ namespace nU3.Core.UI.Shell.Services
         private bool _disposed;
 
         /// <summary>
-        /// ÀÌ¸ÞÀÏ ¸®Æ÷ÆÃÀÌ È°¼ºÈ­µÇ¾î ÀÖ´ÂÁö ¿©ºÎ¸¦ ¹ÝÈ¯ÇÕ´Ï´Ù.
+        /// ï¿½Ì¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È°ï¿½ï¿½È­ï¿½Ç¾ï¿½ ï¿½Ö´ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Î¸ï¿½ ï¿½ï¿½È¯ï¿½Õ´Ï´ï¿½.
         /// </summary>
         public bool EmailReportingEnabled => _emailSettings != null && !string.IsNullOrEmpty(_emailSettings.ToEmail);
 
         /// <summary>
-        /// Å©·¡½Ã ·Î±× µð·ºÅÍ¸® °æ·Î¸¦ ¹ÝÈ¯ÇÕ´Ï´Ù.
+        /// Å©ï¿½ï¿½ï¿½ï¿½ ï¿½Î±ï¿½ ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½ï¿½Î¸ï¿½ ï¿½ï¿½È¯ï¿½Õ´Ï´ï¿½.
         /// </summary>
         public string CrashLogDirectory => _crashLogDirectory;
 
         /// <summary>
-        /// Å©·¡½Ã°¡ º¸°íµÉ ¶§ ¹ß»ýÇÏ´Â ÀÌº¥Æ®ÀÔ´Ï´Ù.
+        /// Å©ï¿½ï¿½ï¿½Ã°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ß»ï¿½ï¿½Ï´ï¿½ ï¿½Ìºï¿½Æ®ï¿½Ô´Ï´ï¿½.
         /// </summary>
         public event EventHandler<CrashReportedEventArgs>? CrashReported;
 
         /// <summary>
-        /// CrashReportService »ý¼ºÀÚ
+        /// CrashReportService ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         /// </summary>
-        /// <param name="mainForm">½ºÅ©¸°¼¦ Ä¸Ã³¿¡ »ç¿ëÇÒ ¸ÞÀÎ Æû(¼±ÅÃ)</param>
-        /// <param name="emailSettings">ÀÌ¸ÞÀÏ Àü¼Û ¼³Á¤(¼±ÅÃ)</param>
-        /// <param name="applicationName">¾ÖÇÃ¸®ÄÉÀÌ¼Ç ÀÌ¸§(º¸°í¼­¿¡ »ç¿ë)</param>
+        /// <param name="mainForm">ï¿½ï¿½Å©ï¿½ï¿½ï¿½ï¿½ Ä¸Ã³ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½)</param>
+        /// <param name="emailSettings">ï¿½Ì¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½)</param>
+        /// <param name="applicationName">ï¿½ï¿½ï¿½Ã¸ï¿½ï¿½ï¿½ï¿½Ì¼ï¿½ ï¿½Ì¸ï¿½(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½)</param>
         public CrashReportService(Form? mainForm = null, EmailSettings? emailSettings = null, string? applicationName = null)
         {
             _mainForm = mainForm;
@@ -63,13 +64,13 @@ namespace nU3.Core.UI.Shell.Services
         }
 
         /// <summary>
-        /// ¿¹¿Ü¸¦ ºñµ¿±âÀûÀ¸·Î ¸®Æ÷Æ®ÇÕ´Ï´Ù.
-        /// ½ºÅ©¸°¼¦ Ä¸Ã³, ·Î±× »ý¼º, ÀÌ¸ÞÀÏ Àü¼Û(¼³Á¤µÈ °æ¿ì)À» ¼öÇàÇÕ´Ï´Ù.
+        /// ï¿½ï¿½ï¿½Ü¸ï¿½ ï¿½ñµ¿±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®ï¿½Õ´Ï´ï¿½.
+        /// ï¿½ï¿½Å©ï¿½ï¿½ï¿½ï¿½ Ä¸Ã³, ï¿½Î±ï¿½ ï¿½ï¿½ï¿½ï¿½, ï¿½Ì¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½)ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.
         /// </summary>
-        /// <param name="exception">¹ß»ýÇÑ ¿¹¿Ü</param>
-        /// <param name="additionalInfo">Ãß°¡ Á¤º¸(¼±ÅÃ)</param>
-        /// <param name="cancellationToken">Ãë¼Ò ÅäÅ«(¼±ÅÃ)</param>
-        /// <returns>¼º°øÀûÀ¸·Î ¸®Æ÷Æ®°¡ »ý¼º/Àü¼ÛµÇ¸é true¸¦ ¹ÝÈ¯ÇÕ´Ï´Ù.</returns>
+        /// <param name="exception">ï¿½ß»ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½</param>
+        /// <param name="additionalInfo">ï¿½ß°ï¿½ ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½)</param>
+        /// <param name="cancellationToken">ï¿½ï¿½ï¿½ ï¿½ï¿½Å«(ï¿½ï¿½ï¿½ï¿½)</param>
+        /// <returns>ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½/ï¿½ï¿½ï¿½ÛµÇ¸ï¿½ trueï¿½ï¿½ ï¿½ï¿½È¯ï¿½Õ´Ï´ï¿½.</returns>
         public async Task<bool> ReportCrashAsync(
             Exception exception,
             string? additionalInfo = null,
@@ -81,13 +82,13 @@ namespace nU3.Core.UI.Shell.Services
                 var screenshotPath = Path.Combine(_crashLogDirectory, $"crash_{timestamp}.png");
                 var logFilePath = Path.Combine(_crashLogDirectory, $"crash_{timestamp}.log");
 
-                // ½ºÅ©¸°¼¦ Ä¸Ã³
+                // ï¿½ï¿½Å©ï¿½ï¿½ï¿½ï¿½ Ä¸Ã³
                 bool screenshotCaptured = CaptureScreenshot(screenshotPath);
 
-                // ·Î±× ÆÄÀÏ »ý¼º
+                // ï¿½Î±ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
                 CreateLogFile(exception, logFilePath, additionalInfo);
 
-                // ¿¡·¯ ¸®Æ÷Æ® »ý¼º
+                // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
                 var report = new ErrorReport
                 {
                     Timestamp = DateTime.Now,
@@ -105,13 +106,13 @@ namespace nU3.Core.UI.Shell.Services
 
                 bool emailSent = false;
 
-                // ÀÌ¸ÞÀÏ Àü¼Û(±¸¼ºµÇ¾î ÀÖ´Â °æ¿ì)
+                // ï¿½Ì¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½ï¿½Ç¾ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½)
                 if (EmailReportingEnabled && _emailService != null)
                 {
                     emailSent = await _emailService.SendErrorReportAsync(report, cancellationToken);
                 }
 
-                // ÀÌº¥Æ® ¹ß»ý
+                // ï¿½Ìºï¿½Æ® ï¿½ß»ï¿½
                 CrashReported?.Invoke(this, new CrashReportedEventArgs
                 {
                     Report = report,
@@ -130,7 +131,7 @@ namespace nU3.Core.UI.Shell.Services
         }
 
         /// <summary>
-        /// µ¿±â ¹æ½ÄÀ¸·Î ¿¹¿Ü¸¦ ¸®Æ÷Æ®ÇÕ´Ï´Ù. (ºñµ¿±â È£ÃâÀÌ ¾î·Á¿î ÄÁÅØ½ºÆ®¿ë)
+        /// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ü¸ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®ï¿½Õ´Ï´ï¿½. (ï¿½ñµ¿±ï¿½ È£ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ø½ï¿½Æ®ï¿½ï¿½)
         /// </summary>
         public bool ReportCrash(Exception exception, string? additionalInfo = null)
         {
@@ -146,9 +147,9 @@ namespace nU3.Core.UI.Shell.Services
         }
 
         /// <summary>
-        /// ¿À·¡µÈ Å©·¡½Ã ·Î±×¸¦ Á¤¸®ÇÕ´Ï´Ù.
+        /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Å©ï¿½ï¿½ï¿½ï¿½ ï¿½Î±×¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.
         /// </summary>
-        /// <param name="daysToKeep">º¸°üÇÒ ÀÏ¼ö</param>
+        /// <param name="daysToKeep">ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ï¼ï¿½</param>
         public void CleanupOldLogs(int daysToKeep = 30)
         {
             try
@@ -171,7 +172,7 @@ namespace nU3.Core.UI.Shell.Services
                     }
                     catch
                     {
-                        // °³º° ÆÄÀÏ »èÁ¦ ¿À·ù´Â ¹«½Ã
+                        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
                     }
                 }
             }
@@ -182,7 +183,7 @@ namespace nU3.Core.UI.Shell.Services
         }
 
         /// <summary>
-        /// Å©·¡½Ã ·Î±× ÆÄÀÏ ¸ñ·ÏÀ» ¹ÝÈ¯ÇÕ´Ï´Ù.
+        /// Å©ï¿½ï¿½ï¿½ï¿½ ï¿½Î±ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯ï¿½Õ´Ï´ï¿½.
         /// </summary>
         public string[] GetCrashLogs()
         {
@@ -253,7 +254,7 @@ namespace nU3.Core.UI.Shell.Services
                 sb.AppendLine(exception.ToString());
                 sb.AppendLine();
 
-                // ³»ºÎ ¿¹¿Üµµ ±â·Ï
+                // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Üµï¿½ ï¿½ï¿½ï¿½
                 var innerException = exception.InnerException;
                 var depth = 1;
                 while (innerException != null)
@@ -272,7 +273,7 @@ namespace nU3.Core.UI.Shell.Services
                 if (!string.IsNullOrEmpty(additionalInfo))
                 {
                     sb.AppendLine("-".PadRight(80, '-'));
-                    sb.AppendLine("Ãß°¡ Á¤º¸");
+                    sb.AppendLine("ï¿½ß°ï¿½ ï¿½ï¿½ï¿½ï¿½");
                     sb.AppendLine("-".PadRight(80, '-'));
                     sb.AppendLine(additionalInfo);
                     sb.AppendLine();
@@ -330,7 +331,7 @@ namespace nU3.Core.UI.Shell.Services
     }
 
     /// <summary>
-    /// Å©·¡½Ã º¸°í ÀÌº¥Æ®ÀÇ ÀÌº¥Æ® ÀÎÀÚÀÔ´Ï´Ù.
+    /// Å©ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ®ï¿½ï¿½ ï¿½Ìºï¿½Æ® ï¿½ï¿½ï¿½ï¿½ï¿½Ô´Ï´ï¿½.
     /// </summary>
     public class CrashReportedEventArgs : EventArgs
     {

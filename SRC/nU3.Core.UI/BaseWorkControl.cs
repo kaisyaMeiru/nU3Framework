@@ -1279,8 +1279,8 @@ namespace nU3.Core.UI
                 return;
             }
 
-            var evt = EventBus?.GetEvent<nU3.Core.Events.Contracts.PatientSelectedEvent>();
-            evt?.Publish(new PatientSelectedEventPayload { Patient = patient, Source = this.ProgramID });
+            var evt = EventBus?.GetEvent<Events.Contracts.PatientSelectedEvent>();
+            evt?.Publish(new Events.Contracts.PatientSelectedEventPayload { Patient = patient, Source = this.ProgramID });
 
             LogInfo($"환자 선택 이벤트 발행: {patient.PatientName} ({patient.PatientId})");
         }

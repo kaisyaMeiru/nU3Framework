@@ -5,6 +5,7 @@ using nU3.Core.Context;
 using nU3.Core.Events;
 using nU3.Models;
 using nU3.Core.Attributes;
+using nU3.Core.Events.Contracts;
 
 namespace nU3.Modules.EMR.IN.Worklist
 {
